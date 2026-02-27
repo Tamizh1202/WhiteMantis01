@@ -6,7 +6,6 @@ import Image from "next/image";
 import CuponsSideBar from "../CuponsSideBar/CuponsSideBar";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { cleanProductName } from "../../../lib/productUtils";
 
 const CartSideBar = () => {
   const {
@@ -152,7 +151,7 @@ const CartSideBar = () => {
                           </div>
                           <div className={styles.ProdDetails}>
                             <h5>
-                              {cleanProductName(item.name)}
+                              {(item.name)}
                               {item.attributes?.attribute_pa_weight
                                 ? ` - ${item.attributes.attribute_pa_weight}`
                                 : ""}

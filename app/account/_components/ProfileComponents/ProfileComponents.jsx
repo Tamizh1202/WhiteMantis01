@@ -15,24 +15,26 @@ const UAE_STATES = [
 ];
 
 const ProfileComponents = ({ initialData }) => {
+
+  console.log(initialData)
   const { update } = useSession();
   const [profile, setProfile] = useState({
-    ...initialData.profile,
-    phone: initialData.profile.metaData?.find((item) => item.key === "phonenumber")?.value || initialData.profile.phone
+    // Add .user before the field names
+    firstName: initialData?.user?.firstName || "",
+    lastName: initialData?.user?.lastName || "",
+    email: initialData?.user?.email || "",
+    phone: initialData?.user?.phone || "",
+    gender: initialData?.user?.gender || "",
+    profileImage: initialData?.user?.profileImage || null,
+    addresses: initialData?.user?.addresses || [],
   });
-  const isGuestUser = !initialData.profile?.email;
+  const isGuestUser = false;
 
   const [editMode, setEditMode] = useState(false);
 
   const [addresses, setAddresses] = useState(
-    (
-      initialData.profile.metaData?.find(
-        (item) => item.key === "saved_addresses",
-      )?.value || []
-    ).map((addr, index) => ({
-      ...addr,
-      id: addr.id || Date.now() + index,
-    })),
+    // Use .user.addresses to reach the Payload data
+    initialData?.user?.addresses || initialData?.addresses || []
   );
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -166,10 +168,13 @@ const ProfileComponents = ({ initialData }) => {
   const openAddAddress = () => {
     setEditingAddressId(null);
     setAddressForm({
-      isDefault: false,
+      isDefault: true,
+      fullName: 'Tamil',
       country: "United Arab Emirates (UAE)",
       state: "Dubai",
     });
+
+    console.log(addressForm)
     setAddressErrors({});
     setAddressGeneralError("");
     setShowAddressPopup(true);
@@ -339,15 +344,7 @@ const ProfileComponents = ({ initialData }) => {
           <div className={styles.Top}>
             <div className={styles.TopLeft}>
               <img
-                src={
-                  initialData.profile.metaData?.find(
-                    (item) => item.key === "profile_image",
-                  )?.value?.url || one.src
-                }
-                alt="Profile Pic"
-                // width={500}
-                // height={500}
-                className={styles.ProfilePic}
+                src={initialData?.profileImage?.url || one.src}
               />
             </div>
             {!isGuestUser && (
@@ -505,11 +502,7 @@ const ProfileComponents = ({ initialData }) => {
                     </select>
                   ) : (
                     <input
-                      value={
-                        initialData.profile.metaData?.find(
-                          (item) => item.key === "gender",
-                        )?.value
-                      }
+                      value={initialData?.gender || ""}
                       style={{ textTransform: "capitalize" }}
                       disabled
                     />
@@ -549,18 +542,25 @@ const ProfileComponents = ({ initialData }) => {
                       <div className={styles.AddressCard}>
                         <div className={styles.AddressText}>
                           <p className={styles.Name}>
-                            {defaultAddress.firstName +
-                              " " +
-                              defaultAddress.lastName}
+                            {/* Note the use of addressFirstName/LastName */}
+                            {`${defaultAddress.x || ""} ${defaultAddress.addressLastName || ""}`}
                           </p>
-                          <p>{defaultAddress.address} </p>
-                          <p>{defaultAddress.apartment}</p>
-                          <p>
-                            {defaultAddress.city}, {defaultAddress.state}{" "}
-                            {defaultAddress.postalCode}
+                          <p className={styles.Name}>
+                            {/* Note the use of addressFirstName/LastName */}
+                            {`${defaultAddress.addressFirstName || ""} ${defaultAddress.addressLastName || ""}`}
                           </p>
-                          <p className={styles.Phone}>
-                            Phone number: {defaultAddress.phone}
+                          <hr />
+
+                          <p className={styles.Name}>{defaultAddress.street}</p>
+                          <p className={styles.Name}>{defaultAddress.apartment}</p>
+
+                          <p className={styles.Name}>
+                            {/* Note the use of emirates for UAE addresses */}
+                            {defaultAddress.city}, {defaultAddress.emirates || defaultAddress.state}
+                          </p>
+                          <hr />
+                          <p className={styles.Name}>
+                            Phone number: {defaultAddress.phoneNumber}
                           </p>
                         </div>
 
@@ -595,7 +595,7 @@ const ProfileComponents = ({ initialData }) => {
                             >
                               <path
                                 d="M2.66067 16C2.18812 16 1.78444 15.8327 1.44961 15.498C1.11495 15.1632 0.947615 14.7595 0.947615 14.287V2.25959H0V0.838165H4.26427V0H9.94995V0.838165H14.2142V2.25959H13.2666V14.287C13.2666 14.7657 13.1008 15.1708 12.7691 15.5025C12.4374 15.8342 12.0323 16 11.5536 16H2.66067ZM11.8452 2.25959H2.36904V14.287C2.36904 14.3721 2.39636 14.442 2.45101 14.4966C2.50565 14.5513 2.57554 14.5786 2.66067 14.5786H11.5536C11.6265 14.5786 11.6933 14.5482 11.754 14.4874C11.8148 14.4267 11.8452 14.3599 11.8452 14.287V2.25959ZM4.6471 12.6833H6.06829V4.15482H4.6471V12.6833ZM8.14593 12.6833H9.56712V4.15482H8.14593V12.6833Z"
-                                fill="#6E736A"
+                                fill="#FF0000"
                               />
                             </svg>
                           </span>
@@ -625,7 +625,6 @@ const ProfileComponents = ({ initialData }) => {
                               Phone number: {addr.phone}
                             </p>
                           </div>
-
                           <div className={styles.AddressActions}>
                             <span onClick={() => openEditAddress(addr)}>
                               <svg

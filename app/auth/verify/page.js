@@ -6,6 +6,7 @@ import Image from "next/image";
 import Logo from "./logo.png";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import axiosClient from "@/lib/axios";
 
 const RESEND_COOLDOWN = 60;
 
@@ -21,20 +22,8 @@ export default function Otp() {
   const [countdown, setCountdown] = useState(RESEND_COOLDOWN);
   const [userEmail, setUserEmail] = useState("");
 
-  // Fetch user email on mount
   useEffect(() => {
-    async function fetchEmail() {
-      try {
-        const emailRes = await fetch("/api/website/auth/user-auth/prefill-email");
-        const emailData = await emailRes.json();
-        if (emailData?.email) {
-          setUserEmail(emailData.email);
-        }
-      } catch (e) {
-        console.error("Failed to fetch email:", e);
-      }
-    }
-    fetchEmail();
+    setUserEmail(sessionStorage.getItem("email"));
   }, []);
 
   // Countdown timer
@@ -84,40 +73,20 @@ export default function Otp() {
     }
 
     try {
-      const res = await fetch("/api/website/auth/otp/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ otp: otpString }),
+      const res = await axiosClient.post("api/otp/verify-web", {
+        otp: otpString,
+        email: userEmail,
       });
 
-      const json = await res.json();
+      console.log(res)
 
-      if (!res.ok || !json.success) {
+      const json = res.data;
+
+      if (res.status !== 200 || !json.success) {
         setError(json.message || "Invalid or expired OTP");
         setLoading(false);
         return;
       }
-
-      const emailRes = await fetch("/api/website/auth/user-auth/prefill-email");
-      const emailData = await emailRes.json();
-
-      if (!emailData?.email) {
-        setError("Session expired. Please start again.");
-        setLoading(false);
-        return;
-      }
-
-      const signInResult = await signIn("credentials", {
-        redirect: false,
-        email: emailData.email,
-        password: json.jwt,
-      });
-
-      if (signInResult?.error) {
-        console.error("NextAuth session creation failed:", signInResult.error);
-      }
-
-      console.log("signInResult", json);
 
       if (json.isNewUser) {
         router.push("/auth/create-profile");
@@ -142,13 +111,13 @@ export default function Otp() {
     setResending(true);
 
     try {
-      const res = await fetch("/api/website/auth/otp/send", {
-        method: "POST",
+      const signupRes = await axiosClient.post("api/otp/send-web", {
+        email: userEmail,
       });
 
-      const json = await res.json();
+      const json = signupRes.data;
 
-      if (!res.ok) {
+      if (signupRes.status !== 200) {
         setError(json.error || "Unable to resend OTP");
         setResending(false);
         return;

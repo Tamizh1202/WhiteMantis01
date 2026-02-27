@@ -21,7 +21,13 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
   },
   "include": [
     "next-env.d.ts",
@@ -29,8 +35,9 @@
     "**/*.ts",
     "**/*.tsx",
     "app/filter-product/page.jsx",
-    ".next/dev/types/**/*.ts"
-, "app/_context/_components/addToCartToast.jsx"  ],
+    ".next/dev/types/**/*.ts",
+    "app/_context/_components/addToCartToast.jsx"
+  ],
   "exclude": [
     "node_modules",
     "app/_components"
