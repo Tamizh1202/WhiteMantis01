@@ -16,7 +16,6 @@ const UAE_STATES = [
 
 const ProfileComponents = ({ initialData }) => {
 
-  console.log(initialData)
   const { update } = useSession();
   const [profile, setProfile] = useState({
     // Add .user before the field names

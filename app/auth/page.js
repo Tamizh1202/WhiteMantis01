@@ -4,61 +4,80 @@ import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Logo from "./logo.png";
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axiosClient from "@/lib/axios";
 
 function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/");
-    }
-  }, [status, router]);
+    async function handleAuthLogic() {
+      if (status === "loading" || verifying) return;
 
-  // Handle Google OAuth callback
-  useEffect(() => {
-    async function handleGoogleCallback() {
-      if (status === "authenticated" && session?.user?.email) {
-        const isFromGoogle =
-          searchParams.get("from") === "google" ||
-          window.location.href.includes("callbackUrl");
+      if (status === "authenticated") {
+        // Case 1: Google login, needs backend verification if not already done
+        if (session?.isGoogleLogin && !session?.user?.["paylaod-token"]) {
+          setVerifying(true);
+          try {
+            console.log("Verifying Google Auth with Backend...");
+            const res = await axiosClient.post("/api/website/google-auth", {
+              googleToken: session.googleIdToken,
+            });
 
-        if (!isFromGoogle) return;
+            const json = res.data;
+            console.log("Backend Response:", json);
 
-        setLoading(true);
+            if (json.success) {
+              await update({
+                user: {
+                  ...session.user,
+                  id: json.user.id.toString(),
+                  firstName: json.user.firstName,
+                  lastName: json.user.lastName,
+                  profileImage: json.user.profileImage,
+                  stripeCustomerId: json.user.stripeCustomerId,
+                  "paylaod-token": json.token,
+                  isNewUser: json.isNewUser,
+                  success: true,
+                },
+              });
 
-        try {
-          const jwtRes = await fetch("/api/website/auth/jwt/get", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: session.user.email,
-            }),
-          });
-
-          const jwtData = await jwtRes.json();
-
-          if (!jwtRes.ok) {
-            throw new Error(jwtData.error || "Social login failed");
+              if (json.isNewUser) {
+                router.push("/auth/create-profile");
+              } else {
+                router.push("/");
+              }
+            } else {
+              setError(json.message || "Backend verification failed");
+            }
+          } catch (err) {
+            console.error("Google Auth Verification Error:", err);
+            setError("Failed to link account with backend");
+          } finally {
+            setVerifying(false);
           }
-
-          router.push("/");
-        } catch (e) {
-          setError(e.message || "Failed to complete sign-in");
-          setLoading(false);
         }
+        // Case 2: Already verified or OTP login
+        else {
+          if (session?.user?.isNewUser) {
+            router.push("/auth/create-profile");
+          } else {
+            router.push("/");
+          }
+        }
+        router.refresh();
       }
     }
 
-    handleGoogleCallback();
-  }, [status, session, searchParams, router]);
+    handleAuthLogic();
+  }, [status, session, router, update]);
 
   async function handleContinue(e) {
     e.preventDefault();
@@ -91,9 +110,11 @@ function AuthPageContent() {
         return;
       }
 
-      router.push("/auth/verify");
+      if (signupJson.success === true) {
+        router.push("/auth/verify");
+      }
     } catch (e) {
-      setError(e.message || "Something went wrong");
+      setError(e.response.data.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -155,9 +176,9 @@ function AuthPageContent() {
                 <button
                   className={styles.ctacontinue}
                   onClick={handleContinue}
-                  disabled={loading || !email}
+                  disabled={loading || verifying || !email}
                 >
-                  {loading ? "Processing..." : "Continue"}
+                  {loading || verifying ? "Processing..." : "Continue"}
                 </button>
               </div>
             </div>

@@ -1,10 +1,9 @@
 "use client";
-
 import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from "./logo.png";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/lib/axios";
 
@@ -73,22 +72,43 @@ export default function Otp() {
     }
 
     try {
-      const res = await axiosClient.post("api/otp/verify-web", {
-        otp: otpString,
+      // Step 1: Call the backend route directly
+      const verifyRes = await axiosClient.post("/api/otp/verify-web", {
         email: userEmail,
+        otp: otpString,
       });
 
-      console.log(res)
+      const verifyData = verifyRes.data;
 
-      const json = res.data;
-
-      if (res.status !== 200 || !json.success) {
-        setError(json.message || "Invalid or expired OTP");
+      if (!verifyData.success) {
+        setError(verifyData.message || "Invalid or expired OTP");
         setLoading(false);
         return;
       }
 
-      if (json.isNewUser) {
+      // Step 2: Sign in to NextAuth with the verified data
+      const res = await signIn("otp", {
+        user: JSON.stringify(verifyData.user),
+        token: verifyData.token || verifyData.jwt,
+        redirect: false,
+      });
+
+      console.log("NextAuth SignIn Response:", res);
+
+      if (res?.error) {
+        setError("Login failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Save the payload token in a cookie for direct Payload CMS API calls
+      const payloadToken = verifyData.token || verifyData.jwt;
+      if (payloadToken) {
+        document.cookie = `payload-token=${payloadToken}; path=/; SameSite=Lax`;
+      }
+
+      // Redirect based on whether it's a new user
+      if (verifyData.isNewUser) {
         router.push("/auth/create-profile");
       } else {
         router.push("/");
@@ -97,7 +117,7 @@ export default function Otp() {
       router.refresh();
     } catch (e) {
       console.error("OTP verification error:", e);
-      setError(e.message || "Verification failed");
+      setError(e.response?.data?.message || e.message || "Verification failed");
       setLoading(false);
     }
   }
@@ -111,22 +131,24 @@ export default function Otp() {
     setResending(true);
 
     try {
-      const signupRes = await axiosClient.post("api/otp/send-web", {
-        email: userEmail,
-      });
+      // const signupRes = await axiosClient.post("api/otp/send-web", {
+      //   email: userEmail,
+      // });
 
-      const json = signupRes.data;
+      // const json = signupRes.data;
 
-      if (signupRes.status !== 200) {
-        setError(json.error || "Unable to resend OTP");
-        setResending(false);
-        return;
-      }
+      // if (signupRes.status !== 200) {
+      //   setError(json.error || "Unable to resend OTP");
+      //   setResending(false);
+      //   return;
+      // }
 
-      setInfo("OTP sent again. Please check your email.");
-      setCountdown(RESEND_COOLDOWN);
-      setOtp(["", "", "", ""]);
-      inputsRef.current[0]?.focus();
+      // setInfo("OTP sent again. Please check your email.");
+      // setCountdown(RESEND_COOLDOWN);
+      // setOtp(["", "", "", ""]);
+      // inputsRef.current[0]?.focus();
+
+
     } catch (e) {
       setError(e.message || "Failed to resend OTP");
     } finally {

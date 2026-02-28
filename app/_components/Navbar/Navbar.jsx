@@ -4,9 +4,11 @@ import styles from "./Navbar.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-const Logo = "/White-mantis-animated-logo.gif";
 import { useSession } from "next-auth/react";
 import { useCart } from "../../_context/CartContext";
+import axiosClient from "@/lib/axios";
+
+const Logo = "/White-mantis-animated-logo.gif";
 
 const Navbar = () => {
   const closeShopDropdown = () => {
@@ -21,6 +23,29 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   const dropdownRef = useRef(null);
   const { isCartOpen, openCart, closeCart, items } = useCart();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      try {
+        const res = await axiosClient.get("/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100");
+        const fetchedCategories = await res.data;
+
+        if (res.status !== 200) {
+          throw new Error(fetchedCategories.message || "Categories fetch failed");
+        }
+        setCategories(fetchedCategories.docs);
+      } catch (e) {
+        setError(e.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,16 +99,14 @@ const Navbar = () => {
               onMouseLeave={handleMouseLeave}
             >
               <div
-                className={`${styles.OurShops} ${
-                  pathname.startsWith("/shop") ? styles.active : ""
-                }`}
+                className={`${styles.OurShops} ${pathname.startsWith("/shop") ? styles.active : ""
+                  }`}
                 onClick={() => setShopOpen((prev) => !prev)}
               >
                 <p>Our Shop</p>
                 <svg
-                  className={`${styles.Arrow} ${
-                    shopOpen ? styles.ArrowOpen : ""
-                  }`}
+                  className={`${styles.Arrow} ${shopOpen ? styles.ArrowOpen : ""
+                    }`}
                   width="8"
                   height="5"
                   viewBox="0 0 8 5"
@@ -97,9 +120,8 @@ const Navbar = () => {
               </div>
 
               <div
-                className={`${styles.DummyMain} ${
-                  shopOpen ? styles.DummyMainOpen : ""
-                }`}
+                className={`${styles.DummyMain} ${shopOpen ? styles.DummyMainOpen : ""
+                  }`}
               >
                 <div className={styles.DummyMainCoantiner}>
                   <div className={styles.DummyLeft}>
@@ -119,24 +141,16 @@ const Navbar = () => {
                           <h4>Coffee</h4>
                         </div>
                         <div className={styles.DummyLeftTwoLeftBottom}>
-                          <Link
-                            href="/shop/coffee-beans"
-                            onClick={closeShopDropdown}
-                          >
-                            <p>Coffee Beans</p>
-                          </Link>
-                          <Link
-                            href="/shop/coffee-dripbags"
-                            onClick={closeShopDropdown}
-                          >
-                            <p>Coffee Drip bags</p>
-                          </Link>
-                          <Link
-                            href="/shop/coffee-capsules"
-                            onClick={closeShopDropdown}
-                          >
-                            <p>Coffee Capsules</p>
-                          </Link>
+
+                          {categories.map((category) => (
+                            <Link
+                              key={category.id}
+                              href={`/shop/${category.slug}`}
+                              onClick={closeShopDropdown}
+                            >
+                              <p>{category.title}</p>
+                            </Link>
+                          ))}
                         </div>
                       </div>
 
@@ -162,7 +176,7 @@ const Navbar = () => {
                         </p>
                       </div>
                       <div className={styles.DummyRightOneBottom}>
-                        <Link href="/shop/coffee-beans">
+                        <Link href={categories.length > 0 ? `/shop/${categories[0].slug}` : "/shop/coffee-beans"}>
                           <button className={styles.DummyExplore}>
                             Explore
                           </button>

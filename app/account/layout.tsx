@@ -3,11 +3,13 @@ import Breadcrumb from "./_components/Breadcrumb/Breadcrumb";
 import Sidebar from "./_components/Sidebar/Sidebar";
 import styles from "./layout.module.css";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../lib/nextauth";
 import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/nextauth";
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions as any);
+
+  console.log(session)
 
   if (!session) {
     redirect("/auth");

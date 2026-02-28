@@ -6,6 +6,7 @@ import Image from "next/image";
 import one from "./1.png";
 import whatsappIcon from "./Whatsapp-icon.svg";
 import Link from "next/link";
+import { validateEmail, validateUAEPhone } from "@/utils/validatorFunctions";
 
 const ContactForm = () => {
   const [fullName, setFullName] = useState("");
@@ -17,7 +18,36 @@ const ContactForm = () => {
   const [responseMessage, setResponseMessage] = useState("");
   const [responseError, setResponseError] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const enquiryOptions = ["General", "Support", "Partnership", "Careers"];
+  const enquiryOptions = [
+    {
+      "label": "Order issue",
+      "value": "order_issue"
+    },
+    {
+      "label": "Payment or refund",
+      "value": "payment_refund"
+    },
+    {
+      "label": "Rewards & stamps",
+      "value": "rewards_stamps"
+    },
+    {
+      "label": "Barista selection",
+      "value": "barista_selection"
+    },
+    {
+      "label": "Pickup or timing",
+      "value": "pickup_timing"
+    },
+    {
+      "label": "Menu & availability",
+      "value": "menu_availability"
+    },
+    {
+      "label": "Other",
+      "value": "other"
+    }
+  ]
 
   const ENDPOINT = "/api/website/contact";
 
@@ -26,54 +56,35 @@ const ContactForm = () => {
     setResponseMessage("");
     setResponseError(false);
 
-    if (!fullName.trim() || !email.trim()) {
+    if (!fullName.trim() || !email.trim() || !phone.trim() || !enquiryType.trim() || !message.trim()) {
       setResponseError(true);
-      setResponseMessage("Please enter your name and email.");
+      setResponseMessage("Invalid Input");
+      return;
+    }
+
+    if (validateEmail(email.trim())) {
+      setResponseError(true);
+      setResponseMessage("Please enter a valid email address.");
+      return;
+    }
+
+    if (validateUAEPhone(phone.trim())) {
+      setResponseError(true);
+      setResponseMessage("Please enter a valid UAE phone number.");
       return;
     }
 
     setLoading(true);
-    try {
-      const payload = {
-        full_name: fullName.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-        enquiry_type: enquiryType.trim(),
-        message: message.trim(),
-      };
 
-      const res = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    const payload = {
+      full_name: fullName.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      enquiry_type: enquiryType.trim(),
+      message: message.trim(),
+    };
 
-      const json = await res.json();
-      if (!res.ok || (json && json.success === false)) {
-        setResponseError(true);
-        setResponseMessage(
-          (json && json.message) || "Submission failed. Please try again.",
-        );
-      } else {
-        setResponseError(false);
-        setResponseMessage("Thank you! Your message has been submitted.");
-        setFullName("");
-        setEmail("");
-        setPhone("");
-        setEnquiryType("");
-        setMessage("");
-      }
-    } catch (err) {
-      setResponseError(true);
-      setResponseMessage("Network error. Please try again.");
-    } finally {
-      try {
-        window.setTimeout(() => {
-          setResponseMessage("");
-        }, 3000);
-      } catch (e) {}
-      setLoading(false);
-    }
+    console.log(payload)
   };
 
   return (
@@ -128,9 +139,8 @@ const ContactForm = () => {
                 </div>
 
                 <div
-                  className={`${testStyles.selectWrap} ${
-                    enquiryOpen ? testStyles.open : ""
-                  }`}
+                  className={`${testStyles.selectWrap} ${enquiryOpen ? testStyles.open : ""
+                    }`}
                 >
                   <select
                     value={enquiryType}
@@ -141,10 +151,11 @@ const ContactForm = () => {
                     }}
                   >
                     <option value="">Please select enquiry type</option>
-                    <option value="General">General</option>
-                    <option value="Support">Support</option>
-                    <option value="Partnership">Partnership</option>
-                    <option value="Careers">Careers</option>
+                    {enquiryOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
 

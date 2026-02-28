@@ -6,36 +6,29 @@ import Image from "next/image";
 import Logo from "./logo.png";
 import flag from "./2.png";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import axiosClient from "@/lib/axios";
 
 export default function CreateProfile() {
   const router = useRouter();
-
-  const [email, setEmail] = useState("");
+  const { data: session, status } = useSession();
+  const [email, setEmail] = useState(session?.user?.email || "");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Fetch prefilled email from cookie-based API
   useEffect(() => {
-    async function fetchEmail() {
-      try {
-        const res = await fetch("/api/website/auth/user-auth/prefill-email", {
-          method: "GET",
-        });
-        const data = await res.json();
-        if (data?.email) {
-          setEmail(data.email);
-        }
-      } catch (e) {
-        console.error("Failed to fetch prefilled email", e);
-      }
+    if (status === "unauthenticated") {
+      router.push("/auth");
     }
-
-    fetchEmail();
-  }, []);
+    setEmail(session?.user?.email)
+    if (session?.user?.phone && !phone) {
+      const formatted = session.user.phone.toString().replace(/[^0-9]/g, "");
+      setPhone(formatted);
+    }
+  }, [session])
 
   async function submit(e) {
     e.preventDefault();
@@ -43,19 +36,16 @@ export default function CreateProfile() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/website/auth/user-auth/signup/complete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          phone: `+971${phone}`,
-          gender,
-        }),
-      });
+      const res = await axiosClient.patch(`/api/users/${session?.user?.id}`, {
+        firstName: name,
+        lastName: name,
+        gender: gender.toLowerCase(),
+        phone: phone,
+      })
 
-      const json = await res.json();
+      const json = await res.data;
 
-      if (!res.ok || !json.success) {
+      if (res.status !== 200) {
         throw new Error(json.message || "Profile update failed");
       }
 
@@ -139,9 +129,9 @@ export default function CreateProfile() {
                   disabled={loading}
                 >
                   <option value="">Gender (optional)</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Prefer not to say</option>
                 </select>
 
                 <svg

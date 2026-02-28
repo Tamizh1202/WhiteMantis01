@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { AuthProvider } from "./_context/AuthContext";
 import { CartProvider } from "./_context/CartContext";
 import { WishlistProvider } from "./_context/WishlistContext";
+import SmoothScrollProvider from "./_providers/SmoothScrollProvider";
 
 export function Providers({ children }) {
   return (
@@ -11,7 +12,9 @@ export function Providers({ children }) {
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
-            {children}
+            <SmoothScrollProvider>
+              {children}
+            </SmoothScrollProvider>
           </WishlistProvider>
         </CartProvider>
       </AuthProvider>

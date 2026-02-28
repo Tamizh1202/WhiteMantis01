@@ -53,8 +53,8 @@ const Lisiting = () => {
       setIsLoading(true);
       try {
         const [catRes, prodRes] = await Promise.all([
-          fetch(`/api/website/products/categories?parent_id=${PARENT_ID}`),
-          fetch(`/api/website/products?category_id=${PARENT_ID}`),
+          fetch(`/api/web-products?category=${PARENT_ID}`),
+          fetch(`/api/web-products?category=${PARENT_ID}`),
         ]);
 
         if (catRes.ok && prodRes.ok) {
@@ -82,21 +82,21 @@ const Lisiting = () => {
     }
     fetchData();
   }, []);
-useEffect(() => {
-  if (!showSubscribePopup) return;
+  useEffect(() => {
+    if (!showSubscribePopup) return;
 
-  const handleClickOutside = (e) => {
-    if (popupRef.current && !popupRef.current.contains(e.target)) {
-      setShowSubscribePopup(false);
-    }
-  };
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        setShowSubscribePopup(false);
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, [showSubscribePopup]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSubscribePopup]);
 
   // 4. FRONTEND ONLY: Filter & Sort logic (Functionality)
   const filteredProducts = useMemo(() => {
@@ -187,8 +187,8 @@ useEffect(() => {
     // Find subscription product from children
     const subscriptionProduct = product.children
       ? Object.values(product.children).find(
-          (child) => child.type === "variable-subscription",
-        )
+        (child) => child.type === "variable-subscription",
+      )
       : null;
 
     if (!subscriptionProduct) {
@@ -238,9 +238,9 @@ useEffect(() => {
     const variation = selectedProduct.subscription.variation_options?.find(
       (v) =>
         v.attributes["attribute_pa_simple-subscription-frequenc"] ===
-          selectedFrequency &&
+        selectedFrequency &&
         v.attributes["attribute_pa_simple-subscription-quantity"] ===
-          selectedQuantity &&
+        selectedQuantity &&
         v.attributes.attribute_pa_weight === selectedSubWeight,
     );
 
@@ -284,9 +284,8 @@ useEffect(() => {
               {openMenus[cat.slug] ? <span>✕</span> : <span>▾</span>}
             </div>
             <div
-              className={`${styles.AnimatedBox} ${
-                openMenus[cat.slug] ? styles.open : ""
-              }`}
+              className={`${styles.AnimatedBox} ${openMenus[cat.slug] ? styles.open : ""
+                }`}
             >
               <div className={styles.FilterOptions}>
                 {renderCategories(cat.children)}
@@ -393,12 +392,11 @@ useEffect(() => {
                 >
                   <p>{sortType}</p>
                   <span
-    className={`${styles.SortArrow} ${
-      sortOpen ? styles.SortArrowOpen : ""
-    }`}
-  >
-    ▼
-  </span>
+                    className={`${styles.SortArrow} ${sortOpen ? styles.SortArrowOpen : ""
+                      }`}
+                  >
+                    ▼
+                  </span>
                 </div>
                 {sortOpen && (
                   <div className={styles.SortDropdown}>
@@ -492,7 +490,7 @@ useEffect(() => {
                             <h4>AED {displayData.price}</h4>
                             {displayData.sale_price &&
                               displayData.sale_price !==
-                                displayData.regular_price && (
+                              displayData.regular_price && (
                                 <p className={styles.OldPrice}>
                                   AED {displayData.regular_price}
                                 </p>
@@ -561,7 +559,7 @@ useEffect(() => {
         {/* Subscription Popup */}
         {showSubscribePopup && selectedProduct && (
           <div className={styles.PopupOverlay}>
-            <div className={styles.Popup}  ref={popupRef}>
+            <div className={styles.Popup} ref={popupRef}>
               <button
                 className={styles.PopupClose}
                 onClick={() => setShowSubscribePopup(false)}
@@ -581,7 +579,7 @@ useEffect(() => {
                       selectedProduct.subscription.variation_options.map(
                         (v) =>
                           v.attributes[
-                            "attribute_pa_simple-subscription-quantity"
+                          "attribute_pa_simple-subscription-quantity"
                           ],
                       ),
                     ),
@@ -636,7 +634,7 @@ useEffect(() => {
                       selectedProduct.subscription.variation_options.map(
                         (v) =>
                           v.attributes[
-                            "attribute_pa_simple-subscription-frequenc"
+                          "attribute_pa_simple-subscription-frequenc"
                           ],
                       ),
                     ),
@@ -663,10 +661,10 @@ useEffect(() => {
                   selectedProduct.subscription.variation_options?.find(
                     (v) =>
                       v.attributes[
-                        "attribute_pa_simple-subscription-frequenc"
+                      "attribute_pa_simple-subscription-frequenc"
                       ] === selectedFrequency &&
                       v.attributes[
-                        "attribute_pa_simple-subscription-quantity"
+                      "attribute_pa_simple-subscription-quantity"
                       ] === selectedQuantity &&
                       v.attributes.attribute_pa_weight === selectedSubWeight,
                   );

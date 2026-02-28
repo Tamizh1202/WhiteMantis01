@@ -9,6 +9,7 @@ const Logo = "/White-mantis-animated-logo.gif";
 import { useCart } from "../../_context/CartContext";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { useEffect } from "react";
 
 const NavbarMobile = () => {
   const pathname = usePathname();
@@ -16,9 +17,33 @@ const NavbarMobile = () => {
   const [shopOpen, setShopOpen] = useState(true);
   const [accountOpen, setAccountOpen] = useState(true);
   const [showLogout, setShowLogout] = useState(false);
-
   const { isCartOpen, openCart, closeCart, items } = useCart();
   const { data: session, status } = useSession();
+
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      try {
+        const res = await axiosClient.get("/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100");
+        const fetchedCategories = await res.data;
+
+        if (res.status !== 200) {
+          throw new Error(fetchedCategories.message || "Categories fetch failed");
+        }
+        setCategories(fetchedCategories.docs);
+      } catch (e) {
+        setError(e.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, [])
+
   const handleLogout = async () => {
     try {
       await fetch("/api/website/auth/logout", {
@@ -143,7 +168,7 @@ const NavbarMobile = () => {
                 onClick={() => setShopOpen(!shopOpen)}
               >
                 Our Shop
-         
+
                 <svg
                   className={shopOpen ? styles.Rotate : ""}
                   width="14"
@@ -183,12 +208,12 @@ const NavbarMobile = () => {
                       >
                         Coffee Capsules
                       </Link>
-                    </div> 
+                    </div>
                     {/* <div className={styles.Columnvee}>
                     <Link href="/shop/merchandise">Merchandise</Link>
                     <Link href="/shop/equipment">Equipments</Link>
                   </div> */}
-                 </div>
+                  </div>
                 </>
               )}
             </div>
@@ -211,7 +236,7 @@ const NavbarMobile = () => {
             >
               Subscriptions
             </Link>
-             <div className={styles.Line}></div>
+            <div className={styles.Line}></div>
             <Link
               className={styles.SectionHeader}
               href="/wholesale"
