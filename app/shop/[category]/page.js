@@ -6,8 +6,11 @@ import Landing from "./_components/Landing/Landing";
 export default async function ShopCategoryPage({ params }) {
   const { category } = await params;
 
-  // Validate the category slug against the real list
-  const res = await axiosClient.get("/api/web-categories?sort=createdAt&select[slug]=true&depth=0&limit=100");
+  // Validate the category slug against the real list using native fetch (server-safe)
+  const apiUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+  const res = await fetch(`${apiUrl}/api/web-categories?sort=createdAt&select[slug]=true&depth=0&limit=100`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) notFound();
 

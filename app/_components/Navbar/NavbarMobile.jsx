@@ -10,6 +10,7 @@ import { useCart } from "../../_context/CartContext";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { useEffect } from "react";
+import axiosClient from "@/lib/axios";
 
 const NavbarMobile = () => {
   const pathname = usePathname();
@@ -104,7 +105,7 @@ const NavbarMobile = () => {
               />
             </svg>
 
-            {items.length > 0 && (
+            {Array.isArray(items) && items.length > 0 && (
               <span className={styles.CartBadge}>{items.length}</span>
             )}
           </div>

@@ -1,121 +1,127 @@
 "use client";
-import React, { useState } from "react";
-import styles from "./ProfileComponents.module.css";
-import one from "./1.png";
-import { useSession } from "next-auth/react";
+// ─── ProfileComponents (Orchestrator) ────────────────────────────────────────
+// This is the top-level component for the profile page.
+// It owns ALL state and passes only the needed props down to each sub-component.
+//
+// Sub-components live in: ./_components/
+// API helpers live in:    ./profileApiUtils.js
+// Constants live in:      ./profileConstants.js
+// Validation uses:        @/utils/validatorFunctions
 
-const UAE_STATES = [
-  "Abu Dhabi",
-  "Dubai",
-  "Sharjah",
-  "Ajman",
-  "Umm Al Quwain",
-  "Ras Al Khaimah",
-  "Fujairah",
-];
+import React, { useState, useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
+import styles from "./ProfileComponents.module.css";
+
+// ── Utils & Constants ─────────────────────────────────────────────────────────
+import { UAE_STATES } from "./profileConstants";
+import {
+  updateProfileAPI,
+  saveAddressAPI,
+  deleteAddressAPI,
+  checkDeleteAccountAPI,
+  confirmDeleteAccountAPI,
+} from "./profileApiUtils";
+import { validateRequired, validateUAEPhone } from "@/utils/validatorFunctions";
+
+// ── Sub-components ────────────────────────────────────────────────────────────
+import ProfilePictureSection from "./_components/ProfilePictureSection";
+import PersonalInfoForm from "./_components/PersonalInfoForm";
+import OtpVerificationPopup from "./_components/OtpVerificationPopup";
+import AddressSection from "./_components/AddressSection";
+import AddressFormPopup from "./_components/AddressFormPopup";
+import DeleteAddressPopup from "./_components/DeleteAddressPopup";
+import DeleteAccountPopup from "./_components/DeleteAccountPopup";
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const ProfileComponents = ({ initialData }) => {
+  console.log(initialData);
 
-  const { update } = useSession();
+  const { update, data: session } = useSession();
+  const isGuestUser = false;
+
+  // ── Profile state ───────────────────────────────────────────────────────────
   const [profile, setProfile] = useState({
-    // Add .user before the field names
     firstName: initialData?.user?.firstName || "",
     lastName: initialData?.user?.lastName || "",
     email: initialData?.user?.email || "",
     phone: initialData?.user?.phone || "",
     gender: initialData?.user?.gender || "",
     profileImage: initialData?.user?.profileImage || null,
-    addresses: initialData?.user?.addresses || [],
   });
-  const isGuestUser = false;
-
+  const [originalEmail, setOriginalEmail] = useState(initialData?.user?.email || "");
   const [editMode, setEditMode] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const [addresses, setAddresses] = useState(
-    // Use .user.addresses to reach the Payload data
-    initialData?.user?.addresses || initialData?.addresses || []
-  );
+  // ── OTP state ───────────────────────────────────────────────────────────────
+  const [showOTP, popOTP] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [countdown, setCountdown] = useState(0);
+  const inputRefs = useRef([]);
 
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const interval = setInterval(() => setCountdown((p) => p - 1), 1000);
+    return () => clearInterval(interval);
+  }, [countdown]);
+
+  const handleOtpChange = (e, index) => {
+    const val = e.target.value;
+    if (isNaN(val)) return;
+    const newOtp = [...otp];
+    newOtp[index] = val.substring(val.length - 1);
+    setOtp(newOtp);
+    if (val && index < 3) inputRefs.current[index + 1].focus();
+  };
+
+  const handleOtpKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  // ── Address state ───────────────────────────────────────────────────────────
+  const [addresses, setAddresses] = useState(initialData?.user?.addresses || []);
   const [showAddressPopup, setShowAddressPopup] = useState(false);
-
   const [showEditAddressPopup, setShowEditAddressPopup] = useState(false);
-
   const [editingAddressId, setEditingAddressId] = useState(null);
   const [addressForm, setAddressForm] = useState({});
+  const [addressErrors, setAddressErrors] = useState({});
+  const [addressGeneralError, setAddressGeneralError] = useState("");
+  const [activeLabelBtn, setActiveLabelBtn] = useState(null);
 
   const [showDeleteAddressPopup, setShowDeleteAddressPopup] = useState(false);
   const [deleteAddressId, setDeleteAddressId] = useState(null);
 
+  // ── Delete account state ────────────────────────────────────────────────────
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [accountStatus, setAccountStatus] = useState(null);
 
-  // Validation helper functions from checkout logic
-  const validatePhone = (phoneValue) => {
-    if (!phoneValue || phoneValue.trim() === "") {
-      return "Phone number is required";
+  // ── Profile handlers ────────────────────────────────────────────────────────
+  /**
+   * Generic field change handler.
+   * The special field "__editMode__" is used by PersonalInfoForm's Edit button.
+   */
+  const handleFieldChange = (field, value) => {
+    if (field === "__editMode__") {
+      setEditMode(true);
+      return;
     }
-    // UAE phone validation - matches backend validation
-    const cleanNumber = phoneValue.replace(/\D/g, '');
-    const uaeRegex = /^(?:00971|971|0)?(5[024568]|2|3|4|6|7|9)\d{7}$/;
-    const match = cleanNumber.match(uaeRegex);
-
-    if (!match) {
-      return "Invalid phone number";
-    }
-    return "";
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
+    setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Validation states
-  const [errors, setErrors] = useState({});
-  const [addressErrors, setAddressErrors] = useState({});
-  const [addressGeneralError, setAddressGeneralError] = useState("");
-
-  const handleProfileChange = (field, value) => {
-    // Clear errors when user types
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: null }));
-    }
-
-    if (field === "name") {
-      const parts = value.split(" ");
-      const firstName = parts[0];
-      const lastName = parts.slice(1).join(" ");
-      setProfile((prev) => ({ ...prev, firstName, lastName }));
-    } else {
-      setProfile((prev) => ({ ...prev, [field]: value }));
-    }
-  };
-
-  const updateProfileAPI = async (payload) => {
-    try {
-      const res = await fetch("/api/website/profile/update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      return data;
-    } catch (error) {
-      console.error(error);
-      alert(error.message || "Failed to update profile");
-      return null;
-    }
-  };
-
-  const saveProfile = async () => {
-    // Validation
+  const handleSaveProfile = async () => {
     const newErrors = {};
-    const fullName = `${profile.firstName || ""} ${profile.lastName || ""}`.trim();
-    if (!fullName) newErrors.name = "Name is required";
+    const fnErr = validateRequired((profile.firstName || "").trim(), "First name");
+    const lnErr = validateRequired((profile.lastName || "").trim(), "Last name");
+    if (fnErr) newErrors.firstName = fnErr;
+    if (lnErr) newErrors.lastName = lnErr;
 
-    // Check if phone matches the initial data or is newly entered
-    const currentPhone = profile.phone || "";
-    if (!currentPhone && editMode) {
-      newErrors.phone = "Phone number is required";
-    } else if (currentPhone) {
-      const phoneError = validatePhone(currentPhone);
-      if (phoneError) newErrors.phone = phoneError;
+    // Phone is optional but must be valid if provided
+    if (profile.phone) {
+      const phErr = validateUAEPhone(profile.phone);
+      if (phErr) newErrors.phone = phErr;
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -123,996 +129,271 @@ const ProfileComponents = ({ initialData }) => {
       return;
     }
 
-    // Determine gender from state or metadata
-    const gender =
-      profile.gender ||
-      profile.metaData?.find((item) => item.key === "gender")?.value;
-
     const payload = {
-      full_name: `${profile.firstName} ${profile.lastName}`,
-      // email: profile.email,
-      phone: profile.phone || profile.shipping?.phone,
-      gender: gender,
-      // Send saved addresses as well to ensure data consistency
-      saved_addresses: transformAddressesForAPI(addresses),
+      firstName: profile.firstName.trim(),
+      lastName: profile.lastName.trim(),
+      phone: (profile.phone || "").trim(),
+      gender: (profile.gender || "male").toLowerCase(),
     };
 
-    const result = await updateProfileAPI(payload);
-    if (result && result.success) {
+    const result = await updateProfileAPI(session?.user?.id, payload);
+    if (result?.success) {
+      setOriginalEmail(profile.email);
       setEditMode(false);
-      // Optionally update local state with result.customer if needed
+      alert("Profile updated successfully!");
+    } else {
+      setErrors({ general: result.message || "Failed to update profile" });
     }
   };
 
-  const transformAddressesForAPI = (addrList) => {
-    return addrList.map((addr) => ({
-      firstName: addr.firstName || addr.fullName?.split(" ")[0] || "",
-      lastName:
-        addr.lastName || addr.fullName?.split(" ").slice(1).join(" ") || "",
-      address: addr.house || addr.address, // Mapping 'house' to 'address'
-      apartment: addr.area || addr.apartment, // Mapping 'area' to 'apartment'
-      city: addr.city,
-      state: addr.state,
-      postcode: addr.postal || addr.postcode,
-      country: addr.country,
-      phone: addr.phone,
-      setAsDefault: addr.isDefault,
-      id: addr.id, // Preserve ID
-    }));
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setErrors({});
   };
 
-  const defaultAddress = addresses.find((a) => a.isDefault) || addresses[0];
-  const otherAddresses = addresses.filter((a) => a !== defaultAddress);
+  // ── Profile picture handlers ────────────────────────────────────────────────
+  const handleUploadProfilePic = async (base64Image) => {
+    const res = await updateProfileAPI(session?.user?.id, { base64Image });
+    if (res?.success) {
+      const newImage = res.data?.customer?.meta_data?.find((m) => m.key === "profile_image")?.value;
+      await update({ profile_image: newImage });
+      window.location.reload();
+    }
+  };
 
+  const handleRemoveProfilePic = async () => {
+    if (!confirm("Are you sure you want to remove your profile picture?")) return;
+    const res = await updateProfileAPI(session?.user?.id, { profile_image: "" });
+    if (res?.success) {
+      await update({ profile_image: null });
+      window.location.reload();
+    }
+  };
+
+  // ── Address form change ─────────────────────────────────────────────────────
+  const handleAddressFormChange = (field, value) => {
+    setAddressForm((prev) => ({ ...prev, [field]: value }));
+    if (addressErrors[field]) {
+      setAddressErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  // ── Open Add Address popup ──────────────────────────────────────────────────
   const openAddAddress = () => {
     setEditingAddressId(null);
-    setAddressForm({
-      isDefault: true,
-      fullName: 'Tamil',
-      country: "United Arab Emirates (UAE)",
-      state: "Dubai",
-    });
-
-    console.log(addressForm)
+    setActiveLabelBtn(null);
+    setAddressForm({ isDefault: true, country: "United Arab Emirates", state: "Dubai" });
     setAddressErrors({});
     setAddressGeneralError("");
     setShowAddressPopup(true);
   };
 
+  // ── Open Edit Address popup ─────────────────────────────────────────────────
   const openEditAddress = (addr) => {
     setEditingAddressId(addr.id);
+    const currentLabel = addr.label || "";
+    const isStandard = ["Home", "Work"].includes(currentLabel);
+    setActiveLabelBtn(isStandard ? currentLabel : "Others");
     setAddressForm({
       ...addr,
-      fullName:
-        addr.fullName ||
-        `${addr.firstName || ""} ${addr.lastName || ""}`.trim(),
+      address: addr.street || addr.address || "",
+      phone: addr.phoneNumber || "",
+      country: addr.country || addr.emirates || "United Arab Emirates",
+      state: addr.emirates || addr.state || "",
     });
     setAddressErrors({});
     setAddressGeneralError("");
     setShowEditAddressPopup(true);
   };
 
-  const saveAddress = async () => {
-    // Validation
-    const newAddressErrors = {};
-    if (!addressForm.fullName?.trim()) {
-      newAddressErrors.fullName = "Full Name is required";
-    }
-    if (!addressForm.address?.trim()) {
-      newAddressErrors.address = "Address is required";
-    }
+  // ── Save address (add or edit) ──────────────────────────────────────────────
+  const handleSaveAddress = async () => {
+    const newErrors = {};
 
-    // Address Phone Validation
-    const phoneError = validatePhone(addressForm.phone);
-    if (phoneError) {
-      newAddressErrors.phone = phoneError;
-    }
+    const fnErr = validateRequired((addressForm.addressFirstName || "").trim(), "First name");
+    const addrErr = validateRequired((addressForm.address || "").trim(), "Address");
+    const phErr = validateUAEPhone(addressForm.phone);
 
-    if (Object.keys(newAddressErrors).length > 0) {
-      setAddressErrors(newAddressErrors);
-      // setAddressGeneralError("Please fill in all required fields.");
+    if (fnErr) newErrors.fullName = fnErr;
+    if (addrErr) newErrors.address = addrErr;
+    if (phErr) newErrors.phone = phErr;
+
+    if (Object.keys(newErrors).length > 0) {
+      setAddressErrors(newErrors);
       return;
     }
 
-    // Construct the payload for the SINGLE address
-    const fullNameParts = (addressForm.fullName || "").split(" ");
-    const firstName = fullNameParts[0];
-    const lastName = fullNameParts.slice(1).join(" ");
-
-    const payload = {
-      firstName: firstName || "",
-      lastName: lastName || "",
-      address: addressForm.address || addressForm.house || "", // Backwards compatibility
-      apartment: addressForm.apartment || addressForm.area || "", // Backwards compatibility
+    const payload = [{
+      label: addressForm.label || "others",
+      addressFirstName: addressForm.addressFirstName || "",
+      addressLastName: addressForm.addressLastName || "",
+      street: addressForm.address || addressForm.house || "",
+      apartment: addressForm.apartment || addressForm.area || "",
+      country: "United Arab Emirates",
       city: addressForm.city || "",
-      state: addressForm.state || "",
-      country: addressForm.country || "",
+      emirates: addressForm.state || "",
       phone: addressForm.phone || "",
-      setAsDefault: addressForm.isDefault || false,
-    };
+      isDefaultAddress: addressForm.isDefault || false,
+      ...(editingAddressId ? { address_id: editingAddressId } : {}),
+    }];
 
-    if (editingAddressId) {
-      payload.address_id = editingAddressId;
-    }
-
-    // Call NEW API
-    try {
-      const res = await fetch("/api/website/profile/address/update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-
-      // Update local state with the returned fresh list of addresses
-      if (data.addresses) {
-        setAddresses(data.addresses);
-      }
-
+    const result = await saveAddressAPI(session?.user?.id, payload);
+    if (result?.success) {
+      setAddresses(result.updatedAddresses);
       setShowAddressPopup(false);
       setShowEditAddressPopup(false);
       setEditingAddressId(null);
-    } catch (error) {
-      console.error(error);
-      alert(error.message || "Failed to save address");
+    } else {
+      setAddressGeneralError(result.error || "Failed to save address");
     }
   };
 
-  const deleteAddress = async (id) => {
-    // Not used directly, confirmDeleteAddress is used.
-    setAddresses((prev) => prev.filter((a) => a.id !== id));
+  // ── Delete address ──────────────────────────────────────────────────────────
+  const handleDeleteRequest = (id) => {
+    setDeleteAddressId(id);
+    setShowDeleteAddressPopup(true);
   };
 
-  const confirmDeleteAddress = async () => {
-    const newAddresses = addresses.filter(
-      (addr) => addr.id !== deleteAddressId,
-    );
+  const handleConfirmDeleteAddress = async () => {
+    const newAddresses = addresses.filter((a) => a.id !== deleteAddressId);
     setAddresses(newAddresses);
     setShowDeleteAddressPopup(false);
+    await deleteAddressAPI(session?.user?.id, deleteAddressId);
     setDeleteAddressId(null);
-
-    await updateProfileAPI({
-      saved_addresses: transformAddressesForAPI(newAddresses),
-    });
   };
 
-  const removeProfilePic = async () => {
-    if (confirm("Are you sure you want to remove your profile picture?")) {
-      const res = await updateProfileAPI({ profile_image: "" });
-      if (res && res.success) {
-        // Update session
-        await update({ profile_image: null });
-        window.location.reload();
-      }
-    }
-  };
-
+  // ── Delete account ──────────────────────────────────────────────────────────
   const handleDeleteAccount = async () => {
-    try {
-      // Fetch account status (active orders/subscriptions)
-      const checkRes = await fetch("/api/website/profile/delete", {
-        method: "GET",
-      });
-
-      const checkData = await checkRes.json();
-
-      if (!checkRes.ok) {
-        throw new Error(checkData.message || "Failed to check account status");
-      }
-
-      // Store account status to display in popup
-      setAccountStatus(checkData);
-    } catch (error) {
-      console.error("Delete account check error:", error);
-      alert(
-        error.message || "Failed to check account status. Please try again.",
-      );
+    const result = await checkDeleteAccountAPI();
+    if (result.success) {
+      setAccountStatus(result.data);
+      setShowDeletePopup(true);
+    } else {
+      alert(result.error || "Failed to check account status. Please try again.");
     }
   };
 
-  const confirmDeleteAccount = async () => {
-    try {
-      // Proceed with deletion
-      const deleteRes = await fetch("/api/website/profile/delete/confirm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const deleteData = await deleteRes.json();
-
-      if (!deleteRes.ok) {
-        throw new Error(deleteData.message || "Failed to delete account");
-      }
-
-      if (deleteData.success) {
-        // Account deleted successfully
-        // Redirect to home page
-        window.location.href = "/";
-      }
-    } catch (error) {
-      console.error("Delete account error:", error);
-      alert(error.message || "Failed to delete account. Please try again.");
+  const handleConfirmDeleteAccount = async () => {
+    const result = await confirmDeleteAccountAPI();
+    if (result.success) {
+      window.location.href = "/";
+    } else {
+      alert(result.error || "Failed to delete account. Please try again.");
     }
   };
+
+  // ─────────────────────────────────────────────────────────────────────────────
 
   return (
     <>
       <div className={styles.main}>
         <div className={styles.MainContainer}>
-          <div className={styles.Top}>
-            <div className={styles.TopLeft}>
-              <img
-                src={initialData?.profileImage?.url || one.src}
-              />
-            </div>
-            {!isGuestUser && (
-              <div className={styles.TopRight}>
-                <label
-                  className={styles.pfbtn}
-                  style={{
-                    cursor: "pointer",
-                    display: "inline-block",
-                    textAlign: "center",
-                    paddingTop: "10px",
-                  }}
-                >
-                  Upload New Profile Picture
-                  <input
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={async (e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = async () => {
-                          const base64Image = reader.result;
-                          const res = await updateProfileAPI({ base64Image });
-                          if (res && res.success) {
-                            // Update session with new image
-                            const newImage = res.customer.meta_data.find(
-                              (m) => m.key === "profile_image"
-                            )?.value;
 
-                            await update({ profile_image: newImage });
-                            window.location.reload();
-                          }
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                </label>
-                <button className={styles.pfrembtn} onClick={removeProfilePic}>
-                  Remove Profile Picture
-                </button>
-              </div>
-            )}
-          </div>
+          {/* 1. Profile picture */}
+          <ProfilePictureSection
+            profileImageUrl={profile.profileImage?.url || null}
+            isGuestUser={isGuestUser}
+            onUpload={handleUploadProfilePic}
+            onRemove={handleRemoveProfilePic}
+          />
+
           <div className={styles.Bottom}>
-            <div className={styles.PersonalInfoSection}>
-              {isGuestUser && (
-                <p className={styles.GuestNote}>
-                  Please login to manage your profile details.
-                </p>
-              )}
-              <div className={styles.AddressHeader}>
-                <h4>Personal Information</h4>
-                {!editMode && (
-                  <button onClick={() => setEditMode(true)}>Edit</button>
-                )}
-              </div>
-
-              <div className={styles.Field}>
-                <input
-                  value={
-                    profile.firstName || profile.lastName
-                      ? `${profile.firstName || ""} ${profile.lastName || ""}`.trim()
-                      : isGuestUser
-                        ? "Guest User"
-                        : ""
-                  }
-                  placeholder={!isGuestUser ? "Enter your full name" : ""}
-                  disabled={!editMode || isGuestUser}
-                  onChange={(e) => handleProfileChange("name", e.target.value)}
+            {/* 2. Personal info + OTP popup */}
+            <PersonalInfoForm
+              profile={profile}
+              editMode={editMode}
+              errors={errors}
+              isGuestUser={isGuestUser}
+              originalEmail={originalEmail}
+              onFieldChange={handleFieldChange}
+              onSave={handleSaveProfile}
+              onCancel={handleCancelEdit}
+              onVerifyEmail={() => { popOTP(true); setCountdown(60); }}
+              showOtpPopup={showOTP}
+              otpNode={
+                <OtpVerificationPopup
+                  email={profile.email}
+                  countdown={countdown}
+                  otp={otp}
+                  inputRefs={inputRefs}
+                  onChange={handleOtpChange}
+                  onKeyDown={handleOtpKeyDown}
+                  onVerify={() => { /* TODO: wire OTP validation API */ }}
+                  onClose={() => popOTP(false)}
                 />
-                {errors.name && (
-                  <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
-                    {errors.name}
-                  </p>
-                )}
-              </div>
+              }
+            />
 
-              <div className={styles.Field}>
-                <input
-                  value={profile.email || ""}
-                  placeholder={
-                    isGuestUser
-                      ? "Login to view email"
-                      : "Enter your email address"
-                  }
-                  disabled={true}
-                  onChange={(e) => handleProfileChange("email", e.target.value)}
-                />
-
-                {/* <span onClick={() => !isGuestUser && setEditMode(true)}>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M1.41176 14.5882H2.59906L12.2334 4.95388L11.0461 3.76659L1.41176 13.4009V14.5882ZM0 16V12.8146L12.4146 0.405411C12.5569 0.276156 12.714 0.176314 12.8859 0.105882C13.058 0.0352941 13.2384 0 13.4271 0C13.6158 0 13.7985 0.0334907 13.9753 0.100471C14.1522 0.167451 14.3089 0.27396 14.4452 0.419999L15.5946 1.58376C15.7406 1.72008 15.8447 1.87694 15.9068 2.05435C15.9689 2.23176 16 2.40918 16 2.58659C16 2.77592 15.9677 2.95655 15.9031 3.12847C15.8384 3.30055 15.7356 3.45773 15.5946 3.6L3.18541 16H0ZM11.6294 4.37059L11.0461 3.76659L12.2334 4.95388L11.6294 4.37059Z"
-                      fill="#6E736A"
-                    />
-                  </svg>
-                </span> */}
-              </div>
-
-              <div className={styles.Row}>
-                <div className={styles.Field}>
-                  <input
-                    value={profile.phone || ""}
-                    placeholder={
-                      editMode
-                        ? "Add your phone number"
-                        : profile.phone
-                          ? ""
-                          : isGuestUser
-                            ? "Login to add phone number"
-                            : "No phone number added"
-                    }
-                    disabled={!editMode || isGuestUser}
-                    onChange={(e) =>
-                      handleProfileChange("phone", e.target.value)
-                    }
-                  />
-                  {errors.phone && (
-                    <p
-                      style={{
-                        color: "red",
-                        fontSize: "12px",
-                        marginTop: "5px",
-                      }}
-                    >
-                      {errors.phone}
-                    </p>
-                  )}
-                </div>
-
-                <div className={styles.Field}>
-                  {editMode ? (
-                    <select
-                      value={
-                        profile.gender ||
-                        profile.metaData?.find((item) => item.key === "gender")
-                          ?.value
-                      }
-                      onChange={(e) =>
-                        handleProfileChange("gender", e.target.value)
-                      }
-                    >
-                      <option>Male</option>
-                      <option>Female</option>
-                      {/* <option>Prefer not to say</option> */}
-                    </select>
-                  ) : (
-                    <input
-                      value={initialData?.gender || ""}
-                      style={{ textTransform: "capitalize" }}
-                      disabled
-                    />
-                  )}
-                </div>
-              </div>
-
-              {editMode && !isGuestUser && (
-                <div className={styles.ActionRow}>
-                  <button className={styles.SaveBtn} onClick={saveProfile}>
-                    Save Changes
-                  </button>
-                  <button
-                    className={styles.CancelBtn}
-                    onClick={() => {
-                      setEditMode(false);
-                      setErrors({});
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )}
-            </div>
+            {/* 3. Saved addresses */}
             {!isGuestUser && (
-              <div className={styles.AddressSection}>
-                <div className={styles.AddressHeader}>
-                  <h4>SAVED ADDRESS</h4>
-                  <button onClick={openAddAddress}>Add new Address</button>
-                </div>
-
-                {defaultAddress && (
-                  <>
-                    <div className={styles.fixerOne}>
-                      <p>Default address</p>
-
-                      <div className={styles.AddressCard}>
-                        <div className={styles.AddressText}>
-                          <p className={styles.Name}>
-                            {/* Note the use of addressFirstName/LastName */}
-                            {`${defaultAddress.x || ""} ${defaultAddress.addressLastName || ""}`}
-                          </p>
-                          <p className={styles.Name}>
-                            {/* Note the use of addressFirstName/LastName */}
-                            {`${defaultAddress.addressFirstName || ""} ${defaultAddress.addressLastName || ""}`}
-                          </p>
-                          <hr />
-
-                          <p className={styles.Name}>{defaultAddress.street}</p>
-                          <p className={styles.Name}>{defaultAddress.apartment}</p>
-
-                          <p className={styles.Name}>
-                            {/* Note the use of emirates for UAE addresses */}
-                            {defaultAddress.city}, {defaultAddress.emirates || defaultAddress.state}
-                          </p>
-                          <hr />
-                          <p className={styles.Name}>
-                            Phone number: {defaultAddress.phoneNumber}
-                          </p>
-                        </div>
-
-                        <div className={styles.AddressActions}>
-                          <span onClick={() => openEditAddress(defaultAddress)}>
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M1.41176 14.5882H2.59906L12.2334 4.95388L11.0461 3.76659L1.41176 13.4009V14.5882ZM0 16V12.8146L12.4146 0.405411C12.5569 0.276156 12.714 0.176314 12.8859 0.105882C13.058 0.0352941 13.2384 0 13.4271 0C13.6158 0 13.7985 0.0334907 13.9753 0.100471C14.1522 0.167451 14.3089 0.27396 14.4452 0.419999L15.5946 1.58376C15.7406 1.72008 15.8447 1.87694 15.9068 2.05435C15.9689 2.23176 16 2.40918 16 2.58659C16 2.77592 15.9677 2.95655 15.9031 3.12847C15.8384 3.30055 15.7356 3.45773 15.5946 3.6L3.18541 16H0ZM11.6294 4.37059L11.0461 3.76659L12.2334 4.95388L11.6294 4.37059Z"
-                                fill="#6E736A"
-                              />
-                            </svg>
-                          </span>
-
-                          <span
-                            onClick={() => {
-                              setDeleteAddressId(defaultAddress.id);
-                              setShowDeleteAddressPopup(true);
-                            }}
-                          >
-                            <svg
-                              width="15"
-                              height="16"
-                              viewBox="0 0 15 16"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M2.66067 16C2.18812 16 1.78444 15.8327 1.44961 15.498C1.11495 15.1632 0.947615 14.7595 0.947615 14.287V2.25959H0V0.838165H4.26427V0H9.94995V0.838165H14.2142V2.25959H13.2666V14.287C13.2666 14.7657 13.1008 15.1708 12.7691 15.5025C12.4374 15.8342 12.0323 16 11.5536 16H2.66067ZM11.8452 2.25959H2.36904V14.287C2.36904 14.3721 2.39636 14.442 2.45101 14.4966C2.50565 14.5513 2.57554 14.5786 2.66067 14.5786H11.5536C11.6265 14.5786 11.6933 14.5482 11.754 14.4874C11.8148 14.4267 11.8452 14.3599 11.8452 14.287V2.25959ZM4.6471 12.6833H6.06829V4.15482H4.6471V12.6833ZM8.14593 12.6833H9.56712V4.15482H8.14593V12.6833Z"
-                                fill="#FF0000"
-                              />
-                            </svg>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {otherAddresses.length > 0 && (
-                  <>
-                    <div className={styles.fixerTwo}>
-                      <h6 className={styles.other}>Other addresses</h6>
-
-                      {otherAddresses.map((addr) => (
-                        <div key={addr.id} className={styles.AddressCard}>
-                          <div className={styles.AddressText}>
-                            <p className={styles.Name}>
-                              {addr.firstName + " " + addr.lastName}
-                            </p>
-                            <p>{addr.address}</p>
-                            <p>{addr.apartment}</p>
-                            <p>
-                              {addr.city}, {addr.country}
-                            </p>
-                            <p className={styles.Phone}>
-                              Phone number: {addr.phone}
-                            </p>
-                          </div>
-                          <div className={styles.AddressActions}>
-                            <span onClick={() => openEditAddress(addr)}>
-                              <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M1.41176 14.5882H2.59906L12.2334 4.95388L11.0461 3.76659L1.41176 13.4009V14.5882ZM0 16V12.8146L12.4146 0.405411C12.5569 0.276156 12.714 0.176314 12.8859 0.105882C13.058 0.0352941 13.2384 0 13.4271 0C13.6158 0 13.7985 0.0334907 13.9753 0.100471C14.1522 0.167451 14.3089 0.27396 14.4452 0.419999L15.5946 1.58376C15.7406 1.72008 15.8447 1.87694 15.9068 2.05435C15.9689 2.23176 16 2.40918 16 2.58659C16 2.77592 15.9677 2.95655 15.9031 3.12847C15.8384 3.30055 15.7356 3.45773 15.5946 3.6L3.18541 16H0ZM11.6294 4.37059L11.0461 3.76659L12.2334 4.95388L11.6294 4.37059Z"
-                                  fill="#6E736A"
-                                />
-                              </svg>
-                            </span>
-
-                            <span
-                              onClick={() => {
-                                setDeleteAddressId(addr.id);
-                                setShowDeleteAddressPopup(true);
-                              }}
-                            >
-                              <svg
-                                width="15"
-                                height="16"
-                                viewBox="0 0 15 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M2.66067 16C2.18812 16 1.78444 15.8327 1.44961 15.498C1.11495 15.1632 0.947615 14.7595 0.947615 14.287V2.25959H0V0.838165H4.26427V0H9.94995V0.838165H14.2142V2.25959H13.2666V14.287C13.2666 14.7657 13.1008 15.1708 12.7691 15.5025C12.4374 15.8342 12.0323 16 11.5536 16H2.66067ZM11.8452 2.25959H2.36904V14.287C2.36904 14.3721 2.39636 14.442 2.45101 14.4966C2.50565 14.5513 2.57554 14.5786 2.66067 14.5786H11.5536C11.6265 14.5786 11.6933 14.5482 11.754 14.4874C11.8148 14.4267 11.8452 14.3599 11.8452 14.287V2.25959ZM4.6471 12.6833H6.06829V4.15482H4.6471V12.6833ZM8.14593 12.6833H9.56712V4.15482H8.14593V12.6833Z"
-                                  fill="#6E736A"
-                                />
-                              </svg>
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
+              <AddressSection
+                addresses={addresses}
+                onAddNew={openAddAddress}
+                onEdit={openEditAddress}
+                onDeleteRequest={handleDeleteRequest}
+              />
             )}
+
+            {/* 4. Delete account section */}
             {!isGuestUser && (
               <div className={styles.DeleteAccount}>
                 <h4>DELETE ACCOUNT</h4>
-                <button
-                  onClick={async () => {
-                    await handleDeleteAccount();
-                    setShowDeletePopup(true);
-                  }}
-                >
-                  Delete My Account
-                </button>
+                <button onClick={handleDeleteAccount}>Delete My Account</button>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {showDeletePopup && (
-        <div className={styles.DeletePopupOverlay}>
-          <div className={styles.DeletePopup}>
-            <h3>DELETE ACCOUNT</h3>
+      {/* ── Popups ── */}
 
-            {accountStatus ? (
-              <>
-                {accountStatus.activeSubscriptions?.count > 0 && (
-                  <p>
-                    You currently have an active subscription on this account,
-                    which will be cancelled.{" "}
-                    {accountStatus.activeOrders?.count > 0 &&
-                      "If you have any pending orders, they will still be delivered."}
-                  </p>
-                )}
-
-                {accountStatus.activeSubscriptions?.count === 0 &&
-                  accountStatus.activeOrders?.count > 0 && (
-                    <p>Any pending orders will still be delivered.</p>
-                  )}
-              </>
-            ) : (
-              <>
-                <p>
-                  Any pending orders will still be delivered.
-                  <br />
-                  Deleting your account will permanently remove your data and
-                  saved preferences.
-                </p>
-              </>
-            )}
-
-            <p
-              style={{ color: "#d32f2f", fontWeight: "500", marginTop: "16px" }}
-            >
-              Deleting your account will permanently erase your data, history,
-              and saved settings.
-            </p>
-
-            <div className={styles.DeletePopupActions}>
-              <button
-                onClick={() => {
-                  setShowDeletePopup(false);
-                  setAccountStatus(null);
-                }}
-              >
-                Keep Account
-              </button>
-              <button
-                className={styles.DeleteDanger}
-                onClick={confirmDeleteAccount}
-              >
-                Delete Anyway
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* Add address popup */}
       {showAddressPopup && (
-        <div className={styles.PopupOverlay}>
-          <div className={styles.Popup}>
-            <h3>ADD ADDRESS</h3>
-
-            <input
-              placeholder="Full Name"
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, fullName: e.target.value })
-              }
-            />
-            {addressErrors.fullName && (
-              <p style={{ color: "red", fontSize: "12px", marginTop: "-10px", marginBottom: "10px" }}>
-                {addressErrors.fullName}
-              </p>
-            )}
-
-            <input
-              value="United Arab Emirates"
-              readOnly
-              // value={addressForm.country || ""}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, country: e.target.value })
-              }
-            />
-
-            <input
-              placeholder="House number, Street name"
-              value={addressForm.address || ""}
-              onChange={(e) => {
-                setAddressForm({ ...addressForm, address: e.target.value });
-                if (addressErrors.address) {
-                  setAddressErrors((prev) => ({ ...prev, address: "" }));
-                }
-              }}
-            />
-            {addressErrors.address && (
-              <p style={{ color: "red", fontSize: "12px", marginTop: "-10px", marginBottom: "10px" }}>
-                {addressErrors.address}
-              </p>
-            )}
-
-            <input
-              placeholder="Apartment, suite, etc."
-              value={addressForm.apartment || ""}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, apartment: e.target.value })
-              }
-            />
-
-            <div className={styles.Row} style={{ display: "flex" }}>
-              {!isGuestUser && (
-                <input
-                  placeholder="City"
-                  value={addressForm.city || ""}
-                  onChange={(e) =>
-                    setAddressForm({ ...addressForm, city: e.target.value })
-                  }
-                />
-              )}
-
-              {/* Check if country is UAE-like to show dropdown */}
-
-              <select
-                className={styles.StateSelect} // Ensure you have styles or use inline
-                value={addressForm.state || ""}
-                onChange={(e) =>
-                  setAddressForm({ ...addressForm, state: e.target.value })
-                }
-                style={{
-                  padding: "10px",
-                  border: "1px solid #2f362a4d",
-                  // borderRadius: "20px",
-                  fontSize: "15px",
-                  color: "#6e736a",
-                  width: "100%",
-                  outline: "none",
-                }}
-              >
-                <option value="" disabled>
-                  Select Emirate
-                </option>
-                {UAE_STATES.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
-
-              {/* <input
-                placeholder="Postal code"
-                value={addressForm.postcode || ""}
-                onChange={(e) =>
-                  setAddressForm({ ...addressForm, postal: e.target.value })
-                }
-              /> */}
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                border: "1px solid #2f362a4d",
-                padding: "19px 22px",
-                fontFamily: "var(--lato)",
-                fontSize: "15px",
-                color: "#6e736a",
-                background: "#fff",
-              }}
-            >
-              <span style={{ marginRight: "8px", userSelect: "none" }}>
-                +971
-              </span>
-              <input
-                placeholder="50 123 4567"
-                value={
-                  addressForm.phone
-                    ? addressForm.phone.replace(/^\+971\s?/, "")
-                    : ""
-                }
-                onChange={(e) =>
-                  setAddressForm({
-                    ...addressForm,
-                    phone: "+971" + e.target.value.replace(/^(\+971\s?)/, ""),
-                  })
-                }
-                style={{
-                  border: "none",
-                  outline: "none",
-                  width: "100%",
-                  padding: 0,
-                  fontSize: "15px",
-                  color: "#6e736a",
-                  background: "transparent",
-                }}
-              />
-            </div>
-            {addressErrors.phone && (
-              <p style={{ color: "red", fontSize: "12px", marginTop: "5px", marginBottom: "10px" }}>
-                {addressErrors.phone}
-              </p>
-            )}
-
-            <label className={styles.CheckRow}>
-              <input
-                type="checkbox"
-                checked={addressForm.isDefault || false}
-                onChange={(e) =>
-                  setAddressForm({
-                    ...addressForm,
-                    isDefault: e.target.checked,
-                  })
-                }
-              />
-              Use this as my default Shipping Address
-            </label>
-
-            <div className={styles.PopupActions}>
-              {addressGeneralError && (
-                <p style={{ color: "red", fontSize: "14px", marginBottom: "10px", width: "100%", textAlign: "right" }}>
-                  {addressGeneralError}
-                </p>
-              )}
-              <button onClick={() => {
-                setShowAddressPopup(false);
-                setAddressErrors({});
-              }}>Cancel</button>
-              <button className={styles.SaveBtn} onClick={saveAddress}>
-                Save Address
-              </button>
-            </div>
-          </div>
-        </div>
+        <AddressFormPopup
+          mode="add"
+          addressForm={addressForm}
+          addressErrors={addressErrors}
+          addressGeneralError={addressGeneralError}
+          activeLabelBtn={activeLabelBtn}
+          UAE_STATES={UAE_STATES}
+          onFormChange={handleAddressFormChange}
+          onLabelSelect={(label) => { setActiveLabelBtn(label); handleAddressFormChange("label", label); }}
+          onSave={handleSaveAddress}
+          onCancel={() => { setShowAddressPopup(false); setAddressErrors({}); }}
+        />
       )}
+
+      {/* Edit address popup */}
       {showEditAddressPopup && (
-        <div className={styles.PopupOverlay}>
-          <div className={styles.Popup}>
-            <h3>EDIT ADDRESS</h3>
-
-            <input
-              placeholder="Full Name"
-              value={addressForm.fullName || ""}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, fullName: e.target.value })
-              }
-            />
-            {addressErrors.fullName && (
-              <p style={{ color: "red", fontSize: "12px", marginTop: "-10px", marginBottom: "10px" }}>
-                {addressErrors.fullName}
-              </p>
-            )}
-
-
-            <input
-              // value="United Arab Emirates"
-              readOnly
-              value={addressForm.country || ""}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, country: e.target.value })
-              }
-            />
-
-            <input
-              placeholder="House number, Street name"
-              value={addressForm.address || ""}
-              onChange={(e) => {
-                setAddressForm({ ...addressForm, address: e.target.value });
-                if (addressErrors.address) {
-                  setAddressErrors((prev) => ({ ...prev, address: "" }));
-                }
-              }}
-            />
-            {addressErrors.address && (
-              <p style={{ color: "red", fontSize: "12px", marginTop: "-10px", marginBottom: "10px" }}>
-                {addressErrors.address}
-              </p>
-            )}
-
-            <input
-              placeholder="Apartment, suite, etc."
-              value={addressForm.apartment || ""}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, apartment: e.target.value })
-              }
-            />
-
-            <div className={styles.Row} style={{ display: "flex" }}>
-              <input
-                placeholder="City"
-                value={addressForm.city || ""}
-                onChange={(e) =>
-                  setAddressForm({ ...addressForm, city: e.target.value })
-                }
-                style={{
-                  // padding: "10px",
-                  border: "1px solid #2f362a4d",
-                  fontSize: "15px",
-                  // color: "#6e736a",
-                  width: "100%",
-                  outline: "none",
-                }}
-              />
-              {/* Check if country is UAE-like to show dropdown */}
-              <select
-                className={styles.StateSelect}
-                value={addressForm.state || ""}
-                onChange={(e) =>
-                  setAddressForm({ ...addressForm, state: e.target.value })
-                }
-                style={{
-                  padding: "10px",
-                  border: "1px solid #2f362a4d",
-                  fontSize: "15px",
-                  color: "#6e736a",
-                  width: "100%",
-                  outline: "none",
-                }}
-              >
-                <option value="" disabled>
-                  Select Emirate
-                </option>
-                {UAE_STATES.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                border: "1px solid #2f362a4d",
-                padding: "19px 22px",
-                fontFamily: "var(--lato)",
-                fontSize: "15px",
-                color: "#6e736a",
-                background: "#fff",
-              }}
-            >
-              <span style={{ marginRight: "8px", userSelect: "none" }}>
-                +971
-              </span>
-              <input
-                placeholder="50 123 4567"
-                value={
-                  addressForm.phone
-                    ? addressForm.phone.replace(/^\+971\s?/, "")
-                    : ""
-                }
-                onChange={(e) =>
-                  setAddressForm({
-                    ...addressForm,
-                    phone: "+971" + e.target.value.replace(/^(\+971\s?)/, ""),
-                  })
-                }
-                style={{
-                  border: "none",
-                  outline: "none",
-                  width: "100%",
-                  padding: 0,
-                  fontSize: "15px",
-                  color: "#6e736a",
-                  background: "transparent",
-                }}
-              />
-            </div>
-            {addressErrors.phone && (
-              <p style={{ color: "red", fontSize: "12px", marginTop: "5px", marginBottom: "10px" }}>
-                {addressErrors.phone}
-              </p>
-            )}
-
-            <label className={styles.CheckRow}>
-              <input
-                type="checkbox"
-                checked={addressForm.isDefault || false}
-                onChange={(e) =>
-                  setAddressForm({
-                    ...addressForm,
-                    isDefault: e.target.checked,
-                  })
-                }
-              />
-              Use this as my default Shipping Address
-            </label>
-
-            <div className={styles.PopupActions}>
-              {addressGeneralError && (
-                <p style={{ color: "red", fontSize: "14px", marginBottom: "10px", width: "100%", textAlign: "right" }}>
-                  {addressGeneralError}
-                </p>
-              )}
-              <button onClick={() => {
-                setShowEditAddressPopup(false);
-                setAddressErrors({});
-              }}>
-                Cancel
-              </button>
-              <button className={styles.SaveBtn} onClick={saveAddress}>
-                Update Address
-              </button>
-            </div>
-          </div>
-        </div>
+        <AddressFormPopup
+          mode="edit"
+          addressForm={addressForm}
+          addressErrors={addressErrors}
+          addressGeneralError={addressGeneralError}
+          activeLabelBtn={activeLabelBtn}
+          UAE_STATES={UAE_STATES}
+          onFormChange={handleAddressFormChange}
+          onLabelSelect={(label) => { setActiveLabelBtn(label); handleAddressFormChange("label", label); }}
+          onSave={handleSaveAddress}
+          onCancel={() => { setShowEditAddressPopup(false); setAddressErrors({}); }}
+        />
       )}
+
+      {/* Delete address confirmation */}
       {showDeleteAddressPopup && (
-        <div className={styles.PopupOverlayDeleteAddress}>
-          <div className={styles.PopupDeleteAddress}>
-            <h3>DELETE CONFIRMATION</h3>
-            <p>Are you sure you want to delete this address?</p>
+        <DeleteAddressPopup
+          onConfirm={handleConfirmDeleteAddress}
+          onCancel={() => setShowDeleteAddressPopup(false)}
+        />
+      )}
 
-            <div className={styles.PopupActionsDeleteAddress}>
-              <button
-                className={styles.DeleteAddressCancelBtn}
-                onClick={() => setShowDeleteAddressPopup(false)}
-              >
-                Cancel
-              </button>
-
-              <button
-                className={styles.DeleteAddressSaveBtn}
-                onClick={confirmDeleteAddress}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Delete account confirmation */}
+      {showDeletePopup && (
+        <DeleteAccountPopup
+          accountStatus={accountStatus}
+          onKeep={() => { setShowDeletePopup(false); setAccountStatus(null); }}
+          onConfirm={handleConfirmDeleteAccount}
+        />
       )}
     </>
   );

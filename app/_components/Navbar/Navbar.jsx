@@ -262,7 +262,7 @@ const Navbar = () => {
           >
             <p>
               Cart
-              {items.length > 0 && (
+              {Array.isArray(items) && items.length > 0 && (
                 <span
                   style={{
                     color: "#6c7a5f",
@@ -286,34 +286,23 @@ const Navbar = () => {
                 alignItems: "center",
               }}
             >
-              {session?.user?.profile_image?.url || session?.user?.image ? (
-                <div
-                  style={{
-                    width: "32px",
-                    height: "32px",
-                    position: "relative",
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                    border: "1px solid #6b7b5c",
-                    boxShadow: pathname.startsWith("/account")
-                      ? "0 0 0 2px #6b7b5c"
-                      : "none",
-                    transition: "box-shadow 0.2s ease",
-                  }}
-                >
-                  <Image
-                    src={
-                      session?.user?.profile_image?.url || session?.user?.image
-                    }
-                    alt="Profile"
-                    fill
-                    sizes="32px"
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              ) : (
-                <p>Account</p>
-              )}
+              <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M21.8106 13.4114C21.8106 11.0306 19.881 9.10016 17.5002 9.09997C15.1193 9.09997 13.1888 11.0304 13.1888 13.4114C13.189 15.7921 15.1194 17.7217 17.5002 17.7217C19.8809 17.7215 21.8104 15.792 21.8106 13.4114ZM23.4105 13.4114C23.4104 16.6756 20.7645 19.3215 17.5002 19.3217C14.2358 19.3217 11.5891 16.6758 11.5889 13.4114C11.5889 10.1468 14.2357 7.5 17.5002 7.5C20.7646 7.50019 23.4105 10.1469 23.4105 13.4114Z"
+                  fill="#171717"
+                  stroke="#171717"
+                  strokeWidth="0.5"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M24.8774 26.7006C24.8774 24.744 24.1006 22.8666 22.717 21.483C21.3335 20.0996 19.4569 19.3227 17.5004 19.3226C15.5438 19.3226 13.6664 20.0994 12.2828 21.483C10.8992 22.8666 10.1224 24.744 10.1224 26.7006C10.1222 27.1423 9.76415 27.5006 9.32245 27.5006C8.88074 27.5006 8.52265 27.1423 8.52246 26.7006C8.52246 24.3196 9.46795 22.0354 11.1516 20.3518C12.8352 18.6681 15.1194 17.7227 17.5004 17.7227C19.8812 17.7227 22.1647 18.6683 23.8482 20.3518C25.5319 22.0354 26.4774 24.3196 26.4774 26.7006C26.4772 27.1423 26.1191 27.5006 25.6774 27.5006C25.2358 27.5004 24.8776 27.1422 24.8774 26.7006Z"
+                  fill="#171717"
+                  stroke="#171717"
+                  strokeWidth="0.5"
+                  strokeLinejoin="round"
+                />
+              </svg>
+
             </Link>
           )}
           {!session && (

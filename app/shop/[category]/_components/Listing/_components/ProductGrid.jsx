@@ -1,0 +1,183 @@
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import AddToCart from "@/app/_components/AddToCart";
+import Wishlist from "@/app/_components/Whishlist";
+
+const ProductGrid = ({
+    filteredProducts,
+    visibleCount,
+    handleLoadMore,
+    getDisplayData,
+    handleOpenSubscribePopup,
+    categorySlug,
+    currentCategory,
+    sortType,
+    setSortType,
+    sortOpen,
+    setSortOpen,
+    setIsMobileFiltersOpen,
+    styles,
+}) => {
+    return (
+        <div className={styles.RightConatiner}>
+            <div className={styles.RightTop}>
+                <div className={styles.RightTopLeft}>
+                    <div className={styles.CatName}>
+                        <h3>{currentCategory?.title || "Shop"}</h3>
+                    </div>
+                    <div className={styles.CatCount}>
+                        <p>({filteredProducts.length} items)</p>
+                    </div>
+                </div>
+
+                <div className={styles.RightTopRight}>
+                    <button
+                        className={styles.MobileFilterBtn}
+                        onClick={() => setIsMobileFiltersOpen(true)}
+                    >
+                        <svg
+                            width="12"
+                            height="8"
+                            viewBox="0 0 12 8"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M4.66667 8V6.66667H7.33333V8H4.66667ZM2 4.66667V3.33333H10V4.66667H2ZM0 1.33333V0H12V1.33333H0Z"
+                                fill="#6E736A"
+                            />
+                        </svg>
+                        Filter
+                    </button>
+
+                    <div className={styles.SortBy}>
+                        <p>Sort by:</p>
+                    </div>
+                    <div className={styles.SortWrapper}>
+                        <div
+                            className={styles.SortOptions}
+                            onClick={() => setSortOpen(!sortOpen)}
+                        >
+                            <p>{sortType}</p>
+                            <span
+                                className={`${styles.SortArrow} ${sortOpen ? styles.SortArrowOpen : ""
+                                    }`}
+                            >
+                                ▼
+                            </span>
+                        </div>
+                        {sortOpen && (
+                            <div className={styles.SortDropdown}>
+                                {["Recommended", "Latest to Oldest", "Oldest to Latest"].map(
+                                    (item) => (
+                                        <p
+                                            key={item}
+                                            onClick={() => {
+                                                setSortType(item);
+                                                setSortOpen(false);
+                                            }}
+                                        >
+                                            {item}
+                                        </p>
+                                    )
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.RightBottom}>
+                <div className={styles.ProductsGrid}>
+                    {filteredProducts.slice(0, visibleCount).map((product) => {
+                        const displayData = getDisplayData(product);
+
+                        // Format product data for AddToCart (Functionality)
+                        const cartProduct = {
+                            productId: product.id,
+                            variationId: product.hasVariantOptions
+                                ? product.variants?.[0]?.id
+                                : null,
+                            quantity: 1,
+                        };
+
+                        /* --------- SEO SLUG + ID --------- */
+                        const productUrl = `/shop/${categorySlug}/${product.slug}`;
+
+                        return (
+                            <div className={styles.ProductCard} key={product.id}>
+                                <div className={styles.ProductTop}>
+                                    <div className={styles.WishlistIcon}>
+                                        <Wishlist product={product} />
+                                    </div>
+                                    <Link href={productUrl} className={styles.ProductImage}>
+                                        {displayData.image ? (
+                                            <Image
+                                                src={displayData.image}
+                                                alt={product.name}
+                                                width={300}
+                                                height={300}
+                                            />
+                                        ) : (
+                                            <div className={styles.NoImage}>No Image</div>
+                                        )}
+                                    </Link>
+                                </div>
+
+                                <div className={styles.ProductBottom}>
+                                    <Link
+                                        href={productUrl}
+                                        style={{ textDecoration: "none", color: "inherit" }}
+                                    >
+                                        <div className={styles.ProductInfo}>
+                                            <div className={styles.ProductPrice}>
+                                                <h4>AED {displayData.price}</h4>
+                                                {displayData.sale_price &&
+                                                    displayData.sale_price !==
+                                                    displayData.regular_price && (
+                                                        <p className={styles.OldPrice}>
+                                                            AED {displayData.regular_price}
+                                                        </p>
+                                                    )}
+                                            </div>
+                                            <div className={styles.Line}></div>
+                                            <div className={styles.ProductName}>
+                                                <h3>{`${product.name} ${product.tagline || ""}`}</h3>
+                                                <p>{product.tastingNotes}</p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                    <div className={styles.ProductActions}>
+                                        <AddToCart product={cartProduct} />
+                                        {/* Subscribe button with popup functionality - only show if subscription product exists */}
+                                        {(product.hasSimpleSub ||
+                                            (product.hasVariantOptions &&
+                                                product.variants?.some((v) => v.hasVariantSub))) && (
+                                                <button
+                                                    className={styles.Subscribe}
+                                                    onClick={() => handleOpenSubscribePopup(product)}
+                                                >
+                                                    Subscribe
+                                                </button>
+                                            )}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {visibleCount < filteredProducts.length && (
+                    <div className={styles.LoadMore}>
+                        <button className={styles.LoadMoreCta} onClick={handleLoadMore}>
+                            Load More
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default ProductGrid;

@@ -1,0 +1,289 @@
+"use client";
+import { useState, useEffect, useRef } from "react";
+import styles from "../page.module.css";
+import { validateRequired, validateUAEPhone } from "@/utils/validatorFunctions";
+import DeleteAddressPopup from "@/app/account/_components/ProfileComponents/_components/DeleteAddressPopup";
+
+/**
+ * ShippingAddressSection
+ * ─────────────────────────────────────────
+ * Renders:
+ *  - Saved address cards (if authenticated)
+ *  - "Use a different address" / "Discard" toggle buttons
+ *  - New address form (if not authenticated OR showNewAddressForm is true)
+ *  - Pickup location card (if delivery === "pickup")
+ *
+ * Props:
+ *   delivery, status, savedAddresses, selectedAddressId, setSelectedAddressId,
+ *   showNewAddressForm, setShowNewAddressForm,
+ *   shippingForm, setShippingForm,
+ *   validationErrors, clearError, setValidationErrors
+ */
+export default function ShippingAddressSection({
+    delivery,
+    status,
+    savedAddresses,
+    selectedAddressId,
+    setSelectedAddressId,
+    showNewAddressForm,
+    setShowNewAddressForm,
+    shippingForm,
+    setShippingForm,
+    validationErrors,
+    clearError,
+    setValidationErrors,
+}) {
+    console.log(savedAddresses);
+
+    const [openMenuId, setOpenMenuId] = useState(null);
+    const [addressDeletePopup, setAddressDeletePopup] = useState(false);
+    const [addressFormPopup, setAddressFormPopup] = useState(false);
+    const [addressToDelete, setAddressToDelete] = useState(null);
+    const menuRef = useRef(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setOpenMenuId(null);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    function handleEditAddress(addr) {
+        // TODO: open edit address form pre-filled with addr data
+
+
+    }
+
+    function handleDeleteAddress(addr) {
+        setAddressToDelete(addr);
+        setAddressDeletePopup(true);
+    }
+
+    function confirmDeleteAddress() {
+        setAddressDeletePopup(false);
+        setAddressToDelete(null);
+    }
+
+    function cancelDeleteAddress() {
+        setAddressDeletePopup(false);
+        setAddressToDelete(null);
+    }
+
+    return (
+        <div className={styles.Four}>
+            {addressDeletePopup && (
+                <DeleteAddressPopup
+                    onConfirm={confirmDeleteAddress}
+                    onCancel={cancelDeleteAddress}
+                />
+            )}
+            {/* ── Shipping ── */}
+            {delivery === "ship" && (
+                <>
+                    <div className={styles.Three}>
+                        <h3>SHIP TO</h3>
+                    </div>
+                    <div className={styles.HeaderRow}>
+                        <input className={styles.Input} value="United Arab Emirates" readOnly style={{ display: "none" }} />
+                    </div>
+
+                    {/* Saved Addresses (only for authenticated users) */}
+                    {status === "authenticated" && (
+                        <>
+                            <div className={styles.AddressList}>
+                                {savedAddresses.map((addr) => (
+                                    <div
+                                        key={addr.id}
+                                        className={`${styles.AddressCard} ${selectedAddressId === addr.id ? styles.Selected : ""}`}
+                                        onClick={() => {
+                                            setSelectedAddressId(addr.id);
+                                            setShowNewAddressForm(false);
+                                        }}
+                                    >
+                                        <span className={styles.Radio}>
+                                            {selectedAddressId === addr.id && <span className={styles.RadioInner} />}
+                                        </span>
+                                        <div className={styles.AddressContent}>
+                                            <p className={styles.AddressName}>{addr.label}, {addr.apartment}, {addr.street}, {addr.city}, {addr.phoneNumber} </p>
+                                            <p className={styles.AddressText}>{addr.emirates}</p>
+                                        </div>
+                                        <div
+                                            ref={openMenuId === addr.id ? menuRef : null}
+                                            className={styles.MenuContainer}
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <span
+                                                className={styles.MenuIcon}
+                                                onClick={() => setOpenMenuId(openMenuId === addr.id ? null : addr.id)}
+                                            >
+                                                <svg width="3" height="15" viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1.5 14.5385C1.0875 14.5385 0.734417 14.3916 0.44075 14.0978C0.146917 13.8041 0 13.451 0 13.0385C0 12.626 0.146917 12.2728 0.44075 11.979C0.734417 11.6853 1.0875 11.5385 1.5 11.5385C1.9125 11.5385 2.26558 11.6853 2.55925 11.979C2.85308 12.2728 3 12.626 3 13.0385C3 13.451 2.85308 13.8041 2.55925 14.0978C2.26558 14.3916 1.9125 14.5385 1.5 14.5385ZM1.5 8.76925C1.0875 8.76925 0.734417 8.62233 0.44075 8.3285C0.146917 8.03483 0 7.68175 0 7.26925C0 6.85675 0.146917 6.50367 0.44075 6.21C0.734417 5.91617 1.0875 5.76925 1.5 5.76925C1.9125 5.76925 2.26558 5.91617 2.55925 6.21C2.85308 6.50367 3 6.85675 3 7.26925C3 7.68175 2.85308 8.03483 2.55925 8.3285C2.26558 8.62233 1.9125 8.76925 1.5 8.76925ZM1.5 3C1.0875 3 0.734417 2.85317 0.44075 2.5595C0.146917 2.26567 0 1.9125 0 1.5C0 1.0875 0.146917 0.734417 0.44075 0.44075C0.734417 0.146917 1.0875 0 1.5 0C1.9125 0 2.26558 0.146917 2.55925 0.44075C2.85308 0.734417 3 1.0875 3 1.5C3 1.9125 2.85308 2.26567 2.55925 2.5595C2.26558 2.85317 1.9125 3 1.5 3Z" fill="#6E736A" />
+                                                </svg>
+                                            </span>
+                                            {openMenuId === addr.id && (
+                                                <div className={styles.MenuDropdown}>
+                                                    <button
+                                                        className={styles.MenuItem}
+                                                        onClick={() => { handleEditAddress(addr); setOpenMenuId(null); }}
+                                                    >
+                                                        Edit Address
+                                                    </button>
+                                                    <button
+                                                        className={styles.MenuItem}
+                                                        onClick={() => { handleDeleteAddress(addr); setOpenMenuId(null); }}
+                                                    >
+                                                        Delete Address
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {!showNewAddressForm ? (
+                                <button
+                                    className={styles.AddNewAddress}
+                                    onClick={() => {
+                                        if (savedAddresses.length >= 5) return;
+                                        setShowNewAddressForm(true);
+                                        setSelectedAddressId(null);
+                                    }}
+                                >
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 0V12M0 6H12" stroke="#6E736A" strokeWidth="1.5" />
+                                    </svg>
+                                    <p>Use a different address</p>
+                                </button>
+                            ) : (
+                                <button className={styles.AddNewAddress} onClick={() => setShowNewAddressForm(false)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1 1L11 11M1 11L11 1" stroke="#6E736A" strokeWidth="1.5" strokeLinecap="round" />
+                                    </svg>
+                                    <p>Discard</p>
+                                </button>
+                            )}
+                        </>
+                    )}
+                </>
+            )}
+
+            {/* ── New Address Form (unauthenticated OR showNewAddressForm) ── */}
+            {(showNewAddressForm || status !== "authenticated") && delivery === "ship" && (
+                <>
+                    <input className={styles.Input} value="United Arab Emirates" readOnly />
+
+                    {/* First / Last Name */}
+                    <div className={styles.Row}>
+                        <div style={{ flex: 1 }}>
+                            <input
+                                className={`${styles.Input} ${validationErrors.shippingFirstName ? styles.InputError : ""}`}
+                                placeholder="First Name"
+                                value={shippingForm.firstName}
+                                onChange={(e) => { setShippingForm({ ...shippingForm, firstName: e.target.value }); clearError("shippingFirstName"); }}
+                                onBlur={() => { const e = validateRequired(shippingForm.firstName, "First name"); if (e) setValidationErrors((p) => ({ ...p, shippingFirstName: e })); }}
+                            />
+                            {validationErrors.shippingFirstName && <span className={styles.ErrorMessage}>{validationErrors.shippingFirstName}</span>}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                            <input
+                                className={`${styles.Input} ${validationErrors.shippingLastName ? styles.InputError : ""}`}
+                                placeholder="Last Name"
+                                value={shippingForm.lastName}
+                                onChange={(e) => { setShippingForm({ ...shippingForm, lastName: e.target.value }); clearError("shippingLastName"); }}
+                                onBlur={() => { const e = validateRequired(shippingForm.lastName, "Last name"); if (e) setValidationErrors((p) => ({ ...p, shippingLastName: e })); }}
+                            />
+                            {validationErrors.shippingLastName && <span className={styles.ErrorMessage}>{validationErrors.shippingLastName}</span>}
+                        </div>
+                    </div>
+
+                    {/* Address */}
+                    <div>
+                        <input
+                            className={`${styles.Input} ${validationErrors.shippingAddress ? styles.InputError : ""}`}
+                            placeholder="House number, Street name"
+                            value={shippingForm.address}
+                            onChange={(e) => { setShippingForm({ ...shippingForm, address: e.target.value }); clearError("shippingAddress"); }}
+                            onBlur={() => { const e = validateRequired(shippingForm.address, "Address"); if (e) setValidationErrors((p) => ({ ...p, shippingAddress: e })); }}
+                        />
+                        {validationErrors.shippingAddress && <span className={styles.ErrorMessage}>{validationErrors.shippingAddress}</span>}
+                    </div>
+
+                    {/* Apartment */}
+                    <input
+                        className={styles.Input}
+                        placeholder="Apartment, suite, etc. (optional)"
+                        value={shippingForm.apartment}
+                        onChange={(e) => setShippingForm({ ...shippingForm, apartment: e.target.value })}
+                    />
+
+                    {/* City / Emirates */}
+                    <div className={styles.Row}>
+                        <div style={{ flex: 1 }}>
+                            <input
+                                className={`${styles.Input} ${validationErrors.shippingCity ? styles.InputError : ""}`}
+                                placeholder="City"
+                                value={shippingForm.city}
+                                onChange={(e) => { setShippingForm({ ...shippingForm, city: e.target.value }); clearError("shippingCity"); }}
+                                onBlur={() => { const e = validateRequired(shippingForm.city, "City"); if (e) setValidationErrors((p) => ({ ...p, shippingCity: e })); }}
+                            />
+                            {validationErrors.shippingCity && <span className={styles.ErrorMessage}>{validationErrors.shippingCity}</span>}
+                        </div>
+                        <select className={styles.Select} style={{ flex: 1 }}>
+                            <option>Dubai</option>
+                            <option>Abu Dhabi</option>
+                            <option>Sharjah</option>
+                            <option>Ajman</option>
+                            <option>Umm Al Quwain</option>
+                            <option>Ras Al Khaimah</option>
+                            <option>Fujairah</option>
+                        </select>
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                        <input
+                            className={`${styles.Input} ${validationErrors.shippingPhone ? styles.InputError : ""}`}
+                            placeholder="Phone"
+                            value={shippingForm.phone}
+                            onChange={(e) => { setShippingForm({ ...shippingForm, phone: e.target.value }); clearError("shippingPhone"); }}
+                            onBlur={() => { const e = validateUAEPhone(shippingForm.phone); if (e) setValidationErrors((p) => ({ ...p, shippingPhone: e })); }}
+                        />
+                        {validationErrors.shippingPhone && <span className={styles.ErrorMessage}>{validationErrors.shippingPhone}</span>}
+                    </div>
+
+                    {/* Save address checkbox (authenticated only) */}
+                    {status === "authenticated" && (
+                        <label className={styles.CheckBox}>
+                            <input
+                                type="checkbox"
+                                checked={shippingForm.saveAddress}
+                                onChange={(e) => setShippingForm({ ...shippingForm, saveAddress: e.target.checked })}
+                            />
+                            <p>Save this for next time.</p>
+                        </label>
+                    )}
+                </>
+            )}
+
+            {/* ── Pickup Location ── */}
+            {delivery === "pickup" && (
+                <div className={styles.PickupList}>
+                    <p>Pickup Locations Near You</p>
+                    <div className={styles.PickupCard}>
+                        <input type="radio" style={{ accentColor: "#2F362A" }} checked readOnly />
+                        <div>
+                            <h5>White Mantis Roastery - Al Quoz</h5>
+                            <p>Warehouse #2 – Al Quoz Industrial Area 4, Dubai</p>
+                            <span>10:00 AM – 7:00 PM</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

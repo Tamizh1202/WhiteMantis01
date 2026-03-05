@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from "react";
-import { useCart } from '../_context/CartContext';
+import { useCart } from "@/app/_context/CartContext";
+
 
 const AddToCart = ({ product }) => {
-  const { addItem } = useCart();
-
+  const { addToCart } = useCart();
   const [loading, setLoading] = useState(false);
 
   const handleAddToCart = async (e) => {
@@ -21,13 +21,8 @@ const AddToCart = ({ product }) => {
 
     setLoading(true);
     try {
-      await addItem(product.product_id, product.quantity || 1, {
-        name: product.name, variation_id: product.variation_id,
-        description: product.description,
-        image: product.image,
-        tagline: product.tagline,
-      });
-     
+      await addToCart(product.productId, product.quantity || 1, product.variationId);
+
     } catch (err) {
       console.error('Add to cart error', err);
     } finally {

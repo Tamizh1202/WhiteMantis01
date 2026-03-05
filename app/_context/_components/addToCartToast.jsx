@@ -3,6 +3,7 @@
 import toast from "react-hot-toast";
 import Image from "next/image";
 import styles from "./addToCartToast.module.css";
+import { formatImageUrl } from "@/lib/imageUtils";
 
 export const addToCartToast = (product, openCart) => {
   toast.custom(
@@ -12,9 +13,8 @@ export const addToCartToast = (product, openCart) => {
 
       return (
         <div
-          className={`${styles.toastContainer} ${
-            isVisible ? styles.toastContainerVisible : ""
-          }`}
+          className={`${styles.toastContainer} ${isVisible ? styles.toastContainerVisible : ""
+            }`}
         >
           {/* Close button */}
           <button
@@ -31,7 +31,7 @@ export const addToCartToast = (product, openCart) => {
           <div className={styles.productRow}>
             <div className={styles.imageWrapper}>
               <Image
-                src={product.image}
+                src={formatImageUrl(product.image)}
                 alt={product.name}
                 fill
                 sizes="64px"
@@ -41,7 +41,7 @@ export const addToCartToast = (product, openCart) => {
             </div>
 
             <div className={styles.productInfo}>
-              <p className={styles.productName}>{product.name}</p>
+              <p className={styles.productName}>{`${product.name} ${product.tagline}${product.variantName ? `, ${product.variantName}` : ''}`}</p>
               <p className={styles.productQty}>Qty: {product.quantity}</p>
             </div>
           </div>
@@ -62,7 +62,6 @@ export const addToCartToast = (product, openCart) => {
     },
     {
       duration: 4000,
-      id: "cart-toast",
       position: "top-right",
     },
   );

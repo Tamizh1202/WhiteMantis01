@@ -138,6 +138,7 @@ const Footer = () => {
                       className={styles.NewsLetterInput}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      suppressHydrationWarning
                     />
 
                     <button

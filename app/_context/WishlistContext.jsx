@@ -1,99 +1,58 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-// import { broadcastUpdate, subscribeToRemoteUpdates } from '../lib/realtimeSync';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useSession } from "next-auth/react";
+import axiosClient from "@/lib/axios";
 
 const WishlistContext = createContext(null);
 
 export function WishlistProvider({ children }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { status } = useSession();
 
-  const fetchWishlist = useCallback(async () => {
+  const refresh = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/website/wishlist/get', { cache: 'no-store', credentials: 'include' });
-      if (!res.ok) {
-        setItems([]);
-        setLoading(false);
-        return;
-      }
-      const data = await res.json();
-      setItems(data.items || []);
+      const { data } = await axiosClient.get('/api/wishlist');
+      setItems(data.wishlist?.items || data.items || []);
     } catch (e) {
       setItems([]);
     } finally {
       setLoading(false);
     }
-  }, []);
+  };    
 
   useEffect(() => {
-    fetchWishlist();
-  }, [fetchWishlist]);
-  // useEffect(() => {
-  //   const unsub = subscribeToRemoteUpdates((resource, meta) => {
-  //     try {
-  //       if (resource === 'wishlist') {
-  //
-  //         fetchWishlist();
-  //       }
-  //     } catch (e) {
-  //
-  //     }
-  //   });
-  //   return () => unsub && unsub();
-  // }, [fetchWishlist]);
-
-  const add = useCallback(async (product_id) => {
-    try {
-      const res = await fetch('/api/website/wishlist/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product_id }),
-        credentials: 'include',
-      });
-      const data = await res.json().catch(() => ({}));
-      // refresh after server write
-      await fetchWishlist();
-      // notify other tabs/devices that wishlist changed
-      // try { broadcastUpdate('wishlist'); } catch (e) { /* ignore */ }
-      return { ok: res.ok, data };
-    } catch (err) {
-      return { ok: false, error: err };
+    if (status === "authenticated") refresh();
+    else if (status === "unauthenticated") {
+      setItems([]);
+      setLoading(false);
     }
-  }, [fetchWishlist]);
+  }, [status]);
 
-  const remove = useCallback(async (product_id) => {
-    try {
-      const res = await fetch('/api/website/wishlist/remove', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product_id }),
-        credentials: 'include',
-      });
-      const data = await res.json().catch(() => ({}));
-      await fetchWishlist();
-      // try { broadcastUpdate('wishlist'); } catch (e) { /* ignore */ }
-      return { ok: res.ok, data };
-    } catch (err) {
-      return { ok: false, error: err };
-    }
-  }, [fetchWishlist]);
+  const add = async (productId) => {
+    await axiosClient.post('/api/wishlist', { productId, origin: 'store' });
+    await refresh();
+  };
 
-  const toggle = useCallback(async (product_id) => {
-    const exists = items.find((it) => Number(it.id) === Number(product_id));
-    if (exists) return remove(product_id);
-    return add(product_id);
-  }, [items, add, remove]);
+  const remove = async (productId) => {
+    await axiosClient.delete('/api/wishlist', { data: { productId, origin: 'store' } });
+    await refresh();
+  };
+
+  const toggle = (productId) => {
+    const exists = items.find(it => {
+      const itemProductId = it.product?.value?.id || it.product?.id || it.product;
+      return String(itemProductId) === String(productId);
+    });
+    return exists ? remove(productId) : add(productId);
+  };
 
   return (
-    <WishlistContext.Provider value={{ items, loading, add, remove, toggle, refresh: fetchWishlist }}>
+    <WishlistContext.Provider value={{ items, loading, add, remove, toggle, refresh }}>
       {children}
     </WishlistContext.Provider>
   );
 }
 
-export function useWishlist() {
-  const ctx = useContext(WishlistContext);
-  if (!ctx) return { items: [], loading: false, add: async () => { }, remove: async () => { }, toggle: async () => { }, refresh: async () => { } };
-  return ctx;
-}
+export const useWishlist = () => useContext(WishlistContext) || {};

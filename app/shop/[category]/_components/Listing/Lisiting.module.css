@@ -99,7 +99,7 @@
   background-color: #ffffff;
   cursor: pointer;
   border: 1px solid #6e736a;
-  
+
 }
 
 .SortOptions p {
@@ -146,17 +146,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-   border: 1px solid transparent;
+  border: 1px solid transparent;
   box-sizing: border-box;
 
-  overflow: hidden; 
+  overflow: hidden;
   transition: border 0.3s ease;
-  
+
 }
+
 .ProductImage:hover {
   border: 1px solid #2f362a;
-  
+
 }
+
 .ProductImage img:hover {
   transform: scale(1.05);
 
@@ -191,8 +193,8 @@
   max-width: 401px;
   max-height: 305px;
   object-fit: contain;
-   transition: transform 0.35s ease-in-out; 
-  will-change: transform; 
+  transition: transform 0.35s ease-in-out;
+  will-change: transform;
 }
 
 /* .ProductTop img {
@@ -205,6 +207,7 @@
   top: 16px;
   right: 3px;
   cursor: pointer;
+  z-index: 5;
 }
 
 .ProductBottom {
@@ -533,6 +536,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .FilterOptions input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -547,11 +551,12 @@
   display: inline-grid;
   place-content: center;
 }
+
 .MobileFilterOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45); 
-  z-index: 900; 
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 900;
 }
 
 @media (max-width: 640px) {
@@ -562,7 +567,7 @@
   .MainContainer {
     flex-direction: column;
     gap: 24px;
-    
+
   }
 
   .ProductImage img {
@@ -625,25 +630,26 @@
     max-width: 169px;
     min-width: 169px;
   }
+
   .RightTop {
-  position: sticky;
-  top: 73px; 
-  z-index: 30;
-  background: #ffffff;
-  padding-bottom: 10px;
-}
+    position: sticky;
+    top: 73px;
+    z-index: 30;
+    background: #ffffff;
+    padding-bottom: 10px;
+  }
 
-.RightTopRight {
- display: flex;
-  z-index: 30;
+  .RightTopRight {
+    display: flex;
+    z-index: 30;
 
-  width: 100%;
-  align-items: baseline;
-  justify-content: left;
+    width: 100%;
+    align-items: baseline;
+    justify-content: left;
 
-  background: #ffffff;
-  padding-bottom: 10px;
-}
+    background: #ffffff;
+    padding-bottom: 10px;
+  }
 
 
   .SortBy p {
@@ -661,7 +667,7 @@
 
   .RightConatiner {
     gap: 32px;
-   
+
   }
 
   .FilterBox {
@@ -724,21 +730,22 @@
   }
 
   .RightTop {
-  position: sticky;
-  top: 73px; 
-  z-index: 30;
-  background: #ffffff;
-  padding-bottom: 10px;
-}
+    position: sticky;
+    top: 73px;
+    z-index: 30;
+    background: #ffffff;
+    padding-bottom: 10px;
+  }
+
   .RightTopRight {
-   display: flex;
-  z-index: 30;
+    display: flex;
+    z-index: 30;
 
-  width: 100%;
-  align-items: baseline;
-  justify-content: left;
+    width: 100%;
+    align-items: baseline;
+    justify-content: left;
 
-  background: #ffffff;
+    background: #ffffff;
   }
 
   .RightTopLeft {
@@ -777,11 +784,12 @@
     max-width: 300px;
   }
 
-    .ProductActions {
+  .ProductActions {
     flex-direction: column;
-     gap: 10px; 
-     
+    gap: 10px;
+
   }
+
   .Subscribe {
     display: flex;
     width: 100%;
@@ -811,11 +819,13 @@
   .MobileFilterBtn {
     display: none;
   }
+
   .ProductActions {
     flex-direction: column;
-     gap: 10px; 
-     
+    gap: 10px;
+
   }
+
   .Subscribe {
     display: flex;
     width: 100%;
@@ -837,17 +847,18 @@
 
 .Popup {
   background: #fff;
-  width: 560px; 
+  width: 560px;
   padding: 28px;
   position: relative;
   border-radius: 0px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
 }
+
 .SortArrow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-font-size: 12px;
+  font-size: 12px;
   color: #6e736a;
   transition: transform 0.25s ease;
 }
@@ -870,10 +881,12 @@ font-size: 12px;
 
   cursor: pointer;
 }
+
 .FilterOptions input[type="checkbox"]:checked {
   background-color: #6c7a5f;
   border-color: #6c7a5f;
 }
+
 .FilterOptions input[type="checkbox"]:checked::after {
   content: "✓";
   font-size: 10px;
@@ -889,6 +902,7 @@ font-size: 12px;
     opacity: 0;
     transform: scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -903,7 +917,7 @@ font-size: 12px;
   margin-bottom: 40px;
 }
 
-.Popup > p {
+.Popup>p {
   font-family: var(--lato);
   font-size: 15px;
   color: #2F362A;
@@ -1027,9 +1041,7 @@ font-size: 12px;
 } */
 .ActiveFrequency::after {
   border-color: #6c7a5f;
-  background: radial-gradient(
-    circle,
-    #6c7a5f 0 3px,
-    transparent 4px
-  );
+  background: radial-gradient(circle,
+      #6c7a5f 0 3px,
+      transparent 4px);
 }

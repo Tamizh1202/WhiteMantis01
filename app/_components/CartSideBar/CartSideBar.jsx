@@ -1,79 +1,51 @@
 "use client";
 
 import styles from "./CartSideBar.module.css";
-import { useCart } from "../../_context/CartContext";
+import { useCart } from "@/app/_context/CartContext";
 import Image from "next/image";
-import CuponsSideBar from "../CuponsSideBar/CuponsSideBar";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { formatImageUrl } from "@/lib/imageUtils";
 
 const CartSideBar = () => {
   const {
     isCartOpen,
     closeCart,
-    products,
-    addItem,
+    items,
     removeItem,
+    updateQuantity,
     cartTotals,
-    appliedCoupon,
-    applyCoupon,
-    removeCoupon,
     loading,
   } = useCart();
 
-  const [isCouponsOpen, setIsCouponsOpen] = useState(false);
-  const [couponCode, setCouponCode] = useState("");
+
   const router = useRouter();
-  const isCartEmpty = products.length === 0;
+  const isCartEmpty = !items || items.length === 0;
 
-  const handleIncrease = async (product_id, variation_id, currentQty) => {
-    // Maximum quantity limit of 5 per product
-    if (currentQty >= 5) {
-      return; // Don't allow increasing beyond 5
-    }
-    await addItem(product_id, 1, { variation_id, skipToast: true });
+  const handleIncrease = async (product, vId, currentQty) => {
+    if (currentQty >= 5) return;
+    await updateQuantity(product, vId, null, "increment");
   };
 
-  const handleDecrease = async (product_id, variation_id, currentQty) => {
+  const handleDecrease = async (product, vId, currentQty) => {
     if (currentQty > 1) {
-      await addItem(product_id, -1, { variation_id, skipToast: true });
+      await updateQuantity(product, vId, null, "decrement");
     }
   };
 
-  const handleRemove = async (product_id, variation_id) => {
-    await removeItem(product_id, variation_id);
-  };
-
-  const handleApplyCoupon = async () => {
-    if (!couponCode.trim()) {
-      return;
-    }
-    const result = await applyCoupon(couponCode);
-    if (result.ok) {
-      setCouponCode("");
-    }
-  };
+  const handleRemove = async (product, vId) => {
+    await removeItem(product, vId);
+  }
 
   const handleCheckout = () => {
     closeCart();
     router.push("/checkout?mode=cart");
   };
 
-  // console.log(products);
-
   return (
     <>
-      {(isCartOpen || isCouponsOpen) && (
-        <div
-          className={styles.overlay}
-          onClick={() => {
-            if (isCouponsOpen) {
-              setIsCouponsOpen(false);
-            } else {
-              closeCart();
-            }
-          }}
-        />
+      {isCartOpen && (
+        <div className={styles.overlay} onClick={closeCart} />
       )}
 
       <aside className={`${styles.sidebar} ${isCartOpen ? styles.open : ""}`}>
@@ -117,7 +89,7 @@ const CartSideBar = () => {
                   <div className={styles.TopOneTop}>
                     <div className={styles.TopOneLeft}>
                       <h4>Your Cart </h4>
-                      <p>({products.length} items)</p>
+                      <p>({items?.length || 0} items)</p>
                     </div>
                     <div className={styles.TopOneRight} onClick={closeCart}>
                       <svg
@@ -135,15 +107,15 @@ const CartSideBar = () => {
                     </div>
                   </div>
                   <div className={styles.TopOneBottom}>
-                    {products.map((item) => (
+                    {Array.isArray(items) && items.map((item) => (
                       <div
                         className={styles.Card}
-                        key={`${item.product_id}-${item.variation_id || 0}`}
+                        key={`${item.product}`}
                       >
                         <div className={styles.CardLeft}>
                           <div className={styles.ProdImage}>
                             <Image
-                              src={item.image}
+                              src={formatImageUrl(item.image)}
                               alt={item.name}
                               width={100}
                               height={100}
@@ -151,15 +123,11 @@ const CartSideBar = () => {
                           </div>
                           <div className={styles.ProdDetails}>
                             <h5>
-                              {(item.name)}
-                              {item.attributes?.attribute_pa_weight
-                                ? ` - ${item.attributes.attribute_pa_weight}`
-                                : ""}
+                              {`${item.name} ${item.tagline}${item.variantName ? `, ${item.variantName}` : ''}`}
                             </h5>
                             <h4>
                               AED{" "}
                               {(
-                                item.price?.final_price ||
                                 item.price ||
                                 0
                               ).toFixed(2)}
@@ -173,8 +141,8 @@ const CartSideBar = () => {
                               className={styles.qtyBtn}
                               onClick={() =>
                                 handleDecrease(
-                                  item.product_id,
-                                  item.variation_id,
+                                  item.product,
+                                  item.vId,
                                   item.quantity,
                                 )
                               }
@@ -190,8 +158,8 @@ const CartSideBar = () => {
                               className={styles.qtyBtn}
                               onClick={() =>
                                 handleIncrease(
-                                  item.product_id,
-                                  item.variation_id,
+                                  item.product,
+                                  item.vId,
                                   item.quantity,
                                 )
                               }
@@ -208,7 +176,7 @@ const CartSideBar = () => {
                           <div className={styles.RemoveItem}>
                             <button
                               onClick={() =>
-                                handleRemove(item.product_id, item.variation_id)
+                                handleRemove(item.product, item.vId)
                               }
                             >
                               Remove
@@ -219,7 +187,7 @@ const CartSideBar = () => {
                     ))}
                   </div>
                 </div>
-                <div className={styles.TopTwo}>
+                {/* <div className={styles.TopTwo}>
                   <div className={styles.TopTwoTop}>
                     <h3>COUPONS AND OFFERS</h3>
                   </div>
@@ -239,7 +207,7 @@ const CartSideBar = () => {
                               fill="#6E736A"
                             />
                           </svg>
-                          <p>Coupon Applied: {appliedCoupon.code}</p>
+                          <p>Coupon Applied: {appliedCoupon?.code || ""}</p>
                         </div>
                         <button
                           className={styles.RemoveCoupon}
@@ -310,7 +278,7 @@ const CartSideBar = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className={styles.Bottom}>
                 <div className={styles.BottomOne}>
@@ -323,15 +291,7 @@ const CartSideBar = () => {
                         <h5>Subtotal</h5>
                       </div>
                       <div className={styles.BottomDetailsRight}>
-                        <h4>AED {cartTotals.subtotal.toFixed(2)}</h4>
-                      </div>
-                    </div>
-                    <div className={styles.BottomDetailsBottom}>
-                      <div className={styles.BottomDetailsLeft}>
-                        <h5>Coupon Discount</h5>
-                      </div>
-                      <div className={styles.BottomDetailsRight}>
-                        <h4>AED {cartTotals.discount.toFixed(2)}</h4>
+                        <h4>AED {(cartTotals?.subtotal || 0).toFixed(2)}</h4>
                       </div>
                     </div>
                   </div>
@@ -347,7 +307,7 @@ const CartSideBar = () => {
                       <h5>Total</h5>
                     </div>
                     <div className={styles.PriceDetailRight}>
-                      <h4>AED {cartTotals.total.toFixed(2)}</h4>
+                      <h4>AED {(cartTotals?.total || 0).toFixed(2)}</h4>
                     </div>
                   </div>
                   <button
@@ -378,10 +338,6 @@ const CartSideBar = () => {
           )}
         </div>
       </aside>
-      <CuponsSideBar
-        isOpen={isCouponsOpen}
-        onClose={() => setIsCouponsOpen(false)}
-      />
     </>
   );
 };
