@@ -108,7 +108,7 @@ export default function ShippingAddressSection({
                                             {selectedAddressId === addr.id && <span className={styles.RadioInner} />}
                                         </span>
                                         <div className={styles.AddressContent}>
-                                            <p className={styles.AddressName}>{addr.label}, {addr.apartment}, {addr.street}, {addr.city}, {addr.phoneNumber} </p>
+                                            <p className={styles.AddressName}>{addr.addressFirstName} {addr.addressLastName}, {addr.label}, {addr.apartment}, {addr.street}, {addr.city}, {addr.phoneNumber} </p>
                                             <p className={styles.AddressText}>{addr.emirates}</p>
                                         </div>
                                         <div
