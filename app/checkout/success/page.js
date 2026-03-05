@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import Image from "next/image";
 import one from "./1.png"; // Fallback image
-import { cleanProductName } from "../../../lib/productUtils";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -102,7 +101,7 @@ function SuccessContent() {
   // Both orders and subscriptions use line_items array in WooCommerce
   const items = order.line_items?.map(item => ({
     id: item.id,
-    name: cleanProductName(item.name),
+    name: (item.name),
     quantity: item.quantity,
     price: item.total, // Total for line
     image: item.image?.src || null // Try to get image if available
@@ -276,7 +275,7 @@ function SuccessContent() {
                   />
                 </div>
                 <div className={styles.ProdNameAndweight}>
-                  <h4>{cleanProductName(item.name)}</h4>
+                  <h4>{(item.name)}</h4>
                 </div>
                 <div className={styles.ProdQnty}>
                   <p>x{item.quantity}</p>

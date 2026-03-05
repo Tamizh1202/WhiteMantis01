@@ -39,7 +39,7 @@ export default function OrderSummary({ product, cartTotals, delivery }) {
                         </div>
 
                         <div className={styles.ProdDetails}>
-                            <h4>{cleanProductName(item.title || item.name)}</h4>
+                            <h4>{(item.title || item.name)}</h4>
                             <p>
                                 {item.attributes?.attribute_pa_weight || item.weight} | {item.quantity}x
                             </p>
