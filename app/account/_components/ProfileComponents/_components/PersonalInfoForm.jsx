@@ -49,7 +49,7 @@ const PersonalInfoForm = ({
             <div className={styles.Name1}>
                 <div className={styles.Field}>
                     <input
-                        value={profile.firstName ? profile.firstName.trim() : isGuestUser ? "Guest User" : ""}
+                        value={profile.firstName && profile.firstName}
                         placeholder={!isGuestUser ? "Enter your first name" : ""}
                         disabled={!editMode || isGuestUser}
                         onChange={(e) => onFieldChange("firstName", e.target.value)}
@@ -61,7 +61,7 @@ const PersonalInfoForm = ({
 
                 <div className={styles.Field}>
                     <input
-                        value={profile.lastName ? profile.lastName.trim() : isGuestUser ? "Guest User" : ""}
+                        value={profile.lastName && profile.lastName}
                         placeholder={!isGuestUser ? "Enter your last name" : ""}
                         disabled={!editMode || isGuestUser}
                         onChange={(e) => onFieldChange("lastName", e.target.value)}

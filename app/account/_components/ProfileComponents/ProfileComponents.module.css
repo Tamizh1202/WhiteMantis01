@@ -171,11 +171,30 @@
   gap: 24px;
 }
 
+.AddressText .Label {
+  color: #2F362A;
+  font-family: var(--lato);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.AddressText hr {
+  background-color: #2F362A4D;
+  height: 1px;
+  border: 1px;
+  opacity: 1;
+}
+
+.AddressText {
+  width: 100%;
+}
+
 .AddressText .Name {
-  color: #6e736a;
+  color: #6E736A;
   font-family: var(--lato);
   font-weight: 400;
   font-size: 15px;
+  width: 100%;
 }
 
 .AddressText .Head {
@@ -263,6 +282,7 @@
   flex-shrink: 0;
   justify-content: flex-end;
   cursor: pointer;
+  width: 100%;
 }
 
 /* .other {
@@ -317,6 +337,7 @@
   align-items: center;
   justify-content: center;
   z-index: 10009;
+  gap: 0;
 }
 
 .DeletePopupOverlay,
@@ -337,7 +358,7 @@
   padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
 }
 
 .PopupDeleteAddress,
@@ -556,7 +577,7 @@
 
 .div2 .input {
   border: 1px solid #2f362a4d;
-  width: 60px;
+  width: 80px;
   height: 80px;
   font-size: 25px;
   text-align: center;

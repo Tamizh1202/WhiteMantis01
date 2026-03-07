@@ -10,6 +10,8 @@
 import React from "react";
 import styles from "../ProfileComponents.module.css";
 
+import { UAE_STATES } from "../profileConstants";
+
 const EditIcon = () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1.41176 14.5882H2.59906L12.2334 4.95388L11.0461 3.76659L1.41176 13.4009V14.5882ZM0 16V12.8146L12.4146 0.405411C12.5569 0.276156 12.714 0.176314 12.8859 0.105882C13.058 0.0352941 13.2384 0 13.4271 0C13.6158 0 13.7985 0.0334907 13.9753 0.100471C14.1522 0.167451 14.3089 0.27396 14.4452 0.419999L15.5946 1.58376C15.7406 1.72008 15.8447 1.87694 15.9068 2.05435C15.9689 2.23176 16 2.40918 16 2.58659C16 2.77592 15.9677 2.95655 15.9031 3.12847C15.8384 3.30055 15.7356 3.45773 15.5946 3.6L3.18541 16H0ZM11.6294 4.37059L11.0461 3.76659L12.2334 4.95388L11.6294 4.37059Z" fill="#6E736A" />
@@ -23,18 +25,20 @@ const DeleteIcon = () => (
 );
 
 const AddressCard = ({ address, onEdit, onDelete }) => {
+    const emirateLabel = UAE_STATES.find(s => s.value === address.emirates)?.label || address.emirates;
+
     return (
         <div className={styles.AddressCard}>
             <div className={styles.AddressText}>
-                <p className={styles.Name}>{address.label || "Not specified"}</p>
+                <p className={styles.Label}>{address.label || "Others"}</p>
                 <p className={styles.Name}>
                     {`${address.addressFirstName || ""} ${address.addressLastName || ""}`.trim()}
                 </p>
                 <hr />
                 <p className={styles.Name}>
-                    {address.street}<br />
-                    {address.apartment}<br />
-                    {address.city}, {address.emirates || address.state}
+                    {address.street && <>{address.street}<br /></>}
+                    {address.apartment && <>{address.apartment}<br /></>}
+                    {address.city}, {emirateLabel}, {address.country}
                 </p>
                 <hr />
                 <p className={styles.Name}>Phone number: {address.phoneNumber}</p>

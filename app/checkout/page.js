@@ -144,7 +144,7 @@ function CheckoutContent() {
           const res = await axiosClient.get(`/api/users/${session.user.id}/addresses`);
           const data = await res.data;
           setSavedAddresses(data.addresses);
-          
+
           const defaultAddr = data.docs.find((a) => a.original.setAsDefault);
           setSelectedAddressId(defaultAddr ? defaultAddr.id : data.docs[0]?.id || null);
 

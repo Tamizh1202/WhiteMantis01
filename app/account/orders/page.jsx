@@ -1,63 +1,126 @@
 "use client";
 import React, { useEffect, useState } from "react";
-// import Link from "next/link";
-import Progress from "../_components/OrderComponents/Progress/page";
 import styles from "./page.module.css";
-import Delivered from "../_components/OrderComponents/Delivered/page";
-import Placed from "../_components/OrderComponents/Placed/page";
-import CancellationRequested from "../_components/OrderComponents/Cancellation/page";
-import Cancelled from "../_components/OrderComponents/Cancelled/page";
-import InProgress from "../_components/OrderComponents/in-progress/page";
-
+import { useSession } from "next-auth/react";
+import OrderCard from "./_components/OrderCard/OrderCard";
+import axiosClient from "@/lib/axios";
+import CancelOrderPopup from "./_components/CancelOrderPopup/CancelOrderPopup";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchingMore, setFetchingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const { data: session, status } = useSession()
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch("/api/website/order");
-      const data = await response.json();
-
-      if (data.success && Array.isArray(data.data)) {
-        setOrders(data.data);
-      } else if (Array.isArray(data.orders)) {
-        setOrders(data.orders);
-      }
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-      console.error("Failed to load orders");
-    } finally {
+    if (status === "authenticated" && session?.user?.id) {
+      fetchOrders(1);
+    } else if (status === "unauthenticated") {
       setLoading(false);
     }
-  };
+  }, [status, session]);
 
-  const renderOrderComponent = (order) => {
-    // Check for subscription first if needed, or rely on status
-    // Example logic based on status
-    switch (order.status) {
-      case "completed":
-        return <Delivered order={order} />;
-      case "cancelled":
-      case "refunded":
-      case "failed":
-        return <Cancelled order={order} />;
-      case "processing":
-      case "on-hold":
-        return <Placed order={order} />;
-      case "pending":
-        return <Progress order={order} />;
-      // case "cancellation-requested": // specific custom status?
-      //   return <CancellationRequested order={order} />;
-      default:
-        // Default fallback
-        return <Placed order={order} />;
+  const fetchOrders = async (pageNumber = 1) => {
+    if (!session || !session.user || !session.user.id) {
+      return;
+    }
+
+    try {
+      if (pageNumber === 1) setLoading(true);
+      else setFetchingMore(true);
+
+      const userId = session.user.id;
+      const queryParams = {
+        'where[user][equals]': userId,
+        'where[paymentStatus][in]': 'completed,refunded,refund-initiated',
+        'sort': '-createdAt',
+        'depth': '2',
+        'limit': '5',
+        'page': pageNumber.toString(),
+        'select[id]': 'true',
+        'select[orderTotal]': 'true',
+        'select[deliveryStatus]': 'true',
+        'select[paymentStatus]': 'true', // Changed from 'status' (which doesn't exist)
+        'select[createdAt]': 'true',
+        'select[items]': 'true',
+        'select[refundedOn]': 'true',
+        'select[refundReason]': 'true',
+        'select[deliveringBy]': 'true',
+        'select[deliveredOn]': 'true',
+        'select[refundedAmount]': 'true',
+      };
+
+      const query = new URLSearchParams(queryParams);
+      const response = await axiosClient.get(`/api/web-orders?${query.toString()}`);
+      const data = response.data;
+
+
+      let newOrders = [];
+      let hasNext = false;
+
+      if (data.docs && Array.isArray(data.docs)) {
+        newOrders = data.docs;
+        hasNext = data.hasNextPage;
+      } else if (data.orders && Array.isArray(data.orders)) {
+        newOrders = data.orders;
+        hasNext = data.hasNextPage;
+      } else if (data.data && Array.isArray(data.data)) {
+        newOrders = data.data;
+        hasNext = data.hasNextPage;
+      }
+
+      if (pageNumber === 1) {
+        setOrders(newOrders);
+      } else {
+        setOrders(prev => [...prev, ...newOrders]);
+      }
+
+      setHasNextPage(hasNext);
+      setPage(pageNumber);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
+      setFetchingMore(false);
     }
   };
+
+  console.log(orders)
+
+  const handleLoadMore = () => {
+    if (!fetchingMore && hasNextPage) {
+      fetchOrders(page + 1);
+    }
+  };
+
+  const handleCancelButton = (orderId) => {
+    if (!orderId) return;
+    setSelectedOrderId(orderId);
+    setIsCancelPopupOpen(true);
+  }
+
+  const handleConfirmCancel = async (reason) => {
+    if (!selectedOrderId) return;
+
+    try {
+      const response = await axiosClient.get(`api/web-orders/${selectedOrderId}/cancel`, {
+        params: { reason }
+      })
+
+      if (response.status === 200) {
+        // Refresh orders or update local state
+        fetchOrders(1);
+        setIsCancelPopupOpen(false);
+        setSelectedOrderId(null);
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   return (
     <div className={styles.main}>
@@ -94,17 +157,46 @@ export default function OrdersPage() {
         {loading ? (
           <p style={{ textAlign: "center", padding: "20px" }}>Loading orders...</p>
         ) : orders.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {orders.map((order) => (
-              <div key={order.id}>
-                {renderOrderComponent(order)}
+          <>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {orders.map((order) => (
+                <OrderCard key={order.id} order={order} handleCancelButton={handleCancelButton} />
+              ))}
+            </div>
+
+            {hasNextPage && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <button
+                  onClick={handleLoadMore}
+                  disabled={fetchingMore}
+                  className={styles.loadMoreBtn}
+                  style={{
+                    padding: '12px 30px',
+                    backgroundColor: 'transparent',
+                    border: '1px solid #2F362A',
+                    color: '#2F362A',
+                    cursor: fetchingMore ? 'not-allowed' : 'pointer',
+                    fontFamily: 'var(--lato)',
+                    fontWeight: '500',
+                    fontSize: '15px'
+                  }}
+                >
+                  {fetchingMore ? 'Loading...' : 'Load More'}
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         ) : (
           <p style={{ textAlign: "center", padding: "20px" }}>No orders found.</p>
         )}
       </div>
+      {isCancelPopupOpen && (
+        <CancelOrderPopup
+          orderId={selectedOrderId}
+          onClose={() => setIsCancelPopupOpen(false)}
+          onConfirm={handleConfirmCancel}
+        />
+      )}
     </div>
   );
 }

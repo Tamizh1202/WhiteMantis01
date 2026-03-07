@@ -1,25 +1,8 @@
 "use client";
-// ─── AddressFormPopup ─────────────────────────────────────────────────────────
-// Reusable popup for BOTH adding and editing an address.
-// Controlled entirely by props — no internal state.
-//
-// Props:
-//   mode              "add" | "edit"
-//   addressForm       object   — current form values
-//   addressErrors     object   — { fullName?, address?, phone? }
-//   addressGeneralError string
-//   activeLabelBtn    string   — which of Home/Work/Others is highlighted
-//   UAE_STATES        array    — [{ label, value }]
-//   onFormChange      (field: string, value: any) => void
-//   onLabelSelect     (label: string) => void
-//   onSave            () => void
-//   onCancel          () => void
-//
-// Validation is done in the parent (ProfileComponents) using validatorFunctions.
 
 import React from "react";
 import styles from "../ProfileComponents.module.css";
-import { ADDRESS_LABELS } from "../profileConstants";
+import { ADDRESS_LABELS, UAE_STATES } from "../profileConstants";
 
 const AddressFormPopup = ({
     mode,
@@ -27,7 +10,6 @@ const AddressFormPopup = ({
     addressErrors,
     addressGeneralError,
     activeLabelBtn,
-    UAE_STATES,
     onFormChange,
     onLabelSelect,
     onSave,
@@ -77,7 +59,7 @@ const AddressFormPopup = ({
 
                 {/* Apartment */}
                 <input
-                    placeholder="Apartment, suite, etc."
+                    placeholder="Apartment, suite, etc. (Optional)"
                     value={addressForm.apartment || ""}
                     onChange={(e) => onFormChange("apartment", e.target.value)}
                 />
@@ -147,7 +129,7 @@ const AddressFormPopup = ({
                 )}
 
                 {/* Home / Work / Others toggle buttons */}
-                <div className={styles.Popup} style={{ display: "flex", flexDirection: "row", padding: "0", width: "100%" }}>
+                <div className={styles.Popup} style={{ display: "flex", flexDirection: "row", padding: "0", width: "100%", gap: '0' }}>
                     {ADDRESS_LABELS.map((label) => (
                         <button
                             key={label}

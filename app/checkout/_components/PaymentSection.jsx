@@ -4,21 +4,11 @@ import {
     CardNumberElement,
     CardExpiryElement,
     CardCvcElement,
+    PaymentElement
 } from "@stripe/react-stripe-js";
 import { stripeElementStyle } from "./stripeStyles.js";
 import Link from "next/link";
 
-/**
- * PaymentSection
- * ─────────────────────────────────────────
- * Renders the Stripe card inputs and Pay Now button.
- * The billing toggle + billing address form are handled in BillingAddressSection.
- *
- * Props:
- *   validationErrors : object   — uses .card key for stripe errors
- *   isProcessing     : bool     — disables/changes Pay Now button
- *   handlePayment    : fn       — called on Pay Now click
- */
 export default function PaymentSection({ validationErrors, isProcessing, handlePayment }) {
     return (
         <div className={styles.Five}>

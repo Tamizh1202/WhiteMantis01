@@ -16,8 +16,14 @@ import styles from "../ProfileComponents.module.css";
 import AddressCard from "./AddressCard";
 
 const AddressSection = ({ addresses, onAddNew, onEdit, onDeleteRequest }) => {
-    const defaultAddress = addresses.find((a) => a.isDefaultAddress) || addresses[0];
-    const otherAddresses = addresses.filter((a) => a !== defaultAddress);
+    // Defensive check to ensure addresses is always an array
+    const addressList = Array.isArray(addresses) ? addresses : [];
+
+    // Only identify as default if explicitly marked
+    const defaultAddress = addressList.find((a) => a.isDefaultAddress);
+    const otherAddresses = defaultAddress
+        ? addressList.filter((a) => a.id !== defaultAddress.id)
+        : addressList;
 
     return (
         <div className={styles.AddressSection}>
@@ -27,23 +33,36 @@ const AddressSection = ({ addresses, onAddNew, onEdit, onDeleteRequest }) => {
                 <button onClick={onAddNew}>Add new Address</button>
             </div>
 
-            {/* Default address */}
-            {defaultAddress && (
-                <div className={styles.fixerOne}>
-                    <p>Default address</p>
-                    <AddressCard
-                        address={defaultAddress}
-                        onEdit={onEdit}
-                        onDelete={onDeleteRequest}
-                    />
-                </div>
-            )}
+            {/* If there is a default address, show it with the label */}
+            {defaultAddress ? (
+                <>
+                    <div className={styles.fixerOne}>
+                        <p>Default address</p>
+                        <AddressCard
+                            address={defaultAddress}
+                            onEdit={onEdit}
+                            onDelete={onDeleteRequest}
+                        />
+                    </div>
 
-            {/* Other addresses */}
-            {otherAddresses.length > 0 && (
+                    {otherAddresses.length > 0 && (
+                        <div className={styles.fixerTwo}>
+                            <h6 className={styles.other}>Other addresses</h6>
+                            {otherAddresses.map((addr) => (
+                                <AddressCard
+                                    key={addr.id}
+                                    address={addr}
+                                    onEdit={onEdit}
+                                    onDelete={onDeleteRequest}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </>
+            ) : (
+                /* No default address: just show all addresses without labels */
                 <div className={styles.fixerTwo}>
-                    <h6 className={styles.other}>Other addresses</h6>
-                    {otherAddresses.map((addr) => (
+                    {addressList.map((addr) => (
                         <AddressCard
                             key={addr.id}
                             address={addr}

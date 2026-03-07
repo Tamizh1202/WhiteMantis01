@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import styles from "../page.module.css";
 import { validateRequired, validateUAEPhone } from "@/utils/validatorFunctions";
 import DeleteAddressPopup from "@/app/account/_components/ProfileComponents/_components/DeleteAddressPopup";
+import AddressFormPopup from "@/app/account/_components/ProfileComponents/_components/AddressFormPopup";
+import { UAE_STATES, ADDRESS_LABELS } from "@/app/account/_components/ProfileComponents/profileConstants";
 
 /**
  * ShippingAddressSection
@@ -38,8 +40,34 @@ export default function ShippingAddressSection({
     const [openMenuId, setOpenMenuId] = useState(null);
     const [addressDeletePopup, setAddressDeletePopup] = useState(false);
     const [addressFormPopup, setAddressFormPopup] = useState(false);
+    const [addressPopupMode, setAddressPopupMode] = useState("add"); // "add" | "edit"
     const [addressToDelete, setAddressToDelete] = useState(null);
+    const [addressToEdit, setAddressToEdit] = useState(null);
     const menuRef = useRef(null);
+
+    const emptyAddressForm = {
+        addressFirstName: "",
+        addressLastName: "",
+        address: "",
+        apartment: "",
+        city: "",
+        state: "",
+        phone: "",
+        label: ADDRESS_LABELS[0],
+        isDefault: false,
+    };
+    const [addressForm, setAddressForm] = useState(emptyAddressForm);
+    const [addressErrors, setAddressErrors] = useState({});
+    const [addressGeneralError, setAddressGeneralError] = useState("");
+    const [activeLabelBtn, setActiveLabelBtn] = useState(ADDRESS_LABELS[0]);
+
+    // Auto-select default address (or first address as fallback) on load
+    useEffect(() => {
+        if (!savedAddresses || savedAddresses.length === 0) return;
+        if (selectedAddressId) return; // don't override a user's manual choice
+        const defaultAddr = savedAddresses.find((a) => a.isDefault);
+        setSelectedAddressId(defaultAddr ? defaultAddr.id : savedAddresses[0].id);
+    }, [savedAddresses]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -53,9 +81,23 @@ export default function ShippingAddressSection({
     }, []);
 
     function handleEditAddress(addr) {
-        // TODO: open edit address form pre-filled with addr data
-
-
+        setAddressToEdit(addr);
+        setAddressPopupMode("edit");
+        setAddressForm({
+            addressFirstName: addr.addressFirstName || "",
+            addressLastName: addr.addressLastName || "",
+            address: addr.street || addr.address || "",
+            apartment: addr.apartment || "",
+            city: addr.city || "",
+            state: addr.emirates || addr.state || "",
+            phone: addr.phoneNumber || addr.phone || "",
+            label: addr.label || ADDRESS_LABELS[0],
+            isDefault: addr.isDefault || false,
+        });
+        setActiveLabelBtn(addr.label || ADDRESS_LABELS[0]);
+        setAddressErrors({});
+        setAddressGeneralError("");
+        setAddressFormPopup(true);
     }
 
     function handleDeleteAddress(addr) {
@@ -79,6 +121,36 @@ export default function ShippingAddressSection({
                 <DeleteAddressPopup
                     onConfirm={confirmDeleteAddress}
                     onCancel={cancelDeleteAddress}
+                />
+            )}
+            {addressFormPopup && (
+                <AddressFormPopup
+                    mode={addressPopupMode}
+                    addressForm={addressForm}
+                    addressErrors={addressErrors}
+                    addressGeneralError={addressGeneralError}
+                    activeLabelBtn={activeLabelBtn}
+                    UAE_STATES={UAE_STATES}
+                    onFormChange={(field, value) =>
+                        setAddressForm((prev) => ({ ...prev, [field]: value }))
+                    }
+                    onLabelSelect={(label) => {
+                        setActiveLabelBtn(label);
+                        setAddressForm((prev) => ({ ...prev, label }));
+                    }}
+                    onSave={() => {
+                        // TODO: call API to save/update address, then close popup
+                        setAddressFormPopup(false);
+                        setAddressToEdit(null);
+                        setAddressForm(emptyAddressForm);
+                        setActiveLabelBtn(ADDRESS_LABELS[0]);
+                    }}
+                    onCancel={() => {
+                        setAddressFormPopup(false);
+                        setAddressToEdit(null);
+                        setAddressForm(emptyAddressForm);
+                        setActiveLabelBtn(ADDRESS_LABELS[0]);
+                    }}
                 />
             )}
             {/* ── Shipping ── */}
@@ -150,8 +222,12 @@ export default function ShippingAddressSection({
                                     className={styles.AddNewAddress}
                                     onClick={() => {
                                         if (savedAddresses.length >= 5) return;
-                                        setShowNewAddressForm(true);
-                                        setSelectedAddressId(null);
+                                        setAddressPopupMode("add");
+                                        setAddressForm(emptyAddressForm);
+                                        setActiveLabelBtn(ADDRESS_LABELS[0]);
+                                        setAddressErrors({});
+                                        setAddressGeneralError("");
+                                        setAddressFormPopup(true);
                                     }}
                                 >
                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,16 +1,7 @@
-// ─── Profile API Helpers ───────────────────────────────────────────────────────
-// All network calls for the profile page live here.
-// Components should call these functions — never call axiosClient directly.
-
 import axiosClient from "@/lib/axios";
 
-/**
- * PATCH the user's core profile fields (name, phone, gender …).
- * @param {string} userId  - session user id
- * @param {object} payload - fields to update
- * @returns {{ success: boolean, data?: object, error?: string }}
- */
 export const updateProfileAPI = async (userId, payload) => {
+    console.log(payload)
     try {
         const res = await axiosClient.patch(`/api/users/${userId}`, payload);
         const data = res.data;
@@ -24,19 +15,18 @@ export const updateProfileAPI = async (userId, payload) => {
     }
 };
 
-/**
- * PATCH the user's address list.
- * @param {string} userId          - session user id
- * @param {Array}  addressPayload  - array of address objects
- * @returns {{ success: boolean, updatedAddresses?: Array, error?: string }}
- */
 export const saveAddressAPI = async (userId, addressPayload) => {
+    console.log(addressPayload)
     try {
-        const res = await axiosClient.patch(`/api/users/${userId}`, { addresses: addressPayload });
+        const res = await axiosClient.post(`/api/users/${userId}/addresses`, addressPayload);
         const data = res.data;
-        if (res.status === 200 || data.message?.toLowerCase().includes("updated")) {
+        if (res.status === 201 || res.status === 200 || data.message?.toLowerCase().includes("updated")) {
             const updatedAddresses =
-                data.doc?.saved_addresses || data.saved_addresses || addressPayload;
+                data.doc?.addresses ||
+                data.addresses ||
+                data.doc?.saved_addresses ||
+                data.saved_addresses ||
+                (Array.isArray(addressPayload) ? addressPayload : []);
             return { success: true, updatedAddresses };
         }
         return { success: false };
@@ -46,17 +36,31 @@ export const saveAddressAPI = async (userId, addressPayload) => {
     }
 };
 
-/**
- * DELETE a single address by ID.
- * @param {string} userId    - session user id
- * @param {string} addressId - the id of the address to remove
- * @returns {{ success: boolean, error?: string }}
- */
-export const deleteAddressAPI = async (userId, addressId) => {
+export const updateAddressAPI = async (userId, addressPayload) => {
+    console.log(addressPayload)
     try {
-        const res = await axiosClient.delete(`/api/users/${userId}`, {
-            data: { addressId },
-        });
+        const res = await axiosClient.patch(`/api/users/${userId}/addresses`, addressPayload);
+        const data = res.data;
+        if (res.status === 201 || res.status === 200 || data.message?.toLowerCase().includes("updated")) {
+            const updatedAddresses =
+                data.doc?.addresses ||
+                data.addresses ||
+                data.doc?.saved_addresses ||
+                data.saved_addresses ||
+                (Array.isArray(addressPayload) ? addressPayload : []);
+            return { success: true, updatedAddresses };
+        }
+        return { success: false };
+    } catch (error) {
+        console.error("saveAddressAPI error:", error.response?.data || error.message);
+        return { success: false, error: error.message };
+    }
+};
+
+export const deleteAddressAPI = async (userId, addressId) => {
+    console.log('addressId :', addressId)
+    try {
+        const res = await axiosClient.delete(`/api/users/${userId}/addresses`, { data: { addressId } });
         console.log("deleteAddressAPI response:", res.data);
         return { success: true };
     } catch (error) {
@@ -65,37 +69,62 @@ export const deleteAddressAPI = async (userId, addressId) => {
     }
 };
 
-/**
- * GET account status before showing the delete-account popup.
- * @returns {{ success: boolean, data?: object, error?: string }}
- */
-export const checkDeleteAccountAPI = async () => {
+export const confirmDeleteAccountAPI = async (userId) => {
     try {
-        const res = await fetch("/api/website/profile/delete", { method: "GET" });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to check account status");
-        return { success: true, data };
+        const res = await axiosClient.delete(`/api/users/${userId}`);
+        const data = res.data;
+        if (res.status === 200 || data.success) {
+            return { success: true, data };
+        }
+        return { success: false, error: data.message || "Failed to delete account" };
     } catch (error) {
-        console.error("checkDeleteAccountAPI error:", error);
+        console.error("confirmDeleteAccountAPI error:", error.response?.data || error.message);
+        return { success: false, error: error.response?.data?.message || error.message };
+    }
+};
+
+// Accepts { base64, filename } object — backend also expects these exact keys
+export const uploadProfileImageAPI = async ({ base64, filename }) => {
+    try {
+        const res = await axiosClient.post(`/api/users/upload-profile-image`, { base64, filename });
+        const data = res.data;
+        if (res.status === 200) {
+            return { success: true, data };
+        }
+        return { success: false };
+    } catch (error) {
+        console.error("uploadProfileImageAPI error:", error.response?.data || error.message);
         return { success: false, error: error.message };
     }
 };
 
-/**
- * POST to permanently delete the account.
- * @returns {{ success: boolean, error?: string }}
- */
-export const confirmDeleteAccountAPI = async () => {
+// Sends OTP to the new email address the user wants to switch to
+export const changeEmailOtpAPI = async (email) => {
     try {
-        const res = await fetch("/api/website/profile/delete/confirm", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to delete account");
-        return { success: true, data };
+        const res = await axiosClient.post(`/api/users/web-change-email`, { email });
+        const data = res.data;
+        if (res.status === 200 && data.success) {
+            return { success: true };
+        }
+        return { success: false, message: data.message || 'Failed to send OTP' };
     } catch (error) {
-        console.error("confirmDeleteAccountAPI error:", error);
-        return { success: false, error: error.message };
+        console.error("changeEmailOtpAPI error:", error.response?.data || error.message);
+        const msg = error.response?.data?.message || error.message;
+        return { success: false, message: msg };
+    }
+};
+
+export const verifyChangeEmailOtpAPI = async (email, otp) => {
+    try {
+        const res = await axiosClient.post(`/api/users/web-verify-change-email`, { email, otp });
+        const data = res.data;
+        if (res.status === 200 && data.success) {
+            return { success: true };
+        }
+        return { success: false, message: data.message || 'Failed to verify OTP' };
+    } catch (error) {
+        console.error("changeEmailOtpAPI error:", error.response?.data || error.message);
+        const msg = error.response?.data?.message || error.message;
+        return { success: false, message: msg };
     }
 };

@@ -13,7 +13,7 @@ export default function Breadcrumb() {
     "ACCOUNT";
 
   const crumbs = [
-    { label: "home", href: "/" },
+    { label: "Home", href: "/" },
     { label: "Account", href: "/account" },
   ];
 

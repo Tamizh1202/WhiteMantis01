@@ -1,29 +1,18 @@
 "use client";
-// ─── ProfileComponents (Orchestrator) ────────────────────────────────────────
-// This is the top-level component for the profile page.
-// It owns ALL state and passes only the needed props down to each sub-component.
-//
-// Sub-components live in: ./_components/
-// API helpers live in:    ./profileApiUtils.js
-// Constants live in:      ./profileConstants.js
-// Validation uses:        @/utils/validatorFunctions
-
 import React, { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import styles from "./ProfileComponents.module.css";
-
-// ── Utils & Constants ─────────────────────────────────────────────────────────
 import { UAE_STATES } from "./profileConstants";
 import {
   updateProfileAPI,
   saveAddressAPI,
+  updateAddressAPI,
   deleteAddressAPI,
-  checkDeleteAccountAPI,
   confirmDeleteAccountAPI,
+  changeEmailOtpAPI,
+  verifyChangeEmailOtpAPI,
 } from "./profileApiUtils";
-import { validateRequired, validateUAEPhone } from "@/utils/validatorFunctions";
-
-// ── Sub-components ────────────────────────────────────────────────────────────
+import { validateEmail, validateRequired, validateUAEPhone } from "@/utils/validatorFunctions";
 import ProfilePictureSection from "./_components/ProfilePictureSection";
 import PersonalInfoForm from "./_components/PersonalInfoForm";
 import OtpVerificationPopup from "./_components/OtpVerificationPopup";
@@ -32,24 +21,24 @@ import AddressFormPopup from "./_components/AddressFormPopup";
 import DeleteAddressPopup from "./_components/DeleteAddressPopup";
 import DeleteAccountPopup from "./_components/DeleteAccountPopup";
 
-// ─────────────────────────────────────────────────────────────────────────────
-
 const ProfileComponents = ({ initialData }) => {
-  console.log(initialData);
 
-  const { update, data: session } = useSession();
-  const isGuestUser = false;
+  const { update, data: session, status } = useSession();
+  const isGuestUser = status === "unauthenticated";
 
-  // ── Profile state ───────────────────────────────────────────────────────────
+  // Determine the core user data from initialData (could be direct or nested in .user)
+  const userData = initialData?.user || initialData || {};
+
   const [profile, setProfile] = useState({
-    firstName: initialData?.user?.firstName || "",
-    lastName: initialData?.user?.lastName || "",
-    email: initialData?.user?.email || "",
-    phone: initialData?.user?.phone || "",
-    gender: initialData?.user?.gender || "",
-    profileImage: initialData?.user?.profileImage || null,
+    firstName: userData.firstName || "",
+    lastName: userData.lastName || "",
+    email: userData.email || "",
+    phone: userData.phone || "",
+    gender: userData.gender || "male",
+    profileImage: userData.profileImage || null,
   });
-  const [originalEmail, setOriginalEmail] = useState(initialData?.user?.email || "");
+  const [originalEmail, setOriginalEmail] = useState(userData.email || "");
+
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -81,7 +70,9 @@ const ProfileComponents = ({ initialData }) => {
   };
 
   // ── Address state ───────────────────────────────────────────────────────────
-  const [addresses, setAddresses] = useState(initialData?.user?.addresses || []);
+  const [addresses, setAddresses] = useState(
+    Array.isArray(userData.addresses) ? userData.addresses : []
+  );
   const [showAddressPopup, setShowAddressPopup] = useState(false);
   const [showEditAddressPopup, setShowEditAddressPopup] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState(null);
@@ -96,6 +87,29 @@ const ProfileComponents = ({ initialData }) => {
   // ── Delete account state ────────────────────────────────────────────────────
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [accountStatus, setAccountStatus] = useState(null);
+
+  // Sync profile when initialData or session becomes available
+  useEffect(() => {
+    if ((initialData || session?.user) && !editMode) {
+      // Prioritize session user data for real-time updates
+      const sUser = session?.user;
+      const iData = initialData?.user || initialData?.data || initialData || {};
+
+      setProfile((prev) => ({
+        ...prev,
+        firstName: sUser?.firstName || iData.firstName || prev.firstName,
+        lastName: sUser?.lastName || iData.lastName || prev.lastName,
+        email: sUser?.email || iData.email || prev.email,
+        phone: sUser?.phone || iData.phone || prev.phone,
+        gender: sUser?.gender || iData.gender || prev.gender,
+        profileImage: sUser?.profileImage || iData.profileImage || prev.profileImage,
+      }));
+      setOriginalEmail(sUser?.email || iData.email || originalEmail);
+      if (Array.isArray(iData.addresses)) {
+        setAddresses(iData.addresses);
+      }
+    }
+  }, [initialData, session, status, editMode]);
 
   // ── Profile handlers ────────────────────────────────────────────────────────
   /**
@@ -138,6 +152,16 @@ const ProfileComponents = ({ initialData }) => {
 
     const result = await updateProfileAPI(session?.user?.id, payload);
     if (result?.success) {
+      // Update session name and other fields
+      await update({
+        user: {
+          ...session.user,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          phone: payload.phone,
+          gender: payload.gender,
+        },
+      });
       setOriginalEmail(profile.email);
       setEditMode(false);
       alert("Profile updated successfully!");
@@ -151,22 +175,86 @@ const ProfileComponents = ({ initialData }) => {
     setErrors({});
   };
 
+  // ── Email verify handler ─────────────────────────────────────────────────────
+  // Reads the *currently edited* email from profile state and sends an OTP there.
+  const handleVerifyEmail = async () => {
+    const emailToVerify = profile.email?.trim();
+    if (!emailToVerify) return;
+
+    const emailErr = validateEmail(emailToVerify);
+    if (emailErr) {
+      setErrors((prev) => ({ ...prev, email: emailErr }));
+      return;
+    }
+
+    const result = await changeEmailOtpAPI(emailToVerify);
+    if (result.success) {
+      popOTP(true);
+      setCountdown(60);
+    } else {
+      setErrors((prev) => ({ ...prev, email: result.message || "Failed to send OTP" }));
+    }
+  };
+
+  // ── OTP verification handler ─────────────────────────────────────────────────
+  // Called when user clicks "Verify" in the OTP popup.
+  const handleVerifyOtp = async () => {
+    const otpString = otp.join("");
+    if (otpString.length < 4) {
+      alert("Please enter the complete 4-digit code.");
+      return;
+    }
+    const newEmail = profile.email?.trim();
+    const result = await verifyChangeEmailOtpAPI(newEmail, otpString);
+    if (result.success) {
+      // Update the Next-Auth session to reflect the new email immediately
+      await update({
+        user: {
+          ...session.user,
+          email: newEmail,
+        },
+      });
+      popOTP(false);
+      setOtp(["", "", "", ""]);
+      setOriginalEmail(newEmail);
+      alert("Email updated successfully!");
+    } else {
+      alert(result.message || "Invalid OTP. Please try again.");
+    }
+  };
+
   // ── Profile picture handlers ────────────────────────────────────────────────
-  const handleUploadProfilePic = async (base64Image) => {
-    const res = await updateProfileAPI(session?.user?.id, { base64Image });
+  // Called by ProfilePictureSection after a successful upload with the media doc
+  const handleUploadProfilePic = async (mediaDoc) => {
+    if (!mediaDoc) return;
+    setProfile((prev) => ({ ...prev, profileImage: mediaDoc }));
+
+    // Update the profile in the DB (though the upload itself might have done it, 
+    // we ensure the session knows about the specific new mediaDoc)
+    const res = await updateProfileAPI(session?.user?.id, { profileImage: mediaDoc.id });
     if (res?.success) {
-      const newImage = res.data?.customer?.meta_data?.find((m) => m.key === "profile_image")?.value;
-      await update({ profile_image: newImage });
-      window.location.reload();
+      await update({
+        user: {
+          ...session.user,
+          profileImage: mediaDoc,
+        },
+      });
     }
   };
 
   const handleRemoveProfilePic = async () => {
-    if (!confirm("Are you sure you want to remove your profile picture?")) return;
-    const res = await updateProfileAPI(session?.user?.id, { profile_image: "" });
+    const res = await updateProfileAPI(session?.user?.id, { profileImage: null });
     if (res?.success) {
-      await update({ profile_image: null });
-      window.location.reload();
+      // Clear the image in local state — avatar switches to default immediately
+      setProfile((prev) => ({ ...prev, profileImage: null }));
+      await update({
+        user: {
+          ...session.user,
+          profileImage: null,
+        },
+      });
+    } else {
+      alert("Failed to remove profile picture. Please try again.");
     }
   };
 
@@ -181,8 +269,13 @@ const ProfileComponents = ({ initialData }) => {
   // ── Open Add Address popup ──────────────────────────────────────────────────
   const openAddAddress = () => {
     setEditingAddressId(null);
-    setActiveLabelBtn(null);
-    setAddressForm({ isDefault: true, country: "United Arab Emirates", state: "Dubai" });
+    setActiveLabelBtn("Home"); // Default to Home
+    setAddressForm({
+      isDefault: true,
+      country: "United Arab Emirates",
+      state: "dubai", // snake_case
+      label: "Home"
+    });
     setAddressErrors({});
     setAddressGeneralError("");
     setShowAddressPopup(true);
@@ -191,22 +284,30 @@ const ProfileComponents = ({ initialData }) => {
   // ── Open Edit Address popup ─────────────────────────────────────────────────
   const openEditAddress = (addr) => {
     setEditingAddressId(addr.id);
-    const currentLabel = addr.label || "";
-    const isStandard = ["Home", "Work"].includes(currentLabel);
-    setActiveLabelBtn(isStandard ? currentLabel : "Others");
+    const rawLabel = addr.label || "";
+    // Normalise label to match constants: Title Case
+    const normalizedLabel = rawLabel.charAt(0).toUpperCase() + rawLabel.slice(1).toLowerCase();
+    const isStandard = ["Home", "Work"].includes(normalizedLabel);
+    const finalLabel = isStandard ? normalizedLabel : "Others";
+
+    const rawState = addr.emirates || addr.state || "dubai";
+    const normalizedState = rawState.toLowerCase().replace(/\s+/g, '_');
+
+    setActiveLabelBtn(finalLabel);
     setAddressForm({
       ...addr,
       address: addr.street || addr.address || "",
       phone: addr.phoneNumber || "",
-      country: addr.country || addr.emirates || "United Arab Emirates",
-      state: addr.emirates || addr.state || "",
+      country: addr.country || "United Arab Emirates",
+      state: normalizedState,
+      label: finalLabel,
     });
     setAddressErrors({});
     setAddressGeneralError("");
     setShowEditAddressPopup(true);
   };
 
-  // ── Save address (add or edit) ──────────────────────────────────────────────
+  // ── Save address (add) ─────────────────────────────────────────────────────
   const handleSaveAddress = async () => {
     const newErrors = {};
 
@@ -223,28 +324,67 @@ const ProfileComponents = ({ initialData }) => {
       return;
     }
 
-    const payload = [{
-      label: addressForm.label || "others",
-      addressFirstName: addressForm.addressFirstName || "",
-      addressLastName: addressForm.addressLastName || "",
-      street: addressForm.address || addressForm.house || "",
-      apartment: addressForm.apartment || addressForm.area || "",
+    const payload = {
+      label: addressForm.label || "Others",
+      addressFirstName: (addressForm.addressFirstName || "").trim(),
+      addressLastName: (addressForm.addressLastName || "").trim(),
+      street: (addressForm.address || addressForm.house || "").trim(),
+      apartment: (addressForm.apartment || addressForm.area || "").trim(),
       country: "United Arab Emirates",
-      city: addressForm.city || "",
+      city: (addressForm.city || "").trim(),
       emirates: addressForm.state || "",
-      phone: addressForm.phone || "",
+      phoneNumber: (addressForm.phone || "").trim(),
       isDefaultAddress: addressForm.isDefault || false,
-      ...(editingAddressId ? { address_id: editingAddressId } : {}),
-    }];
+    };
 
     const result = await saveAddressAPI(session?.user?.id, payload);
     if (result?.success) {
       setAddresses(result.updatedAddresses);
       setShowAddressPopup(false);
-      setShowEditAddressPopup(false);
       setEditingAddressId(null);
     } else {
       setAddressGeneralError(result.error || "Failed to save address");
+    }
+  };
+
+  // ── Update address (edit) ───────────────────────────────────────────────────
+  const handleUpdateAddress = async () => {
+    const newErrors = {};
+
+    const fnErr = validateRequired((addressForm.addressFirstName || "").trim(), "First name");
+    const addrErr = validateRequired((addressForm.address || "").trim(), "Address");
+    const phErr = validateUAEPhone(addressForm.phone);
+
+    if (fnErr) newErrors.fullName = fnErr;
+    if (addrErr) newErrors.address = addrErr;
+    if (phErr) newErrors.phone = phErr;
+
+    if (Object.keys(newErrors).length > 0) {
+      setAddressErrors(newErrors);
+      return;
+    }
+
+    const payload = {
+      addressId: editingAddressId,
+      label: addressForm.label || "Others",
+      addressFirstName: (addressForm.addressFirstName || "").trim(),
+      addressLastName: (addressForm.addressLastName || "").trim(),
+      street: (addressForm.address || addressForm.house || "").trim(),
+      apartment: (addressForm.apartment || addressForm.area || "").trim(),
+      country: "United Arab Emirates",
+      city: (addressForm.city || "").trim(),
+      emirates: addressForm.state || "",
+      phoneNumber: (addressForm.phone || "").trim(),
+      isDefaultAddress: addressForm.isDefault || false,
+    };
+
+    const result = await updateAddressAPI(session?.user?.id, payload);
+    if (result?.success) {
+      setAddresses(result.updatedAddresses);
+      setShowEditAddressPopup(false);
+      setEditingAddressId(null);
+    } else {
+      setAddressGeneralError(result.error || "Failed to update address");
     }
   };
 
@@ -264,18 +404,20 @@ const ProfileComponents = ({ initialData }) => {
 
   // ── Delete account ──────────────────────────────────────────────────────────
   const handleDeleteAccount = async () => {
-    const result = await checkDeleteAccountAPI();
-    if (result.success) {
-      setAccountStatus(result.data);
-      setShowDeletePopup(true);
-    } else {
-      alert(result.error || "Failed to check account status. Please try again.");
-    }
+    setShowDeletePopup(true);
   };
 
   const handleConfirmDeleteAccount = async () => {
-    const result = await confirmDeleteAccountAPI();
+    if (!session?.user?.id) return;
+    const result = await confirmDeleteAccountAPI(session?.user?.id);
     if (result.success) {
+      // Clear all local state and cookies
+      localStorage.clear();
+      sessionStorage.clear();
+      // Hit the logout route to clear httpOnly cookies
+      try { await fetch("/api/logout"); } catch (e) { }
+
+      alert("Account deleted successfully.");
       window.location.href = "/";
     } else {
       alert(result.error || "Failed to delete account. Please try again.");
@@ -308,7 +450,7 @@ const ProfileComponents = ({ initialData }) => {
               onFieldChange={handleFieldChange}
               onSave={handleSaveProfile}
               onCancel={handleCancelEdit}
-              onVerifyEmail={() => { popOTP(true); setCountdown(60); }}
+              onVerifyEmail={handleVerifyEmail}
               showOtpPopup={showOTP}
               otpNode={
                 <OtpVerificationPopup
@@ -318,7 +460,8 @@ const ProfileComponents = ({ initialData }) => {
                   inputRefs={inputRefs}
                   onChange={handleOtpChange}
                   onKeyDown={handleOtpKeyDown}
-                  onVerify={() => { /* TODO: wire OTP validation API */ }}
+                  onVerify={handleVerifyOtp}
+                  onResend={handleVerifyEmail}
                   onClose={() => popOTP(false)}
                 />
               }
@@ -374,7 +517,7 @@ const ProfileComponents = ({ initialData }) => {
           UAE_STATES={UAE_STATES}
           onFormChange={handleAddressFormChange}
           onLabelSelect={(label) => { setActiveLabelBtn(label); handleAddressFormChange("label", label); }}
-          onSave={handleSaveAddress}
+          onSave={handleUpdateAddress}
           onCancel={() => { setShowEditAddressPopup(false); setAddressErrors({}); }}
         />
       )}
@@ -397,6 +540,6 @@ const ProfileComponents = ({ initialData }) => {
       )}
     </>
   );
-};
+}
 
 export default ProfileComponents;

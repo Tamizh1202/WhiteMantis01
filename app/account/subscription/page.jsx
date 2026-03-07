@@ -33,9 +33,9 @@ export default function SubscriptionPage() {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("en-AE", {
-      day: "numeric",
+    return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
+      day: "2-digit",
       year: "numeric",
       timeZone: "Asia/Dubai",
     });

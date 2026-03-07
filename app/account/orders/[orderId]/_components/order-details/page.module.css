@@ -1,0 +1,154 @@
+.main {
+    width: 100%;
+}
+
+.main h1 {
+    font-size: 22px;
+    font-family: var(--lexend);
+    font-weight: 500;
+    color: #525252;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(47, 54, 42, 0.3);
+    background-color: #fff;
+}
+
+.Top {
+    display: flex;
+    padding: 20px 30px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(47, 54, 42, 0.3);
+    transition: background-color 0.2s ease;
+}
+
+.Top:hover {
+    background-color: #f9f9f9;
+}
+
+.Left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.Left h1 {
+    font-family: var(--lato);
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0;
+    color: #6E736A;
+}
+
+.savingsBadge {
+    font-family: var(--lato);
+    font-weight: 400;
+    font-size: 14px;
+    color: #2F362A;
+    background-color: rgba(47, 54, 42, 0.2);
+    padding: 6px 12px;
+    margin: 0;
+}
+
+.toggleIcon {
+    transition: transform 0.3s ease;
+}
+
+.toggleIcon.open {
+    transform: rotate(180deg);
+}
+
+.detailsWrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out, border-bottom 0.3s ease-out;
+    overflow: hidden;
+    border-bottom: 0px solid rgba(47, 54, 42, 0);
+}
+
+.detailsWrapper.open {
+    grid-template-rows: 1fr;
+    border-bottom: 1px solid rgba(47, 54, 42, 0.3);
+}
+
+.detailsContent {
+    min-height: 0;
+    padding: 0 30px;
+    background-color: transparent;
+    transition: padding 0.3s ease-out;
+}
+
+.detailsWrapper.open .detailsContent {
+    padding: 20px 30px;
+}
+
+.detailRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.detailRow span {
+    font-family: var(--lato);
+    font-size: 15px;
+    color: #6E736A;
+}
+
+.detailRow span:first-child {
+    font-weight: 400;
+}
+
+.detailRow span:last-child {
+    font-weight: 500;
+}
+
+.discountText {
+    color: #E54842 !important;
+}
+
+.dividerSub {
+    height: 0.5px;
+    background-color: #2F362A;
+    opacity: 0.3;
+    margin: 15px 0;
+}
+
+.totalRow span {
+    font-size: 16px;
+    color: #2F362A !important;
+    font-weight: 700 !important;
+}
+
+.paymentMethod {
+    display: flex;
+    padding: 20px 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.paymentLeft p {
+    font-family: var(--lato);
+    font-weight: 500;
+    font-size: 15px;
+    color: #2F362A;
+    margin: 0;
+}
+
+.paymentRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.paymentRight p {
+    font-family: var(--lato);
+    font-size: 14px;
+    color: #6E736A;
+    margin: 0;
+}

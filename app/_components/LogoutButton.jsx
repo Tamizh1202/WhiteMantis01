@@ -2,28 +2,25 @@
 import React from 'react';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import axiosClient from '@/lib/axios';
 
 export default function LogoutButtonClient() {
   const router = useRouter();
 
   async function handleLogout() {
     try {
-      // clear WP token cookie server-side
-      await fetch('/api/website/auth/logout', { method: 'POST' });
-    } catch (e) {
-      console.error('error clearing wp cookie', e);
-    }
+      localStorage.clear();
+      sessionStorage.clear();
 
-    try {
-      // sign out from NextAuth (no redirect)
+      await axiosClient.get('/api/logout');
       await signOut({ redirect: false });
-    } catch (e) {
-      console.error('nextauth signOut error', e);
-    }
 
-    // navigate to home and refresh
-    router.push('/');
-    try { router.refresh(); } catch (e) { }
+      // 4. Final Redirect
+      router.push('/');
+      router.refresh();
+    } catch (e) {
+      console.error('Logout failed', e);
+    }
   }
 
   return (

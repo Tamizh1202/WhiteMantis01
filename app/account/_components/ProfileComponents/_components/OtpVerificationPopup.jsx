@@ -1,21 +1,11 @@
 "use client";
-// ─── OtpVerificationPopup ─────────────────────────────────────────────────────
-// Full-screen overlay shown when the user changes their email and clicks Verify.
-//
-// Props:
-//   email       string   — the new email the OTP was sent to
-//   countdown   number   — seconds remaining on the resend cooldown
-//   otp         string[] — array of 4 digit strings
-//   inputRefs   ref      — React ref array for the 4 inputs (for focus management)
-//   onChange    (e, index) => void
-//   onKeyDown   (e, index) => void
-//   onVerify    () => void   — called when user clicks the Verify button
-//   onClose     () => void   — closes the popup
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "../ProfileComponents.module.css";
 
-const OtpVerificationPopup = ({ email, countdown, otp, inputRefs, onChange, onKeyDown, onVerify, onClose }) => {
+const OtpVerificationPopup = ({ email, countdown, otp, inputRefs, onChange, onKeyDown, onVerify, onResend, onClose }) => {
+    const [focusedIndex, setFocusedIndex] = useState(null);
+
     return (
         <div className={styles.styleOTP}>
             <div className={styles.main1}>
@@ -37,9 +27,14 @@ const OtpVerificationPopup = ({ email, countdown, otp, inputRefs, onChange, onKe
                                 value={digit}
                                 onChange={(e) => onChange(e, index)}
                                 onKeyDown={(e) => onKeyDown(e, index)}
+                                onFocus={() => setFocusedIndex(index)}
+                                onBlur={() => setFocusedIndex(null)}
                                 style={{
-                                    borderColor: digit ? "#6C7A5F" : "#2F362A4D",
-                                    color: digit ? "#6C7A5F" : "#FFFFFF",
+                                    borderColor: focusedIndex === index ? "#6C7A5F" : digit ? "#6C7A5F" : "#2F362A4D",
+                                    color: digit ? "#6C7A5F" : "#2F362A",
+                                    boxShadow: focusedIndex === index ? "0 0 0 3px rgba(108, 122, 95, 0.25)" : "none",
+                                    outline: "none",
+                                    transition: "border-color 0.2s, box-shadow 0.2s",
                                 }}
                             />
                         ))}
@@ -59,14 +54,26 @@ const OtpVerificationPopup = ({ email, countdown, otp, inputRefs, onChange, onKe
                     </div>
                     <div className={styles.txt}>
                         <p>
-                            Didn't receive it? Check spam or <a href="#">Resend OTP</a> ({countdown}s)
+                            Didn't receive it? Check spam or{" "}
+                            <a
+                                href="#"
+                                onClick={(e) => { e.preventDefault(); if (countdown <= 0) onResend(); }}
+                                style={{
+                                    color: countdown > 0 ? "rgba(47,54,42,0.3)" : "#6C7A5F",
+                                    pointerEvents: countdown > 0 ? "none" : "auto",
+                                    cursor: countdown > 0 ? "default" : "pointer",
+                                }}
+                            >
+                                Resend OTP
+                            </a>{" "}
+                            ({countdown}s)
                         </p>
                     </div>
                 </div>
 
                 {/* Close × button */}
                 <button onClick={onClose} className={styles.closeButton}>
-                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="25" height="25" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_otp_close" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
                             <rect width="16" height="16" fill="#D9D9D9" />
                         </mask>

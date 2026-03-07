@@ -25,6 +25,8 @@ export default function Sidebar() {
     signOut({ callbackUrl: "/" });
   };
 
+  console.log(session)
+
   return (
     <>
       <div className={styles.Main}>
@@ -102,7 +104,7 @@ export default function Sidebar() {
                 <p>Manage Subscription</p>
               </div>
             </Link>
-            {/* <Link href="/account/wishlist" className={styles.Link}>
+            <Link href="/account/wishlist" className={styles.Link}>
               <div
                 className={`${styles.Wishlist} ${pathname.startsWith("/account/wishlist") ? styles.active : ""
                   }`}
@@ -121,7 +123,7 @@ export default function Sidebar() {
                 </svg>
                 <p>Wishlist</p>
               </div>
-            </Link> */}
+            </Link>
             {session && (
               <div
                 className={styles.Logout}
