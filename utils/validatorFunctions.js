@@ -28,7 +28,6 @@ export const validateCheckoutForm = ({
     email,
     delivery,
     status,
-    showNewAddressForm,
     selectedAddressId,
     shippingForm,
     billingForm,
@@ -48,8 +47,7 @@ export const validateCheckoutForm = ({
 
     // Shipping (only if shipping mode + no saved address selected)
     if (delivery === "ship") {
-        const needsForm =
-            status !== "authenticated" || showNewAddressForm || !selectedAddressId;
+        const needsForm = status !== "authenticated" || !selectedAddressId;
         if (needsForm) {
             const fn = validateRequired(shippingForm.firstName, "First name");
             const ln = validateRequired(shippingForm.lastName, "Last name");

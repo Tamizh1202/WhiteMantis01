@@ -614,7 +614,7 @@
   width: 16px;
   height: 16px;
   border: 1.5px solid #9b9b9b;
-  border-radius: 0px; 
+  border-radius: 0px;
   background-color: transparent;
   cursor: pointer;
   position: relative;
@@ -762,6 +762,7 @@
   background-color: #ffffff;
   cursor: pointer;
   position: relative;
+  margin-bottom: 2px;
 }
 
 .AddressCard:first-child {
@@ -784,16 +785,30 @@
 .AddressContent {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   flex: 1;
 }
 
-.AddressName {
+.AddrLabel {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 600;
+  color: #2f362a;
+}
+
+.AddrName {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
-  color: #2f362a;
-  line-height: 1.4;
+  color: #6e736a;
+  line-height: 1.5;
+}
+
+.AddrDivider {
+  border: none;
+  border-top: 1px solid rgba(47, 54, 42, 0.3);
+  width: 100%;
+  margin: 2px 0;
 }
 
 .AddressText {
@@ -804,7 +819,7 @@
 }
 
 .MenuIcon {
-  padding: 4px;
+  padding: 10px;
   cursor: pointer;
   color: #6e736a;
 }

@@ -1,18 +1,18 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useStripe, useElements, CardNumberElement } from "@stripe/react-stripe-js";
+import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/app/_context/CartContext";
 import { toast } from "react-hot-toast";
 import styles from "../page.module.css";
 
 // ── Section Components ──────────────────────────────────────────────────────
-import ExpressCheckoutSection from "./ExpressCheckoutSection";
+// ExpressCheckoutSection removed (temporarily disabled)
 import ContactSection from "./ContactSection";
 import DeliverySelector from "./DeliverySelector";
 import ShippingAddressSection from "./ShippingAddressSection";
 import BillingAddressSection from "./BillingAddressSection";
-import PaymentSection from "./PaymentSection";
+import { PaymentCardSection, PaymentButtonSection } from "./PaymentSection";
 import OrderSummary from "./OrderSummary";
 
 // ── Utilities ───────────────────────────────────────────────────────────────
@@ -23,26 +23,19 @@ import {
     buildSuccessUrl,
     scrollToFirstError,
 } from "@/utils/checkoutUtils";
+import { saveAddressAPI } from "@/app/account/_components/ProfileComponents/profileApiUtils";
 
-/**
- * CheckoutForm
- * ─────────────────────────────────────────────────────────
- * Main form orchestrator. Receives all state from CheckoutContent (page.js).
- * Manages local UI state: email, isProcessing, validationErrors.
- * Handles the full payment flow via handlePayment.
- */
 export default function CheckoutForm({
     session,
     status,
     delivery,
     setDelivery,
     savedAddresses,
+    setSavedAddresses,
     selectedAddressId,
     setSelectedAddressId,
     openMenuId,
     setOpenMenuId,
-    showNewAddressForm,
-    setShowNewAddressForm,
     useShippingAsBilling,
     setUseShippingAsBilling,
     product,
@@ -67,7 +60,7 @@ export default function CheckoutForm({
     // Pre-fill email from session
     useEffect(() => {
         if (session?.user?.email) setEmail(session.user.email);
-    }, [session?.user?.email]);
+    }, [session]);
 
     // ── Helper: clear a single error field ─────────────────────────────────────
     const clearError = (key) => setValidationErrors((prev) => ({ ...prev, [key]: "" }));
@@ -81,7 +74,6 @@ export default function CheckoutForm({
             email,
             delivery,
             status,
-            showNewAddressForm,
             selectedAddressId,
             shippingForm,
             billingForm,
@@ -97,10 +89,10 @@ export default function CheckoutForm({
         setIsProcessing(true);
 
         try {
-            // 2. Get Stripe card element
-            const cardElement = elements.getElement(CardNumberElement);
-            if (!cardElement) {
-                setValidationErrors((prev) => ({ ...prev, card: "Card information is required" }));
+            // 2. Trigger form validation via Stripe Elements
+            const { error: submitError } = await elements.submit();
+            if (submitError) {
+                setValidationErrors((prev) => ({ ...prev, card: submitError.message }));
                 setIsProcessing(false);
                 return;
             }
@@ -108,28 +100,16 @@ export default function CheckoutForm({
             // 3. Build Stripe billing details
             const billingDetails = buildBillingDetails({
                 email, session, delivery, useShippingAsBilling,
-                status, showNewAddressForm, selectedAddressId,
+                status, selectedAddressId,
                 savedAddresses, shippingForm, billingForm,
             });
 
-            // 4. Create Stripe payment method
-            const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({
-                type: "card",
-                card: cardElement,
-                billing_details: billingDetails,
-            });
-
-            if (pmError) {
-                setIsProcessing(false);
-                setValidationErrors((prev) => ({ ...prev, card: pmError.message || "Invalid card information" }));
-                return;
-            }
-
-            // 5. Build and send checkout payload to backend
+            // 4. Build and send checkout payload to backend
+            // Note: We don't have a paymentMethodId yet, backend needs to return clientSecret
             const payload = buildCheckoutPayload({
-                email, session, delivery, status, showNewAddressForm,
+                email, session, delivery, status,
                 selectedAddressId, savedAddresses, shippingForm, billingForm,
-                useShippingAsBilling, paymentMethodId: paymentMethod.id,
+                useShippingAsBilling, paymentMethodId: null, // Intent-based flow
                 checkoutMode, subscriptionId, variationId,
             });
 
@@ -142,37 +122,51 @@ export default function CheckoutForm({
 
             if (!data.success) throw new Error(data.message || data.error || "Checkout failed");
 
-            // 6. Confirm the payment
+            // 5. Confirm the payment with Stripe
+            // This will handle 3DS, saved cards, and redirect to return_url
             if (data.clientSecret) {
-                const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret);
+                // Save address if user opted in (before redirect as redirect will unload page)
+                if (shippingForm.saveAddress && status === "authenticated" && session?.user?.id) {
+                    try {
+                        await saveAddressAPI(session.user.id, {
+                            label: "Home",
+                            addressFirstName: shippingForm.firstName.trim(),
+                            addressLastName: shippingForm.lastName.trim(),
+                            street: shippingForm.address.trim(),
+                            apartment: (shippingForm.apartment || "").trim(),
+                            country: "United Arab Emirates",
+                            city: shippingForm.city.trim(),
+                            emirates: shippingForm.emirates || "dubai",
+                            phoneNumber: shippingForm.phone.trim(),
+                            isDefaultAddress: false,
+                        });
+                    } catch (saveErr) {
+                        console.error("Failed to save address:", saveErr);
+                    }
+                }
+
+                // Confirm payment
+                const { error: confirmError } = await stripe.confirmPayment({
+                    elements,
+                    clientSecret: data.clientSecret,
+                    confirmParams: {
+                        return_url: `${window.location.origin}${buildSuccessUrl(checkoutMode, data)}`,
+                        payment_method_data: {
+                            billing_details: billingDetails,
+                        }
+                    },
+                });
 
                 if (confirmError) {
                     setIsProcessing(false);
                     setValidationErrors((prev) => ({ ...prev, card: confirmError.message || "Payment confirmation failed" }));
                     toast.error(confirmError.message || "Payment confirmation failed");
-                    return;
                 }
-
-                if (paymentIntent?.status === "succeeded") {
-                    // Clear cart on successful order
-                    if (checkoutMode === "cart") {
-                        try {
-                            await fetch("/api/website/cart/clear", {
-                                method: "DELETE",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ action: "clear" }),
-                            });
-                        } catch (clearError) {
-                            console.error("Failed to clear cart:", clearError);
-                        }
-                    }
-                    router.push(buildSuccessUrl(checkoutMode, data));
-                }
+                // Redirect happens automatically on success if return_url is provided
             }
         } catch (e) {
             console.error(e);
-            openCart();
-        } finally {
+            toast.error(e.message || "An error occurred");
             setIsProcessing(false);
         }
     };
@@ -183,7 +177,7 @@ export default function CheckoutForm({
             <div className={styles.MainConatiner}>
                 {/* ── Left Column ── */}
                 <div className={styles.Left}>
-                    <ExpressCheckoutSection />
+                    {/* ExpressCheckoutSection temporarily removed */}
 
                     <ContactSection
                         email={email}
@@ -201,15 +195,19 @@ export default function CheckoutForm({
                         delivery={delivery}
                         status={status}
                         savedAddresses={savedAddresses}
+                        setSavedAddresses={setSavedAddresses}
                         selectedAddressId={selectedAddressId}
                         setSelectedAddressId={setSelectedAddressId}
-                        showNewAddressForm={showNewAddressForm}
-                        setShowNewAddressForm={setShowNewAddressForm}
                         shippingForm={shippingForm}
                         setShippingForm={setShippingForm}
                         validationErrors={validationErrors}
                         clearError={clearError}
                         setValidationErrors={setValidationErrors}
+                        session={session}
+                    />
+
+                    <PaymentCardSection
+                        validationErrors={validationErrors}
                     />
 
                     <BillingAddressSection
@@ -223,8 +221,7 @@ export default function CheckoutForm({
                         setValidationErrors={setValidationErrors}
                     />
 
-                    <PaymentSection
-                        validationErrors={validationErrors}
+                    <PaymentButtonSection
                         isProcessing={isProcessing}
                         handlePayment={handlePayment}
                     />

@@ -43,7 +43,6 @@ export const buildBillingDetails = ({
     delivery,
     useShippingAsBilling,
     status,
-    showNewAddressForm,
     selectedAddressId,
     savedAddresses,
     shippingForm,
@@ -57,15 +56,17 @@ export const buildBillingDetails = ({
     };
 
     if (useShippingAsBilling && delivery === "ship") {
-        if (status === "authenticated" && !showNewAddressForm && selectedAddressId) {
+        if (status === "authenticated" && selectedAddressId) {
             const addr = savedAddresses.find((a) => a.id === selectedAddressId);
             if (addr) {
-                details.name = addr.name;
+                details.name = `${addr.addressFirstName || ""} ${addr.addressLastName || ""}`.trim();
+                details.phone = addr.phoneNumber || addr.phone || "";
                 details.address = {
-                    line1: addr.original.address,
-                    line2: addr.original.apartment,
-                    city: addr.original.city,
-                    country: getCountryCode(addr.original.country),
+                    line1: addr.street || addr.address || "",
+                    line2: addr.apartment || "",
+                    city: addr.city || "",
+                    country: getCountryCode(addr.country),
+                    state: addr.emirates || addr.state || "",
                 };
             }
         } else {
@@ -99,7 +100,6 @@ export const buildCheckoutPayload = ({
     session,
     delivery,
     status,
-    showNewAddressForm,
     selectedAddressId,
     savedAddresses,
     shippingForm,
@@ -113,9 +113,19 @@ export const buildCheckoutPayload = ({
     // Resolve shipping address
     let shippingMeta = {};
     if (delivery === "ship") {
-        if (status === "authenticated" && !showNewAddressForm && selectedAddressId) {
-            const s = savedAddresses.find((a) => a.id === selectedAddressId)?.original;
-            if (s) shippingMeta = formatAddress(s.firstName, s.lastName, s.address, s.apartment, s.city, s.country, s.phone);
+        if (status === "authenticated" && selectedAddressId) {
+            const s = savedAddresses.find((a) => a.id === selectedAddressId);
+            if (s) {
+                shippingMeta = formatAddress(
+                    s.addressFirstName || "",
+                    s.addressLastName || "",
+                    s.street || s.address || "",
+                    s.apartment || "",
+                    s.city || "",
+                    s.country || "United Arab Emirates",
+                    s.phoneNumber || s.phone || ""
+                );
+            }
         } else {
             shippingMeta = formatAddress(
                 shippingForm.firstName, shippingForm.lastName,
@@ -148,7 +158,7 @@ export const buildCheckoutPayload = ({
         address: {
             billing: billingMeta,
             shipping: shippingMeta,
-            addressId: status === "authenticated" && !showNewAddressForm ? selectedAddressId : null,
+            addressId: status === "authenticated" ? selectedAddressId : null,
             shippingAsbillingAddress: useShippingAsBilling,
             saveAddress: shippingForm.saveAddress,
         },

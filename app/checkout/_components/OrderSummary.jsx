@@ -16,6 +16,7 @@ import placeholderImage from "../1.png";
  *   delivery   : string — "ship" | "pickup"
  */
 export default function OrderSummary({ product, cartTotals, delivery }) {
+    console.log(product);
     return (
         <div className={styles.Right}>
             {/* Header */}

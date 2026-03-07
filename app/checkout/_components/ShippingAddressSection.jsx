@@ -6,34 +6,21 @@ import DeleteAddressPopup from "@/app/account/_components/ProfileComponents/_com
 import AddressFormPopup from "@/app/account/_components/ProfileComponents/_components/AddressFormPopup";
 import { UAE_STATES, ADDRESS_LABELS } from "@/app/account/_components/ProfileComponents/profileConstants";
 
-/**
- * ShippingAddressSection
- * ─────────────────────────────────────────
- * Renders:
- *  - Saved address cards (if authenticated)
- *  - "Use a different address" / "Discard" toggle buttons
- *  - New address form (if not authenticated OR showNewAddressForm is true)
- *  - Pickup location card (if delivery === "pickup")
- *
- * Props:
- *   delivery, status, savedAddresses, selectedAddressId, setSelectedAddressId,
- *   showNewAddressForm, setShowNewAddressForm,
- *   shippingForm, setShippingForm,
- *   validationErrors, clearError, setValidationErrors
- */
+import { updateAddressAPI, deleteAddressAPI, saveAddressAPI } from "@/app/account/_components/ProfileComponents/profileApiUtils";
+
 export default function ShippingAddressSection({
     delivery,
     status,
     savedAddresses,
+    setSavedAddresses,
     selectedAddressId,
     setSelectedAddressId,
-    showNewAddressForm,
-    setShowNewAddressForm,
     shippingForm,
     setShippingForm,
     validationErrors,
     clearError,
     setValidationErrors,
+    session,
 }) {
     console.log(savedAddresses);
 
@@ -65,7 +52,7 @@ export default function ShippingAddressSection({
     useEffect(() => {
         if (!savedAddresses || savedAddresses.length === 0) return;
         if (selectedAddressId) return; // don't override a user's manual choice
-        const defaultAddr = savedAddresses.find((a) => a.isDefault);
+        const defaultAddr = savedAddresses.find((a) => a.isDefault || a.isDefaultAddress);
         setSelectedAddressId(defaultAddr ? defaultAddr.id : savedAddresses[0].id);
     }, [savedAddresses]);
 
@@ -92,7 +79,7 @@ export default function ShippingAddressSection({
             state: addr.emirates || addr.state || "",
             phone: addr.phoneNumber || addr.phone || "",
             label: addr.label || ADDRESS_LABELS[0],
-            isDefault: addr.isDefault || false,
+            isDefault: addr.isDefault || addr.isDefaultAddress || false,
         });
         setActiveLabelBtn(addr.label || ADDRESS_LABELS[0]);
         setAddressErrors({});
@@ -105,15 +92,83 @@ export default function ShippingAddressSection({
         setAddressDeletePopup(true);
     }
 
-    function confirmDeleteAddress() {
-        setAddressDeletePopup(false);
-        setAddressToDelete(null);
+    async function confirmDeleteAddress() {
+        if (!addressToDelete || !session?.user?.id) return;
+        try {
+            const newAddresses = savedAddresses.filter((a) => a.id !== addressToDelete.id);
+            setSavedAddresses(newAddresses);
+            const result = await deleteAddressAPI(session.user.id, addressToDelete.id);
+            if (result.success) {
+                if (selectedAddressId === addressToDelete.id) {
+                    setSelectedAddressId(null);
+                }
+                setAddressDeletePopup(false);
+                setAddressToDelete(null);
+            } else {
+                // Rollback if failed (optional, but good practice if addresses were re-fetched)
+                alert(result.message || "Failed to delete address");
+            }
+        } catch (error) {
+            console.error("Delete address error:", error);
+            alert("An error occurred while deleting the address");
+        }
     }
 
     function cancelDeleteAddress() {
         setAddressDeletePopup(false);
         setAddressToDelete(null);
     }
+
+    async function handleSaveAddressPopup() {
+        if (!session?.user?.id) return;
+
+        const payload = {
+            addressId: addressToEdit?.id,
+            label: addressForm.label || "Others",
+            addressFirstName: (addressForm.addressFirstName || "").trim(),
+            addressLastName: (addressForm.addressLastName || "").trim(),
+            street: (addressForm.address || "").trim(),
+            apartment: (addressForm.apartment || "").trim(),
+            country: "United Arab Emirates",
+            city: (addressForm.city || "").trim(),
+            emirates: addressForm.state || "",
+            phoneNumber: (addressForm.phone || "").trim(),
+            isDefaultAddress: addressForm.isDefault || false,
+        };
+
+        try {
+            let result;
+            if (addressPopupMode === "edit") {
+                result = await updateAddressAPI(session.user.id, payload);
+            } else {
+                result = await saveAddressAPI(session.user.id, payload);
+            }
+
+            if (result.success) {
+                setSavedAddresses(result.updatedAddresses || result.addresses || []);
+                setAddressFormPopup(false);
+                setAddressToEdit(null);
+                setAddressForm(emptyAddressForm);
+            } else {
+                setAddressGeneralError(result.message || "Failed to save address");
+            }
+        } catch (error) {
+            console.error("Save address error:", error);
+            setAddressGeneralError("An error occurred while saving the address");
+        }
+    }
+
+    function handleAddAddress() {
+        setAddressPopupMode("add");
+        setAddressToEdit(null);
+        setAddressForm(emptyAddressForm);
+        setAddressErrors({});
+        setAddressGeneralError("");
+        setActiveLabelBtn(ADDRESS_LABELS[0]);
+        setAddressFormPopup(true);
+    }
+
+    const showInlineForm = delivery === "ship" && (status !== "authenticated" || (status === "authenticated" && savedAddresses.length === 0));
 
     return (
         <div className={styles.Four}>
@@ -138,13 +193,7 @@ export default function ShippingAddressSection({
                         setActiveLabelBtn(label);
                         setAddressForm((prev) => ({ ...prev, label }));
                     }}
-                    onSave={() => {
-                        // TODO: call API to save/update address, then close popup
-                        setAddressFormPopup(false);
-                        setAddressToEdit(null);
-                        setAddressForm(emptyAddressForm);
-                        setActiveLabelBtn(ADDRESS_LABELS[0]);
-                    }}
+                    onSave={handleSaveAddressPopup}
                     onCancel={() => {
                         setAddressFormPopup(false);
                         setAddressToEdit(null);
@@ -153,36 +202,47 @@ export default function ShippingAddressSection({
                     }}
                 />
             )}
+
             {/* ── Shipping ── */}
             {delivery === "ship" && (
                 <>
                     <div className={styles.Three}>
                         <h3>SHIP TO</h3>
                     </div>
-                    <div className={styles.HeaderRow}>
-                        <input className={styles.Input} value="United Arab Emirates" readOnly style={{ display: "none" }} />
-                    </div>
 
-                    {/* Saved Addresses (only for authenticated users) */}
-                    {status === "authenticated" && (
+                    {/* Saved Addresses (only for authenticated users with addresses) */}
+                    {status === "authenticated" && savedAddresses.length > 0 && (
                         <>
                             <div className={styles.AddressList}>
                                 {savedAddresses.map((addr) => (
                                     <div
                                         key={addr.id}
                                         className={`${styles.AddressCard} ${selectedAddressId === addr.id ? styles.Selected : ""}`}
-                                        onClick={() => {
-                                            setSelectedAddressId(addr.id);
-                                            setShowNewAddressForm(false);
-                                        }}
+                                        onClick={() => setSelectedAddressId(addr.id)}
                                     >
                                         <span className={styles.Radio}>
                                             {selectedAddressId === addr.id && <span className={styles.RadioInner} />}
                                         </span>
+
                                         <div className={styles.AddressContent}>
-                                            <p className={styles.AddressName}>{addr.addressFirstName} {addr.addressLastName}, {addr.label}, {addr.apartment}, {addr.street}, {addr.city}, {addr.phoneNumber} </p>
-                                            <p className={styles.AddressText}>{addr.emirates}</p>
+                                            <p className={styles.AddrLabel}>{addr.label || "Others"}</p>
+                                            <p className={styles.AddrName}>
+                                                {`${addr.addressFirstName || ""} ${addr.addressLastName || ""}`.trim()}
+                                            </p>
+                                            <hr className={styles.AddrDivider} />
+                                            <p className={styles.AddrName}>
+                                                {addr.street && <>{addr.street}, </>}
+                                                {addr.apartment && <>{addr.apartment}, </>}
+                                                {[
+                                                    addr.city,
+                                                    UAE_STATES.find(s => s.value === addr.emirates)?.label || addr.emirates,
+                                                    addr.country || "United Arab Emirates"
+                                                ].filter(Boolean).join(", ")}
+                                            </p>
+                                            <hr className={styles.AddrDivider} />
+                                            <p className={styles.AddrName}>Phone number: {addr.phoneNumber}</p>
                                         </div>
+
                                         <div
                                             ref={openMenuId === addr.id ? menuRef : null}
                                             className={styles.MenuContainer}
@@ -217,131 +277,109 @@ export default function ShippingAddressSection({
                                 ))}
                             </div>
 
-                            {!showNewAddressForm ? (
-                                <button
-                                    className={styles.AddNewAddress}
-                                    onClick={() => {
-                                        if (savedAddresses.length >= 5) return;
-                                        setAddressPopupMode("add");
-                                        setAddressForm(emptyAddressForm);
-                                        setActiveLabelBtn(ADDRESS_LABELS[0]);
-                                        setAddressErrors({});
-                                        setAddressGeneralError("");
-                                        setAddressFormPopup(true);
-                                    }}
-                                >
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M6 0V12M0 6H12" stroke="#6E736A" strokeWidth="1.5" />
-                                    </svg>
-                                    <p>Use a different address</p>
-                                </button>
-                            ) : (
-                                <button className={styles.AddNewAddress} onClick={() => setShowNewAddressForm(false)}>
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1 1L11 11M1 11L11 1" stroke="#6E736A" strokeWidth="1.5" strokeLinecap="round" />
-                                    </svg>
-                                    <p>Discard</p>
-                                </button>
-                            )}
+                            <button
+                                className={styles.AddNewAddress}
+                                onClick={handleAddAddress}
+                            >
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 0V12M0 6H12" stroke="#6E736A" strokeWidth="1.5" />
+                                </svg>
+                                <p>Use a different address</p>
+                            </button>
                         </>
                     )}
-                </>
-            )}
 
-            {/* ── New Address Form (unauthenticated OR showNewAddressForm) ── */}
-            {(showNewAddressForm || status !== "authenticated") && delivery === "ship" && (
-                <>
-                    <input className={styles.Input} value="United Arab Emirates" readOnly />
+                    {/* Inline Form (unauthenticated OR authenticated with NO addresses) */}
+                    {showInlineForm && (
+                        <>
+                            <input className={styles.Input} value="United Arab Emirates" readOnly />
 
-                    {/* First / Last Name */}
-                    <div className={styles.Row}>
-                        <div style={{ flex: 1 }}>
+                            <div className={styles.Row}>
+                                <div style={{ flex: 1 }}>
+                                    <input
+                                        className={`${styles.Input} ${validationErrors.shippingFirstName ? styles.InputError : ""}`}
+                                        placeholder="First Name"
+                                        value={shippingForm.firstName}
+                                        onChange={(e) => { setShippingForm({ ...shippingForm, firstName: e.target.value }); clearError("shippingFirstName"); }}
+                                        onBlur={() => { const e = validateRequired(shippingForm.firstName, "First name"); if (e) setValidationErrors((p) => ({ ...p, shippingFirstName: e })); }}
+                                    />
+                                    {validationErrors.shippingFirstName && <span className={styles.ErrorMessage}>{validationErrors.shippingFirstName}</span>}
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <input
+                                        className={`${styles.Input} ${validationErrors.shippingLastName ? styles.InputError : ""}`}
+                                        placeholder="Last Name"
+                                        value={shippingForm.lastName}
+                                        onChange={(e) => { setShippingForm({ ...shippingForm, lastName: e.target.value }); clearError("shippingLastName"); }}
+                                        onBlur={() => { const e = validateRequired(shippingForm.lastName, "Last name"); if (e) setValidationErrors((p) => ({ ...p, shippingLastName: e })); }}
+                                    />
+                                    {validationErrors.shippingLastName && <span className={styles.ErrorMessage}>{validationErrors.shippingLastName}</span>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <input
+                                    className={`${styles.Input} ${validationErrors.shippingAddress ? styles.InputError : ""}`}
+                                    placeholder="House number, Street name"
+                                    value={shippingForm.address}
+                                    onChange={(e) => { setShippingForm({ ...shippingForm, address: e.target.value }); clearError("shippingAddress"); }}
+                                    onBlur={() => { const e = validateRequired(shippingForm.address, "Address"); if (e) setValidationErrors((p) => ({ ...p, shippingAddress: e })); }}
+                                />
+                                {validationErrors.shippingAddress && <span className={styles.ErrorMessage}>{validationErrors.shippingAddress}</span>}
+                            </div>
+
                             <input
-                                className={`${styles.Input} ${validationErrors.shippingFirstName ? styles.InputError : ""}`}
-                                placeholder="First Name"
-                                value={shippingForm.firstName}
-                                onChange={(e) => { setShippingForm({ ...shippingForm, firstName: e.target.value }); clearError("shippingFirstName"); }}
-                                onBlur={() => { const e = validateRequired(shippingForm.firstName, "First name"); if (e) setValidationErrors((p) => ({ ...p, shippingFirstName: e })); }}
+                                className={styles.Input}
+                                placeholder="Apartment, suite, etc. (optional)"
+                                value={shippingForm.apartment}
+                                onChange={(e) => setShippingForm({ ...shippingForm, apartment: e.target.value })}
                             />
-                            {validationErrors.shippingFirstName && <span className={styles.ErrorMessage}>{validationErrors.shippingFirstName}</span>}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                            <input
-                                className={`${styles.Input} ${validationErrors.shippingLastName ? styles.InputError : ""}`}
-                                placeholder="Last Name"
-                                value={shippingForm.lastName}
-                                onChange={(e) => { setShippingForm({ ...shippingForm, lastName: e.target.value }); clearError("shippingLastName"); }}
-                                onBlur={() => { const e = validateRequired(shippingForm.lastName, "Last name"); if (e) setValidationErrors((p) => ({ ...p, shippingLastName: e })); }}
-                            />
-                            {validationErrors.shippingLastName && <span className={styles.ErrorMessage}>{validationErrors.shippingLastName}</span>}
-                        </div>
-                    </div>
 
-                    {/* Address */}
-                    <div>
-                        <input
-                            className={`${styles.Input} ${validationErrors.shippingAddress ? styles.InputError : ""}`}
-                            placeholder="House number, Street name"
-                            value={shippingForm.address}
-                            onChange={(e) => { setShippingForm({ ...shippingForm, address: e.target.value }); clearError("shippingAddress"); }}
-                            onBlur={() => { const e = validateRequired(shippingForm.address, "Address"); if (e) setValidationErrors((p) => ({ ...p, shippingAddress: e })); }}
-                        />
-                        {validationErrors.shippingAddress && <span className={styles.ErrorMessage}>{validationErrors.shippingAddress}</span>}
-                    </div>
+                            <div className={styles.Row}>
+                                <div style={{ flex: 1 }}>
+                                    <input
+                                        className={`${styles.Input} ${validationErrors.shippingCity ? styles.InputError : ""}`}
+                                        placeholder="City"
+                                        value={shippingForm.city}
+                                        onChange={(e) => { setShippingForm({ ...shippingForm, city: e.target.value }); clearError("shippingCity"); }}
+                                        onBlur={() => { const e = validateRequired(shippingForm.city, "City"); if (e) setValidationErrors((p) => ({ ...p, shippingCity: e })); }}
+                                    />
+                                    {validationErrors.shippingCity && <span className={styles.ErrorMessage}>{validationErrors.shippingCity}</span>}
+                                </div>
+                                <select
+                                    className={styles.Select}
+                                    style={{ flex: 1 }}
+                                    value={shippingForm.emirates || "dubai"}
+                                    onChange={(e) => setShippingForm({ ...shippingForm, emirates: e.target.value })}
+                                >
+                                    {UAE_STATES.map((s) => (
+                                        <option key={s.value} value={s.value}>{s.label}</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    {/* Apartment */}
-                    <input
-                        className={styles.Input}
-                        placeholder="Apartment, suite, etc. (optional)"
-                        value={shippingForm.apartment}
-                        onChange={(e) => setShippingForm({ ...shippingForm, apartment: e.target.value })}
-                    />
+                            <div>
+                                <input
+                                    className={`${styles.Input} ${validationErrors.shippingPhone ? styles.InputError : ""}`}
+                                    placeholder="Phone"
+                                    value={shippingForm.phone}
+                                    onChange={(e) => { setShippingForm({ ...shippingForm, phone: e.target.value }); clearError("shippingPhone"); }}
+                                    onBlur={() => { const e = validateUAEPhone(shippingForm.phone); if (e) setValidationErrors((p) => ({ ...p, shippingPhone: e })); }}
+                                />
+                                {validationErrors.shippingPhone && <span className={styles.ErrorMessage}>{validationErrors.shippingPhone}</span>}
+                            </div>
 
-                    {/* City / Emirates */}
-                    <div className={styles.Row}>
-                        <div style={{ flex: 1 }}>
-                            <input
-                                className={`${styles.Input} ${validationErrors.shippingCity ? styles.InputError : ""}`}
-                                placeholder="City"
-                                value={shippingForm.city}
-                                onChange={(e) => { setShippingForm({ ...shippingForm, city: e.target.value }); clearError("shippingCity"); }}
-                                onBlur={() => { const e = validateRequired(shippingForm.city, "City"); if (e) setValidationErrors((p) => ({ ...p, shippingCity: e })); }}
-                            />
-                            {validationErrors.shippingCity && <span className={styles.ErrorMessage}>{validationErrors.shippingCity}</span>}
-                        </div>
-                        <select className={styles.Select} style={{ flex: 1 }}>
-                            <option>Dubai</option>
-                            <option>Abu Dhabi</option>
-                            <option>Sharjah</option>
-                            <option>Ajman</option>
-                            <option>Umm Al Quwain</option>
-                            <option>Ras Al Khaimah</option>
-                            <option>Fujairah</option>
-                        </select>
-                    </div>
-
-                    {/* Phone */}
-                    <div>
-                        <input
-                            className={`${styles.Input} ${validationErrors.shippingPhone ? styles.InputError : ""}`}
-                            placeholder="Phone"
-                            value={shippingForm.phone}
-                            onChange={(e) => { setShippingForm({ ...shippingForm, phone: e.target.value }); clearError("shippingPhone"); }}
-                            onBlur={() => { const e = validateUAEPhone(shippingForm.phone); if (e) setValidationErrors((p) => ({ ...p, shippingPhone: e })); }}
-                        />
-                        {validationErrors.shippingPhone && <span className={styles.ErrorMessage}>{validationErrors.shippingPhone}</span>}
-                    </div>
-
-                    {/* Save address checkbox (authenticated only) */}
-                    {status === "authenticated" && (
-                        <label className={styles.CheckBox}>
-                            <input
-                                type="checkbox"
-                                checked={shippingForm.saveAddress}
-                                onChange={(e) => setShippingForm({ ...shippingForm, saveAddress: e.target.checked })}
-                            />
-                            <p>Save this for next time.</p>
-                        </label>
+                            {status === "authenticated" && (
+                                <label className={styles.CheckBox}>
+                                    <input
+                                        type="checkbox"
+                                        checked={shippingForm.saveAddress}
+                                        onChange={(e) => setShippingForm({ ...shippingForm, saveAddress: e.target.checked })}
+                                    />
+                                    <p>Save this for next time.</p>
+                                </label>
+                            )}
+                        </>
                     )}
                 </>
             )}

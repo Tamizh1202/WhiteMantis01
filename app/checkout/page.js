@@ -34,12 +34,11 @@ function CheckoutContent() {
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
-  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [useShippingAsBilling, setUseShippingAsBilling] = useState(false);
 
   // ── Form State ──────────────────────────────────────────────────────────────
   const [shippingForm, setShippingForm] = useState({
-    firstName: "", lastName: "", address: "", apartment: "", city: "", phone: "", saveAddress: false,
+    firstName: "", lastName: "", address: "", apartment: "", city: "", phone: "", emirates: "dubai", saveAddress: false,
   });
   const [billingForm, setBillingForm] = useState({
     firstName: "", lastName: "", address: "", apartment: "", city: "", phone: "",
@@ -143,10 +142,15 @@ function CheckoutContent() {
         try {
           const res = await axiosClient.get(`/api/users/${session.user.id}/addresses`);
           const data = await res.data;
-          setSavedAddresses(data.addresses);
+          const addresses = data.addresses || [];
+          setSavedAddresses(addresses);
 
-          const defaultAddr = data.docs.find((a) => a.original.setAsDefault);
-          setSelectedAddressId(defaultAddr ? defaultAddr.id : data.docs[0]?.id || null);
+          if (addresses.length > 0) {
+            const defaultAddr = addresses.find((a) => a.isDefaultAddress || a.isDefault);
+            setSelectedAddressId(defaultAddr ? defaultAddr.id : addresses[0].id);
+          } else {
+            setSelectedAddressId(null);
+          }
 
         } catch (err) {
           console.error("Failed to fetch addresses", err);
@@ -196,7 +200,10 @@ function CheckoutContent() {
   }, [product, checkoutMode, contextCartTotals, shippingTax, delivery]);
 
   // ── Loading / Guard ─────────────────────────────────────────────────────────
-  if (isLoading) {
+  // Wait for both page data AND session to resolve before mounting Stripe Elements.
+  // If we mount while status === "loading", the key changes from "guest" → userId
+  // which forces Elements to remount mid-load, causing PaymentElement to fail.
+  if (isLoading || status === "loading") {
     return (
       <div className={styles.Main}>
         <div style={{ textAlign: "center", padding: "50px" }}>
@@ -208,37 +215,40 @@ function CheckoutContent() {
   if (!checkoutMode) return null;
 
   // ── Stripe Elements options ─────────────────────────────────────────────────
+  const stripeAmount = Math.max(100, Math.round((cartTotals.total || 0) * 100));
   const stripeOptions = {
-    appearance: { theme: "stripe" },
-    paymentMethodCreation: "manual",
     mode: "payment",
-    amount: Math.round(cartTotals.total * 100) || 100,
+    amount: stripeAmount,
     currency: "aed",
   };
 
+
   return (
-    <Elements stripe={stripePromise} options={stripeOptions} key={session?.user?.email || "no-email"}>
+    <Elements
+      stripe={stripePromise}
+      options={stripeOptions}
+      key={status === "authenticated" ? "authenticated" : "guest"}
+    >
       <CheckoutForm
         session={session}
         status={status}
         delivery={delivery}
         setDelivery={setDelivery}
         savedAddresses={savedAddresses}
+        setSavedAddresses={setSavedAddresses}
         selectedAddressId={selectedAddressId}
         setSelectedAddressId={setSelectedAddressId}
         openMenuId={openMenuId}
         setOpenMenuId={setOpenMenuId}
-        showNewAddressForm={showNewAddressForm}
-        setShowNewAddressForm={setShowNewAddressForm}
         useShippingAsBilling={useShippingAsBilling}
         setUseShippingAsBilling={setUseShippingAsBilling}
         product={product}
         cartTotals={cartTotals}
         shippingForm={shippingForm}
         setShippingForm={setShippingForm}
-        billingForm={billingForm}
         setBillingForm={setBillingForm}
         checkoutMode={checkoutMode}
+        billingForm={billingForm}
         subscriptionId={subscriptionId}
         variationId={variationId}
       />
