@@ -8,6 +8,7 @@ import NewsLetter from "./workshops/_components/NewsLetter/NewsLetter";
 import Navbar from "./_components/Navbar/Navbar";
 import NavbarMobile from "./_components/Navbar/NavbarMobile";
 import GlobalLoader from "./_components/GlobalLoader/GlobalLoader";
+import CouponModal from "./_components/CouponModal/CouponModal";
 import { Toaster } from "react-hot-toast";
 
 
@@ -71,6 +72,7 @@ export default function RootLayout({ children }) {
 
           <Footer />
           <CartSideBar />
+          <CouponModal />
           <NewsLetter />
         </Providers>
       </body>

@@ -10,18 +10,27 @@ import styles from "./page.module.css";
 import placeholderImage from "./1.png";
 import CheckoutForm from "./_components/CheckoutForm";
 import axiosClient from "@/lib/axios";
+import { formatImageUrl } from "@/lib/imageUtils";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
+// Helper to get frequency label (matching Listing.jsx)
+const getFrequencyLabel = (freq) => {
+  if (!freq) return "";
+  const plural = freq.duration > 1 ? "s" : "";
+  return `Delivery every ${freq.duration > 1 ? freq.duration : ""} ${freq.interval}${plural}`.replace("  ", " ");
+};
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { cartTotals: contextCartTotals, products: cartProducts } = useCart();
+  const { cartTotals: contextCartTotals, items: cartProducts, isBeansApplied, beansBalance, coinConfig } = useCart();
 
   // ── URL Params ──────────────────────────────────────────────────────────────
   const mode = searchParams.get("mode");
-  const subscriptionId = searchParams.get("subscriptionId");
+  const productId = searchParams.get("productId");
+  const subscriptionId = searchParams.get("subscriptionId"); // Frequency ID
   const variationId = searchParams.get("variationId");
 
   // ── Page State ──────────────────────────────────────────────────────────────
@@ -35,6 +44,8 @@ function CheckoutContent() {
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [useShippingAsBilling, setUseShippingAsBilling] = useState(false);
+
+  const [email, setEmail] = useState("");
 
   // ── Form State ──────────────────────────────────────────────────────────────
   const [shippingForm, setShippingForm] = useState({
@@ -65,66 +76,80 @@ function CheckoutContent() {
     }
   }, [contextCartTotals, checkoutMode]);
 
+  // ── Sync user email from session ───────────────────────────────────────────
+  useEffect(() => {
+    if (session?.user?.email) setEmail(session.user.email);
+  }, [session]);
+
   // ── Initial Data Fetch ──────────────────────────────────────────────────────
   useEffect(() => {
     const fetchData = async () => {
       // 1. Validate mode
       if (mode === "subscription") {
-        if (!subscriptionId || !variationId) { router.push("/"); return; }
+        if (!productId || !subscriptionId) { router.push("/"); return; }
         setCheckoutMode("subscription");
 
         try {
-          const res = await fetch(`/api/website/products/${subscriptionId}`);
-          const data = await res.json();
+          const res = await axiosClient.get(`/api/web-products/${productId}`);
+          const data = res.data;
 
-          if (!res.ok || data.product?.type !== "variable-subscription") {
+          if (!data) {
             router.push("/"); return;
           }
 
-          const variation = data.product.variation_options?.find(
-            (v) => String(v.id) === String(variationId)
-          );
-          if (!variation) toast.error("Subscription option not found");
+          const productData = data;
+          let variation = null;
+          let selectedFreqs = [];
+          let discountPercent = 0;
+          let basePrice = 0;
+          let image = formatImageUrl(productData.productImage) || placeholderImage;
+          let weight = "";
+          let variantName = "";
 
-          // Extract product details
-          const weight = variation?.attributes?.attribute_pa_weight ||
-            data.product.attributes.find((a) => a.name === "Weight")?.option || "";
+          if (productData.hasVariantOptions && variationId) {
+            variation = productData.variants?.find(
+              (v) => String(v.id || v._id) === String(variationId)
+            );
 
-          const freqRaw = variation?.attributes?.["attribute_pa_simple-subscription-frequenc"] ||
-            data.product.meta_data.find((m) => m.key === "_subscription_period")?.value || "";
+            if (variation) {
+              selectedFreqs = variation.subFreq || [];
+              discountPercent = variation.subscriptionDiscount || 0;
+              basePrice = parseFloat(variation.variantSalePrice || variation.variantRegularPrice || 0);
+              image = formatImageUrl(variation.variantImage) || image;
+              weight = variation.variantWeight || "";
+              variantName = variation.variantName || "";
+            }
+          } else {
+            selectedFreqs = productData.subFreq || [];
+            discountPercent = productData.subscriptionDiscount || 0;
+            basePrice = parseFloat(productData.salePrice || productData.regularPrice || 0);
+            weight = productData.weight || "";
+          }
 
-          const quantityRaw = variation?.attributes?.["attribute_pa_simple-subscription-quantity"] || "1";
+          // Find Freq by subscriptionId
+          const matchedFreq = selectedFreqs.find(f => String(f.id || f._id) === String(subscriptionId));
+          const frequencyDisplay = matchedFreq ? getFrequencyLabel(matchedFreq) : "Subscription";
 
-          // Format frequency label
-          const freqMap = {
-            "2-week": "Every 2 Weeks", "4-week": "Every 4 Weeks", "month": "Monthly",
-            "7-day": "Every 7 Days", "15-day": "Every 15 Days", "30-day": "Every 30 Days",
-          };
-          const frequencyDisplay = freqMap[freqRaw] || freqRaw;
-
-          const basePrice = parseFloat(variation?.price || data.product.price || 0);
-          const discountPercent = variation?.subscription_details?.subscription_discount || 0;
-          const discountedPrice = basePrice - (basePrice * discountPercent / 100);
+          const discountedPrice = basePrice - (basePrice * (discountPercent / 100));
 
           setProducts([{
-            id: data.product.id,
-            variation_id: variation?.id,
-            image: variation?.image || data.product.images?.[0]?.src || placeholderImage,
-            title: data.product.name,
-            weight,
+            id: productData.id,
+            vId: variation?.id || variation?._id || "",
+            image: image,
+            name: productData.name,
+            variantName: variantName,
+            weight: weight,
             frequency: frequencyDisplay,
             price: discountedPrice,
-            quantity: parseInt(quantityRaw) || 1,
-            attributes: variation?.attributes,
-            subscription_details: variation?.subscription_details,
+            quantity: parseInt(searchParams.get("quantity") || "1"),
           }]);
 
           setCartTotals({
-            subtotal: discountedPrice,
+            subtotal: discountedPrice * parseInt(searchParams.get("quantity") || "1"),
             shipping: 0,
             tax: 0,
-            discount: basePrice - discountedPrice,
-            total: discountedPrice,
+            discount: (basePrice - discountedPrice) * parseInt(searchParams.get("quantity") || "1"),
+            total: discountedPrice * parseInt(searchParams.get("quantity") || "1"),
           });
         } catch (err) {
           console.error("Error fetching subscription:", err);
@@ -184,25 +209,66 @@ function CheckoutContent() {
 
     let sub = 0;
     let disc = 0;
+    let coinsDisc = 0;
 
     if (checkoutMode === "cart") {
       sub = product.reduce((acc, item) => acc + parseFloat(item.price?.final_price || item.price || 0) * (item.quantity || 1), 0);
       if (contextCartTotals?.discount) disc = contextCartTotals.discount;
+      if (contextCartTotals?.beansDiscount) coinsDisc = contextCartTotals.beansDiscount;
     } else if (checkoutMode === "subscription") {
-      sub = product.reduce((acc, item) => acc + parseFloat(item.price?.final_price || item.price || 0), 0);
+      sub = product.reduce((acc, item) => acc + parseFloat(item.price?.final_price || item.price || 0) * (item.quantity || 1), 0);
+      // Calculate Beans Discount for Subscription
+      if (isBeansApplied && beansBalance > 0) {
+        const maxPossibleDiscount = sub * 0.2;
+        const balanceInAed = beansBalance / (coinConfig.pointsToAed || 10);
+        coinsDisc = Math.min(maxPossibleDiscount, balanceInAed);
+      }
     }
 
-    const shipping = delivery === "ship" ? shippingTax.shipping : 0;
-    const taxableAmount = Math.max(0, sub - disc + shipping);
-    const tax = taxableAmount * (shippingTax.taxPercent / 100);
+    // Determine Dynamic Shipping
+    let currentShipping = 0;
+    if (delivery === "ship") {
+      let currentEmirate = "dubai"; // default
 
-    setCartTotals({ subtotal: sub, discount: disc, shipping, tax, total: Math.max(0, sub - disc + shipping + tax) });
-  }, [product, checkoutMode, contextCartTotals, shippingTax, delivery]);
+      if (status === "authenticated" && selectedAddressId) {
+        const selectedAddr = savedAddresses.find(a => a.id === selectedAddressId);
+        if (selectedAddr) {
+          currentEmirate = (selectedAddr.emirates || selectedAddr.state || "dubai").toLowerCase();
+        }
+      } else {
+        currentEmirate = (shippingForm.emirates || "dubai").toLowerCase();
+      }
 
-  // ── Loading / Guard ─────────────────────────────────────────────────────────
-  // Wait for both page data AND session to resolve before mounting Stripe Elements.
-  // If we mount while status === "loading", the key changes from "guest" → userId
-  // which forces Elements to remount mid-load, causing PaymentElement to fail.
+      // Shipping Rates: Dubai 30, others 50
+      const rates = {
+        dubai: 30,
+        abu_dhabi: 50,
+        ajman: 50,
+        fujairah: 50,
+        ras_al_khaimah: 50,
+        sharjah: 50,
+        umm_al_quwain: 50
+      };
+
+      currentShipping = rates[currentEmirate] || 50;
+    }
+
+    // Tax calculation (Default to 5% if API returns 0 or null)
+    const activeTaxPercent = shippingTax.taxPercent > 0 ? shippingTax.taxPercent : 5;
+    const taxableAmount = Math.max(0, sub - disc - coinsDisc + currentShipping);
+    const taxValue = taxableAmount * (activeTaxPercent / 100);
+
+    setCartTotals({
+      subtotal: sub,
+      discount: disc,
+      beansDiscount: coinsDisc,
+      shipping: currentShipping,
+      tax: taxValue,
+      taxPercent: activeTaxPercent,
+      total: Math.max(0, sub - disc - coinsDisc + currentShipping + taxValue)
+    });
+  }, [product, checkoutMode, contextCartTotals, shippingTax, delivery, selectedAddressId, savedAddresses, shippingForm.emirates, status, isBeansApplied, beansBalance, coinConfig]);
+
   if (isLoading || status === "loading") {
     return (
       <div className={styles.Main}>
@@ -220,14 +286,21 @@ function CheckoutContent() {
     mode: "payment",
     amount: stripeAmount,
     currency: "aed",
+    setup_future_usage: checkoutMode === "subscription" || (checkoutMode === "cart" && status === "authenticated") ? "off_session" : undefined,
+    defaultValues: {
+      billingDetails: {
+        email: email,
+        name: `${shippingForm.firstName} ${shippingForm.lastName}`.trim(),
+        phone: shippingForm.phone,
+      }
+    }
   };
-
 
   return (
     <Elements
       stripe={stripePromise}
       options={stripeOptions}
-      key={status === "authenticated" ? "authenticated" : "guest"}
+      key={`${status === "authenticated" ? "authenticated" : "guest"}-${email}`}
     >
       <CheckoutForm
         session={session}
@@ -251,6 +324,8 @@ function CheckoutContent() {
         billingForm={billingForm}
         subscriptionId={subscriptionId}
         variationId={variationId}
+        email={email}
+        setEmail={setEmail}
       />
     </Elements>
   );

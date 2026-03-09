@@ -15,12 +15,125 @@ const CartContext = createContext(null);
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cartTotals, setCartTotals] = useState({ subtotal: 0, total: 0, discount: 0, totalItems: 0 });
+  const [cartTotals, setCartTotals] = useState({ subtotal: 0, total: 0, discount: 0, totalItems: 0, beansDiscount: 0 });
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+  const [isBeansApplied, setIsBeansApplied] = useState(false);
+  const [beansBalance, setBeansBalance] = useState(0);
+  const [coinConfig, setCoinConfig] = useState({ pointsEarn: 5, pointsToAed: 10, maxPointsPerOrder: 0 });
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+
   const { data: session, status } = useSession();
 
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
+
+  const openCouponModal = () => setIsCouponModalOpen(true);
+  const closeCouponModal = () => setIsCouponModalOpen(false);
+
+  const toggleBeans = () => setIsBeansApplied(!isBeansApplied);
+
+  const applyCoupon = async (code) => {
+    try {
+      const res = await axiosClient.get(`/api/coupon/coupons/${code}`);
+      const data = res.data;
+
+      console.log("Coupon Data:", data);
+
+      const coupon = data.coupon || (data.docs?.[0]);
+
+      if (coupon && (data.success || !data.message)) {
+        // Validation: Minimum Amount
+        const minAmount = Number(coupon.minimumAmount || 0);
+        if (minAmount > 0 && cartTotals.subtotal < minAmount) {
+          return { ok: false, message: `Minimum amount of AED ${minAmount} required` };
+        }
+
+        let discountVal = 0;
+        if (coupon.discountType === "percentage") {
+          discountVal = cartTotals.subtotal * (Number(coupon.discountAmount) / 100);
+        } else {
+          discountVal = Number(coupon.discountAmount);
+        }
+
+        setAppliedCoupon({
+          code: coupon.code,
+          discount: discountVal,
+          type: coupon.discountType,
+          amount: coupon.discountAmount
+        });
+
+        setCartTotals(prev => ({
+          ...prev,
+          discount: discountVal,
+          total: prev.subtotal - discountVal
+        }));
+        return { ok: true, message: "Coupon applied!" };
+      }
+      return { ok: false, message: data.message || "Invalid coupon code" };
+    } catch (e) {
+      return { ok: false, message: e.response?.data?.message || e.message };
+    }
+  };
+
+  const removeCoupon = () => {
+    if (appliedCoupon) {
+      setCartTotals(prev => ({
+        ...prev,
+        discount: 0,
+        total: prev.subtotal
+      }));
+      setAppliedCoupon(null);
+    }
+  };
+
+  // Fetch Loyalty Config & Balance
+  const fetchLoyaltyData = async () => {
+    if (status !== "authenticated") return;
+    try {
+      const [balanceRes, configRes] = await Promise.all([
+        axiosClient.get("/api/user-wt-coins"),
+        axiosClient.get("/api/globals/wt-coins")
+      ]);
+
+      console.log(balanceRes)
+
+      if (balanceRes.data.docs?.[0]) {
+        setBeansBalance(balanceRes?.data?.docs?.[0]?.totalBalance || 0);
+      }
+
+      if (configRes.data) {
+        setCoinConfig({
+          pointsEarn: configRes.data.pointsEarn || 5,
+          pointsToAed: configRes.data.pointsToAed || 10,
+          maxPointsPerOrder: configRes.data.maxPointsPerOrder || 0
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching loyalty data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLoyaltyData();
+  }, [session, status]);
+
+  useEffect(() => {
+    let coinsDiscount = 0;
+    if (isBeansApplied && beansBalance > 0) {
+      // Redemption Logic: discountAED = pointsUsed / pointsToAed
+      // For now, assuming user uses all available or max allowed
+      const maxPossibleDiscount = cartTotals.subtotal * 0.2; // Example 20% cap
+      const balanceInAed = beansBalance / coinConfig.pointsToAed;
+      coinsDiscount = Math.min(maxPossibleDiscount, balanceInAed);
+    }
+
+    setCartTotals(prev => ({
+      ...prev,
+      beansDiscount: coinsDiscount,
+      total: Math.max(0, prev.subtotal - (prev.discount || 0) + (prev.shipping || 0) + (prev.tax || 0) - coinsDiscount)
+    }));
+  }, [isBeansApplied, cartTotals.subtotal, cartTotals.discount, cartTotals.shipping, cartTotals.tax, beansBalance, coinConfig]);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -32,23 +145,23 @@ export function CartProvider({ children }) {
   /** Apply a cart API response (items, subtotal, totalItems) to state */
   const applyCartResponse = (data) => {
     setItems(data.items || []);
-    setCartTotals({
+    setCartTotals(prev => ({
+      ...prev,
       subtotal: data.subtotal || 0,
-      total: data.subtotal || 0,
       totalItems: data.totalItems || 0,
-    });
+    }));
   };
 
   /** Apply the local guest cart to state */
   const applyGuestCart = () => {
     const cart = getCart();
     setItems(cart.items || []);
-    setCartTotals({
+    setCartTotals(prev => ({
+      ...prev,
       subtotal: cart.subtotal || 0,
-      total: cart.subtotal || 0,
       discount: 0,
       totalItems: cart.totalItems || 0,
-    });
+    }));
   };
 
   // ─── Fetch ───────────────────────────────────────────────────────────────────
@@ -175,6 +288,16 @@ export function CartProvider({ children }) {
         removeItem,
         updateQuantity,
         cartTotals,
+        isCouponModalOpen,
+        openCouponModal,
+        closeCouponModal,
+        isBeansApplied,
+        toggleBeans,
+        beansBalance,
+        coinConfig,
+        applyCoupon,
+        removeCoupon,
+        appliedCoupon,
         refreshCart: () => fetchCart(),
       }}
     >

@@ -1,0 +1,237 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    backdrop-filter: blur(2px);
+}
+
+.modal {
+    background: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: modalFadeIn 0.3s ease-out;
+    position: relative;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    padding: 24px 30px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.headerText h3 {
+    font-family: var(--lexend);
+    font-size: 22px;
+    font-weight: 500;
+    color: #2f362a;
+    margin: 0;
+}
+
+.headerText p {
+    font-family: var(--lato);
+    font-size: 14px;
+    color: #6e736a;
+    margin: 4px 0 0 0;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    padding: 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.inputWrap {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.inputWrap input {
+    flex: 1;
+    border: 1px solid #2f362a4d;
+    padding: 12px 16px;
+    font-family: var(--lato);
+    font-size: 15px;
+    outline: none;
+}
+
+.inputWrap input:focus {
+    border-color: #6c7a5f;
+}
+
+.applyBtn {
+    background: #6c7a5f;
+    color: #ffffff;
+    border: none;
+    padding: 0 24px;
+    font-family: var(--lato);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.applyBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.offersSection h4 {
+    font-family: var(--lato);
+    font-size: 16px;
+    font-weight: 400;
+    color: #2f362a;
+    margin-bottom: 20px;
+}
+
+.couponList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.couponCard {
+    border: 1px solid #2f362a4d;
+    padding: 20px;
+    background: #ffffff;
+}
+
+.ineligible {
+    opacity: 0.6;
+    /* Removed pointer-events: none to allow hover/tooltips if needed, 
+       but we block click in JS and style it accordingly */
+}
+
+.disabledBtn h5 {
+    color: #999 !important;
+    text-decoration: none !important;
+    cursor: not-allowed !important;
+}
+
+.cardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.cardLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.codeRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.codeRow h4 {
+    margin: 0;
+    font-family: var(--lato);
+    font-size: 16px;
+    font-weight: 700;
+    color: #2f362a;
+}
+
+.saveRow h5 {
+    margin: 0;
+    font-family: var(--lato);
+    font-size: 15px;
+    color: #227336;
+    font-weight: 400;
+}
+
+.descRow p {
+    margin: 0;
+    font-family: var(--lato);
+    font-size: 14px;
+    color: #6e736a;
+    max-width: 90%;
+}
+
+.cardRight h5 {
+    margin: 0;
+    font-family: var(--lato);
+    font-size: 14px;
+    color: #6e736a;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.cardBottom {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dotted #f0f0f0;
+}
+
+.cardBottom p {
+    margin: 0;
+    font-family: var(--lato);
+    font-size: 14px;
+    color: #6e736a;
+    cursor: pointer;
+}
+
+.errorText {
+    padding: 0 30px 20px 30px;
+    margin: 0;
+    color: #dc2626;
+    font-family: var(--lato);
+    font-size: 14px;
+    text-align: right;
+}
+
+.loadingText,
+.noCoupons {
+    text-align: center;
+    font-family: var(--lato);
+    color: #6e736a;
+    padding: 20px;
+}
+
+@media (max-width: 640px) {
+    .modal {
+        width: 95%;
+    }
+
+    .header,
+    .content {
+        padding: 20px;
+    }
+}

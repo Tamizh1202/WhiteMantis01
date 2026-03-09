@@ -257,7 +257,8 @@ const Lisiting = () => {
     const params = new URLSearchParams({
       mode: "subscription",
       productId: selectedProduct.parent.id,
-      variantId: selectedProduct.isVariant ? selectedProduct.variant.id : "",
+      subscriptionId: selectedFrequency.id || selectedFrequency._id || "",
+      variationId: selectedProduct.isVariant ? selectedProduct.variant.id : "",
       quantity: selectedQuantity.toString(),
     });
 

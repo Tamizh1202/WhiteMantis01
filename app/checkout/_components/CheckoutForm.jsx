@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/app/_context/CartContext";
 import { toast } from "react-hot-toast";
 import styles from "../page.module.css";
+import axiosClient from "@/lib/axios";
 
 // ── Section Components ──────────────────────────────────────────────────────
 // ExpressCheckoutSection removed (temporarily disabled)
@@ -20,10 +21,14 @@ import { validateCheckoutForm } from "@/utils/validatorFunctions";
 import {
     buildBillingDetails,
     buildCheckoutPayload,
+    buildOneTimePayload,
+    buildSubscriptionPayload,
+    formatCheckoutAddress,
     buildSuccessUrl,
     scrollToFirstError,
 } from "@/utils/checkoutUtils";
 import { saveAddressAPI } from "@/app/account/_components/ProfileComponents/profileApiUtils";
+import { ExpressCheckoutElement } from "@stripe/react-stripe-js";
 
 export default function CheckoutForm({
     session,
@@ -47,20 +52,16 @@ export default function CheckoutForm({
     checkoutMode,
     subscriptionId,
     variationId,
+    email,
+    setEmail,
 }) {
     const stripe = useStripe();
     const elements = useElements();
-    const { openCart } = useCart();
+    const { openCart, isBeansApplied, appliedCoupon } = useCart();
     const router = useRouter();
 
-    const [email, setEmail] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
-
-    // Pre-fill email from session
-    useEffect(() => {
-        if (session?.user?.email) setEmail(session.user.email);
-    }, [session]);
 
     // ── Helper: clear a single error field ─────────────────────────────────────
     const clearError = (key) => setValidationErrors((prev) => ({ ...prev, [key]: "" }));
@@ -97,28 +98,85 @@ export default function CheckoutForm({
                 return;
             }
 
-            // 3. Build Stripe billing details
-            const billingDetails = buildBillingDetails({
-                email, session, delivery, useShippingAsBilling,
-                status, selectedAddressId,
-                savedAddresses, shippingForm, billingForm,
-            });
+            // 3. (Optional) Any additional validation or pre-processing
 
             // 4. Build and send checkout payload to backend
-            // Note: We don't have a paymentMethodId yet, backend needs to return clientSecret
-            const payload = buildCheckoutPayload({
-                email, session, delivery, status,
-                selectedAddressId, savedAddresses, shippingForm, billingForm,
-                useShippingAsBilling, paymentMethodId: null, // Intent-based flow
-                checkoutMode, subscriptionId, variationId,
-            });
+            const deliveryOption = delivery === "ship" ? "delivery" : "pickup";
 
-            const response = await fetch("/api/website/stripe/create-checkout-session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-            const data = await response.json();
+            const shipAddr = deliveryOption === "delivery"
+                ? formatCheckoutAddress(
+                    status === "authenticated" && selectedAddressId
+                        ? savedAddresses.find(a => a.id === selectedAddressId)
+                        : shippingForm
+                )
+                : {
+                    addressFirstName: "",
+                    addressLastName: "",
+                    addressLine1: "Pickup",
+                    addressLine2: "",
+                    city: "",
+                    emirates: "dubai",
+                    phoneNumber: "",
+                    addressCountry: "United Arab Emirates",
+                };
+
+            const billAddr = useShippingAsBilling && deliveryOption === "delivery"
+                ? { ...shipAddr }
+                : formatCheckoutAddress(billingForm);
+
+
+            let payload = {
+                delivery: deliveryOption,
+                shippingAddress: shipAddr,
+                billingAddress: billAddr,
+                shippingAddressAsBillingAddress: useShippingAsBilling,
+                email: email || session?.user?.email,
+                product: {
+                    productId: product[0].id,
+                    variantId: variationId || "",
+                    subscriptionId: subscriptionId,
+                    quantity: product[0].quantity
+                },
+                useWTCoins: !!isBeansApplied
+            }
+            let url = "";
+
+            if (checkoutMode === "subscription") {
+                url = "/api/checkout/subscription";
+                payload = buildSubscriptionPayload({
+                    delivery: deliveryOption,
+                    shippingAddress: shipAddr,
+                    billingAddress: billAddr,
+                    shippingAddressAsBillingAddress: useShippingAsBilling,
+                    email: email || session?.user?.email,
+                    product: {
+                        productId: product[0].id,
+                        variantId: variationId || "",
+                        subscriptionId: subscriptionId,
+                        quantity: product[0].quantity
+                    },
+                    useWTCoins: !!isBeansApplied
+                });
+            } else {
+                url = "/api/checkout/one-time";
+                payload = buildOneTimePayload({
+                    delivery: deliveryOption,
+                    shippingAddress: shipAddr,
+                    billingAddress: billAddr,
+                    shippingAddressAsBillingAddress: useShippingAsBilling,
+                    email: email || session?.user?.email,
+                    products: product.map(p => ({
+                        productId: p.product || p.id,
+                        variantId: p.vId || "",
+                        quantity: p.quantity
+                    })),
+                    useWTCoins: !!isBeansApplied,
+                    appliedCouponCode: appliedCoupon?.code || ""
+                });
+            }
+
+            const response = await axiosClient.post(url, payload);
+            const data = response.data;
 
             if (!data.success) throw new Error(data.message || data.error || "Checkout failed");
 
@@ -151,9 +209,6 @@ export default function CheckoutForm({
                     clientSecret: data.clientSecret,
                     confirmParams: {
                         return_url: `${window.location.origin}${buildSuccessUrl(checkoutMode, data)}`,
-                        payment_method_data: {
-                            billing_details: billingDetails,
-                        }
                     },
                 });
 
@@ -178,6 +233,14 @@ export default function CheckoutForm({
                 {/* ── Left Column ── */}
                 <div className={styles.Left}>
                     {/* ExpressCheckoutSection temporarily removed */}
+
+                    <div className={styles.One}>
+                        <p style={{ fontWeight: '400' }}>EXPRESS CHECKOUT</p>
+
+                        <div className={styles.ExpressContainer}>
+                            <ExpressCheckoutElement />
+                        </div>
+                    </div>
 
                     <ContactSection
                         email={email}
@@ -230,7 +293,7 @@ export default function CheckoutForm({
                 <div className={styles.Line}></div>
 
                 {/* ── Right Column ── */}
-                <OrderSummary product={product} cartTotals={cartTotals} delivery={delivery} />
+                <OrderSummary product={product} cartTotals={cartTotals} delivery={delivery} checkoutMode={checkoutMode} />
             </div>
         </div>
     );

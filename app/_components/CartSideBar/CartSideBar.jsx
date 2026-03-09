@@ -16,6 +16,7 @@ const CartSideBar = () => {
     updateQuantity,
     cartTotals,
     loading,
+    openCouponModal,
   } = useCart();
 
 

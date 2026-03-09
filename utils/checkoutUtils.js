@@ -167,6 +167,67 @@ export const buildCheckoutPayload = ({
     };
 };
 
+/**
+ * Formats a checkout address for the new API.
+ */
+export const formatCheckoutAddress = (addr) => {
+    if (!addr) return {};
+    return {
+        addressFirstName: addr.addressFirstName || addr.firstName || "",
+        addressLastName: addr.addressLastName || addr.lastName || "",
+        addressLine1: addr.addressLine1 || addr.street || addr.address || "",
+        addressLine2: addr.addressLine2 || addr.apartment || "",
+        city: addr.city || "",
+        emirates: addr.emirates || addr.state || "dubai",
+        phoneNumber: addr.phoneNumber || addr.phone || "",
+        addressCountry: "United Arab Emirates",
+    };
+};
+
+/**
+ * Builds the payload for a one-time checkout (cart mode).
+ */
+export const buildOneTimePayload = ({
+    delivery,
+    shippingAddress,
+    billingAddress,
+    shippingAddressAsBillingAddress,
+    email,
+    products,
+    useWTCoins,
+    appliedCouponCode
+}) => ({
+    deliveryOption: delivery,
+    shippingAddress,
+    billingAddress,
+    shippingAddressAsBillingAddress,
+    email,
+    products,
+    useWTCoins,
+    appliedCouponCode
+});
+
+/**
+ * Builds the payload for a subscription checkout.
+ */
+export const buildSubscriptionPayload = ({
+    delivery,
+    shippingAddress,
+    billingAddress,
+    shippingAddressAsBillingAddress,
+    email,
+    product,
+    useWTCoins
+}) => ({
+    deliveryOption: delivery,
+    shippingAddress,
+    billingAddress,
+    shippingAddressAsBillingAddress,
+    email,
+    product,
+    useWTCoins
+});
+
 // ─── Success URL Builder ──────────────────────────────────────────────────────
 
 export const buildSuccessUrl = (checkoutMode, data) => {

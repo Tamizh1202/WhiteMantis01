@@ -122,7 +122,7 @@
   justify-content: left;
   flex-direction: column;
   gap: clamp(24px, calc(24px + (8 * ((100vw - 320px) / 1120))), 32px);
-  padding-top: 150px;
+  padding-top: 120px;
   width: 100%;
   position: sticky;
   top: 40px;
@@ -155,7 +155,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
   max-height: 480px;
   overflow-y: auto;
   padding-right: 5px;
@@ -178,39 +178,86 @@
   background: #555;
 }
 
-.ProdOne {
+.SummaryItem {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 0;
+  gap: 24px;
 }
 
-.ProdImage img {
+.ItemImage {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.ItemImage img {
   width: 100%;
-  max-width: 81px;
   height: 100%;
-  max-height: 80px;
   object-fit: contain;
 }
 
-.ProdNameAndweight h4 {
+.ItemInfo {
+  flex: 3;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   color: #2f362a;
 }
 
-.ProdQnty p {
+.ItemQty {
+  flex: 1;
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 550;
   color: #2f362a;
+  text-align: center;
 }
 
-.ProdPrice h4 {
+.ItemPrice {
+  flex: 1.5;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   color: #2f362a;
+  text-align: right;
+}
+
+.ItemMainRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.ItemName {
+  font-family: var(--lato);
+  font-size: 16px;
+  font-weight: 400;
+  color: #2F362A;
+  line-height: 1.4;
+}
+
+.ItemSubRow {
+  display: flex;
+  align-items: center;
+  font-family: var(--lato);
+  font-size: 15px;
+  color: #2F362A;
+  margin-top: 4px;
+}
+
+.ItemFrequencyRow {
+  font-family: var(--lato);
+  font-size: 15px;
+  color: #2F362A;
+  margin-top: 4px;
+}
+
+.SubSummaryItem {
+  align-items: flex-start;
 }
 
 .RightThree {
@@ -234,6 +281,7 @@
   width: 100%;
   height: 1px;
   background-color: #2f362a4d;
+  margin: 10px 0;
 }
 
 .Subtotal p,
@@ -710,6 +758,22 @@
     font-size: 14px;
   }
 
+  .SummaryItem {
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  .ItemInfo,
+  .ItemQty,
+  .ItemPrice {
+    font-size: 14px;
+  }
+
+  .ItemImage {
+    width: 60px;
+    height: 60px;
+  }
+
   .ProdNameAndweight h4,
   .ProdQnty p,
   .ProdPrice h4,
@@ -893,45 +957,233 @@
 }
 
 .CouponSection {
-  margin-top: 20px;
-  padding: 0 0px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #2F362A1A;
 }
 
-.CouponInput {
-  display: flex;
-  gap: 10px;
-}
-
-.CouponInput input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  outline: none;
-}
-
-.CouponInput button {
-  padding: 10px 20px;
-  background-color: #2F362A;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.AppliedCoupon {
+.CouponHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f5f5f5;
-  padding: 10px;
-  border-radius: 4px;
+  margin-bottom: 20px;
 }
 
-.AppliedCoupon button {
+.CouponHeader h3 {
+  font-family: var(--lexend);
+  font-size: 18px;
+  font-weight: 500;
+  color: #2F362A;
+  margin: 0;
+}
+
+.ViewAll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.ViewAll span {
+  font-family: var(--lato);
+  font-size: 14px;
+  color: #6E736A;
+}
+
+.CouponInputGroup {
+  display: flex;
+  gap: 0;
+  margin-bottom: 0;
+  height: 48px;
+}
+
+.AppliedCouponGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  border: 1px solid #2F362A33;
+  padding: 0 16px;
+  background: #FFFFFF;
+}
+
+.AppliedText {
+  font-family: var(--lato);
+  font-size: 15px;
+  color: #227336;
+  margin: 0;
+}
+
+.AppliedRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.SavingsBadge {
+  background: #D9E8D9;
+  padding: 6px 12px;
+  border-radius: 2px;
+  font-family: var(--lato);
+  font-size: 14px;
+  color: #6E736A;
+}
+
+.RemoveCouponBtn {
   background: none;
   border: none;
-  color: red;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.CouponInputGroup input {
+  flex: 1;
+  border: 1px solid #2F362A33;
+  border-right: none !important;
+  padding: 0 16px;
+  font-family: var(--lato);
+  font-size: 15px;
+  outline: none;
+  background: #FFFFFF;
+}
+
+.CouponInputGroup button {
+  background: #6D7763;
+  color: #FFFFFF;
+  border: none;
+  padding: 0 30px;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.RewardsSection {
+  border: 1px solid #2F362A33;
+  border-top: none;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  background: #FFFFFF;
+}
+
+.SubRewardsSection {
+  border-top: 1px solid #2F362A33 !important;
+}
+
+.CheckboxContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.CheckboxContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.Checkmark {
+  height: 20px;
+  width: 20px;
+  background-color: #FFFFFF;
+  border: 1.5px solid #2F362A66;
+  border-radius: 2px;
+  flex-shrink: 0;
+  position: relative;
+  margin-top: 2px;
+}
+
+.CheckboxContainer:hover input~.Checkmark {
+  border-color: #6D7763;
+}
+
+.CheckboxContainer input:checked~.Checkmark {
+  background-color: #6D7763;
+  border-color: #6D7763;
+}
+
+.Checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.CheckboxContainer input:checked~.Checkmark:after {
+  display: block;
+}
+
+.CheckboxContainer .Checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.RewardsInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.RewardsLabel {
+  margin: 0;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 550;
+  color: #2F362A;
+}
+
+.RewardsBalance {
+  margin: 4px 0 0 0;
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #6E736A;
+}
+
+.PotentialSavings {
+  margin: 0;
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #227336;
+  display: flex;
+  align-items: center;
+  text-align: right;
+}
+
+.CouponInfoMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.CouponInfoMessage span {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #6E736A;
+}
+
+.EarningBadge {
+  margin-top: 15px;
+  background: #FFFFFF;
+  padding: 12px 16px;
+  border: 1px solid #2F362A1A;
+}
+
+.EarningBadge p {
+  margin: 0;
+  font-family: var(--lato);
   font-size: 14px;
+  color: #227336;
 }

@@ -1,6 +1,6 @@
 "use client";
 import styles from "../page.module.css";
-import { PaymentElement, ExpressCheckoutElement } from "@stripe/react-stripe-js";
+import { PaymentElement } from "@stripe/react-stripe-js";
 import Link from "next/link";
 
 export function PaymentCardSection({ validationErrors }) {
