@@ -68,6 +68,15 @@ const OrderCard = ({ order, handleCancelButton }) => {
                     <Link href={`/account/orders/${order.id}`} className={styles.orderDetailsLink}>
                         Order Details
                     </Link>
+                    <a
+                        href={`/api/website/invoice/order/${order.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.orderDetailsLink}
+                        style={{ marginTop: '10px' }}
+                    >
+                        Download Invoice
+                    </a>
                     {config.showCancel && <button className={styles.cancelBtn} onClick={() => handleCancelButton(order.id)}>Cancel Order</button>}
                 </div>
             </div>

@@ -248,19 +248,27 @@ export default function SubscriptionDetailPage({ params }) {
                 {/* Brand: Uses stripeData or fallback */}
                 <span>{transaction.stripeData?.brand || "Credit Card"}</span>
 
-                {/* Receipt Link */}
-                {transaction.stripeData?.receipt_url ? (
+                {/* Invoice Column */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  {transaction.stripeData?.receipt_url && (
+                    <a
+                      href={transaction.stripeData.receipt_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.ViewLink}
+                    >
+                      View Receipt
+                    </a>
+                  )}
                   <a
-                    href={transaction.stripeData.receipt_url}
+                    href={`/api/website/invoice/subscription/${transaction.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.ViewLink}
                   >
-                    View
+                    Download PDF
                   </a>
-                ) : (
-                  <span>—</span>
-                )}
+                </div>
 
                 {/* Amount: Fixed to 2 decimals */}
                 <span>AED {(transaction.financials?.subtotal / 100).toFixed(2)}</span>

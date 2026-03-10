@@ -28,7 +28,6 @@ function SuccessContent() {
           ? `/api/web-subscription/${id}`
           : `/api/web-orders/${id}`;
 
-        // Add token to endpoint if present (for guest users)
         const params = {};
         if (token) {
           params.token = token;
@@ -37,9 +36,6 @@ function SuccessContent() {
         const response = await axiosClient.get(endpoint, { params });
         const result = response.data;
 
-        // If Payload CMS returns the doc directly, we handle it. 
-        // Based on the previous code, it expected json.success and json.order/subscription.
-        // We will adapt to handle both: if it has 'doc' or 'order'/'subscription' property, or is the object itself.
         if (result) {
           setData(result);
         } else {
@@ -64,6 +60,8 @@ function SuccessContent() {
     );
   }
 
+
+
   if (error || !data) {
     return (
       <div className={styles.Main}>
@@ -78,7 +76,8 @@ function SuccessContent() {
   // Handle cases where the API might return the document directly or wrapped
   const order = type === 'subscription' ? (data.subscription || data) : (data.order || data);
 
-  // Helpers
+  console.log(order)
+
   const formatAddress = (addr) => {
     if (!addr) return "N/A";
     // Handle both WC and Payload fields
@@ -123,23 +122,23 @@ function SuccessContent() {
     email: order.email || order.billing?.email || "N/A",
   };
 
-  const totalVal = parseFloat(order.total || order.totalAmount || 0);
-  const taxVal = parseFloat(order.total_tax || order.taxTotal || order.taxes || 0);
-  const shippingVal = parseFloat(order.shipping_total || order.shippingTotal || 0);
-  const discountVal = parseFloat(order.discount_total || order.discountTotal || 0);
+  const totalVal = parseFloat(order.financials?.total || order?.financials?.totalAmount || 0);
+  const taxVal = parseFloat(order.financials?.taxAmount || order.tax || order.taxes || 0);
+  const taxPercentage = parseFloat(order.financials?.taxPercentage || order.taxPercentage || 0);
+  const shippingVal = parseFloat(order.financials?.shippingCharge || order.shippingTotal || 0);
+  const couponDiscount = parseFloat(order.financials?.couponDiscount || order.couponDiscount || 0);
+  const coinsDiscount = parseFloat(order.financials?.wtCoinsDiscount || order.wtCoinsDiscount || 0);
+  const subtotal = parseFloat(order.financials?.subtotal || order.subtotal || 0);
 
   const totals = {
-    subtotal: totalVal - taxVal - shippingVal + discountVal,
+    subtotal: subtotal,
     shipping: shippingVal,
-    discount: discountVal,
     tax: taxVal,
-    total: totalVal
+    total: totalVal,
+    taxPercentage: taxPercentage,
+    couponDiscount: couponDiscount,
+    coinsDiscount: coinsDiscount
   };
-
-  // Correction on Subtotal: WC 'total' is final.
-  // Ideally fetch subtotal from API but calculate: Total - Tax - Shipping + Discount = Subtotal (gross of discount usually? actually WC stores subtotal)
-  // But strictly: order.total = (Subtotal - Discount) + Tax + Shipping
-  // So Subtotal = Total - Tax - Shipping + Discount.
 
   const calcSubtotal = totals.subtotal.toFixed(2);
 
@@ -260,9 +259,19 @@ function SuccessContent() {
             </div>
           </div>
 
-          <div className={styles.LeftBottom}>
+          <div className={styles.LeftBottom} style={{ display: 'flex', gap: '15px' }}>
             <a href="/shop" style={{ textDecoration: 'none' }}>
               <button className={styles.cont}>Continue Shopping</button>
+            </a>
+            <a
+              href={`/api/website/invoice/${type}/${orderInfo.orderId}${token ? `?token=${token}` : ''}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none' }}
+            >
+              <button className={styles.cont} style={{ backgroundColor: '#fff', color: '#428B54', border: '1px solid #428B54' }}>
+                Download Invoice
+              </button>
             </a>
           </div>
         </div>
@@ -310,15 +319,22 @@ function SuccessContent() {
               <h5>AED {totals.shipping.toFixed(2)}</h5>
             </div>
 
-            {totals.discount > 0 && (
+            {totals.couponDiscount > 0 && (
               <div className={styles.CuponDiscount}>
                 <p>Coupon Discount</p>
-                <h5>- AED {totals.discount.toFixed(2)}</h5>
+                <h5>- AED {totals.couponDiscount.toFixed(2)}</h5>
+              </div>
+            )}
+
+            {totals.coinsDiscount > 0 && (
+              <div className={styles.CuponDiscount}>
+                <p>White Mantis Beans Discount</p>
+                <h5>- AED {totals.coinsDiscount.toFixed(2)}</h5>
               </div>
             )}
 
             <div className={styles.EstimatedTax}>
-              <p>Estimated Taxes</p>
+              <p>Estimated Taxes ({totals.taxPercentage}%)</p>
               <h5>AED {totals.tax.toFixed(2)}</h5>
             </div>
             <div className={styles.RightLine}></div>

@@ -97,39 +97,25 @@ function AuthPageContent() {
 
     try {
       // STEP 1: Validate email and check user status
-      const signupRes = await fetch("/api/website/auth/user-auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+      const signupRes = await axiosClient.post("api/otp/send-web", {
+        email,
       });
+      console.log(signupRes)
 
-      const signupJson = await signupRes.json();
+      const signupJson = signupRes.data;
 
       // Check if signup route failed
-      if (!signupRes.ok || signupJson.success === false) {
+      if (signupRes.status !== 200 || signupJson.success === false) {
         setError(signupJson.message || "Email validation failed");
         setLoading(false);
         return;
       }
 
-      // STEP 2: Only proceed to send OTP if Step 1 was successful
-      const otpRes = await fetch("/api/website/auth/otp/send", {
-        method: "POST",
-      });
-
-      const otpJson = await otpRes.json();
-
-      // Check if OTP send failed
-      if (!otpRes.ok || otpJson.success === false) {
-        setError(otpJson.message || "Failed to send OTP");
-        setLoading(false);
-        return;
+      if (signupJson.success === true) {
+        router.push("/auth/verify");
       }
-
-      // STEP 3: Navigate to OTP page only after both steps succeed
-      router.push("/auth/verify");
     } catch (e) {
-      setError(e.message || "Something went wrong");
+      setError(e.response.data.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

@@ -170,3 +170,147 @@ export function formatSubscriptionToInvoice(
         terms: 'This is a recurring subscription. Thank you for your business!',
     };
 }
+/**
+ * Format Payload address to InvoiceAddress
+ */
+export function formatPayloadAddress(address: any): InvoiceAddress {
+    if (!address) {
+        return {
+            first_name: 'N/A',
+            last_name: '',
+            address_1: 'N/A',
+            city: 'N/A',
+            state: 'N/A',
+            postcode: 'N/A',
+            country: 'N/A',
+        };
+    }
+    return {
+        first_name: address.addressFirstName || '',
+        last_name: address.addressLastName || '',
+        address_1: address.addressLine1 || '',
+        address_2: address.addressLine2 || '',
+        city: address.city || '',
+        state: address.emirates || address.state || '',
+        postcode: address.postcode || '00000',
+        country: address.addressCountry || 'United Arab Emirates',
+        email: address.email || '',
+        phone: address.phoneNumber || '',
+    };
+}
+
+/**
+ * Format Payload line items to InvoiceLineItem
+ */
+export function formatPayloadLineItems(items: any[]): InvoiceLineItem[] {
+    return items.map((item, index) => {
+        const product = item.product || {};
+        const price = parseFloat(item.price) || 0;
+        const quantity = parseInt(item.quantity) || 1;
+        const total = price * quantity;
+
+        return {
+            id: item.id || index,
+            name: product.name || product.productTitle || 'Product',
+            quantity: quantity,
+            price: price,
+            subtotal: total,
+            total: total,
+            tax: 0, // Tax is often handled at the order level in Payload
+            sku: product.sku || '',
+        };
+    });
+}
+
+/**
+ * Convert Payload order to InvoiceData
+ */
+export function formatPayloadOrderToInvoice(
+    order: any,
+    paymentDetails?: any
+): InvoiceData {
+    const currencySymbol = 'AED'; // Default for White Mantis
+
+    return {
+        metadata: {
+            invoiceNumber: `INV-ORD-${order.id}`,
+            invoiceDate: formatDate(order.createdAt || new Date().toISOString()),
+            orderNumber: order.id,
+            paymentMethod: order.paymentMethod || 'Credit Card',
+            transactionId: order.stripeOrderId || '',
+        },
+        company: {
+            name: 'White Mantis',
+            logo: '/logo.png',
+            address: 'Dubai Coffee Roastery',
+            city: 'Dubai',
+            state: 'Dubai',
+            postcode: '00000',
+            country: 'UAE',
+            email: 'info@whitemantis.ae',
+            phone: '+971-XXX-XXXX',
+            website: 'www.whitemantis.ae',
+            taxId: 'TRN: XXXXXXXXX',
+        },
+        billTo: formatPayloadAddress(order.billingAddress || order.shippingAddress),
+        shipTo: order.shippingAddress ? formatPayloadAddress(order.shippingAddress) : undefined,
+        lineItems: formatPayloadLineItems(order.items || []),
+        subtotal: parseFloat(order.financials?.subtotal || 0),
+        tax: parseFloat(order.financials?.taxAmount || 0),
+        taxLabel: 'VAT (5%)',
+        shipping: parseFloat(order.financials?.shippingCharge || 0),
+        discount: parseFloat(order.financials?.couponDiscount || 0) + parseFloat(order.financials?.wtCoinsDiscount || 0),
+        discountLabel: 'Discounts',
+        total: parseFloat(order.financials?.total || 0),
+        currency: 'AED',
+        currencySymbol,
+        notes: '',
+        terms: 'Thank you for your purchase from White Mantis!',
+    };
+}
+
+/**
+ * Convert Payload subscription to InvoiceData
+ */
+export function formatPayloadSubscriptionToInvoice(
+    subscription: any
+): InvoiceData {
+    const currencySymbol = 'AED';
+
+    return {
+        metadata: {
+            invoiceNumber: `INV-SUB-${subscription.id}`,
+            invoiceDate: formatDate(subscription.createdAt || new Date().toISOString()),
+            subscriptionNumber: subscription.id,
+            paymentMethod: 'Credit Card',
+            transactionId: subscription.stripeSubscriptionId || '',
+        },
+        company: {
+            name: 'White Mantis',
+            logo: '/logo.png',
+            address: 'Dubai Coffee Roastery',
+            city: 'Dubai',
+            state: 'Dubai',
+            postcode: '00000',
+            country: 'UAE',
+            email: 'info@whitemantis.ae',
+            phone: '+971-XXX-XXXX',
+            website: 'www.whitemantis.ae',
+            taxId: 'TRN: XXXXXXXXX',
+        },
+        billTo: formatPayloadAddress(subscription.billingAddress || subscription.shippingAddress),
+        shipTo: subscription.shippingAddress ? formatPayloadAddress(subscription.shippingAddress) : undefined,
+        lineItems: formatPayloadLineItems(subscription.items || []),
+        subtotal: parseFloat(subscription.financials?.subtotal || 0),
+        tax: parseFloat(subscription.financials?.taxAmount || 0),
+        taxLabel: 'VAT (5%)',
+        shipping: parseFloat(subscription.financials?.shippingCharge || 0),
+        discount: parseFloat(subscription.financials?.couponDiscount || 0) + parseFloat(subscription.financials?.wtCoinsDiscount || 0),
+        discountLabel: 'Discounts',
+        total: parseFloat(subscription.financials?.total || 0),
+        currency: 'AED',
+        currencySymbol,
+        notes: '',
+        terms: 'This is a recurring subscription receipt from White Mantis.',
+    };
+}
