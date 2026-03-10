@@ -1,17 +1,30 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useWishlist } from "../../../_context/WishlistContext";
-import { useCart } from "../../../_context/CartContext";
+import { useWishlist } from "../../../../_context/WishlistContext";
+import { useCart } from "../../../../_context/CartContext";
 import styles from "./WhislistComponents.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import { formatImageUrl } from "@/lib/imageUtils";
+import axiosClient from "@/lib/axios";
 
 const WhislistComponents = () => {
-  const { items: wishlistData, loading, remove } = useWishlist();
+  const { items: wishlistData, loading, refresh, remove } = useWishlist();
   const { addItem } = useCart();
   const router = useRouter();
+  // const remove = async (id) => {
+  //   try {
+  //     // 1. Send the request to the specific ID URL
+  //     await axiosClient.delete(`/api/wishlist/${id}`);
 
+  //     // 2. Refresh the list so the item actually disappears from the screen
+  //     if (refresh) {
+  //       await refresh();
+  //     }
+  //   } catch (error) {
+  //     console.error("Server Error:", error.response?.data || error.message);
+  //   }
+  // };
   // Track selected variation for each product
   const [selectedVariations, setSelectedVariations] = useState({});
 
@@ -30,13 +43,14 @@ const WhislistComponents = () => {
   }, [wishlistData]);
 
   const handleRemove = async (productId) => {
+    console.log("Deleting ID:", productId); // Use the variable 'id' passed in
     await remove(productId);
   };
 
   const handleProductClick = (slug) => {
     router.push(`/product/${slug}`);
   };
-
+  console.log('initial data', wishlistData)
   const handleWeightChange = (productId, weight) => {
     const product = wishlistData.find((item) => item.id === productId);
     if (product?.children?.[0]?.variation_options) {
@@ -95,34 +109,41 @@ const WhislistComponents = () => {
     return item.children?.[0]?.variation_options?.[0]?.image || item.image;
   };
 
-  const getVariationPrice = (item) => {
+  const getVariationPrice = (item, productDoc) => {
+    // 1. Check if a variation is selected using the Wishlist Item ID
     const selectedVariation = selectedVariations[item.id];
+
     if (selectedVariation?.price) {
       return `AED ${parseFloat(selectedVariation.price).toFixed(2)}`;
     }
-    // Fallback to item price
-    if (typeof item.price === 'object') {
-      const price = item.price.final_price || item.price.sale_price || item.price.regular_price || 0;
-      return `AED ${parseFloat(price).toFixed(2)}`;
-    }
-    return `AED ${parseFloat(item.price || 0).toFixed(2)}`;
+
+    // 2. Fallback to productDoc prices (Payload CMS uses regularPrice / salePrice)
+    // Logic: Use salePrice if it exists, otherwise use regularPrice
+    const price = productDoc?.salePrice || productDoc?.regularPrice || 0;
+
+    return `AED ${parseFloat(price).toFixed(2)}`;
   };
 
-  const getRegularPrice = (item) => {
+  const getRegularPrice = (item, productDoc) => {
     const selectedVariation = selectedVariations[item.id];
 
     if (selectedVariation) {
-      const regularPrice = selectedVariation.regular_price;
-      const salePrice = selectedVariation.sale_price;
+      const regular = selectedVariation.regular_price;
+      const sale = selectedVariation.sale_price;
+      if (regular && sale && parseFloat(regular) > parseFloat(sale)) {
+        return `AED ${parseFloat(regular).toFixed(2)}`;
+      }
+    }
 
-      if (regularPrice && salePrice && parseFloat(regularPrice) > parseFloat(salePrice)) {
-        return `AED ${parseFloat(regularPrice).toFixed(2)}`;
+    // Fallback: If product has a sale, show the original regularPrice as the strikethrough
+    if (productDoc?.salePrice && productDoc?.regularPrice) {
+      if (parseFloat(productDoc.regularPrice) > parseFloat(productDoc.salePrice)) {
+        return `AED ${parseFloat(productDoc.regularPrice).toFixed(2)}`;
       }
     }
 
     return null;
   };
-
   const getAvailableWeights = (item) => {
     if (!item.children?.[0]?.variation_options) return [];
 
@@ -177,47 +198,42 @@ const WhislistComponents = () => {
         ) : (
           <div className={styles.Bottom}>
             {wishlistData.map((item) => {
-              const availableWeights = getAvailableWeights(item);
+              // 1. Extract the actual product data from the Payload relationship
+              const productDoc = item.product?.value;
+
+              // 2. If the product data is missing for some reason, skip or show fallback
+              if (!productDoc) return null;
+
+              // 3. Pass productDoc to your existing helper functions
+              const availableWeights = getAvailableWeights(productDoc);
               const selectedVariation = selectedVariations[item.id];
-              const variationImage = getVariationImage(item);
+              const variationImage = formatImageUrl(item?.product?.value?.productImage?.url)
+
+              console.log(formatImageUrl(item?.product?.value?.productImage?.url))
 
               return (
                 <div className={styles.Card} key={item.id}>
                   <div className={styles.CardTop}>
                     <div
                       className={styles.Remove}
-                      onClick={() => handleRemove(item.id)}
+                      onClick={() => handleRemove(item.product.value.id)}
                     >
-                      <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 32 32"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          width="32"
-                          height="32"
-                          rx="16"
-                          fill="#6C7A5F"
-                          fillOpacity="0.2"
-                        />
-                        <path
-                          d="M11.0125 22.4016L9.60156 20.9906L14.6072 15.985L9.60156 11.0125L11.0125 9.60156L16.0181 14.6072L20.9906 9.60156L22.4016 11.0125L17.3959 15.985L22.4016 20.9906L20.9906 22.4016L16.0181 17.3959L11.0125 22.4016Z"
-                          fill="#6C7A5F"
-                        />
+                      {/* SVG remains the same */}
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect width="32" height="32" rx="16" fill="#6C7A5F" fillOpacity="0.2" />
+                        <path d="M11.0125 22.4016L9.60156 20.9906L14.6072 15.985L9.60156 11.0125L11.0125 9.60156L16.0181 14.6072L20.9906 9.60156L22.4016 11.0125L17.3959 15.985L22.4016 20.9906L20.9906 22.4016L16.0181 17.3959L11.0125 22.4016Z" fill="#6C7A5F" />
                       </svg>
                     </div>
 
                     <div
                       className={styles.ImgContainer}
-                      onClick={() => handleProductClick(item.slug)}
+                      onClick={() => handleProductClick(productDoc.slug)}
                       style={{ cursor: 'pointer' }}
                     >
                       {variationImage ? (
                         <Image
-                          src={variationImage}
-                          alt={item.name || "Product"}
+                          src={formatImageUrl(item?.product?.value?.productImage?.url)}
+                          alt={productDoc.name || "Product"}
                           className={styles.Img}
                           width={200}
                           height={200}
@@ -230,19 +246,19 @@ const WhislistComponents = () => {
 
                   <div className={styles.CardMiddle}>
                     <div className={styles.Price}>
-                      <h4>{getVariationPrice(item)}</h4>
-                      {getRegularPrice(item) && <p>{getRegularPrice(item)}</p>}
+                      {/* Pass productDoc to helpers */}
+                      <h4>{getVariationPrice(item, productDoc)}</h4>
+                      {getRegularPrice(item, productDoc) && <p>{getRegularPrice(item, productDoc)}</p>}
                     </div>
                     <div className={styles.line}></div>
                     <div
                       className={styles.TagLine}
-                      onClick={() => handleProductClick(item.slug)}
+                      onClick={() => handleProductClick(productDoc.slug)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <h4>{item.name}</h4>
+                      <h4>{productDoc.name}</h4>
                     </div>
 
-                    {/* Weight Selection */}
                     {availableWeights.length > 0 && (
                       <div className={styles.WeightSelector}>
                         <select
@@ -263,7 +279,7 @@ const WhislistComponents = () => {
                   <div className={styles.CardBottom}>
                     <button
                       className={styles.Bag}
-                      onClick={() => handleAddToCart(item)}
+                      onClick={() => handleAddToCart(productDoc)}
                     >
                       Add to Cart
                     </button>

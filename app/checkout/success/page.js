@@ -1,14 +1,14 @@
 "use client";
-
 import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import Image from "next/image";
 import one from "./1.png"; // Fallback image
+import axiosClient from "@/lib/axios";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
-  const id = searchParams.get("id") || searchParams.get("order_id");
+  const id = searchParams.get("id") || searchParams.get("order_id") || searchParams.get("orderId");
   const type = searchParams.get("type") || "order"; // 'order' or 'subscription'
   const token = searchParams.get("token"); // Guest access token
 
@@ -25,24 +25,28 @@ function SuccessContent() {
     const fetchData = async () => {
       try {
         let endpoint = type === 'subscription'
-          ? `/api/website/subscription/${id}`
-          : `/api/website/order/${id}`;
+          ? `/api/web-subscription/${id}`
+          : `/api/web-orders/${id}`;
 
         // Add token to endpoint if present (for guest users)
+        const params = {};
         if (token) {
-          endpoint += `?token=${encodeURIComponent(token)}`;
+          params.token = token;
         }
 
-        const res = await fetch(endpoint);
-        const json = await res.json();
+        const response = await axiosClient.get(endpoint, { params });
+        const result = response.data;
 
-        if (json.success) {
-          setData(json);
+        // If Payload CMS returns the doc directly, we handle it. 
+        // Based on the previous code, it expected json.success and json.order/subscription.
+        // We will adapt to handle both: if it has 'doc' or 'order'/'subscription' property, or is the object itself.
+        if (result) {
+          setData(result);
         } else {
-          setError(json.message || "Failed to fetch details");
+          setError("Failed to fetch details");
         }
       } catch (err) {
-        setError("An error occurred while loading details");
+        setError(err.response?.data?.message || err.message || "An error occurred while loading details");
         console.error(err);
       } finally {
         setLoading(false);
@@ -71,18 +75,21 @@ function SuccessContent() {
   }
 
   // Map Data based on type
-  const order = type === 'subscription' ? data.subscription : data.order;
+  // Handle cases where the API might return the document directly or wrapped
+  const order = type === 'subscription' ? (data.subscription || data) : (data.order || data);
 
   // Helpers
   const formatAddress = (addr) => {
     if (!addr) return "N/A";
-    // WC Address Object: address_1, address_2, city, state, postcode, country
+    // Handle both WC and Payload fields
     const parts = [
-      addr.address_1,
-      addr.address_2,
+      addr.addressFirstName,
+      addr.addressLastName,
+      addr.addressLine1 || addr.address_1 || addr.street || addr.address,
+      addr.addressLine2 || addr.address_2 || addr.apartment,
       addr.city,
-      addr.state,
-      addr.country,
+      addr.emirates || addr.state,
+      addr.addressCountry || addr.country,
       addr.postcode
     ].filter(Boolean);
     return parts.join(", ");
@@ -98,29 +105,35 @@ function SuccessContent() {
     return order.payment_method_title || "Credit Card";
   };
 
-  // Both orders and subscriptions use line_items array in WooCommerce
-  const items = order.line_items?.map(item => ({
-    id: item.id,
-    name: (item.name),
+  // Both orders and subscriptions use line_items (WC) or products (Payload)
+  const rawItems = order.line_items || order.products || order.items || [];
+  const items = rawItems.map(item => ({
+    id: item.id || item.productId,
+    name: item.name || item.product?.productTitle || item.productName || "Product",
     quantity: item.quantity,
-    price: item.total, // Total for line
-    image: item.image?.src || null // Try to get image if available
-  })) || [];
+    price: item.total || item.product?.salePrice || item.price,
+    image: item.image?.src || item.product?.productImages?.[0]?.image?.url || null
+  }));
 
   const orderInfo = {
-    orderId: order.id,
+    orderId: order.id || order.orderId || order._id,
     paymentMethod: getPaymentMethod(),
-    billingAddress: formatAddress(order.billing),
-    shippingAddress: formatAddress(order.shipping),
-    email: order.billing?.email || "N/A",
+    billingAddress: formatAddress(order.billing || order.billingAddress || order.billing_address),
+    shippingAddress: formatAddress(order.shipping || order.shippingAddress || order.shipping_address),
+    email: order.email || order.billing?.email || "N/A",
   };
 
+  const totalVal = parseFloat(order.total || order.totalAmount || 0);
+  const taxVal = parseFloat(order.total_tax || order.taxTotal || order.taxes || 0);
+  const shippingVal = parseFloat(order.shipping_total || order.shippingTotal || 0);
+  const discountVal = parseFloat(order.discount_total || order.discountTotal || 0);
+
   const totals = {
-    subtotal: parseFloat(order.total) - parseFloat(order.total_tax || 0) - parseFloat(order.shipping_total || 0),
-    shipping: parseFloat(order.shipping_total || 0),
-    discount: parseFloat(order.discount_total || 0),
-    tax: parseFloat(order.total_tax || 0),
-    total: parseFloat(order.total)
+    subtotal: totalVal - taxVal - shippingVal + discountVal,
+    shipping: shippingVal,
+    discount: discountVal,
+    tax: taxVal,
+    total: totalVal
   };
 
   // Correction on Subtotal: WC 'total' is final.
@@ -128,7 +141,7 @@ function SuccessContent() {
   // But strictly: order.total = (Subtotal - Discount) + Tax + Shipping
   // So Subtotal = Total - Tax - Shipping + Discount.
 
-  const calcSubtotal = (parseFloat(order.total) - parseFloat(order.total_tax || 0) - parseFloat(order.shipping_total || 0) + parseFloat(order.discount_total || 0)).toFixed(2);
+  const calcSubtotal = totals.subtotal.toFixed(2);
 
   return (
     <div className={styles.Main}>
@@ -230,13 +243,13 @@ function SuccessContent() {
                 </div>
               </div>
 
-              {type === 'subscription' && order.next_payment_date && (
+              {(type === 'subscription' && (order.next_payment_date || order.nextPaymentDate)) && (
                 <div className={styles.Three}>
                   <div className={styles.ThreeTop}>
                     <p>Next Payment Date</p>
                   </div>
                   <div className={styles.ContactEmail}>
-                    <p>{new Date(order.next_payment_date).toLocaleDateString('en-US', {
+                    <p>{new Date(order.next_payment_date || order.nextPaymentDate).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'

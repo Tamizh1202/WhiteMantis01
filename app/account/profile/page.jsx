@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/nextauth";
 import axiosClient from "@/lib/axios";
-import ProfileComponents from "../_components/ProfileComponents/ProfileComponents";
+import ProfileComponents from "./_components/ProfileComponents/ProfileComponents";
 
 async function getProfile(payloadToken) {
   try {

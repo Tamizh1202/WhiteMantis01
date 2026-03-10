@@ -27,7 +27,7 @@ import {
     buildSuccessUrl,
     scrollToFirstError,
 } from "@/utils/checkoutUtils";
-import { saveAddressAPI } from "@/app/account/_components/ProfileComponents/profileApiUtils";
+import { saveAddressAPI } from "@/app/account/profile/_components/ProfileComponents/profileApiUtils";
 import { ExpressCheckoutElement } from "@stripe/react-stripe-js";
 
 export default function CheckoutForm({
@@ -178,12 +178,19 @@ export default function CheckoutForm({
             const response = await axiosClient.post(url, payload);
             const data = response.data;
 
+            if (checkoutMode === "subscription") {
+                console.log("🧾 [SUB] FULL backend response:", JSON.stringify(data, null, 2));
+            }
+
+            console.log(response, "response")
+
             if (!data.success) throw new Error(data.message || data.error || "Checkout failed");
 
             // 5. Confirm the payment with Stripe
-            // This will handle 3DS, saved cards, and redirect to return_url
-            if (data.clientSecret) {
-                // Save address if user opted in (before redirect as redirect will unload page)
+            const secret = data.clientSecret || data.client_secret;
+
+            if (secret) {
+                // Save address if user opted in
                 if (shippingForm.saveAddress && status === "authenticated" && session?.user?.id) {
                     try {
                         await saveAddressAPI(session.user.id, {
@@ -203,21 +210,48 @@ export default function CheckoutForm({
                     }
                 }
 
-                // Confirm payment
-                const { error: confirmError } = await stripe.confirmPayment({
-                    elements,
-                    clientSecret: data.clientSecret,
-                    confirmParams: {
-                        return_url: `${window.location.origin}${buildSuccessUrl(checkoutMode, data)}`,
-                    },
-                });
+                if (checkoutMode === "subscription") {
+                    // Subscription Flow: Use redirect: 'if_required' and manual PATCH synchronization
+                    const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret);
 
-                if (confirmError) {
-                    setIsProcessing(false);
-                    setValidationErrors((prev) => ({ ...prev, card: confirmError.message || "Payment confirmation failed" }));
-                    toast.error(confirmError.message || "Payment confirmation failed");
+                    if (confirmError) {
+                        setIsProcessing(false);
+                        setValidationErrors((prev) => ({ ...prev, card: confirmError.message || "Payment confirmation failed" }));
+                        toast.error(confirmError.message || "Payment confirmation failed");
+                        return;
+                    }
+
+                    if (paymentIntent && paymentIntent.status === "succeeded") {
+                        const orderId = data.dbSubscriptionId || data.wpSubscriptionId || data.id;
+                        console.log("✅ Subscription payment confirmed:", paymentIntent.id, paymentIntent.status);
+
+                        if (orderId) {
+                            try {
+                                await axiosClient.patch(`/api/web-subscription/${orderId}`, { paymentStatus: "completed" });
+                                console.log("✅ Subscription paymentStatus → completed, orderId:", orderId);
+                            } catch (patchErr) {
+                                console.warn("⚠️ Subscription paymentStatus PATCH error (non-fatal):", patchErr);
+                            }
+                        }
+                        // Manual redirect after synchronization
+                        router.push(buildSuccessUrl(checkoutMode, data));
+                    }
+                } else {
+                    // One-Time Flow: Standard redirect behavior
+                    const { error: confirmError } = await stripe.confirmPayment({
+                        elements,
+                        clientSecret: secret,
+                        confirmParams: {
+                            return_url: `${window.location.origin}${buildSuccessUrl(checkoutMode, data)}`,
+                        },
+                    });
+
+                    if (confirmError) {
+                        setIsProcessing(false);
+                        setValidationErrors((prev) => ({ ...prev, card: confirmError.message || "Payment confirmation failed" }));
+                        toast.error(confirmError.message || "Payment confirmation failed");
+                    }
                 }
-                // Redirect happens automatically on success if return_url is provided
             }
         } catch (e) {
             console.error(e);

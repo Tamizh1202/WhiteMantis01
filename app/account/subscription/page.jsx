@@ -3,50 +3,58 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import axiosClient from "@/lib/axios";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL
 
 export default function SubscriptionPage() {
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { update, data: session } = useSession();
   useEffect(() => {
-    fetchSubscriptions();
-  }, []);
-
-  const fetchSubscriptions = async () => {
-    try {
-      const response = await fetch("/api/website/subscription");
-      const data = await response.json();
-
-      if (data.success && Array.isArray(data.data)) {
-        setSubscriptions(data.data);
-      } else {
-        console.error("Failed to load subscriptions");
+    const fetchSubscriptions = async () => {
+      // 1. THE GUARD: If there's no ID yet, stop right here.
+      if (!session?.user?.id) {
+        console.log("Waiting for session...");
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching subscriptions:", error);
-      console.error("ErrorMessage");
-    } finally {
-      setLoading(false);
-    }
-  };
+
+      try {
+        setLoading(true);
+        const response = await axiosClient.get(`${BASE_URL}/api/web-subscription?where[user][equals]=${session.user.id}&where[paymentStatus][equals]=completed&depth=3`);
+
+        const data = response.data;
+        console.log(data);
+        if (data?.docs && response.status === 200) {
+          setSubscriptions(data.docs);
+        }
+      } catch (error) {
+        console.error("API Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubscriptions();
+  }, [session]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("en-AE", {
+      day: "numeric",
       month: "short",
-      day: "2-digit",
       year: "numeric",
       timeZone: "Asia/Dubai",
     });
   };
 
   const activeSubscriptions = subscriptions.filter(
-    (s) => s.status === "active"
+    (s) => s.subsStatus?.toLowerCase() === "active"
   );
 
   const pastSubscriptions = subscriptions.filter(
-    (s) => s.status === "cancelled" || s.status === "expired" || s.status === "on-hold"
+    (s) => s.subsStatus === "cancelled" || s.subsStatus === "expired" || s.subsStatus === "on-hold" || s.subsStatus === "inactive"
   );
 
   if (loading) {
@@ -113,14 +121,14 @@ export default function SubscriptionPage() {
 
                     <div className={styles.ActiveListTopNextDevelivery}>
                       <p>Next Payment: </p>
-                      <h4>{formatDate(sub.next_payment_date_gmt)}</h4>
+                      <h4>{sub.nextPaymentDate ? formatDate(sub.nextPaymentDate) : "N/A"}</h4>
                     </div>
                   </div>
 
                   <div className={`${styles.ActiveListTopRight} ${styles.DesktopOnly}`}>
                     <div className={styles.ActiveOrderDate}>
                       <p>Start Date:</p>
-                      <p>{formatDate(sub.start_date_gmt)}</p>
+                      <p>{formatDate(sub.createdAt)}</p>
                     </div>
                     <div className={styles.ActiveSubId}>
                       <p>Subscription ID:</p>
@@ -134,26 +142,51 @@ export default function SubscriptionPage() {
                   <div className={styles.ActiveListBottomtOP}>
                     <div className={styles.ActiveSubLeft}>
                       <div className={styles.ActiveSubLeftTop}>
-                        <p>{(sub.line_items?.[0]?.name || "Subscription Product")}</p>
+                        <p>{((`${sub.items?.[0]?.product?.categories?.title} Subscription`) || "Subscription Product")}</p>
                       </div>
 
                       <div className={styles.ActiveSubLeftBottom}>
                         <div className={styles.ProdImge}>
-                          <Image src={sub.line_items?.[0]?.image?.src || "https://placehold.co/100x100"} alt="product image" width={80} height={80} style={{ objectFit: "contain" }} />
+                          <Image
+                            src={
+                              sub.items?.[0]?.product?.productImage?.url
+                                ? `https://whitemantis-app.vercel.app${sub.items?.[0]?.product?.productImage?.url}`
+                                : "https://placehold.co/100x100"
+                            }
+                            alt="product image"
+                            width={80}
+                            height={80}
+                            style={{ objectFit: "contain" }}
+                          />
                         </div>
 
                         <div className={styles.ProdDetails}>
                           <div className={styles.ProdTitle}>
-                            <h3>{(sub.line_items?.[0]?.name)}</h3>
+                            <h3>{sub.items?.[0]?.product?.name} {sub.items?.[0]?.product?.tagline}</h3>
                           </div>
-
+                          {/* varient field is first cross checked with the varID and then it is displayed */}
                           <div className={styles.ProdTooDetails}>
-                            <div className={styles.prodweight}>
-                              <p>{sub.line_items?.[0]?.meta_data?.find(m => m.key === "pa_weight")?.value || "N/A"}</p>
-                            </div>
-                            <div className={styles.smallLine}>|</div>
+                            {(() => {
+                              const item = sub?.items?.[0];
+                              const selectedVariant = item?.product?.variants?.find(v => v.id === item.variantID);
+
+                              // Only render the weight and the line if a variant is matched
+                              if (selectedVariant) {
+                                return (
+                                  <>
+                                    <div className={styles.prodweight}>
+                                      <p>{`${selectedVariant.variantName}g`}</p>
+                                    </div>
+                                    <div className={styles.smallLine}>|</div>
+                                  </>
+                                );
+                              }
+
+                              return null;
+                            })()}
+
                             <div className={styles.prodQty}>
-                              <p>Qty: {sub.line_items?.[0]?.quantity}</p>
+                              <p>Qty: {sub.items?.[0]?.quantity || 0}x Bag amount</p>
                             </div>
                           </div>
                         </div>
@@ -177,11 +210,27 @@ export default function SubscriptionPage() {
                       </div>
 
                       <div className={styles.AtciveSubDeliveryTiming}>
-                        <p>Delivers Every {sub.billing_interval} {sub.billing_period}</p>
+                        <p>Delivers Every {(() => {
+                          const item = sub?.items?.[0];
+                          const variantID = item?.variantID;
+
+                          // 1. Find the active variant (if one is selected)
+                          const selectedVariant = item?.product?.variants?.find(v => v.id === variantID);
+
+                          // 2. Get the list of frequencies (check variant first, then product)
+                          const availableFreqs = selectedVariant?.subFreq || item?.product?.subFreq || [];
+
+                          // 3. Match the specific frequency choice by ID
+                          const matchedFreq = availableFreqs.find(f => f.id === item?.subFreqID);
+
+                          return matchedFreq
+                            ? `${matchedFreq.duration} ${matchedFreq.interval}${matchedFreq.duration > 1 ? 's' : ''}`
+                            : "Standard Interval";
+                        })()}</p>
                       </div>
                     </div>
                   </div>
-
+                  {/* active subscription  */}
                   <div className={styles.ViewCta}>
                     <Link
                       href={`/account/subscription/${sub.id}`}
@@ -206,7 +255,7 @@ export default function SubscriptionPage() {
             ))
           )}
         </div>
-
+        {/* past subscription */}
         <div className={styles.PastSubscriptions}>
           <div className={styles.PastSubscriptionsTop}>
             <h3>Past Subscriptions</h3>
@@ -240,41 +289,66 @@ export default function SubscriptionPage() {
                     </svg>
 
                     <div>
-                      <p>{sub.status} Subscription</p>
-                      <p>on {formatDate(sub.date_modified)}</p>
+                      <p>{sub.subsStatus === "inactive" ? "Cancelled" : sub.subsStatus} Subscription</p>
+                      <p>on {formatDate(sub.updatedAt)}</p>
                     </div>
                   </div>
 
                   <div className={`${styles.pastTopRight} ${styles.DesktopOnly}`}>
-                    <p>Last delivery&nbsp;&nbsp;{formatDate(sub.last_payment_date_gmt || sub.date_created)}</p>
-                    <p>Order ID:&nbsp;&nbsp;#{sub.number}</p>
+                    <p>Last delivery&nbsp;&nbsp;{formatDate(sub.createdAt || sub.updatedAt)}</p>
+                    <p>Order ID:&nbsp;&nbsp;#{sub.id}</p>
                   </div>
                 </div>
 
                 <div className={styles.PastListBottom}>
                   <div className={styles.PastListBottomLeft}>
                     <div className={styles.pastProdImage}>
-                      <Image src={sub.line_items?.[0]?.image?.src || "https://placehold.co/100x100"} alt="product image" width={80} height={80} style={{ objectFit: "contain" }} />
+                      <Image
+                        src={
+                          sub.items?.[0]?.product?.productImage?.url
+                            ? `https://whitemantis-app.vercel.app${sub.items?.[0]?.product?.productImage?.url}`
+                            : "https://placehold.co/100x100"
+                        }
+                        alt="product image"
+                        width={80}
+                        height={80}
+                        style={{ objectFit: "contain" }}
+                      />
                     </div>
-
+                    {/* comeback */}
                     <div className={styles.pastProdDetails}>
                       <div className={styles.pastProdTitle}>
-                        <h4>{(sub.line_items?.[0]?.name)}</h4>
+                        <h4>{`${sub.items?.[0]?.product?.categories?.title} Subscription  ` || "Subscription Product"}</h4>
                       </div>
 
                       <div className={styles.pastProdSubTitledetails}>
                         <div className={styles.pastprodTag}>
-                          <p>{(sub.line_items?.[0]?.name)}</p>
+                          <p>{sub.items?.[0]?.product?.name} {sub.items?.[0]?.product?.tagline}</p>
+
                         </div>
 
-                        <div className={styles.pastprodQty}>
-                          <p>{sub.line_items?.[0]?.meta_data?.find(m => m.key === "pa_weight")?.value || "N/A"}</p>
-                        </div>
+                        {(() => {
+                          const item = sub?.items?.[0];
+                          const selectedVariant = item?.product?.variants?.find(v => v.id === item.variantID);
 
-                        <div className={styles.smallLine}>|</div>
+                          // If we have a variant, show the Weight AND the Vertical Line
+                          if (selectedVariant) {
+                            return (
+                              <>
+                                <div className={styles.pastprodQty}>
+                                  <p>{`${selectedVariant.variantName}g`}</p>
+                                </div>
+                                <div className={styles.smallLine}>|</div>
+                              </>
+                            );
+                          }
+
+                          // If no variant is found, return nothing here
+                          return null;
+                        })()}
 
                         <div className={styles.pastprodQty}>
-                          <p>Qty: {sub.line_items?.[0]?.quantity}</p>
+                          <p>Qty: {sub.items?.[0]?.quantity || 0}x Bag amount</p>
                         </div>
                       </div>
                     </div>

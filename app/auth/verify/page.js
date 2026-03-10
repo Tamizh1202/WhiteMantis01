@@ -101,12 +101,6 @@ export default function Otp() {
         return;
       }
 
-      // Save the payload token in a cookie for direct Payload CMS API calls
-      const payloadToken = verifyData.token || verifyData.jwt;
-      if (payloadToken) {
-        document.cookie = `payload-token=${payloadToken}; path=/; SameSite=Lax`;
-      }
-
       // Redirect based on whether it's a new user
       if (verifyData.isNewUser) {
         router.push("/auth/create-profile");

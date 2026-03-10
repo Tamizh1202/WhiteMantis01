@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Logo from "./logo.png";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axiosClient from "@/lib/axios";
@@ -15,69 +16,69 @@ function AuthPageContent() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
-    async function handleAuthLogic() {
-      if (status === "loading" || verifying) return;
+    if (status === "authenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
 
-      if (status === "authenticated") {
-        // Case 1: Google login, needs backend verification if not already done
-        if (session?.isGoogleLogin && !session?.user?.["paylaod-token"]) {
-          setVerifying(true);
-          try {
-            console.log("Verifying Google Auth with Backend...");
-            const res = await axiosClient.post("/api/website/google-auth", {
-              googleToken: session.googleIdToken,
-            });
+  // Handle Google OAuth callback
+  useEffect(() => {
+    async function handleGoogleCallback() {
+      if (status === "authenticated" && session?.user?.email) {
+        const isFromGoogle =
+          searchParams.get("from") === "google" ||
+          window.location.href.includes("callbackUrl");
 
-            const json = res.data;
-            console.log("Backend Response:", json);
+        if (!isFromGoogle) return;
 
-            if (json.success) {
-              await update({
-                user: {
-                  ...session.user,
-                  id: json.user.id.toString(),
-                  firstName: json.user.firstName,
-                  lastName: json.user.lastName,
-                  profileImage: json.user.profileImage,
-                  stripeCustomerId: json.user.stripeCustomerId,
-                  "paylaod-token": json.token,
-                  isNewUser: json.isNewUser,
-                  success: true,
-                },
-              });
+        setLoading(true);
 
-              if (json.isNewUser) {
-                router.push("/auth/create-profile");
-              } else {
-                router.push("/");
+        try {
+          const res = await axiosClient.post("/api/website/google-auth", {
+            googleToken: session.googleIdToken,
+          });
+
+          console.log(res.data)
+
+          if (!res.data.success) {
+            throw new Error(res.data.message || "Social login failed");
+          }
+
+          if (res.data.token) {
+            Cookies.set("paylaod-token", res.data.token, { expires: 7 });
+          }
+
+          // Update NextAuth session with the correct backend user ID and data
+          if (res.data.user) {
+            await update({
+              user: {
+                id: res.data.user.id,
+                email: res.data.user.email,
+                firstName: res.data.user.firstName,
+                lastName: res.data.user.lastName,
+                profileImage: res.data.user.profileImage,
+                stripeCustomerId: res.data.user.stripeCustomerId,
+                "paylaod-token": res.data.token,
               }
-            } else {
-              setError(json.message || "Backend verification failed");
-            }
-          } catch (err) {
-            console.error("Google Auth Verification Error:", err);
-            setError("Failed to link account with backend");
-          } finally {
-            setVerifying(false);
+            });
           }
-        }
-        // Case 2: Already verified or OTP login
-        else {
-          if (session?.user?.isNewUser) {
-            router.push("/auth/create-profile");
+
+          if (res.data.isNewUser) {
+            window.location.href = "/auth/create-profile";
           } else {
-            router.push("/");
+            window.location.href = "/";
           }
+        } catch (e) {
+          setError(e.response?.data?.message || e.message || "Failed to complete sign-in");
+          setLoading(false);
         }
-        router.refresh();
       }
     }
 
-    handleAuthLogic();
-  }, [status, session, router, update]);
+    handleGoogleCallback();
+  }, [status, session, searchParams, router]);
 
   async function handleContinue(e) {
     e.preventDefault();
@@ -96,25 +97,39 @@ function AuthPageContent() {
 
     try {
       // STEP 1: Validate email and check user status
-      const signupRes = await axiosClient.post("api/otp/send-web", {
-        email,
+      const signupRes = await fetch("/api/website/auth/user-auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       });
-      console.log(signupRes)
 
-      const signupJson = signupRes.data;
+      const signupJson = await signupRes.json();
 
       // Check if signup route failed
-      if (signupRes.status !== 200 || signupJson.success === false) {
+      if (!signupRes.ok || signupJson.success === false) {
         setError(signupJson.message || "Email validation failed");
         setLoading(false);
         return;
       }
 
-      if (signupJson.success === true) {
-        router.push("/auth/verify");
+      // STEP 2: Only proceed to send OTP if Step 1 was successful
+      const otpRes = await fetch("/api/website/auth/otp/send", {
+        method: "POST",
+      });
+
+      const otpJson = await otpRes.json();
+
+      // Check if OTP send failed
+      if (!otpRes.ok || otpJson.success === false) {
+        setError(otpJson.message || "Failed to send OTP");
+        setLoading(false);
+        return;
       }
+
+      // STEP 3: Navigate to OTP page only after both steps succeed
+      router.push("/auth/verify");
     } catch (e) {
-      setError(e.response.data.message || "Something went wrong");
+      setError(e.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -176,9 +191,9 @@ function AuthPageContent() {
                 <button
                   className={styles.ctacontinue}
                   onClick={handleContinue}
-                  disabled={loading || verifying || !email}
+                  disabled={loading || !email}
                 >
-                  {loading || verifying ? "Processing..." : "Continue"}
+                  {loading ? "Processing..." : "Continue"}
                 </button>
               </div>
             </div>

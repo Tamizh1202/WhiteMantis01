@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
+import SubPopup from "../_components/SubscriptionPopup/SubscriptionPopup";
+import axiosClient from "@/lib/axios";
+import { formatImageUrl } from "@/lib/imageUtils";
 
 export default function SubscriptionDetailPage({ params }) {
   // Handle params wrapping/unwrapping
@@ -10,6 +13,7 @@ export default function SubscriptionDetailPage({ params }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     if (subscriptionId) {
@@ -19,106 +23,118 @@ export default function SubscriptionDetailPage({ params }) {
 
   const fetchSubscription = async () => {
     try {
-      const response = await fetch(`/api/website/subscription/${subscriptionId}`);
-      const resData = await response.json();
+      const response = await axiosClient.get(`/api/web-subscription/${subscriptionId}?depth=3`);
+      const resData = response.data;
+      console.log("inner data", resData)
 
-      if (resData.success) {
+      if (resData && resData.id) {
         setData(resData);
       } else {
         console.error("Subscription not found");
       }
     } catch (error) {
       console.error("Error fetching subscription:", error);
-      console.error("Failed to load subscription details");
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancel = async () => {
-    if (!confirm("Are you sure you want to cancel this subscription?")) return;
-
-    setCancelling(true);
-    try {
-      const response = await fetch(`/api/website/subscription/${subscriptionId}/cancel`, {
-        method: 'POST'
-      });
-      const resData = await response.json();
-
-      if (resData.success) {
-        console.log("Subscription cancelled successfully");
-        fetchSubscription(); // Refresh data
-      } else {
-        console.error(resData.message || "Failed to cancel");
-      }
-    } catch (error) {
-      console.error("Error cancelling:", error);
-      console.error("An error occurred");
-    } finally {
-      setCancelling(false);
-    }
+    setIsPopupOpen(true);
   };
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("en-AE", {
+      day: "numeric",
       month: "short",
-      day: "2-digit",
       year: "numeric",
       timeZone: "Asia/Dubai",
     });
   };
 
   if (loading) return <div className={styles.Container}><p style={{ textAlign: "center" }}>Loading...</p></div>;
-  if (!data || !data.subscription) return <div className={styles.Container}>Subscription not found</div>;
+  if (!data || !data.id) return <div className={styles.Container}>Subscription not found</div>;
 
-  const { subscription: sub, stripeSubscription, paymentHistory } = data;
-  const product = sub.line_items?.[0];
+  const sub = data;
 
   return (
     <div className={styles.Container}>
       <h2 className={styles.PageTitle}>SUBSCRIPTION DETAILS</h2>
 
       <div className={styles.StatusBar}>
-        {sub.status === "active" ? (
-          <p>Subscription active since {formatDate(sub.date_created)}</p>
+        {sub.subsStatus === "active" ? (
+          <p>Subscription active since {formatDate(data.createdAt)}</p>
         ) : (
-          <p>Subscription {sub.status} on {formatDate(sub.date_modified)}</p>
+          <p>Subscription {data.subsStatus === "inactive" ? "Cancelled" : data.subsStatus} on {formatDate(data.updatedAt)}</p>
         )}
       </div>
-
       <div className={styles.Card}>
-        <h3 className={styles.CardTitle}>{(product?.name) || "Product Name"}</h3>
+        <h3 className={styles.CardTitle}>{(sub.items?.[0]?.product?.categories?.title) || "Product Name"}</h3>
 
         <div className={styles.ProductRow}>
           <Image
-            src={product?.image?.src || "https://placehold.co/100x100"}
-            alt="product"
-            width={100}
-            height={100}
+            src={formatImageUrl(sub.items?.[0]?.product?.productImage?.url) || "https://placehold.co/100x100"}
+            alt="product image"
+            width={80}
+            height={80}
             style={{ objectFit: "contain" }}
           />
 
           <div className={styles.ProductInfo}>
-            <p className={styles.ProductName}>{(product?.name)}</p>
+            <p className={styles.ProductName}>{sub.items?.[0]?.product?.name || "Product Name"}</p>
             <p className={styles.ProductMeta}>
-              {product?.meta_data?.find(m => m.key === "pa_weight")?.value || "N/A"} &nbsp;|&nbsp; Qty: {product?.quantity}
+              {(() => {
+                const item = sub?.items?.[0];
+                const selectedVariant = item?.product?.variants?.find(v => v.id === item.variantID);
+
+                return (
+                  <>
+                    {/* 1. Show Variant Weight if it exists */}
+                    {selectedVariant && (
+                      <>
+                        <span>{`${selectedVariant.variantName}g`}</span>
+                        <span className={styles.smallLine}>&nbsp;|&nbsp;</span>
+                      </>
+                    )}
+
+                    {/* 2. Quantity (Always shows) */}
+                    <span>Qty: {item?.quantity || 0}x Bag amount</span>
+                  </>
+                );
+              })()}
             </p>
 
             <div className={styles.DetailsGrid}>
               <p>
-                <span>Delivery Frequency:</span> {sub.billing_interval} {sub.billing_period}
+                <span>Delivery Frequency:</span> {(() => {
+                  const item = sub?.items?.[0];
+                  const variantID = item?.variantID;
+                  // 1. Find the active variant (if one is selected)
+                  const selectedVariant = item?.product?.variants?.find(v => v.id === variantID);
+                  // 2. Get the list of frequencies (check variant first, then product)
+                  const availableFreqs = selectedVariant?.subFreq || item?.product?.subFreq || [];
+
+                  // 3. Match the specific frequency choice by ID
+                  const matchedFreq = availableFreqs.find(f => f.id === item?.subFreqID);
+
+                  return matchedFreq
+                    ? `Every ${matchedFreq.duration} ${matchedFreq.interval}${matchedFreq.duration > 1 ? 's' : ''}`
+                    : "Standard Interval";
+                })()}
               </p>
               <p>
-                <span>Price per delivery:</span> {sub.currency} {sub.total}
-              </p>
+                <span>Price per delivery:</span> AED {(data.financials?.subtotal / 100).toFixed(2)}              </p>
               <p>
                 <span>
-                  {sub.status === "active"
+                  {sub.subsStatus === "active"
                     ? "Next Payment:"
                     : "Last Payment:"}
                 </span>{" "}
-                {sub.status === "active" ? formatDate(sub.next_payment_date_gmt) : formatDate(sub.last_payment_date_gmt)}
+                {data.subsStatus === "active"
+                  ? formatDate(data.nextPaymentDate)
+                  : formatDate(data.updatedAt)
+                }
               </p>
             </div>
           </div>
@@ -157,9 +173,10 @@ export default function SubscriptionDetailPage({ params }) {
               </svg>
             </div>
             <div className={styles.InfoHeaderRight}>
-              <p>{sub.shipping.first_name} {sub.shipping.last_name}</p>
+              <p>{data.shippingAddress?.addressFirstName} {data.shippingAddress?.addressLastName}</p>
               <p>
-                {sub.shipping.address_1} {sub.shipping.address_2}, {sub.shipping.city} {sub.shipping.state} {sub.shipping.postcode}
+                {data.shippingAddress?.addressLine1} {data.shippingAddress?.addressLine2 && `, ${data.shippingAddress.addressLine2}`},
+                {data.shippingAddress?.city} {data.shippingAddress?.emirates}
               </p>
             </div>
           </div>
@@ -190,7 +207,7 @@ export default function SubscriptionDetailPage({ params }) {
               </g>
             </svg>
 
-            <p>{sub.billing.phone || sub.shipping.phone || "No phone provided"}</p>
+            <p>{data.user?.phone || "No phone provided"}</p>
           </div>
         </div>
       </div>
@@ -201,11 +218,17 @@ export default function SubscriptionDetailPage({ params }) {
         <div className={styles.InfoBoxbt}>
           <p>
             <strong>
-              {sub.status === "active" ? "Next Payment" : "Last Payment"}
+              {data.subsStatus === "active" ? "Next Payment" : "Last Payment"}
             </strong>
           </p>
-          <p>{sub.status === "active" ? formatDate(sub.next_payment_date_gmt) : formatDate(sub.last_payment_date_gmt)}</p>
-          <p>{sub.payment_method_title || "Credit Card"}</p>
+          <p>
+            {data.subsStatus === "active"
+              ? formatDate(data.nextPaymentDate)
+              : formatDate(data.updatedAt)}
+          </p>
+
+          {/* We use stripeData or default to "Credit Card" */}
+          <p>{data.stripeData?.brand || "Credit Card"}</p>
         </div>
 
         <div className={styles.Table}>
@@ -216,13 +239,31 @@ export default function SubscriptionDetailPage({ params }) {
             <span>Total</span>
           </div>
 
-          {paymentHistory && paymentHistory.length > 0 ? (
-            paymentHistory.map((invoice) => (
-              <div key={invoice.id} className={styles.TableRow}>
-                <span>{formatDate(invoice.created * 1000)}</span>
-                <span>Credit Card</span>
-                <a href={invoice.invoice_pdf} target="_blank" rel="noopener noreferrer" className={styles.ViewLink}>View</a>
-                <span>{invoice.currency.toUpperCase()} {(invoice.amount_paid / 100).toFixed(2)}</span>
+          {data.paymentStatus === "completed" ? (
+            [data].map((transaction) => (
+              <div key={transaction.id} className={styles.TableRow}>
+                {/* Transaction Date */}
+                <span>{formatDate(transaction.createdAt)}</span>
+
+                {/* Brand: Uses stripeData or fallback */}
+                <span>{transaction.stripeData?.brand || "Credit Card"}</span>
+
+                {/* Receipt Link */}
+                {transaction.stripeData?.receipt_url ? (
+                  <a
+                    href={transaction.stripeData.receipt_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.ViewLink}
+                  >
+                    View
+                  </a>
+                ) : (
+                  <span>—</span>
+                )}
+
+                {/* Amount: Fixed to 2 decimals */}
+                <span>AED {(transaction.financials?.subtotal / 100).toFixed(2)}</span>
               </div>
             ))
           ) : (
@@ -233,16 +274,46 @@ export default function SubscriptionDetailPage({ params }) {
         </div>
       </div>
 
-      {sub.status === "active" && (
+      {data.subsStatus === "active" && (
         <>
           <button
             className={styles.CancelBtn}
             onClick={handleCancel}
             disabled={cancelling}
-            style={{ opacity: cancelling ? 0.7 : 1, cursor: cancelling ? 'not-allowed' : 'pointer' }}
+            style={{
+              opacity: cancelling ? 0.7 : 1,
+              cursor: cancelling ? 'not-allowed' : 'pointer'
+            }}
           >
-            {cancelling ? "Cancelling..." : "Cancel Subscription"}
+            {cancelling ? 'Processing...' : 'Cancel Subscription'}
           </button>
+          {isPopupOpen && (
+            <SubPopup
+              sub={sub}
+              onClose={() => setIsPopupOpen(false)}
+              setSubData={setData}
+              onConfirm={async (reason) => {
+                setCancelling(true);
+                try {
+                  const response = await axiosClient.get(`/api/web-subscription/${subscriptionId}/cancel`, {
+                    params: { reason }
+                  });
+
+                  if (response.status === 200) {
+                    setData(prev => ({ ...prev, subsStatus: 'inactive' }));
+                    setIsPopupOpen(false);
+                    alert("Subscription cancelled successfully.");
+                  } else {
+                    console.error("Failed to cancel");
+                  }
+                } catch (err) {
+                  console.error("Network error:", err);
+                } finally {
+                  setCancelling(false);
+                }
+              }}
+            />
+          )}
           <p className={styles.Note}>
             Your subscription remains active until cancelled. You may cancel at
             any time.

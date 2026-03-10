@@ -2,11 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "../page.module.css";
 import { validateRequired, validateUAEPhone } from "@/utils/validatorFunctions";
-import DeleteAddressPopup from "@/app/account/_components/ProfileComponents/_components/DeleteAddressPopup";
-import AddressFormPopup from "@/app/account/_components/ProfileComponents/_components/AddressFormPopup";
-import { UAE_STATES, ADDRESS_LABELS } from "@/app/account/_components/ProfileComponents/profileConstants";
+import DeleteAddressPopup from "@/app/account/profile/_components/ProfileComponents/_components/DeleteAddressPopup";
+import AddressFormPopup from "@/app/account/profile/_components/ProfileComponents/_components/AddressFormPopup";
+import { UAE_STATES, ADDRESS_LABELS } from "@/app/account/profile/_components/ProfileComponents/profileConstants";
 
-import { updateAddressAPI, deleteAddressAPI, saveAddressAPI } from "@/app/account/_components/ProfileComponents/profileApiUtils";
+import { updateAddressAPI, deleteAddressAPI, saveAddressAPI } from "@/app/account/profile/_components/ProfileComponents/profileApiUtils";
 
 export default function ShippingAddressSection({
     delivery,

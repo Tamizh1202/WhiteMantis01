@@ -233,9 +233,11 @@ export const buildSubscriptionPayload = ({
 export const buildSuccessUrl = (checkoutMode, data) => {
     let url = "";
     if (checkoutMode === "subscription") {
-        url = `/checkout/success?type=subscription&id=${data.wpSubscriptionId}`;
+        const subId = data.dbSubscriptionId || data.wpSubscriptionId || data.id || data.subscriptionId;
+        url = `/checkout/success?type=subscription&id=${subId}`;
     } else {
-        url = `/checkout/success?type=order&id=${data.orderId}&order_id=${data.orderId}`;
+        const orderId = data.dbOrderId || data.orderId || data.id;
+        url = `/checkout/success?type=order&id=${orderId}&order_id=${orderId}`;
     }
     if (data.guestAccessToken) {
         url += `&token=${encodeURIComponent(data.guestAccessToken)}`;

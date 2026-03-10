@@ -280,27 +280,23 @@ function CheckoutContent() {
   }
   if (!checkoutMode) return null;
 
-  // ── Stripe Elements options ─────────────────────────────────────────────────
+  // ── Stripe Elements options ───────────────────────────────────────────────── 
   const stripeAmount = Math.max(100, Math.round((cartTotals.total || 0) * 100));
   const stripeOptions = {
+    appearance: { theme: "stripe" },
+    paymentMethodCreation: "manual",
     mode: "payment",
-    amount: stripeAmount,
+    amount: stripeAmount, // Pass in fils
     currency: "aed",
-    setup_future_usage: checkoutMode === "subscription" || (checkoutMode === "cart" && status === "authenticated") ? "off_session" : undefined,
-    defaultValues: {
-      billingDetails: {
-        email: email,
-        name: `${shippingForm.firstName} ${shippingForm.lastName}`.trim(),
-        phone: shippingForm.phone,
-      }
-    }
-  };
+    ...((checkoutMode === 'cart' && session?.user) && { setup_future_usage: 'off_session' }),
+  }
+
 
   return (
     <Elements
       stripe={stripePromise}
       options={stripeOptions}
-      key={`${status === "authenticated" ? "authenticated" : "guest"}-${email}`}
+      key={`${session?.user?.id || 'guest'}-${email}`}
     >
       <CheckoutForm
         session={session}

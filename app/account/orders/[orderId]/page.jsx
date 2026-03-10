@@ -1,12 +1,8 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import axiosClient from "@/lib/axios";
+import ProductDetail from "./_components/ProductDetail/ProductDetails";
 import DelivereyDetails from "./_components/delivery-details/page";
 import OrderDetails from "./_components/order-details/page";
 import Invoice from "./_components/invoice/page";
-import styles from "../page.module.css";
-import ProductDetail from "./_components/ProductDetail/ProductDetails";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 export default function OrderDetailPage({ params }) {
   const { orderId } = React.use(params);
@@ -16,8 +12,8 @@ export default function OrderDetailPage({ params }) {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/web-orders/${orderId}?depth=2`);
-        const data = await response.json();
+        const response = await axiosClient.get(`/api/web-orders/${orderId}?depth=2`);
+        const data = response.data;
 
         if (data) {
           setOrder(data);
