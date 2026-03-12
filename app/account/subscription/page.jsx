@@ -241,11 +241,11 @@ export default function SubscriptionPage() {
                   </div>
                   <div className={`${styles.ActiveMobileMeta} ${styles.MobileOnly}`}>
                     <div className={styles.MobileMetaRow}>
-                      <span>Order Date:</span>
+                      <span style={{ color: "black" }}>Order Date:</span>
                       <span>{formatDate(sub.date_created)}</span>
                     </div>
                     <div className={styles.MobileMetaRow}>
-                      <span>Subscription ID:</span>
+                      <span >Subscription ID:</span>
                       <span>{sub.id}</span>
                     </div>
                   </div>
@@ -299,7 +299,87 @@ export default function SubscriptionPage() {
                     <p>Order ID:&nbsp;&nbsp;#{sub.id}</p>
                   </div>
                 </div>
+                <div className={`${styles.edit} ${styles.MobileOnly}`}>
+                  <div className={styles.main}>
+                    <div className={styles.edit1}>
+                      <div className={styles.edit11}>
+                        <div className={styles.pastProdTitle}>
+                          <h4>{`${sub.items?.[0]?.product?.categories?.title} Subscription  ` || "Subscription Product"}</h4>
+                        </div>
+                        <div className={styles.PastListBottomRight}>
+                          <Link href={`/account/subscription/${sub.id}`}>
+                            Subscription Details
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                    {/* editss */}
+                    <div className={styles.edit2}>
+                      <div className={styles.pastProdImage}>
+                        <Image
+                          src={
+                            sub.items?.[0]?.product?.productImage?.url
+                              ? `https://whitemantis-app.vercel.app${sub.items?.[0]?.product?.productImage?.url}`
+                              : "https://placehold.co/100x100"
+                          }
+                          alt="product image"
+                          width={80}
+                          height={80}
+                          style={{ objectFit: "contain" }}
+                        />
+                      </div>
+                      <div className={styles.coloumn}>
+                        <div className={styles.pastprodTag}>
+                          <p>{sub.items?.[0]?.product?.name} {sub.items?.[0]?.product?.tagline}</p>
+                          <div className={styles.edit21}>
+                            {(() => {
+                              const item = sub?.items?.[0];
+                              const selectedVariant = item?.product?.variants?.find(v => v.id === item.variantID);
 
+                              // If we have a variant, show the Weight AND the Vertical Line
+                              if (selectedVariant) {
+                                return (
+                                  <>
+                                    <div className={styles.pastprodQty}>
+                                      <p>{`${selectedVariant.variantName}g`}</p>
+                                    </div>
+                                    <div className={styles.smallLine}>|</div>
+                                  </>
+                                );
+                              }
+
+                              // If no variant is found, return nothing here
+                              return null;
+                            })()}
+                            <div className={styles.pastprodQty}>
+                        <p>Qty: {sub.items?.[0]?.quantity || 0}x Bag amount</p>
+                      </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+
+
+
+                      
+
+                    </div>
+
+                  </div>
+
+
+
+
+
+
+
+
+
+
+                  {/* edit end */}
+                </div>
                 <div className={styles.PastListBottom}>
                   <div className={styles.PastListBottomLeft}>
                     <div className={styles.pastProdImage}>

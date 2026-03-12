@@ -23,7 +23,7 @@ const AddressFormPopup = ({
             <div className={styles.Popup}>
                 <h3>{title}</h3>
 
-                {/* First name + Last name */}
+                {/* First 11 + Last name */}
                 <div className={styles.divide}>
                     <input
                         placeholder="First name"
@@ -65,7 +65,7 @@ const AddressFormPopup = ({
                 />
 
                 {/* City + Emirate row */}
-                <div className={styles.Row} style={{ display: "flex" }}>
+                <div className={styles.Row2} >
                     <input
                         placeholder="City"
                         value={addressForm.city || ""}
@@ -75,14 +75,7 @@ const AddressFormPopup = ({
                         className={styles.StateSelect}
                         value={addressForm.state || ""}
                         onChange={(e) => onFormChange("state", e.target.value)}
-                        style={{
-                            padding: "10px",
-                            border: "1px solid #2f362a4d",
-                            fontSize: "15px",
-                            color: "#6e736a",
-                            width: "100%",
-                            outline: "none",
-                        }}
+                        
                     >
                         <option value="" disabled>Select Emirate</option>
                         {UAE_STATES.map((s) => (

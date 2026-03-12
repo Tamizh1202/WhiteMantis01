@@ -41,7 +41,7 @@ export const addToCartToast = (product, openCart) => {
             </div>
 
             <div className={styles.productInfo}>
-              <p className={styles.productName}>{`${product.name} ${product.tagline}${product.variantName ? `, ${product.variantName}` : ''}`}</p>
+              <p className={styles.productName}>{`${product.name} ${product.tagline}${product.variantName ? `, ${product.variantName}g` : ''}`}</p>
               <p className={styles.productQty}>Qty: {product.quantity}</p>
             </div>
           </div>

@@ -324,4 +324,166 @@
     .FrequencyOptions {
         grid-template-columns: repeat(2, 1fr);
     }
+
+}
+
+/* Subscription Popup Styles - Synchronized from Listing */
+.PopupOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.Popup {
+    background: #fff;
+    width: 600px;
+    padding: 28px;
+    position: relative;
+    border-radius: 0px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    animation: popupScale 0.3s ease-out;
+}
+
+@keyframes popupScale {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.Popup h3 {
+    font-family: var(--lexend);
+    font-size: 20px;
+    font-weight: 500;
+    color: #2F362A;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.PopupClose {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: 400;
+    color: #6e736a;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.PopupClose:hover {
+    color: #2f362a;
+}
+
+.SubscriptionSection {
+    margin-bottom: 28px;
+}
+
+.SubscriptionSection h4 {
+    font-family: var(--lato);
+    font-size: 14px;
+    font-weight: 500;
+    color: #2f362a;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.FrequencyOptions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.FrequencyBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid #d6d6d6;
+    background: #ffffff;
+    font-size: 14px;
+    font-family: var(--lato);
+    color: #2f362a;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.FrequencyBtn:hover {
+    border-color: #6c7a5f;
+}
+
+.FrequencyBtn::after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid #6e736a;
+    background: #ffffff;
+}
+
+.ActiveFrequency {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1.5px solid #6c7a5f;
+    background: #ffffff;
+    font-size: 14px;
+    font-family: var(--lato);
+    color: #2f362a;
+}
+
+.ActiveFrequency::after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid #6c7a5f;
+    background: radial-gradient(circle, #6c7a5f 0 3px, transparent 4px);
+}
+
+.PopupActions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.PopupConfirm {
+    width: 100%;
+    padding: 14px;
+    background: #6c7a5f;
+    color: #ffffff;
+    border: none;
+    font-family: var(--lato);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.PopupConfirm:hover {
+    background: #5a6650;
+}
+
+@media (max-width: 640px) {
+    .Popup {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .FrequencyOptions {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

@@ -45,8 +45,7 @@ const BuyNowPopup = ({ product, handleOpenSubscribePopup, getDisplayData }) => {
 
                         <div className={styles.HeaderRow}>
                             <div className={styles.TitleArea}>
-                                <h2>{product.name}</h2>
-                                <p>{product.tagline || "Select quantity"}</p>
+                                <h2>{product.name} {product.tagline}</h2>
                             </div>
                             <div className={styles.QtySelector}>
                                 <button onClick={decrement}>-</button>

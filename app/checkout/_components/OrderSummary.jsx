@@ -35,7 +35,7 @@ export default function OrderSummary({ product, cartTotals, delivery, checkoutMo
                             </div>
                             <div className={styles.ItemInfo}>
                                 <div className={styles.ItemMainRow}>
-                                    <div className={styles.ItemName}>{item.name}</div>
+                                    <div className={styles.ItemName}>{item.name} {item.tagline}</div>
                                     {isSubscription && (
                                         <div className={styles.ItemPrice}>
                                             AED {(parseFloat(item.price?.final_price || item.price) || 0).toFixed(0)}
@@ -45,7 +45,7 @@ export default function OrderSummary({ product, cartTotals, delivery, checkoutMo
                                 {isSubscription ? (
                                     <>
                                         <div className={styles.ItemSubRow}>
-                                            {item.weight && <span>{item.weight}</span>}
+                                            {item.weight && <span>{item.weight}g</span>}
                                             {item.weight && <span>&nbsp;|&nbsp;</span>}
                                             <span>{item.quantity}x Bag amount</span>
                                         </div>
@@ -58,10 +58,10 @@ export default function OrderSummary({ product, cartTotals, delivery, checkoutMo
                                 ) : (
                                     <>
                                         {item?.vId && (<span>
-                                            , {item?.variantName || ''}
+                                            , {item?.variantName}g
                                         </span>)}
                                         {item?.frequency && (
-                                            <div className={styles.ItemFrequency} style={{fontSize: '12px', color: '#6e736a'}}>
+                                            <div className={styles.ItemFrequency} style={{ fontSize: '12px', color: '#6e736a' }}>
                                                 {item.frequency}
                                             </div>
                                         )}

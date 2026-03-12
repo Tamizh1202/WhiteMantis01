@@ -73,7 +73,7 @@ const SubscriptionPopup = ({
                                         })
                                     }
                                 >
-                                    {v.variantName}
+                                    {v.variantName}g
                                 </button>
                             ))}
                         </div>

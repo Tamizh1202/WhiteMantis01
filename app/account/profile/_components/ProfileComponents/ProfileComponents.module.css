@@ -129,6 +129,11 @@
   grid-template-columns: 1.5fr 1fr;
 }
 
+.Popup .Row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .Name1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -655,7 +660,34 @@
   }
 
   .Row {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+  }
+
+  .Row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    
+    width: 100%;
+    
+  }
+  .Row2 input,
+  .Row2 select {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .divide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    width: 100%;
+  }
+
+  .divide input {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .Name1 {
@@ -732,6 +764,7 @@
   }
 
   .Row {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
   }
 }

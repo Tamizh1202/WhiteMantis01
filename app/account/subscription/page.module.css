@@ -416,6 +416,7 @@
   cursor: pointer;
 }
 
+/* important */
 .DesktopOnly {
   display: flex;
 }
@@ -428,18 +429,18 @@
 .PastMobileMeta {
   display: none;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px 20px 0 20px;
+
+
 }
 
 .MobileMetaRow {
   display: flex;
-  justify-content: space-between;
+
 }
 
 .MobileMetaRow span {
   font-family: var(--lato);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   color: #6E736A;
 }
@@ -458,66 +459,120 @@
   }
 
   .MobileOnly {
-    display: flex;
+    display: block;
   }
-
-  /* 
-
-
-
 
   .ActiveListTop {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
+
   }
 
+  /* main, lower bottom */
   .ActiveListBottom {
-    padding: 20px;
+    padding: 24px;
+
   }
 
   .ActiveListBottomtOP {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
+    position: relative;
+
+    /* Essential anchor */
+    /* Give some breathing room at the top */
   }
 
   .ActiveSubRight {
-    justify-content: flex-start;
-    border: 1px solid black;
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* align-self and order are no longer needed here */
   }
 
   .ViewCta {
     justify-content: flex-end;
-  }
-  
 
+
+  }
+
+  /* till here only lower is for past */
   .pastListTop {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+
   }
 
   .PastListBottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
+    display: none;
   }
 
-  .PastListBottomRight {
-    align-self: flex-start;
+  .edit {
+    padding: 28px 30px;
   }
 
-  .ActiveMobileMeta,
-  .PastMobileMeta {
+  .edit11 .pastProdTitle {
+    width: 40%;
+  }
+
+  .edit11 {
     display: flex;
+    flex-direction: row;
+    gap: 47px;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .edit2 {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .edit2 .pastprodTag {
+    width: 100%;
+  }
+
+  .edit21 {
+    display: flex;
+    flex-direction: row;
+
+  }
+
+  .coloumn {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ActiveMobileMeta {
+    display: flex;
+    flex-direction: column;
+    /* This is the default, but good to be explicit */
+
+    /* Pushes one to the left, one to the right */
+    gap: 11px;
+    /* Adds space between them so they don't touch */
+    width: 100%;
     padding-bottom: 10px;
+  }
+
+  .MobileMetaRow {
+    display: flex;
+    gap: 4px;
+    /* Space between "Order Date:" and the actual date */
+
+    /* Prevents the text from wrapping inside the row */
   }
 
   .ActiveTop h3,
   .PastSubscriptionsTop h3 {
     font-size: 20px;
-  }*/
+  }
 }
 
 
@@ -538,7 +593,6 @@
 
 
 @media (min-width: 1024px) and (max-width: 1440px) {
-
   .MainContainer {
     max-width: 700px;
   }

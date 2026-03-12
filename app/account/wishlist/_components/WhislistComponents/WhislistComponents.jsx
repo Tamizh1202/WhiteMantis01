@@ -329,7 +329,7 @@ const WhislistComponents = () => {
                       onClick={() => handleProductClick(productDoc.slug)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <h4>{productDoc.name}</h4>
+                      <h4>{productDoc.name} {productDoc.tagline}</h4>
                     </div>
 
                     {availableWeights.length > 0 && (
@@ -341,7 +341,7 @@ const WhislistComponents = () => {
                         >
                           {availableWeights.map((w) => (
                             <option key={w.label} value={w.label}>
-                              {w.label}
+                              {w.label}g
                             </option>
                           ))}
                         </select>

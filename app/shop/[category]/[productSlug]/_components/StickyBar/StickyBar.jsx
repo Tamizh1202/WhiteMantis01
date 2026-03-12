@@ -124,7 +124,7 @@ const StickyBar = ({ product }) => {
                     className={styles.WeightSelect}
                     onClick={() => setShowWeightMenu((prev) => !prev)}
                   >
-                    <span>{selectedWeight?.variantName}</span>
+                    <span>{selectedWeight?.variantName}g</span>
 
                     <svg
                       width="13"
@@ -153,7 +153,7 @@ const StickyBar = ({ product }) => {
                             setShowWeightMenu(false);
                           }}
                         >
-                          {v.variantName}
+                          {v.variantName}g
                         </button>
                       ))}
                     </div>
@@ -161,7 +161,7 @@ const StickyBar = ({ product }) => {
                 </>
               ) : (
                 <div className={styles.SingleWeight}>
-                  {selectedWeight?.variantName}
+                  {selectedWeight?.variantName}g
                 </div>
               )}
             </div>
@@ -282,7 +282,7 @@ const StickyBar = ({ product }) => {
                         setSelectedSubWeight(v.variantName);
                       }}
                     >
-                      {v.variantName}
+                      {v.variantName}g
                     </button>
                   ))}
                 </div>

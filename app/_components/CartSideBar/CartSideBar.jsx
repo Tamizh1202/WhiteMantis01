@@ -124,7 +124,7 @@ const CartSideBar = () => {
                           </div>
                           <div className={styles.ProdDetails}>
                             <h5>
-                              {`${item.name} ${item.tagline}${item.variantName ? `, ${item.variantName}` : ''}`}
+                              {`${item.name} ${item.tagline}${item.variantName ? `, ${item.variantName}g` : ''}`}
                             </h5>
                             <h4>
                               AED{" "}

@@ -50,7 +50,7 @@ const ProductDetail = ({ order }) => {
                                 <p>
                                     {item.product?.variants?.find(v => v.id === item.variantID) && (
                                         <>
-                                            {item.product.variants.find(v => v.id === item.variantID).variantName}
+                                            {item.product.variants.find(v => v.id === item.variantID).variantName}g
                                             &nbsp; &nbsp;<span className={styles.Separator}>|</span>&nbsp;&nbsp;
                                         </>
                                     )}
