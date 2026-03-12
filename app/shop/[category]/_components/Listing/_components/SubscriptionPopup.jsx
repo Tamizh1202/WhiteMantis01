@@ -24,10 +24,12 @@ const SubscriptionPopup = ({
                     onClick={() => setShowSubscribePopup(false)}
                     aria-label="Close"
                 >
-                    ✕
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
                 </button>
 
-                <h3>SUBSCRIPTION OPTIONS</h3>
+                <h3>Subscription Options</h3>
 
                 {/* Bag Amount (Quantity) Selection */}
                 <div className={styles.SubscriptionSection}>
@@ -43,7 +45,7 @@ const SubscriptionPopup = ({
                                 }
                                 onClick={() => setSelectedQuantity(qty)}
                             >
-                                {qty}x
+                                {qty} Bags
                             </button>
                         ))}
                     </div>
@@ -52,7 +54,7 @@ const SubscriptionPopup = ({
                 {/* Variant Selection (e.g. Size/Bag Amount if they are variants) */}
                 {selectedProduct.parent.hasVariantOptions && (
                     <div className={styles.SubscriptionSection}>
-                        <h4>Selection</h4>
+                        <h4>Weight Selection</h4>
                         <div className={styles.FrequencyOptions}>
                             {selectedProduct.parent.variants.map((v) => (
                                 <button
@@ -79,7 +81,7 @@ const SubscriptionPopup = ({
                 )}
 
                 <div className={styles.SubscriptionSection}>
-                    <h4>Frequency</h4>
+                    <h4>Delivery Frequency</h4>
                     <div className={styles.FrequencyOptions}>
                         {selectedProduct.subFreqs?.map((freq, idx) => (
                             <button
@@ -102,7 +104,7 @@ const SubscriptionPopup = ({
                         onClick={handleSubscriptionCheckout}
                         className={styles.PopupConfirm}
                     >
-                        Subscribe – Save {selectedProduct.discount}%
+                        Subscribe & Save {selectedProduct.discount}%
                     </button>
                 </div>
             </div>

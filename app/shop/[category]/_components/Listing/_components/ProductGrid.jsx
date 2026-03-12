@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import AddToCart from "@/app/_components/AddToCart";
 import Wishlist from "@/app/_components/Whishlist";
+import BuyNowPopup from "./BuyNowPopup/BuyNowPopup";
 
 const ProductGrid = ({
     filteredProducts,
@@ -149,18 +150,27 @@ const ProductGrid = ({
                                         </div>
                                     </Link>
                                     <div className={styles.ProductActions}>
-                                        <AddToCart product={cartProduct} />
-                                        {/* Subscribe button with popup functionality - only show if subscription product exists */}
-                                        {(product.hasSimpleSub ||
-                                            (product.hasVariantOptions &&
-                                                product.variants?.some((v) => v.hasVariantSub))) && (
-                                                <button
-                                                    className={styles.Subscribe}
-                                                    onClick={() => handleOpenSubscribePopup(product)}
-                                                >
-                                                    Subscribe
-                                                </button>
-                                            )}
+                                        <div className={styles.DesktopActions}>
+                                            <AddToCart product={cartProduct} />
+                                            {/* Subscribe button with popup functionality - only show if subscription product exists */}
+                                            {(product.hasSimpleSub ||
+                                                (product.hasVariantOptions &&
+                                                    product.variants?.some((v) => v.hasVariantSub))) && (
+                                                    <button
+                                                        className={styles.Subscribe}
+                                                        onClick={() => handleOpenSubscribePopup(product)}
+                                                    >
+                                                        Subscribe
+                                                    </button>
+                                                )}
+                                        </div>
+                                        <div className={styles.MobileActions}>
+                                            <BuyNowPopup
+                                                product={product}
+                                                getDisplayData={getDisplayData}
+                                                handleOpenSubscribePopup={handleOpenSubscribePopup}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -60,7 +60,7 @@ export async function GET(
         const filename = generateInvoiceFilename(id, type as any);
 
         // Return PDF as attachment
-        return new Response(pdfBuffer, {
+        return new Response(pdfBuffer as any, {
             headers: {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename="${filename}"`,

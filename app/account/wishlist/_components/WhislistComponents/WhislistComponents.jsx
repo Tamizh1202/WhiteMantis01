@@ -4,6 +4,9 @@ import { useWishlist } from "../../../../_context/WishlistContext";
 import AddToCart from "@/app/_components/AddToCart";
 import styles from "./WhislistComponents.module.css";
 import Image from "next/image";
+import BuyNowPopup from "@/app/shop/[category]/_components/Listing/_components/BuyNowPopup/BuyNowPopup";
+import SubscriptionPopup from "@/app/shop/[category]/_components/Listing/_components/SubscriptionPopup";
+import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { formatImageUrl } from "@/lib/imageUtils";
 
@@ -26,6 +29,13 @@ const WhislistComponents = () => {
   // Track selected variation for each product
   const [selectedVariations, setSelectedVariations] = useState({});
 
+  // Subscription Popup State
+  const [showSubscribePopup, setShowSubscribePopup] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedFrequency, setSelectedFrequency] = useState(null);
+  const [selectedQuantity, setSelectedQuantity] = useState(2);
+  const popupRef = useRef(null);
+
   // Initialize default selections when wishlist data loads
   useEffect(() => {
     if (wishlistData.length > 0) {
@@ -40,6 +50,22 @@ const WhislistComponents = () => {
     }
   }, [wishlistData]);
 
+  useEffect(() => {
+    if (!showSubscribePopup) return;
+
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        setShowSubscribePopup(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSubscribePopup]);
+
   const handleRemove = async (productId) => {
     console.log("Deleting ID:", productId); // Use the variable 'id' passed in
     await remove(productId);
@@ -47,6 +73,88 @@ const WhislistComponents = () => {
 
   const handleProductClick = (slug) => {
     router.push(`/product/${slug}`);
+  };
+
+  // Helper to get display data for BuyNowPopup
+  const getDisplayData = (product) => {
+    let price = product.regularPrice;
+    let salePrice = product.salePrice;
+    let imageSrc = formatImageUrl(product.productImage);
+    let variationId = null;
+
+    if (product.hasVariantOptions && product.variants?.length > 0) {
+      const firstVariant = product.variants[0];
+      price = firstVariant.variantRegularPrice;
+      salePrice = firstVariant.variantSalePrice;
+      imageSrc = formatImageUrl(firstVariant.variantImage);
+      variationId = firstVariant.id;
+    }
+
+    return {
+      price: salePrice || price,
+      regular_price: price,
+      sale_price: salePrice,
+      image: imageSrc,
+      cartProduct: {
+        productId: product.id,
+        variationId: variationId,
+        quantity: 1,
+      },
+    };
+  };
+
+  const handleOpenSubscribePopup = (product) => {
+    let subFreqs = [];
+    let discount = 0;
+
+    if (product.hasVariantOptions && product.variants?.length > 0) {
+      const subVariant = product.variants.find((v) => v.hasVariantSub) || product.variants[0];
+      subFreqs = subVariant.subFreq || [];
+      discount = subVariant.subscriptionDiscount || 0;
+      setSelectedProduct({
+        parent: product,
+        variant: subVariant,
+        isVariant: true,
+        discount,
+        subFreqs,
+      });
+    } else {
+      subFreqs = product.subFreq || [];
+      discount = product.subscriptionDiscount || 0;
+      setSelectedProduct({
+        parent: product,
+        isVariant: false,
+        discount,
+        subFreqs,
+      });
+    }
+
+    if (subFreqs.length > 0) {
+      setSelectedFrequency(subFreqs[0]);
+    }
+
+    setSelectedQuantity(2);
+    setShowSubscribePopup(true);
+  };
+
+  const handleSubscriptionCheckout = () => {
+    if (!selectedProduct || !selectedFrequency) return;
+
+    const params = new URLSearchParams({
+      mode: "subscription",
+      productId: selectedProduct.parent.id,
+      subscriptionId: selectedFrequency.id || selectedFrequency._id || "",
+      variationId: selectedProduct.isVariant ? selectedProduct.variant.id : "",
+      quantity: selectedQuantity.toString(),
+    });
+
+    router.push(`/checkout?${params.toString()}`);
+  };
+
+  const getFrequencyLabel = (freq) => {
+    if (!freq) return "";
+    const plural = freq.duration > 1 ? "s" : "";
+    return `Every ${freq.duration} ${freq.interval}${plural}`;
   };
   console.log('initial data', wishlistData)
   const handleWeightChange = (productId, weight) => {
@@ -242,19 +350,52 @@ const WhislistComponents = () => {
                   </div>
 
                   <div className={styles.CardBottom}>
-                    <AddToCart
-                      product={{
-                        productId: productDoc.id,
-                        variationId: selectedVariation?.id,
-                        quantity: 1,
-                      }}
-                    />
+                    <div className={styles.DesktopActions}>
+                      <AddToCart
+                        product={{
+                          productId: productDoc.id,
+                          variationId: selectedVariation?.id,
+                          quantity: 1,
+                        }}
+                      />
+                      {(productDoc.hasSimpleSub ||
+                        (productDoc.hasVariantOptions &&
+                          productDoc.variants?.some((v) => v.hasVariantSub))) && (
+                          <button
+                            className={styles.Subscribe}
+                            onClick={() => handleOpenSubscribePopup(productDoc)}
+                          >
+                            Subscribe
+                          </button>
+                        )}
+                    </div>
+                    <div className={styles.MobileActions}>
+                      <BuyNowPopup
+                        product={productDoc}
+                        getDisplayData={getDisplayData}
+                        handleOpenSubscribePopup={handleOpenSubscribePopup}
+                      />
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
         )}
+        <SubscriptionPopup
+          showSubscribePopup={showSubscribePopup}
+          setShowSubscribePopup={setShowSubscribePopup}
+          selectedProduct={selectedProduct}
+          setSelectedProduct={setSelectedProduct}
+          selectedFrequency={selectedFrequency}
+          setSelectedFrequency={setSelectedFrequency}
+          selectedQuantity={selectedQuantity}
+          setSelectedQuantity={setSelectedQuantity}
+          handleSubscriptionCheckout={handleSubscriptionCheckout}
+          getFrequencyLabel={getFrequencyLabel}
+          popupRef={popupRef}
+          styles={styles}
+        />
       </div>
     </div>
   );

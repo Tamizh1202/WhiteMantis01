@@ -167,7 +167,31 @@
 .CardBottom {
     display: flex;
     justify-content: left;
+    width: 100%;
+}
 
+.DesktopActions {
+    display: contents;
+}
+
+.MobileActions {
+    display: none;
+    width: 100%;
+}
+
+.Subscribe {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    width: 100%;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+    color: #464646;
+    font-family: var(--lato);
+    border: 0.75px solid #6c7a5f;
 }
 
 .Bag {
@@ -247,11 +271,17 @@
         font-size: 20px;
     }
 
-    .Bag {
-        font-size: 14px;
-        width: 124px;
-        height: 32px;
-        padding: 0;
+    .CardBottom {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .DesktopActions {
+        display: none;
+    }
+
+    .MobileActions {
+        display: flex;
     }
 }
 
@@ -286,9 +316,12 @@
         padding-right: 10px;
     }
 
-    .Remove svg {
-        width: 100%;
-        height: 100%;
+    .Popup {
+        width: 90%;
+        padding: 24px;
     }
 
+    .FrequencyOptions {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

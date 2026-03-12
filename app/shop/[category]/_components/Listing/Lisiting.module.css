@@ -282,6 +282,15 @@
   width: 100%;
 }
 
+.DesktopActions {
+  display: contents;
+}
+
+.MobileActions {
+  display: none;
+  width: 100%;
+}
+
 .Subscribe {
   display: flex;
   justify-content: center;
@@ -599,13 +608,12 @@
     gap: 8px;
   }
 
-  .ProductActions button {
-    width: 100%;
-    padding: 12px 0;
+  .DesktopActions {
+    display: none;
   }
 
-  .Subscribe {
-    display: none;
+  .MobileActions {
+    display: flex;
   }
 
   .MobileFilterBtn {

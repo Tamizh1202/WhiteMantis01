@@ -1,0 +1,152 @@
+.TriggerBtn {
+    width: 100%;
+    padding: 10px 24px;
+    background-color: #6C7A5F;
+    color: #FFFFFF;
+    border: none;
+    font-family: var(--lato);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.Overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.Popup {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 18px 24px 28px 24px;
+    position: relative;
+
+}
+
+.CloseBtn {
+    margin-left: auto;
+    /* pushes it to the far right in a flex container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+/* The clickable span */
+.CloseBtn {
+    cursor: pointer;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+
+}
+
+.HeaderRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* pushes children to far left and far right */
+    align-items: center;
+    /* optional: vertically align them */
+    margin-bottom: 24px;
+}
+
+.TitleArea h2,
+.TitleArea p {
+    font-family: var(--lato);
+    font-weight: 400;
+
+    color: #6E736A;
+    margin: 0;
+}
+
+
+
+.QtySelector {
+    display: flex;
+    border: 1px solid #2F362A4D;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.QtySelector button {
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    font-family: var(--lexend);
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+    color: #6C7A5F;
+}
+
+.QtySelector span {
+    padding: 0 15px;
+    color: #6C7A5F;
+    font-family: var(--lato);
+    border-left: 1px solid #2F362A4D;
+    border-right: 1px solid #2F362A4D;
+    font-weight: 500;
+}
+
+.PriceArea h2 {
+    font-family: var(--lexend);
+    font-weight: 500;
+    size: 22px;
+    line-height: 100%;
+
+}
+
+.Divider {
+    border: 0;
+    border-top: 1px solid #2F362A4D;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.Actions {
+    display: flex;
+    flex-direction: row;
+    gap: 22px;
+    /* This creates the space between the buttons */
+    width: 100%;
+    margin-top: 24px;
+}
+
+.SubscribeBtn {
+    flex: 1;
+    /* Takes 50% when AddToCart is present */
+    background: white;
+    color: #6C7A5F;
+    border: 1px solid #6C7A5F;
+    width: 100%;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.CartWrapper {
+    flex: 1;
+    /* Takes 50% when Subscribe is present */
+    background-color: #6C7A5F;
+    border: 1px solid #6C7A5F;
+
+    display: flex;
+}
+
+/* If AddToCart is the ONLY child, it will automatically fill the width */
+.CartWrapper button {
+    background: transparent !important;
+    color: white !important;
+    width: 100%;
+    height: 100%;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 47px;
+}

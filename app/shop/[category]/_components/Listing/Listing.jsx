@@ -193,6 +193,7 @@ const Lisiting = () => {
     let price = product.regularPrice;
     let salePrice = product.salePrice;
     let imageSrc = formatImageUrl(product.productImage);
+    let variationId = null;
 
     // If variants exist, prioritize the first variant for listing view (or logic as needed)
     if (product.hasVariantOptions && product.variants?.length > 0) {
@@ -200,6 +201,7 @@ const Lisiting = () => {
       price = firstVariant.variantRegularPrice;
       salePrice = firstVariant.variantSalePrice;
       imageSrc = formatImageUrl(firstVariant.variantImage);
+      variationId = firstVariant.id;
     }
 
     return {
@@ -207,6 +209,11 @@ const Lisiting = () => {
       regular_price: price,
       sale_price: salePrice,
       image: imageSrc,
+      cartProduct: {
+        productId: product.id,
+        variationId: variationId,
+        quantity: 1,
+      },
     };
   };
 
