@@ -37,7 +37,8 @@ export default function Breadcrumb() {
       }
     } else if (third === "profile") {
       crumbs.push({ label: "Profile", href: null });
-      // Add other sections here as needed
+    } else if (third === "whitemantis-beans") {
+      crumbs.push({ label: "Whitemantis Beans", href: null });
     } else {
       crumbs.push({ label: third.charAt(0).toUpperCase() + third.slice(1), href: null });
     }

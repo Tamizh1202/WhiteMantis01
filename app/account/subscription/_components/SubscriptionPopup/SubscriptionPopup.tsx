@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import styles from "./SubscriptionPopup.module.css";
 
-const subPopup = ({ onClose, onConfirm, orderId }) => {
+const subPopup = ({ onClose, onConfirm }) => {
 
     const [selectedReason, setSelectedReason] = useState("");
     const [otherReasonText, setOtherReasonText] = useState("");
@@ -54,9 +54,9 @@ const subPopup = ({ onClose, onConfirm, orderId }) => {
                     </svg>
                 </button>
                 <div className={styles.content}>
-                    <h3>CANCEL ORDER</h3>
+                    <h3>CANCEL SUBSCRIPTION</h3>
                     <p className={styles.description}>
-                        Please let us know why you're cancelling this order. This helps us improve your experience.
+                        Please let us know why you're cancelling this subscription. This helps us improve your experience.
                     </p>
 
                     <div className={styles.reasonsContainer}>
@@ -102,14 +102,14 @@ const subPopup = ({ onClose, onConfirm, orderId }) => {
 
                     <div className={styles.PopupActions}>
                         <button className={styles.KeepBtn} onClick={onClose}>
-                            Keep order
+                            Keep subscription
                         </button>
                         <button
                             className={styles.CancelBtn}
                             onClick={handleConfirm}
                             disabled={isButtonDisabled()}
                         >
-                            Cancel Order
+                            Cancel Subscription
                         </button>
                     </div>
                 </div>

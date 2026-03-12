@@ -7,6 +7,7 @@ import one from "./1.png";
 import whatsappIcon from "./Whatsapp-icon.svg";
 import Link from "next/link";
 import { validateEmail, validateUAEPhone } from "@/utils/validatorFunctions";
+import axiosClient from "@/lib/axios";
 
 const ContactForm = () => {
   const [fullName, setFullName] = useState("");
@@ -49,7 +50,7 @@ const ContactForm = () => {
     }
   ]
 
-  const ENDPOINT = "/api/website/contact";
+  const ENDPOINT = "/api/web-contact-form";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +59,7 @@ const ContactForm = () => {
 
     if (!fullName.trim() || !email.trim() || !phone.trim() || !enquiryType.trim() || !message.trim()) {
       setResponseError(true);
-      setResponseMessage("Invalid Input");
+      setResponseMessage("All fields are required.");
       return;
     }
 
@@ -77,14 +78,33 @@ const ContactForm = () => {
     setLoading(true);
 
     const payload = {
-      full_name: fullName.trim(),
+      fullName: fullName.trim(),
       email: email.trim(),
       phone: phone.trim(),
-      enquiry_type: enquiryType.trim(),
+      inquiryType: enquiryType.trim(),
       message: message.trim(),
     };
 
-    console.log(payload)
+    try {
+      const resp = await axiosClient.post(ENDPOINT, payload);
+
+      if (resp.status === 201) {
+        setResponseMessage("Thank you for your message. We will get back to you soon!");
+      setFullName("");
+        setEmail("");
+        setPhone("");
+        setEnquiryType("");
+        setMessage("");
+      } else {
+        setResponseError(true);
+        setResponseMessage(resp.data.message || "Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      setResponseError(true);
+      setResponseMessage(error.response?.data?.message || "Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UpComing.module.css";
 import one from "./1.png";
+import axiosClient from "@/lib/axios";
 
 const UpComing = () => {
   const [posts, setPosts] = useState([]);
@@ -13,28 +14,19 @@ const UpComing = () => {
 
     async function load() {
       try {
-        const res = await fetch("/api/website/workshops");
-        if (!res.ok) throw new Error("Failed to load");
-        const data = await res.json();
-        if (!cancelled && data && Array.isArray(data.posts)) {
-          const filtered = data.posts.filter((p) => {
-            const rawDate = p.workshop_date ?? p.acf?.workshop_date ?? null;
-            if (!rawDate) return true;
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).toISOString();
+        const nowISO = now.toISOString();
 
-            const s = String(rawDate)
-              .replace(/(\d{1,2})(st|nd|rd|th)/gi, "$1")
-              .replace(/<[^>]*>/g, "")
-              .trim();
-            const parsed = Date.parse(s);
-            if (isNaN(parsed)) return true;
-            const d = new Date(parsed);
+        // Constructing the route with dynamic filters for Upcoming workshops
+        const route = `/api/workshop?where[or][0][eventDate][greater_than]=${today}&where[or][1][and][0][eventDate][equals]=${today}&where[or][1][and][1][eventTime][greater_than]=${nowISO}`;
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            d.setHours(0, 0, 0, 0);
-            return d >= today;
-          });
-          setPosts(filtered);
+        const res = await axiosClient.get(route);
+        const data = res.data;
+
+        if (!cancelled && data) {
+          const docs = Array.isArray(data.docs) ? data.docs : (Array.isArray(data.posts) ? data.posts : []);
+          setPosts(docs);
         }
       } catch (e) {
         console.error("UpComing load error", e);
@@ -87,6 +79,14 @@ const UpComing = () => {
     return `${month} ${getOrdinal(day)}, ${year}`;
   }
 
+  function formatTimeStr(val) {
+    if (!val) return "";
+    const parsed = Date.parse(val);
+    if (isNaN(parsed)) return val;
+    const d = new Date(parsed);
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
   const [modalItem, setModalItem] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -106,18 +106,24 @@ const UpComing = () => {
   }
 
   function renderCard(item, key, full = false) {
-    const imgSrc =
-      item?.featuredImage || item?.acf?.image?.url || (one && (one.src || one));
-    const rawDate = item?.workshop_date || item?.acf?.workshop_date || null;
+    const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "";
+    let imgSrc = item?.workshopImage?.url || item?.featuredImage?.url || item?.featuredImage || item?.acf?.image?.url || (one && (one.src || one));
+
+    // Prefix relative paths with server URL
+    if (typeof imgSrc === "string" && imgSrc.startsWith("/")) {
+      imgSrc = `${serverUrl}${imgSrc}`;
+    }
+
+    const rawDate = item?.eventDate || item?.workshop_date || item?.acf?.workshop_date || null;
     const dateText = formatDateStr(rawDate) || "";
-    const timeText = item?.workshop_time || item?.acf?.workshop_time || "";
+    const timeText = formatTimeStr(item?.eventTime) || item?.workshop_time || item?.acf?.workshop_time || "";
     const title = item?.title || "";
     const fullExcerpt =
       stripHtml(item?.excerpt || item?.content) ||
       "Discover the complete journey of coffee — from the farm to your cup.";
     const excerpt = full ? fullExcerpt : truncate(fullExcerpt, 100);
     const bookLink =
-      item?.workshopLink || item?.acf?.workshop_redirect || item?.link || null;
+      item?.calendyLink || item?.workshopLink || item?.acf?.workshop_redirect || item?.link || null;
 
     return (
       <div className={styles.WorkShopCard} key={key}>

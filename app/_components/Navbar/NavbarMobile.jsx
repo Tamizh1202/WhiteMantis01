@@ -29,11 +29,15 @@ const NavbarMobile = () => {
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        const res = await axiosClient.get("/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100");
+        const res = await axiosClient.get(
+          "/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100",
+        );
         const fetchedCategories = await res.data;
 
         if (res.status !== 200) {
-          throw new Error(fetchedCategories.message || "Categories fetch failed");
+          throw new Error(
+            fetchedCategories.message || "Categories fetch failed",
+          );
         }
         setCategories(fetchedCategories.docs);
       } catch (e) {
@@ -43,7 +47,7 @@ const NavbarMobile = () => {
       }
     };
     fetchCategories();
-  }, [])
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -169,7 +173,6 @@ const NavbarMobile = () => {
                 onClick={() => setShopOpen(!shopOpen)}
               >
                 Our Shop
-
                 <svg
                   className={shopOpen ? styles.Rotate : ""}
                   width="14"
@@ -227,15 +230,16 @@ const NavbarMobile = () => {
               About Us
             </Link>
             <div className={styles.Line}></div>
-            {/* <Link className={styles.Item} href="/workshops">
-              Workshops
-            </Link> */}
+            <Link className={styles.SectionHeader} href="/academy">
+              Academy
+            </Link>
+            <div className={styles.Line}></div>
             <Link
               className={styles.SectionHeader}
               href="/subscription"
               onClick={() => setOpen(false)}
             >
-              Subscriptions
+              Subscription
             </Link>
             <div className={styles.Line}></div>
             <Link
@@ -254,9 +258,10 @@ const NavbarMobile = () => {
               Contact us
             </Link>
             <div className={styles.Line}></div>
-            {/* <Link className={styles.Item} href="/blogs">
+            <Link className={styles.SectionHeader} href="/blogs">
               Blogs
-            </Link> */}
+            </Link>
+            <div className={styles.Line}></div>
 
             {session ? (
               <div className={styles.Section}>
@@ -296,20 +301,27 @@ const NavbarMobile = () => {
                     >
                       Orders
                     </Link>
-                    {/* <Link
+                    <Link
                       href="/account/subscription"
                       onClick={() => setOpen(false)}
                       className={styles.subLinks}
                     >
                       Manage Subscription
-                    </Link> */}
-                    {/* <Link
+                    </Link>
+                    <Link
                       href="/account/wishlist"
                       onClick={() => setOpen(false)}
                       className={styles.subLinks}
                     >
                       Wishlist
-                    </Link> */}
+                    </Link>
+                    <Link
+                      href="/account/whitemantis-beans"
+                      onClick={() => setOpen(false)}
+                      className={styles.subLinks}
+                    >
+                      White Mantis Beans
+                    </Link>
                     <button
                       className={styles.LogoutLink}
                       onClick={() => {

@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import styles from "./Enquires.module.css";
 import Image from "next/image";
 import one from "./1.png";
+import axiosClient from "@/lib/axios";
 
 const Enquires = () => {
   const [formData, setFormData] = useState({
     businessName: "",
     contactName: "",
     email: "",
+    phone: "",
     location: "",
     branch: "",
     website: "",
@@ -50,37 +52,48 @@ const Enquires = () => {
       !formData.businessName ||
       !formData.contactName ||
       !formData.email ||
+      !formData.phone ||
       !formData.location
     ) {
-      console.error("Please fill in all required fields");
+      setResponseError(true);
+      setResponseMessage("Please fill in all required fields.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const payload = { ...formData };
-      if (otherCategory) {
-      }
+      const payload = {
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.businessName,
+        branch: formData.branch || "",
+        companyAddress: formData.location,
+        websiteInstagram: formData.website || "",
+        business_info_group: {
+          office: formData.categories.includes("Office"),
+          bakery: formData.categories.includes("Bakery"),
+          coffee_shop: formData.categories.includes("Coffee Shop"),
+          restaurant: formData.categories.includes("Restaurant"),
+          other: formData.categories.includes("Other"),
+          other_specification: formData.categories.includes("Other") ? formData.message : ""
+        },
+        message: formData.message
+      };
 
-      const res = await fetch("/api/website/enquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await axiosClient.post("/api/wholesale", payload);
 
-      const data = await res.json();
-
-      if (res.ok && data.success) {
+      if (res.status === 201) {
         setResponseError(false);
         setResponseMessage(
           "Thank you! Your wholesale enquiry has been submitted.",
-        );
+        ); 
 
         setFormData({
           businessName: "",
           contactName: "",
           email: "",
+          phone: "",
           location: "",
           branch: "",
           website: "",
@@ -96,7 +109,7 @@ const Enquires = () => {
         }, 3000);
       } else {
         setResponseError(true);
-        setResponseMessage(data.message || "Failed to submit enquiry");
+        setResponseMessage(res.data.message || "Failed to submit enquiry");
       }
     } catch (error) {
       console.error("Submission error:", error);
@@ -148,6 +161,15 @@ const Enquires = () => {
                     name="email"
                     placeholder="Email address*"
                     value={formData.email}
+                    onChange={handleChange}
+                    suppressHydrationWarning
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="phone"
+                    placeholder="Phone number*"
+                    value={formData.phone}
                     onChange={handleChange}
                     suppressHydrationWarning
                     required

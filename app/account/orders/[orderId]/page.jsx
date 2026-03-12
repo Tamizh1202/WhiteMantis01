@@ -1,8 +1,11 @@
+'use client';
 import axiosClient from "@/lib/axios";
+import styles from "../page.module.css";
 import ProductDetail from "./_components/ProductDetail/ProductDetails";
 import DelivereyDetails from "./_components/delivery-details/page";
 import OrderDetails from "./_components/order-details/page";
 import Invoice from "./_components/invoice/page";
+import React, { useEffect, useState } from "react";
 
 export default function OrderDetailPage({ params }) {
   const { orderId } = React.use(params);

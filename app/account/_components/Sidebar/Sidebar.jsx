@@ -25,7 +25,7 @@ export default function Sidebar() {
     signOut({ callbackUrl: "/" });
   };
 
-  console.log(session)
+  console.log(session);
 
   return (
     <>
@@ -42,10 +42,11 @@ export default function Sidebar() {
           <div className={styles.Bottom}>
             <Link href="/account/profile" className={styles.Link}>
               <div
-                className={`${styles.Profile} ${pathname === "/account" || pathname === "/account/profile"
-                  ? styles.active
-                  : ""
-                  }`}
+                className={`${styles.Profile} ${
+                  pathname === "/account" || pathname === "/account/profile"
+                    ? styles.active
+                    : ""
+                }`}
               >
                 <svg
                   width="16"
@@ -64,8 +65,9 @@ export default function Sidebar() {
             </Link>
             <Link href="/account/orders" className={styles.Link}>
               <div
-                className={`${styles.Orders} ${pathname.startsWith("/account/orders") ? styles.active : ""
-                  }`}
+                className={`${styles.Orders} ${
+                  pathname.startsWith("/account/orders") ? styles.active : ""
+                }`}
               >
                 <svg
                   width="15"
@@ -84,10 +86,11 @@ export default function Sidebar() {
             </Link>
             <Link href="/account/subscription" className={styles.Link}>
               <div
-                className={`${styles.Subscription} ${pathname.startsWith("/account/subscription")
-                  ? styles.active
-                  : ""
-                  }`}
+                className={`${styles.Subscription} ${
+                  pathname.startsWith("/account/subscription")
+                    ? styles.active
+                    : ""
+                }`}
               >
                 <svg
                   width="16"
@@ -106,8 +109,9 @@ export default function Sidebar() {
             </Link>
             <Link href="/account/wishlist" className={styles.Link}>
               <div
-                className={`${styles.Wishlist} ${pathname.startsWith("/account/wishlist") ? styles.active : ""
-                  }`}
+                className={`${styles.Wishlist} ${
+                  pathname.startsWith("/account/wishlist") ? styles.active : ""
+                }`}
               >
                 <svg
                   width="18"
@@ -122,6 +126,30 @@ export default function Sidebar() {
                   />
                 </svg>
                 <p>Wishlist</p>
+              </div>
+            </Link>
+            <Link href="/account/whitemantis-beans" className={styles.Link}>
+              <div
+                className={`${styles.Wishlist} ${
+                  pathname.startsWith("/account/whitemantis-beans")
+                    ? styles.active
+                    : ""
+                }`}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.2297 8.55814H8.55814V14.8837H12.1344C12.425 14.8837 12.7037 14.7679 12.9092 14.5625C13.1145 14.3571 13.2297 14.0783 13.2297 13.7878V8.55814ZM2.77035 13.7878C2.77035 14.0783 2.8855 14.3571 3.09084 14.5625C3.29629 14.7679 3.575 14.8837 3.86555 14.8837H7.44186V8.55814H2.77035V13.7878ZM14.8837 5.51962C14.8837 5.37123 14.7633 5.25073 14.6148 5.25073H8.55814V7.44186H14.6148C14.7633 7.44186 14.8837 7.32136 14.8837 7.17297V5.51962ZM1.11628 7.17297C1.11628 7.32136 1.23674 7.44186 1.38517 7.44186H7.44186V5.25073H1.38517C1.23674 5.25073 1.11628 5.37123 1.11628 5.51962V7.17297ZM13.2297 2.62573C13.2297 2.22553 13.0708 1.84186 12.7878 1.55887C12.5048 1.27587 12.1212 1.11628 11.7209 1.11628H11.7115C11.1137 1.10586 10.4766 1.39316 9.89244 2.04215C9.42561 2.56084 9.0269 3.27637 8.74055 4.13445H11.7209C12.1211 4.13445 12.5048 3.97554 12.7878 3.69259C13.0708 3.40962 13.2296 3.0259 13.2297 2.62573ZM2.77035 2.62573C2.77037 3.0259 2.92923 3.40962 3.21221 3.69259C3.4952 3.97554 3.87887 4.13445 4.27907 4.13445H7.25945C6.9731 3.27637 6.57439 2.56084 6.10756 2.04215C5.52343 1.39316 4.88635 1.10586 4.28852 1.11628L4.27907 1.11701V1.11628C3.87884 1.11628 3.49521 1.27587 3.21221 1.55887C2.92922 1.84186 2.77035 2.22553 2.77035 2.62573ZM14.3459 2.62573C14.3459 3.1695 14.1769 3.69545 13.8685 4.13445H14.6148C15.3797 4.13445 16 4.7547 16 5.51962V7.17297C16 7.93789 15.3797 8.55814 14.6148 8.55814H14.3459V13.7878C14.3459 14.3744 14.1132 14.9377 13.6984 15.3525C13.2836 15.7672 12.721 16 12.1344 16H3.86555C3.27903 16 2.71638 15.7672 2.3016 15.3525C1.88679 14.9377 1.65407 14.3744 1.65407 13.7878V8.55814H1.38517C0.620266 8.55814 0 7.93789 0 7.17297V5.51962C0 4.7547 0.620266 4.13445 1.38517 4.13445H2.13154C1.8231 3.69545 1.65409 3.1695 1.65407 2.62573C1.65407 1.92947 1.93064 1.26195 2.42297 0.769622C2.91531 0.277289 3.5828 4.6981e-08 4.27907 0V0.00145349C5.27284 -0.0126098 6.19586 0.472605 6.93677 1.29578C7.35434 1.75973 7.7116 2.32595 8 2.96439C8.2884 2.32595 8.64566 1.75973 9.06323 1.29578C9.80414 0.472605 10.7272 -0.0126096 11.7209 0.00145349V0C12.4172 0 13.0847 0.277289 13.577 0.769622C14.0694 1.26195 14.3459 1.92947 14.3459 2.62573Z"
+                    fill="#6E736A"
+                  />
+                </svg>
+
+                <p>White Mantis Beans</p>
               </div>
             </Link>
             {session && (

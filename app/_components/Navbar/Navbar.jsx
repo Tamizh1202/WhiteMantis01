@@ -210,23 +210,15 @@ const Navbar = () => {
                 <p>About Us</p>
               </div>
             </Link>
-            <Link
-              href="/wholesale"
-              className={pathname === "/wholesale" ? styles.active : ""}
-            >
-              <div className={styles.AboutUspg}>
-                <p>Wholesale</p>
-              </div>
-            </Link>
 
-            {/* <Link
-              href="/workshops"
-              className={pathname === "/workshops" ? styles.active : ""}
+            <Link
+              href="/academy"
+              className={pathname === "/academy" ? styles.active : ""}
             >
               <div className={styles.Workshopspg}>
-                <p>Workshops</p>
+                <p>Academy</p>
               </div>
-            </Link> */}
+            </Link>
 
             <Link
               href="/subscription"
@@ -240,6 +232,16 @@ const Navbar = () => {
         </div>
 
         <div className={styles.Right}>
+
+          <Link
+            href="/wholesale"
+            className={pathname === "/wholesale" ? styles.active : ""}
+          >
+            <div className={styles.AboutUspg}>
+              <p>Wholesale</p>
+            </div>
+          </Link>
+
           <Link
             href="/contact"
             className={pathname === "/contact" ? styles.active : ""}
@@ -247,12 +249,12 @@ const Navbar = () => {
             <p>Contact Us</p>
           </Link>
 
-          {/* <Link
+          <Link
             href="/blogs"
             className={pathname === "/blogs" ? styles.active : ""}
           >
             <p>Blogs</p>
-          </Link> */}
+          </Link>
 
           <Link
             href=""

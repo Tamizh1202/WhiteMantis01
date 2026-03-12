@@ -4,7 +4,7 @@ import { Providers } from "./providers";
 
 import Footer from "./_components/Footer/Footer";
 import CartSideBar from "./_components/CartSideBar/CartSideBar";
-import NewsLetter from "./workshops/_components/NewsLetter/NewsLetter";
+import NewsLetter from "./academy/_components/NewsLetter/NewsLetter";
 import Navbar from "./_components/Navbar/Navbar";
 import NavbarMobile from "./_components/Navbar/NavbarMobile";
 import GlobalLoader from "./_components/GlobalLoader/GlobalLoader";

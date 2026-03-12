@@ -1,16 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useWishlist } from "../../../../_context/WishlistContext";
-import { useCart } from "../../../../_context/CartContext";
+import AddToCart from "@/app/_components/AddToCart";
 import styles from "./WhislistComponents.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { formatImageUrl } from "@/lib/imageUtils";
-import axiosClient from "@/lib/axios";
 
 const WhislistComponents = () => {
-  const { items: wishlistData, loading, refresh, remove } = useWishlist();
-  const { addItem } = useCart();
+  const { items: wishlistData, loading, remove } = useWishlist();
   const router = useRouter();
   // const remove = async (id) => {
   //   try {
@@ -66,39 +64,6 @@ const WhislistComponents = () => {
     }
   };
 
-  const handleAddToCart = async (item) => {
-    const selectedVariation = selectedVariations[item.id];
-
-    if (!selectedVariation) {
-      console.error("Please select a weight");
-      return;
-    }
-
-    const childProduct = item.children?.[0];
-    if (!childProduct) {
-      console.error("Product not available");
-      return;
-    }
-
-    try {
-      const variationImage = selectedVariation.image;
-      const finalImage = typeof variationImage === 'string'
-        ? variationImage
-        : variationImage?.src || item.image;
-
-      await addItem(childProduct.id, 1, {
-        variation_id: selectedVariation.id,
-        name: item.name || 'Product',
-        description: item.description,
-        image: finalImage,
-      });
-
-      console.log("Added to cart!");
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      console.error("Failed to add to cart");
-    }
-  };
 
   const getVariationImage = (item) => {
     const selectedVariation = selectedVariations[item.id];
@@ -277,12 +242,13 @@ const WhislistComponents = () => {
                   </div>
 
                   <div className={styles.CardBottom}>
-                    <button
-                      className={styles.Bag}
-                      onClick={() => handleAddToCart(productDoc)}
-                    >
-                      Add to Cart
-                    </button>
+                    <AddToCart
+                      product={{
+                        productId: productDoc.id,
+                        variationId: selectedVariation?.id,
+                        quantity: 1,
+                      }}
+                    />
                   </div>
                 </div>
               );

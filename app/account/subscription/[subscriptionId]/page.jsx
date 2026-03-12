@@ -58,6 +58,8 @@ export default function SubscriptionDetailPage({ params }) {
 
   const sub = data;
 
+  console.log("sub", sub)
+
   return (
     <div className={styles.Container}>
       <h2 className={styles.PageTitle}>SUBSCRIPTION DETAILS</h2>
@@ -297,9 +299,7 @@ export default function SubscriptionDetailPage({ params }) {
           </button>
           {isPopupOpen && (
             <SubPopup
-              sub={sub}
               onClose={() => setIsPopupOpen(false)}
-              setSubData={setData}
               onConfirm={async (reason) => {
                 setCancelling(true);
                 try {
@@ -316,6 +316,10 @@ export default function SubscriptionDetailPage({ params }) {
                   }
                 } catch (err) {
                   console.error("Network error:", err);
+                  if (err.response) {
+                    console.error("Server responded with:", err.response.data);
+                    alert(`Failed to cancel: ${err.response.data.message || 'Unknown error'}`);
+                  }
                 } finally {
                   setCancelling(false);
                 }
