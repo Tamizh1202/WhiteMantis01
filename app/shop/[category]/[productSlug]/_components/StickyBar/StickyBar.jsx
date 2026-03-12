@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 const StickyBar = ({ product }) => {
   const router = useRouter();
-  const { addItem, refresh } = useCart();
+  const { addToCart, refresh } = useCart();
   const { setSelectedImage } = useProductImage();
   const popupRef = useRef(null);
 
@@ -50,13 +50,11 @@ const StickyBar = ({ product }) => {
 
   // Handle buy now - add to cart
   const handleBuyNow = async () => {
-    addItem({
-      id: product.id,
-      name: product.name,
-      variant: selectedWeight, // Will be null for simple products
-      quantity: qty,
-      image: selectedWeight?.variantImage || product.productImage
-    });
+    try {
+      await addToCart(product.id, qty, selectedWeight?.id || null);
+    } catch (error) {
+      console.error("Error adding to cart from PDP:", error);
+    }
   };
 
   useEffect(() => {

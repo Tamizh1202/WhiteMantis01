@@ -6,7 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 const Logo = "/White-Mantis-White-Logo.svg";
 
-const Footer = () => {
+const Footer = ({ categories }) => {
+
   const pathname = usePathname();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,16 +44,16 @@ const Footer = () => {
                     <Link href="/about-us">
                       <p>About us</p>
                     </Link>
-                    {/* <Link href="/workshop">
-                      <p>Workshop</p>
-                    </Link> */}
+                    <Link href="/academy">
+                      <p>Academy</p>
+                    </Link>
                     <Link href="/subscription">
                       <p>Subscription</p>
                     </Link>
-                    {/* <Link href="/blogs">
+                    <Link href="/blogs">
                       <p>Blogs</p>
                     </Link>
-                    <Link href="/careers">
+                    {/* <Link href="/careers">
                       <p>Careers</p>
                     </Link> */}
                     <Link href="/wholesale">
@@ -69,21 +70,25 @@ const Footer = () => {
                     <h4>Shop</h4>
                   </div>
                   <div className={styles.TopMiddleTwoBottom}>
-                    <Link href="/shop/coffee-beans">
-                      <p>Coffee Beans</p>
-                    </Link>
-                    <Link href="/shop/capsules">
-                      <p>Coffee Capsules</p>
-                    </Link>
-                    <Link href="/shop/drip-bags">
-                      <p>Coffee Drip Bags</p>
-                    </Link>
-                    {/* <Link href="/shop/merchandise">
-                      <p>Merchandise</p>
-                    </Link>
-                    <Link href="/shop/equipment">
-                      <p>Equipment</p>
-                    </Link> */}
+                    {categories && categories.length > 0 ? (
+                      categories.map((category) => (
+                        <Link key={category.id} href={`/shop/${category.slug}`}>
+                          <p>{category.title}</p>
+                        </Link>
+                      ))
+                    ) : (
+                      <>
+                        <Link href="/shop/coffee-beans">
+                          <p>Coffee Beans</p>
+                        </Link>
+                        <Link href="/shop/capsules">
+                          <p>Coffee Capsules</p>
+                        </Link>
+                        <Link href="/shop/drip-bags">
+                          <p>Coffee Drip Bags</p>
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -103,9 +108,12 @@ const Footer = () => {
                     <Link href="/account/wishlist">
                       <p>Whishlist</p>
                     </Link>
-                    {/* <Link href="/subscription/manage">
+                    <Link href="/account/subscription">
                       <p>Manage Subscription</p>
-                    </Link> */}
+                    </Link>
+                    <Link href="account/whitemantis-beans">
+                      <p>White Manits Beans</p>
+                    </Link>
                   </div>
                 </div>
 

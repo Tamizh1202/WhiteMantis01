@@ -12,7 +12,8 @@ import { signOut } from "next-auth/react";
 import { useEffect } from "react";
 import axiosClient from "@/lib/axios";
 
-const NavbarMobile = () => {
+const NavbarMobile = ({ categories: initialCategories }) => {
+
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(true);
@@ -21,33 +22,15 @@ const NavbarMobile = () => {
   const { isCartOpen, openCart, closeCart, items } = useCart();
   const { data: session, status } = useSession();
 
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(initialCategories || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      setLoading(true);
-      try {
-        const res = await axiosClient.get(
-          "/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100",
-        );
-        const fetchedCategories = await res.data;
-
-        if (res.status !== 200) {
-          throw new Error(
-            fetchedCategories.message || "Categories fetch failed",
-          );
-        }
-        setCategories(fetchedCategories.docs);
-      } catch (e) {
-        setError(e.message || "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
+    if (initialCategories) {
+      setCategories(initialCategories);
+    }
+  }, [initialCategories]);
 
   const handleLogout = async () => {
     try {
@@ -191,27 +174,16 @@ const NavbarMobile = () => {
                   <div className={styles.Line}></div>
                   <div className={styles.TwoCol}>
                     <div className={styles.Columnvee}>
-                      <Link
-                        href="/shop/coffee-beans"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        Coffee beans
-                      </Link>
-                      <Link
-                        href="/shop/coffee-dripbags"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        Coffee Drip bags
-                      </Link>
-                      <Link
-                        href="/shop/coffee-capsules"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        Coffee Capsules
-                      </Link>
+                      {categories.map((category) => (
+                        <Link
+                          key={category.id}
+                          href={`/shop/${category.slug}`}
+                          onClick={() => setOpen(false)}
+                          className={styles.subLinks}
+                        >
+                          <p>{category.title}</p>
+                        </Link>
+                      ))}
                     </div>
                     {/* <div className={styles.Columnvee}>
                     <Link href="/shop/merchandise">Merchandise</Link>

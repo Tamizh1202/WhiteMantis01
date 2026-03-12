@@ -1,86 +1,72 @@
+/* --- BASE & DESKTOP STYLES --- */
+
 .main {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
   background-color: #ffffff;
-  padding: 0px 125px 200px 125px;
+  padding-left: 120px;
+  box-sizing: border-box;
 }
+
 .MainConatiner {
   display: flex;
-  justify-content: left;
   flex-direction: column;
   width: 100%;
   gap: 100px;
-  height: 100%;
 }
-.Heading {
-  display: flex;
-  justify-content: left;
-}
+
 .Heading h3 {
   font-family: var(--lexend);
   font-weight: 500;
   font-size: 22px;
   color: #525252;
 }
-.BottomContainer {
-  display: grid;
 
+.BottomContainer {
+  display: block; /* Acts as a wrapper for both versions */
+  width: 100%;
+}
+
+/* Original Desktop Grid Logic */
+.DesktopView {
+  display: grid;
   grid-template-columns: minmax(200px, 719px) 1fr;
   gap: 24px;
-  align-items: start;
-  justify-items: start;
-}
-.Left {
-  display: flex;
-  justify-content: left;
-  height: 100%;
-}
-.Left img {
   width: 100%;
-  height: 100%;
-  max-width: 719px;
-  border-radius: 6px;
-  max-height: 800px;
 }
-.Right {
+
+.Left, .Right {
   display: flex;
-  justify-content: left;
   flex-direction: column;
   gap: 24px;
-  height: 100%;
 }
+
 .RightTop {
   display: flex;
-  justify-content: left;
-  flex-direction: row;
   gap: 24px;
 }
-.RightTop img {
-  width: 100%;
-  height: 100%;
-  max-width: 451px;
-  border-radius: 6px;
-  max-height: 388px;
-}
-.RightBottom {
-  display: flex;
-  justify-content: left;
-}
-.RightBottom img {
-  width: 100%;
-  height: 100%;
-  max-width: 927px;
-  border-radius: 6px;
-  max-height: 388px;
-}
+
 .imageWrapper {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  border-radius: 6px;
 }
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Desktop Image Constraints */
+.Left .image { max-height: 800px; }
+.RightTop .image { max-height: 388px; }
+.RightBottom .image { max-height: 388px; }
 
 .overlay {
   position: absolute;
@@ -88,17 +74,12 @@
   left: 0;
   width: 100%;
   padding: 20px 20px 50px 30px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  /* background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0.8) 100%
-  ); */
-  border-radius: 6px;
 }
 
 .imageWrapper:hover .overlay {
@@ -116,7 +97,79 @@
 .overlay p {
   font-family: var(--lato);
   font-size: 15px;
-  font-weight: 400;
   color: #ffffff;
   margin-top: 4px;
+}
+
+.DesktopOnlyBtn {
+  margin-top: 40px;
+}
+
+/* --- MOBILE SCROLLER (Hidden by default) --- */
+.MobileScroller {
+  display: none;
+}
+
+/* --- RESPONSIVE FIXES --- */
+
+@media (max-width: 768px) {
+  .main {
+    padding-left: 0; /* Reset desktop padding */
+  }
+
+  .MainConatiner {
+    gap: 40px;
+  }
+
+  .Heading {
+    padding-left: 20px;
+  }
+
+  /* Hide the Desktop layout and button */
+  .DesktopView, 
+  .DesktopOnlyBtn {
+    display: none !important;
+  }
+
+  /* Activate the Flat Scroller */
+  .MobileScroller {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 0 20px 40px 20px;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Prevent the "Shrink to Null" bug */
+  .MobileScroller .imageWrapper {
+    flex: 0 0 85% !important; /* Force width to 85% of screen */
+    min-width: 85% !important;
+    max-width: 85% !important;
+    height: 450px; /* Consistent mobile height */
+    scroll-snap-align: center;
+    display: block;
+  }
+
+  .MobileScroller .image {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    max-width: none !important;
+    object-fit: cover;
+  }
+
+  /* UI Polishing for Mobile */
+  .MobileScroller .overlay {
+    opacity: 1; /* Keep info visible since there is no hover on mobile */
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  }
+
+  .MobileScroller::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for a cleaner feel */
+  }
 }

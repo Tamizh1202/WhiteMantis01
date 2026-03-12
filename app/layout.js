@@ -49,7 +49,19 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+
+export default async function RootLayout({ children }) {
+  let categories = [];
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100`, {
+      next: { revalidate: 3600 } // Cache for 1 hour
+    });
+    const data = await res.json();
+    categories = data.docs || [];
+  } catch (error) {
+    console.error("Failed to fetch categories in layout:", error);
+  }
+
   return (
     <html lang="en">
       <body
@@ -66,11 +78,11 @@ export default function RootLayout({ children }) {
             }}
           />
           <GlobalLoader />
-          <Navbar />
-          <NavbarMobile />
+          <Navbar categories={categories} />
+          <NavbarMobile categories={categories} />
           {children}
 
-          <Footer />
+          <Footer categories={categories} />
           <CartSideBar />
           <CouponModal />
           <NewsLetter />

@@ -88,7 +88,13 @@ const Recommendation = ({ product }) => {
                     </div>
 
                     <div className={styles.RCardBottom}>
-                      <AddToCart />
+                      <AddToCart
+                        product={{
+                          productId: item.id,
+                          variationId: item.hasVariantOptions ? item.variants?.[0]?.id : null,
+                          quantity: 1,
+                        }}
+                      />
                     </div>
                   </div>
                 );

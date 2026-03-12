@@ -1,4 +1,4 @@
-.main{
+.main {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,8 @@
     background-color: #6C7A5F;
 
 }
-.MainConatiner{
+
+.MainConatiner {
     display: flex;
     justify-content: left;
     flex-direction: row;
@@ -16,14 +17,16 @@
     align-items: center;
 
 }
-.LeftConatiner{
+
+.LeftConatiner {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 30px;
     width: 50%;
 }
-.LeftConatinerTop{
+
+.LeftConatinerTop {
     display: flex;
     justify-content: left;
     flex-direction: column;
@@ -31,47 +34,53 @@
     padding-left: 124px;
     width: 80%;
 }
-.LeftConatinerTop h3{
+
+.LeftConatinerTop h3 {
     font-family: var(--lexend);
     font-weight: 600;
     font-size: 60px;
     color: #FFFFFF;
     text-transform: uppercase;
 }
-.line{
+
+.line {
     width: 85%;
     height: 1px;
     background-color: #FFFFFF;
 }
-.LeftConatinerBottom{
+
+.LeftConatinerBottom {
     display: flex;
     justify-content: left;
-   
-    padding-left: 16px;
+
+
 }
-.LeftConatinerBottom img{
+
+.LeftConatinerBottom img {
     width: 100%;
     height: 100%;
     max-width: 940px;
     max-height: 300px;
 }
-.MiddleConatiner{
+
+.MiddleConatiner {
     display: flex;
     justify-content: center;
     align-items: center;
-   background-color: #FFFFFF;
-   padding: 33.5px 34px;
-   border: none;
-   max-width: 466px;
-   gap: 30px;
-   flex-direction: column;
+    background-color: #FFFFFF;
+    padding: 33.5px 34px;
+    border: none;
+    max-width: 466px;
+    gap: 30px;
+    flex-direction: column;
     border-radius: 6px;
     position: absolute;
     top: 74%;
     left: 38%;
 
 }
-.MiddleConatinerTop p{
+
+.MiddleConatinerTop p {
     font-family: var(--lato);
     font-weight: 500;
     font-size: 15px;
@@ -79,21 +88,24 @@
     text-align: left;
 
 }
-.MiddleConatinerBottom{
+
+.MiddleConatinerBottom {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
     gap: 10px;
 }
-.MiddleConatinerBottomLeft h5{
+
+.MiddleConatinerBottomLeft h5 {
     font-family: var(--lexend);
     font-weight: 600;
     font-size: 22px;
     color: #6C7A5F;
     text-transform: uppercase;
 }
-.MiddleConatinerBottomRight{
+
+.MiddleConatinerBottomRight {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -102,21 +114,90 @@
     padding: 8px 9px;
     cursor: pointer;
 }
-.MiddleConatinerBottomRight svg{
+
+.MiddleConatinerBottomRight svg {
     width: 100%;
     height: 100%;
     max-width: 13px;
     max-height: 13px;
 }
-.RightConatiner{
+
+.RightConatiner {
     display: flex;
     justify-content: left;
     width: 50%;
 
 }
-.RightConatiner img{
+
+.RightConatiner img {
     width: 100%;
     height: 100%;
     max-width: 960px;
     max-height: 854px;
+}
+
+@media (max-width: 768px) {
+    .main {
+        padding-top: 150px;
+        padding-bottom: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background-color: #6C7A5F;
+    }
+
+    .MainConatiner {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        position: relative;
+        align-items: center;
+    }
+
+    .LeftConatiner {
+        display: flex;
+        justify-content: start;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .LeftConatinerBottom {
+        display: flex;
+        width: auto;
+        height: 100%;
+    }
+
+    .RightConatiner {
+        display: flex;
+        width: 100%;
+    }
+ .LeftConatinerTop {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 60px;
+    width: 80%;
+}
+    .MiddleConatiner {
+        /* 1. Kill the absolute positioning */
+        position: relative !important;
+
+        /* 2. Reset the coordinates that are pushing it off-screen */
+        top: 70px !important;
+        left: 0 !important;
+
+        /* 3. Make it fit the phone screen */
+        width: 90% !important;
+        max-width: none !important;
+
+        /* 4. Center it */
+        margin: 0px auto !important;
+
+        /* 5. Ensure it doesn't create that 'gap' on the right */
+        box-sizing: border-box;
+    }
 }

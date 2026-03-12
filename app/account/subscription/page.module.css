@@ -552,11 +552,7 @@
   .ActiveMobileMeta {
     display: flex;
     flex-direction: column;
-    /* This is the default, but good to be explicit */
-
-    /* Pushes one to the left, one to the right */
     gap: 11px;
-    /* Adds space between them so they don't touch */
     width: 100%;
     padding-bottom: 10px;
   }
@@ -564,9 +560,6 @@
   .MobileMetaRow {
     display: flex;
     gap: 4px;
-    /* Space between "Order Date:" and the actual date */
-
-    /* Prevents the text from wrapping inside the row */
   }
 
   .ActiveTop h3,
@@ -590,7 +583,6 @@
     padding: 20px 24px;
   }
 }
-
 
 @media (min-width: 1024px) and (max-width: 1440px) {
   .MainContainer {

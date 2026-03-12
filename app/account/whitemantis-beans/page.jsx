@@ -52,7 +52,7 @@ const WhiteMantisBeans = () => {
                     setTotalBalance(doc.totalBalance || 0);
 
                     const earningTransactions = (doc.coinEarningHistory || []).map(item => ({
-                        details: `Order Id: ${item.linkedOrder?.value?.id ?? 'N/A'}`,
+                        details: item.type === 'offline' ? `Reference Id: ${item.offlineReferenceId}` : `Order Id: ${item.linkedOrder?.value?.id ?? 'N/A'}`,
                         transaction_type: 'Beans Credit',
                         transaction_date: item.earnedAt,
                         expiry_date: item.expiryDate,
@@ -61,12 +61,12 @@ const WhiteMantisBeans = () => {
                     }));
 
                     const redemptionTransactions = (doc.pointsRedemptionHistory || []).map(item => ({
-                        details: `Order Id: ${item.associatedOrder?.value?.id ?? 'N/A'}`,
+                        details: item.type === 'offline' ? `Reference Id: ${item.offlineReferenceId}` : `Order Id: ${item.associatedOrder?.value?.id ?? 'N/A'}`,
                         transaction_type: 'Beans Redeemed',
-                        transaction_date: item.associatedOrder?.value?.createdAt,
+                        transaction_date: item.redeemedAt,
                         expiry_date: null,
                         coins: `-${item.redeemedPoints}`,
-                        _sortDate: new Date(item.associatedOrder?.value?.createdAt),
+                        _sortDate: new Date(item.redeemedAt),
                     }));
 
                     const merged = [...earningTransactions, ...redemptionTransactions]

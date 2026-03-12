@@ -10,7 +10,8 @@ import axiosClient from "@/lib/axios";
 
 const Logo = "/White-mantis-animated-logo.gif";
 
-const Navbar = () => {
+const Navbar = ({ categories: initialCategories }) => {
+
   const closeShopDropdown = () => {
     setShopOpen(false);
   };
@@ -23,29 +24,15 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   const dropdownRef = useRef(null);
   const { isCartOpen, openCart, closeCart, items } = useCart();
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(initialCategories || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      setLoading(true);
-      try {
-        const res = await axiosClient.get("/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100");
-        const fetchedCategories = await res.data;
-
-        if (res.status !== 200) {
-          throw new Error(fetchedCategories.message || "Categories fetch failed");
-        }
-        setCategories(fetchedCategories.docs);
-      } catch (e) {
-        setError(e.message || "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCategories();
-  }, [])
+    if (initialCategories) {
+      setCategories(initialCategories);
+    }
+  }, [initialCategories]);
 
   useEffect(() => {
     const handleScroll = () => {
