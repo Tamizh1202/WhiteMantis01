@@ -695,8 +695,27 @@
   }
 
   .ProductActions {
+    display: flex;
     flex-direction: column;
-    gap: 10px;
+    /* Keeps the main area vertical */
+    width: 100%;
+  }
+
+  /* This specifically targets the container holding the two buttons */
+  .DesktopActions {
+    display: flex !important;
+    flex-direction: row !important;
+    /* Force side-by-side */
+    gap: 0 !important;
+    /* Remove the gap completely */
+    width: 100%;
+  }
+
+  .DesktopActions>* {
+    flex: 1;
+    /* Each button takes exactly 50% width */
+    border-radius: 0;
+    /* Optional: Makes them look like one solid bar */
   }
 
   .Subscribe,
@@ -781,9 +800,27 @@
   }
 
   .ProductActions {
+    display: flex;
     flex-direction: column;
-    gap: 10px;
+    /* Keeps the main area vertical */
+    width: 100%;
+  }
 
+  /* This specifically targets the container holding the two buttons */
+  .DesktopActions {
+    display: flex !important;
+    flex-direction: row !important;
+    /* Force side-by-side */
+    gap: 0 !important;
+    /* Remove the gap completely */
+    width: 100%;
+  }
+
+  .DesktopActions>* {
+    flex: 1;
+    /* Each button takes exactly 50% width */
+    border-radius: 0;
+    /* Optional: Makes them look like one solid bar */
   }
 
   .Subscribe {
@@ -817,9 +854,26 @@
   }
 
   .ProductActions {
+    display: flex;
     flex-direction: column;
-    gap: 10px;
+    /* Keeps the main area vertical */
+    width: 100%;
+  }
 
+  .DesktopActions {
+    display: flex !important;
+    flex-direction: row !important;
+    /* Force side-by-side */
+    gap: 0 !important;
+    /* Remove the gap completely */
+    width: 100%;
+  }
+
+  .DesktopActions>* {
+    flex: 1;
+    /* Each button takes exactly 50% width */
+    border-radius: 0;
+    /* Optional: Makes them look like one solid bar */
   }
 
   .Subscribe {

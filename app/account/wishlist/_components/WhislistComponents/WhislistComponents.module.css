@@ -174,11 +174,13 @@
 .DesktopActions {
     display: flex;
     width: 100%;
-    gap: 0px;
+     
+    box-sizing: border-box;
 }
 
-.DesktopActions>* {
+.DesktopActions > * {
     flex: 1;
+    min-width: 0; /* CRITICAL: Allows flex children to shrink smaller than their content */
 }
 
 .MobileActions {
@@ -262,6 +264,7 @@
     .Main {
         padding-left: 24px;
         padding-right: 24px;
+        border: 1px solid black;
     }
 
     .Remove svg {
@@ -278,10 +281,7 @@
         font-size: 20px;
     }
 
-    .CardBottom {
-        flex-direction: column;
-        gap: 8px;
-    }
+   
 
     .DesktopActions {
         display: none;

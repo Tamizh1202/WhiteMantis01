@@ -4,7 +4,10 @@ import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import google from "../Footer/appstore.png"
+import apple from "../Footer/googleplay.png"
 const Logo = "/White-Mantis-White-Logo.svg";
+
 
 const Footer = ({ categories }) => {
 
@@ -20,19 +23,87 @@ const Footer = ({ categories }) => {
     <>
       {/* chnge link path with crct one later veer dont forget */}
       <div className={styles.Main}>
-        <div className={styles.MainConatiner}>
-          <div className={styles.Top}>
-            <div className={styles.TopLeft}>
-              <Link href="/">
-                <Image
-                  src={Logo}
-                  alt="White Mantis Logo"
-                  width={170}
-                  height={78}
-                  className={styles.LogoImage}
-                />
-              </Link>
+        <div className={styles.MainConatiner1}>
+
+
+
+          <div className={styles.TopLeft}>
+            <Link href="/">
+              <Image
+                src={Logo}
+                alt="White Mantis Logo"
+                width={157} // Your specific data
+                height={97} // Your specific data
+                priority
+                className={styles.LogoImage}
+              />
+            </Link>
+          </div>
+
+
+          <div className={styles.topright} >
+            <div className={styles.topright1} >
+
+              <h2>BREW. EARN. ENJOY.</h2>
+              <div className={styles.toprightBottom}>
+                <div className={styles.txt1}>
+                  <p style={{ textDecoration: "underline" }}>White Mantis Rewards</p>
+                  <p>Join White Mantis Rewards earn points on every purchase and redeem for free coffee, exclusives, and perks.</p>
+                </div>
+                <div className={styles.btn1}>
+                  <button className={styles.SubscribeButton}>Explore Rewards</button>
+                </div>
+              </div>
+
             </div>
+
+            <div className={styles.topright2}>
+              <div className={styles.topright21}>
+                <h2>YOUR COMPLETE COFFEE EXPERIENCE</h2>
+                <div className={styles.topright21Bottom}>
+                  <div className={styles.topright21txt}>
+                    <p style={{ textDecoration: "underline" }}  >White Mantis App</p>
+                    <p>Order ahead at our cafés, earn rewards, manage subscriptions, and explore new releases all in one seamless experience.</p>
+                  </div>
+
+                  <div className={styles.splitButtoms}>
+
+                    <button className={styles.btns2}>
+
+                      <Image
+                        src={apple}
+                        alt="Clickable Logo"
+                        width={24}
+                        height={24}
+                        className={styles.ButtonIcon}
+                      />
+                      <div className={styles.TextContainer}>
+                        <span className={styles.btnhead}>Get it on</span>
+                        <span className={styles.btnbody}>Google Play</span>
+                      </div>
+                    </button>
+                    <button className={styles.btns2}>
+                      <Image
+                        src={google}
+                        alt="Clickable Logo"
+                        width={24}
+                        height={24}
+                        className={styles.ButtonIcon}
+                      />
+                      <div className={styles.TextContainer}>
+                        <span className={styles.btnhead}>Download on the </span>
+                        <span className={styles.btnbody}>App Store</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.MainConatiner2} >
+          <div className={styles.Top}>
+
 
             <div className={styles.TopMiddle}>
               <div className={styles.MobOne}>
@@ -91,6 +162,7 @@ const Footer = ({ categories }) => {
                     )}
                   </div>
                 </div>
+
               </div>
 
               <div className={styles.MobTwo}>
@@ -117,7 +189,7 @@ const Footer = ({ categories }) => {
                   </div>
                 </div>
 
-                {/* <div className={styles.TopMiddleFour}>
+                <div className={styles.TopMiddleFour}>
                   <div className={styles.TopMiddleFourTop}>
                     <h4>Support</h4>
                   </div>
@@ -129,8 +201,27 @@ const Footer = ({ categories }) => {
                       <p>Contact Us</p>
                     </Link>
                   </div>
-                </div> */}
+                </div>
+
               </div>
+              {/* <div className={styles.TopMiddleTwo}>
+                <div className={styles.TopMiddleTwoTop}>
+                  <h4>Support</h4>
+                </div>
+                <div className={styles.TopMiddleTwoBottom}>
+
+                  <>
+                    <Link href="/shop/coffee-beans">
+                      <p>Wholesale</p>
+                    </Link>
+                    <Link href="/shop/capsules">
+                      <p>Contact Us</p>
+                    </Link>
+
+                  </>
+
+                </div>
+              </div> */}
             </div>
 
             <div className={styles.TopRight}>

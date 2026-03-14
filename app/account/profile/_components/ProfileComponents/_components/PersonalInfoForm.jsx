@@ -1,21 +1,5 @@
 "use client";
-// ─── PersonalInfoForm ─────────────────────────────────────────────────────────
-// Renders the "Personal Information" card with all profile fields.
-//
-// Props:
-//   profile         object   — { firstName, lastName, email, phone, gender }
-//   editMode        boolean
-//   errors          object   — { firstName?, lastName?, phone?, general? }
-//   isGuestUser     boolean
-//   originalEmail   string
-//   onFieldChange   (field: string, value: string) => void
-//   onSave          () => void
-//   onCancel        () => void
-//   onVerifyEmail   () => void   — opens the OTP popup
-//   showOtpPopup    boolean
-//   otpNode         ReactNode    — the <OtpVerificationPopup /> to render inline
-
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "../ProfileComponents.module.css";
 
 const PersonalInfoForm = ({
@@ -31,13 +15,49 @@ const PersonalInfoForm = ({
     showOtpPopup,
     otpNode,
 }) => {
+    // --- State for Custom Gender Dropdown ---
+    const [isGenderOpen, setIsGenderOpen] = useState(false);
+    const genderRef = useRef(null);
+
+    // --- State for API Errors (e.g., "OTP limit reached") ---
+    const [emailError, setEmailError] = useState("");
+
+    // --- Click Outside logic for Dropdown ---
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (genderRef.current && !genderRef.current.contains(event.target)) {
+                setIsGenderOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    // --- Local handler for Email Verification ---
+    const handleVerifyClick = async () => {
+        setEmailError(""); // Clear previous error
+        
+        // This awaits the parent's handleVerifyEmail, which returns the API result
+        const result = await onVerifyEmail(profile.email);
+        
+        // If API utility returns success: false, display the specific message
+        if (result && result.success === false) {
+            setEmailError(result.message);
+        }
+    };
+
+    const genderOptions = [
+        { label: "Male", value: "male" },
+        { label: "Female", value: "female" },
+        { label: "Other", value: "other" },
+    ];
+
     return (
         <div className={styles.PersonalInfoSection}>
             {isGuestUser && (
                 <p className={styles.GuestNote}>Please login to manage your profile details.</p>
             )}
 
-            {/* Section header */}
             <div className={styles.AddressHeader}>
                 <h4>Personal Information</h4>
                 {!editMode && (
@@ -49,40 +69,62 @@ const PersonalInfoForm = ({
             <div className={styles.Name1}>
                 <div className={styles.Field}>
                     <input
-                        value={profile.firstName && profile.firstName}
+                        value={profile.firstName || ""}
                         placeholder={!isGuestUser ? "Enter your first name" : ""}
                         disabled={!editMode || isGuestUser}
                         onChange={(e) => onFieldChange("firstName", e.target.value)}
                     />
                     {errors.firstName && (
-                        <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{errors.firstName}</p>
+                        <p className={styles.ErrorText}>{errors.firstName}</p>
                     )}
                 </div>
 
                 <div className={styles.Field}>
                     <input
-                        value={profile.lastName && profile.lastName}
+                        value={profile.lastName || ""}
                         placeholder={!isGuestUser ? "Enter your last name" : ""}
                         disabled={!editMode || isGuestUser}
                         onChange={(e) => onFieldChange("lastName", e.target.value)}
                     />
                     {errors.lastName && (
-                        <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{errors.lastName}</p>
+                        <p className={styles.ErrorText}>{errors.lastName}</p>
                     )}
                 </div>
             </div>
 
             {/* Email + OTP trigger */}
-            <div className={styles.Field}>
-                <input
-                    value={profile.email || ""}
-                    placeholder={isGuestUser ? "Login to view email" : "Enter your email address"}
-                    disabled={!editMode || isGuestUser}
-                    onChange={(e) => onFieldChange("email", e.target.value)}
-                />
-                {editMode && !isGuestUser && profile.email !== originalEmail && (
-                    <span onClick={onVerifyEmail}>Verify</span>
+            <div className={styles.FieldContainer} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                <div className={styles.Field}>
+                    <input
+                        value={profile.email || ""}
+                        placeholder={isGuestUser ? "Login to view email" : "Enter your email address"}
+                        disabled={!editMode || isGuestUser}
+                        onChange={(e) => {
+                            setEmailError(""); // Clear red error when typing
+                            onFieldChange("email", e.target.value);
+                        }}
+                    />
+                    {editMode && !isGuestUser && profile.email !== originalEmail && (
+                        <span className={styles.VerifyBtn} onClick={handleVerifyClick}>
+                            Verify
+                        </span>
+                    )}
+                </div>
+                
+                {/* --- The Red Error Message --- */}
+                {emailError && (
+                    <p style={{ 
+                        color: "#ff4d4d", 
+                        fontSize: "12px", 
+                        marginTop: "6px",
+                        textAlign: "left",
+                        width: "100%",
+                        display: "block" 
+                    }}>
+                        {emailError}
+                    </p>
                 )}
+                
                 {showOtpPopup && otpNode}
             </div>
 
@@ -91,44 +133,62 @@ const PersonalInfoForm = ({
                 <div className={styles.Field}>
                     <input
                         value={profile.phone || ""}
-                        placeholder={
-                            editMode
-                                ? "Add your phone number"
-                                : profile.phone
-                                    ? ""
-                                    : isGuestUser
-                                        ? "Login to add phone number"
-                                        : "No phone number added"
-                        }
+                        placeholder={editMode ? "Add your phone number" : "No phone number added"}
                         disabled={!editMode || isGuestUser}
                         onChange={(e) => onFieldChange("phone", e.target.value)}
                     />
                     {errors.phone && (
-                        <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{errors.phone}</p>
+                        <p className={styles.ErrorText}>{errors.phone}</p>
                     )}
                 </div>
 
-                <div className={styles.Field}>
+                <div className={styles.Field} ref={genderRef}>
                     {editMode ? (
-                        <select
-                            value={profile.gender || ""}
-                            onChange={(e) => onFieldChange("gender", e.target.value)}
-                        >
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
+                        <div className={styles.SelectContainer} style={{ position: "relative" }}>
+                            <div 
+                                className={styles.CustomSelectTrigger}
+                                onClick={() => setIsGenderOpen(!isGenderOpen)}
+                            >
+                                <span style={{ textTransform: "capitalize" }}>
+                                    {profile.gender || "Select Gender"}
+                                </span>
+                                <span className={`${styles.Arrow} ${isGenderOpen ? styles.Rotate : ""}`}>
+                                    ▼
+                                </span>
+                            </div>
+
+                            {isGenderOpen && (
+                                <div className={styles.CustomOptionsList}>
+                                    {genderOptions.map((opt) => (
+                                        <div 
+                                            key={opt.value}
+                                            className={styles.OptionItem}
+                                            onClick={() => {
+                                                onFieldChange("gender", opt.value);
+                                                setIsGenderOpen(false);
+                                            }}
+                                        >
+                                            {opt.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     ) : (
-                        <input value={profile.gender || ""} style={{ textTransform: "capitalize" }} disabled />
+                        <input 
+                            value={profile.gender || ""} 
+                            style={{ textTransform: "capitalize" }} 
+                            disabled 
+                            placeholder="Not Specified"
+                        />
                     )}
                 </div>
             </div>
 
-            {/* General error */}
             {errors.general && (
-                <p style={{ color: "red", fontSize: "13px", marginTop: "8px" }}>{errors.general}</p>
+                <p className={styles.ErrorText} style={{ marginTop: "8px" }}>{errors.general}</p>
             )}
 
-            {/* Save / Cancel */}
             {editMode && !isGuestUser && (
                 <div className={styles.ActionRow}>
                     <button className={styles.SaveBtn} onClick={onSave}>Save Changes</button>

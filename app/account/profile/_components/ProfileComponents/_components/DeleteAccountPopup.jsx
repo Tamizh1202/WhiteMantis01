@@ -33,9 +33,7 @@ const DeleteAccountPopup = ({ accountStatus, onKeep, onConfirm }) => {
                     </>
                 ) : (
                     <p>
-                        Any pending orders will still be delivered.
-                        <br />
-                        Deleting your account will permanently remove your data and saved preferences.
+                        Are you sure you want to delete your account? Any upcoming orders will still be delivered.
                     </p>
                 )}
 
