@@ -9,8 +9,6 @@ import { authOptions } from "@/lib/nextauth";
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions as any);
 
-  console.log(session)
-
   if (!session) {
     redirect("/auth");
   }

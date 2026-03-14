@@ -547,18 +547,7 @@
 }
 
 .FilterOptions input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  width: 13px;
-  height: 13px;
-  border: 1px solid #6e736a;
-  background: #ffffff;
-  cursor: pointer;
-
-  display: inline-grid;
-  place-content: center;
+  /* Inherit global styles */
 }
 
 .MobileFilterOverlay {
@@ -698,7 +687,6 @@
   }
 
   .ProductsGrid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
 

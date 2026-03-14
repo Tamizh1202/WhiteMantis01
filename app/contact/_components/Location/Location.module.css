@@ -53,7 +53,7 @@
 
 .infoTitle {
   font-size: var(--fs-15);
-  color: #6c7a5f;
+  color: #2F362A;
   font-family: var(--lato);
   font-weight: 700;
   line-height: 1.2;
@@ -62,15 +62,14 @@
 .directionsBtn {
   display: inline-block;
   text-decoration: none;
-  font-size: var(--fs-15);
+  font-size: 15px;
   padding: 7px 30px;
-  border-radius: 6px;
   background: #6c7a5f;
   color: #ffffff;
   font-family: var(--lato);
-  font-weight: 600;
-
+  font-weight: 400;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  letter-spacing: 0;
 }
 
 @media (max-width: 900px) {

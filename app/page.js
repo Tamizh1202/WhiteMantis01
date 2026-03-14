@@ -45,10 +45,23 @@ export const metadata = {
       "Experience premium specialty coffee in Dubai.",
     images: ["/social-thumbnail.png"],
   },
-  
+
 };
 
-export default function Home() {
+export default async function Home() {
+  let categories = [];
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/web-categories?sort=createdAt&select[title]=true&select[slug]=true&depth=0`, {
+      next: { revalidate: 3600 }
+    });
+    const data = await res.json();
+    categories = data.docs || [];
+  } catch (error) {
+    console.error("Failed to fetch categories in home page:", error);
+  }
+
+  const coffeeCategory = categories[0];
+
   return (
     <>
       <Suspense fallback={null}>
@@ -57,7 +70,7 @@ export default function Home() {
 
       <Landing />
       <div className="sectionPadding"></div>
-      <Coffees />
+      <Coffees category={coffeeCategory} />
       <div className="sectionPadding"></div>
       <Shop />
       {/* <Subscribe /> */}

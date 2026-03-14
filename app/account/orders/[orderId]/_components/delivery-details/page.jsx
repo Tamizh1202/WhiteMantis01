@@ -3,11 +3,16 @@ import React from "react";
 import styles from "./page.module.css";
 
 export default function DelivereyDetails({ order }) {
-  if (!order || !order.shippingAddress) return null;
+  if (!order || (!order.shippingAddress && order.deliveryOption === "delivery"))
+    return null;
 
   return (
     <div className={styles.main}>
-      <h1>Delivery Details</h1>
+      {order.deliveryOption === "delivery" ? (
+        <h1>Delivery Details</h1>
+      ) : (
+        <h1>Pickup Details</h1>
+      )}
       <div className={styles.container}>
         <div className={styles.Top}>
           <div>
@@ -24,46 +29,64 @@ export default function DelivereyDetails({ order }) {
               />
             </svg>
           </div>
-          <div>
-            <h1>{order?.shippingAddress?.addressFirstName} {order?.shippingAddress?.addressLastName}</h1>
-            <p>
-              {order?.shippingAddress?.addressLine1}, {order?.shippingAddress?.addressLine2}<br />
-              {order?.shippingAddress?.city}, {order?.shippingAddress?.emirates}, {order?.shippingAddress?.addressCountry}
-            </p>
-          </div>
+          {order.deliveryOption === "delivery" ? (
+            <div>
+              <h1>
+                {order?.shippingAddress?.addressFirstName}{" "}
+                {order?.shippingAddress?.addressLastName}
+              </h1>
+              <p>
+                {order?.shippingAddress?.addressLine1},{" "}
+                {order?.shippingAddress?.addressLine2}
+                <br />
+                {order?.shippingAddress?.city},{" "}
+                {order?.shippingAddress?.emirates},{" "}
+                {order?.shippingAddress?.addressCountry}
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p>White Mantis Roastery - Al Quoz</p>
+              <p>Warehouse #2 – Al Quoz Industrial Area 4, Dubai</p>
+            </div>
+          )}
         </div>
-        <div className={styles.divder}></div>
-        <div className={styles.Bottom}>
-          <span>
-            <svg
-              width={24}
-              height={24}
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <mask
-                id="mask0_3069_21619"
-                style={{ maskType: "alpha" }}
-                maskUnits="userSpaceOnUse"
-                x="0"
-                y="0"
-                width={24}
-                height={24}
-              >
-                <rect width="24" height="24" fill="#D9D9D9" />
-              </mask>
+        {order.deliveryOption === "delivery" && (
+          <>
+            <div className={styles.divder}></div>
+            <div className={styles.Bottom}>
+              <span>
+                <svg
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <mask
+                    id="mask0_3069_21619"
+                    style={{ maskType: "alpha" }}
+                    maskUnits="userSpaceOnUse"
+                    x="0"
+                    y="0"
+                    width={24}
+                    height={24}
+                  >
+                    <rect width="24" height="24" fill="#D9D9D9" />
+                  </mask>
 
-              <g mask="url(#mask0_3069_21619)">
-                <path
-                  d="M22.5135 22.2443C20.3768 22.2443 18.2657 21.7779 16.1802 20.845C14.0947 19.9121 12.1973 18.5898 10.4879 16.8781C8.77848 15.1664 7.45797 13.2664 6.52634 11.1781C5.59472 9.08979 5.12891 6.97583 5.12891 4.83619C5.12891 4.52808 5.23147 4.27133 5.4366 4.06592C5.64173 3.86052 5.89814 3.75781 6.20583 3.75781H10.3597C10.599 3.75781 10.8127 3.83912 11.0007 4.00173C11.1887 4.16434 11.2998 4.35691 11.334 4.57943L12.0007 8.17403C12.0349 8.4479 12.0263 8.67898 11.9751 8.86727C11.9238 9.05556 11.8298 9.21817 11.693 9.35511L9.20583 11.8713C9.54771 12.5047 9.95369 13.1166 10.4238 13.7071C10.8939 14.2977 11.411 14.8668 11.9751 15.4146C12.505 15.9452 13.0605 16.4373 13.6417 16.8909C14.2229 17.3445 14.8383 17.7596 15.4879 18.1362L17.8981 15.7227C18.052 15.5686 18.2528 15.4531 18.5007 15.3761C18.7486 15.299 18.9922 15.2776 19.2315 15.3119L22.7699 16.0308C23.0092 16.0993 23.2058 16.2234 23.3597 16.4031C23.5135 16.5828 23.5904 16.7839 23.5904 17.0065V21.1659C23.5904 21.474 23.4879 21.7308 23.2828 21.9362C23.0776 22.1416 22.8212 22.2443 22.5135 22.2443Z"
-                  fill="#6E736A"
-                />
-              </g>
-            </svg>
-          </span>
-          <p>{order.shippingAddress?.phoneNumber || "No phone provided"}</p>
-        </div>
+                  <g mask="url(#mask0_3069_21619)">
+                    <path
+                      d="M22.5135 22.2443C20.3768 22.2443 18.2657 21.7779 16.1802 20.845C14.0947 19.9121 12.1973 18.5898 10.4879 16.8781C8.77848 15.1664 7.45797 13.2664 6.52634 11.1781C5.59472 9.08979 5.12891 6.97583 5.12891 4.83619C5.12891 4.52808 5.23147 4.27133 5.4366 4.06592C5.64173 3.86052 5.89814 3.75781 6.20583 3.75781H10.3597C10.599 3.75781 10.8127 3.83912 11.0007 4.00173C11.1887 4.16434 11.2998 4.35691 11.334 4.57943L12.0007 8.17403C12.0349 8.4479 12.0263 8.67898 11.9751 8.86727C11.9238 9.05556 11.8298 9.21817 11.693 9.35511L9.20583 11.8713C9.54771 12.5047 9.95369 13.1166 10.4238 13.7071C10.8939 14.2977 11.411 14.8668 11.9751 15.4146C12.505 15.9452 13.0605 16.4373 13.6417 16.8909C14.2229 17.3445 14.8383 17.7596 15.4879 18.1362L17.8981 15.7227C18.052 15.5686 18.2528 15.4531 18.5007 15.3761C18.7486 15.299 18.9922 15.2776 19.2315 15.3119L22.7699 16.0308C23.0092 16.0993 23.2058 16.2234 23.3597 16.4031C23.5135 16.5828 23.5904 16.7839 23.5904 17.0065V21.1659C23.5904 21.474 23.4879 21.7308 23.2828 21.9362C23.0776 22.1416 22.8212 22.2443 22.5135 22.2443Z"
+                      fill="#6E736A"
+                    />
+                  </g>
+                </svg>
+              </span>
+              <p>{order.shippingAddress?.phoneNumber || "No phone provided"}</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

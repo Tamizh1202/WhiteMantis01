@@ -1,9 +1,9 @@
+import BlogsLanding from "./_components/BlogsLanding/BlogsLanding";
+
 async function BlogsPage() {
     return (
-        <div>
-            <h1>Blogs</h1>
-        </div>
-    )
+        <BlogsLanding />
+    );
 }
 
-export default BlogsPage
+export default BlogsPage;

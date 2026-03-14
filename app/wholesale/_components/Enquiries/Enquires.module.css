@@ -7,6 +7,7 @@
   background-color: #ffffff;
   padding: 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
 }
+
 .MainContainer {
   display: flex;
   justify-content: left;
@@ -17,11 +18,13 @@
   align-items: center;
   height: 100%;
 }
+
 .Left {
   display: flex;
   justify-content: left;
   width: 100%;
 }
+
 .Left img {
   width: auto;
   height: 100%;
@@ -29,6 +32,7 @@
   /* max-width: 890px; */
   max-height: 800px;
 }
+
 .Right {
   display: flex;
   justify-content: left;
@@ -36,12 +40,14 @@
   width: 100%;
   gap: clamp(24px, calc(24px + (8 * ((100vw - 320px) / 1120))), 32px);
 }
+
 .RightTop {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 4px;
 }
+
 .RightTop h3 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
@@ -49,28 +55,33 @@
   color: #2f362a;
   text-transform: uppercase;
 }
+
 .RightTop h3 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
   color: #2f362a;
   font-weight: 500;
 }
+
 .RightTop p {
   font-family: var(--lato);
   font-size: 15px;
   color: #6e736a;
   font-weight: 400;
 }
+
 .RightBottom {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 23px;
 }
+
 .SubButton {
   display: flex;
   justify-content: right;
 }
+
 .SubmitButton {
   background-color: #ffffff;
   color: #2f362a;
@@ -82,12 +93,14 @@
   padding: 13px 47px;
   cursor: pointer;
 }
+
 .Form {
   display: flex;
   flex-direction: column;
   gap: 24px;
   /* border: 1px solid #2f362a; */
 }
+
 .FormGroup {
   display: flex;
   flex-direction: column;
@@ -102,10 +115,11 @@
   font-size: 14px;
   color: #2f362a;
 }
+
 .SubmitWrap {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; 
+  align-items: flex-end;
 }
 
 .ResponseMessage {
@@ -176,8 +190,7 @@
 }
 
 .CheckboxBlock input {
-  width: 14px;
-  height: 14px;
+  /* Inherit global styles */
 }
 
 .Textarea {
@@ -192,10 +205,12 @@
 textarea::placeholder {
   color: #9a9a9a;
 }
+
 @media (max-width: 640px) {
   .Main {
     padding: 0px 24px 0px 24px;
   }
+
   .MainContainer {
     flex-direction: column;
     gap: 32px;
@@ -203,9 +218,11 @@ textarea::placeholder {
     align-items: baseline;
     overflow: hidden;
   }
+
   .Left {
     max-width: 100%;
   }
+
   .Left img {
     height: 100%;
     width: 100%;
@@ -218,12 +235,15 @@ textarea::placeholder {
     width: 100%;
     max-width: 350px;
   }
+
   .Form input {
     padding: 12px;
   }
+
   .SubButton {
     justify-content: center;
   }
+
   .TwoCol {
     grid-template-columns: 1fr;
   }
@@ -233,6 +253,7 @@ textarea::placeholder {
     border-bottom: 1px solid #2f362a;
   }
 }
+
 @media (min-width: 641px) and (max-width: 1024px) {
   .MainContainer {
     flex-direction: row;
@@ -268,6 +289,7 @@ textarea::placeholder {
     max-width: 420px;
   }
 }
+
 @media (min-width: 1025px) and (max-width: 1440px) {
   .MainContainer {
     flex-direction: row;

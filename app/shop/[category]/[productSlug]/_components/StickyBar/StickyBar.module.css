@@ -1,6 +1,7 @@
 .main {
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
   background: #ffffff;
   border-top: 1px solid #2f362a1a;
@@ -220,22 +221,25 @@
   .Popup {
     width: 90% !important;
   }
-  .SubscribeCta , .AddtoCartPriceCta{
-     padding: 9px 10px;
-     font-size: 14px;
+
+  .SubscribeCta,
+  .AddtoCartPriceCta {
+    padding: 9px 10px;
+    font-size: 14px;
   }
-    .Popup {
+
+  .Popup {
     width: 80% !important;
     padding: 20px !important;
   }
 
-  
+
   .Popup h3 {
     font-size: 18px !important;
     margin-bottom: 24px !important;
   }
 
- 
+
   .SubscriptionSection {
     margin-bottom: 20px !important;
   }
@@ -245,16 +249,17 @@
     margin-bottom: 8px !important;
   }
 
-  
+
   .FrequencyOptions {
     grid-template-columns: 1fr !important;
     gap: 10px;
   }
 
-  .FrequencyBtn{
+  .FrequencyBtn {
     padding: 10px 10px !important;
     font-size: 14px;
   }
+
   .ActiveFrequency {
     padding: 10px 10px !important;
     font-size: 14px;
@@ -265,7 +270,7 @@
     font-size: 14px !important;
   }
 
-  
+
   .PopupClose {
     top: 14px;
     right: 14px;
@@ -289,6 +294,7 @@
     width: 360px;
   }
 }
+
 .WeightDropdown {
   position: relative;
 }
@@ -335,6 +341,7 @@
 .WeightMenuItem:hover {
   background: #f5f5f5;
 }
+
 .RotateUp {
   transform: rotate(180deg);
   transition: transform 0.2s ease;
@@ -344,6 +351,7 @@
   transform: rotate(0deg);
   transition: transform 0.2s ease;
 }
+
 .SingleWeight {
   padding: 15px 16px;
   border: 1px solid #d6d6d6;
@@ -447,11 +455,9 @@
 /* Active state: ring + centered dot */
 .ActiveFrequency::after {
   border-color: #6c7a5f;
-  background: radial-gradient(
-    circle,
-    #6c7a5f 0 3px,
-    transparent 4px
-  );
+  background: radial-gradient(circle,
+      #6c7a5f 0 3px,
+      transparent 4px);
 }
 
 

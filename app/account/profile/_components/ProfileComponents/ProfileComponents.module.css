@@ -4,7 +4,11 @@
   align-items: center;
   height: auto;
   width: 100%;
-  padding-left: clamp(24px, calc(24px + (226 * ((100vw - 320px) / 1120))), 50px);
+  padding-left: clamp(
+    24px,
+    calc(24px + (226 * ((100vw - 320px) / 1120))),
+    50px
+  );
   padding-bottom: 100px;
   background-color: #ffffff;
 }
@@ -177,14 +181,14 @@
 }
 
 .AddressText .Label {
-  color: #2F362A;
+  color: #2f362a;
   font-family: var(--lato);
   font-weight: 600;
   font-size: 15px;
 }
 
 .AddressText hr {
-  background-color: #2F362A4D;
+  background-color: #2f362a4d;
   height: 1px;
   border: 1px;
   opacity: 1;
@@ -195,7 +199,7 @@
 }
 
 .AddressText .Name {
-  color: #6E736A;
+  color: #6e736a;
   font-family: var(--lato);
   font-weight: 400;
   font-size: 15px;
@@ -249,7 +253,7 @@
 .AddressHeader button {
   border: 1px solid #6c7a5f;
   background: #ffffff;
-  padding: 13px 25px;
+  padding: 8px 10px;
   font-family: var(--lato);
   font-size: 15px;
   color: #6c7a5f;
@@ -413,7 +417,7 @@
   margin-top: 6px !important;
 }
 
-.Popup>div+p[style*="color: red"] {
+.Popup > div + p[style*="color: red"] {
   margin-top: 6px;
   margin-bottom: 12px;
 }
@@ -667,16 +671,17 @@
   .Row2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    
+
     width: 100%;
-    
   }
+
   .Row2 input,
   .Row2 select {
     min-width: 0;
     width: 100%;
     box-sizing: border-box;
   }
+
   .divide {
     display: grid;
     grid-template-columns: 1fr 1fr;

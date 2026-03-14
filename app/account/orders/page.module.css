@@ -76,7 +76,11 @@
         gap: 24px;
         justify-content: left;
         align-items: flex-start;
-        max-width: 354px;
+        width: 100%;
+    }
+
+    .Top h1{
+        display: none;
     }
 
     .searchWrapper {
@@ -88,7 +92,7 @@
         padding-right: 24px;
     }
     .Right{
-        max-width:354px ;
+        width: 100%;
     }
      .searchWrapper{
         width: 100%;

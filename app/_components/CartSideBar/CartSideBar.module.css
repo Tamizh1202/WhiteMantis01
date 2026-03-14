@@ -9,7 +9,6 @@
   position: fixed;
   top: 0;
   right: -30%;
-  overflow-y: auto;
   width: 30%;
   height: 100vh;
   background: #ffffff;
@@ -17,44 +16,57 @@
   transition: right 0.35s ease;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  /* Prevent whole sidebar from scrolling */
 }
 
 .open {
   right: 0;
 }
+
 .Main {
   display: flex;
   justify-content: center;
   /* align-items: center; */
   width: 100%;
-  min-height: 100%;
-  padding: 100px 40px 22px 40px;
+  height: 100%;
+  padding: 100px 24px 0px 40px;
+  /* Remove bottom padding here */
 }
+
 .MainContainer {
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   width: 100%;
-  gap: 20px;
+  height: 100%;
+  overflow: hidden;
 }
+
 .Top {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 32px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 5px;
+  padding-right: 12px;
 }
+
 .TopOne {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 24px;
 }
+
 .TopOneTop {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
 }
+
 .TopOneLeft {
   display: flex;
   justify-content: left;
@@ -62,34 +74,41 @@
   gap: 8.12px;
   align-items: center;
 }
+
 .TopOneLeft h4 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
   font-weight: 400;
   color: #2f362a;
 }
+
 .TopOneLeft p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
   color: #6e736a;
 }
+
 .TopOneBottom {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 30px;
 }
-.TopOneRight svg{
+
+.TopOneRight svg {
   cursor: pointer;
 }
+
 .Card {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   flex-direction: row;
-  gap: 49px;
-  align-items: center;
+  align-items: flex-start;
+  /* Align to top like screenshot */
+  padding-bottom: 24px;
 }
+
 .CardLeft {
   display: flex;
   justify-content: left;
@@ -97,45 +116,49 @@
   flex-direction: row;
   gap: 15px;
 }
+
 .ProdImage img {
-  width: 100%;
-  max-width: 100px;
-  height: 100%;
-  max-height: 100px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
+  background-color: #f8f8f8;
 }
+
 .ProdDetails {
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
 }
+
 .ProdDetails h5 {
   font-family: var(--lato);
   font-weight: 400;
   font-size: 15px;
   color: #6e736a;
+  line-height: 1.4;
 }
+
 .ProdDetails h4 {
   font-family: var(--lato);
   font-weight: 400;
   font-size: 15px;
   color: #6e736a;
+  margin-top: 4px;
 }
+
 .CardRight {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  /* gap: 12px; */
-  justify-content: right;
-  width: 100%;
+  gap: 12px;
 }
 
 .QuantitySelector {
   display: flex;
   align-items: center;
-  border: 1px solid #cfcfcf;
-  height: 34px;
+  border: 1px solid #d4d4d4;
+  height: 38px;
 }
 
 .qtyBtn {
@@ -176,27 +199,32 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
 .TopTwo {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 24px;
 }
+
 .TopTwoTop {
   display: flex;
   justify-content: left;
 }
+
 .TopTwoTop h3 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
   font-weight: 500;
   color: #2f362a;
 }
+
 .TopTwoBottom {
   display: flex;
   justify-content: left;
   flex-direction: column;
 }
+
 .CouponInput {
   display: flex;
   width: 100%;
@@ -274,6 +302,7 @@
   background-color: #6c7a5f;
   color: #ffffff;
 }
+
 .AvailableCoupons {
   display: flex;
   justify-content: space-between;
@@ -284,6 +313,7 @@
   border-right: 1px solid #2f362a4d;
   border-bottom: 1px solid #2f362a4d;
 }
+
 .AvailableCouponsLeft {
   display: flex;
   justify-content: left;
@@ -291,12 +321,14 @@
   gap: 5px;
   align-items: center;
 }
+
 .AvailableCouponsLeft p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
   color: #6e736a;
 }
+
 .AvailableCouponsRight {
   display: flex;
   justify-content: right;
@@ -304,52 +336,64 @@
   gap: 10px;
   align-items: center;
 }
+
 .AvailableCouponsRight p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
   color: #6e736a;
 }
+
 .Bottom {
   display: flex;
   flex-direction: column;
   justify-content: left;
   gap: 24px;
-  padding-bottom: 20px;
+  padding: 10px 0 34px 0;
+  background-color: #ffffff;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
+  z-index: 10;
 }
+
 .BottomOne {
   display: flex;
   justify-content: left;
 }
+
 .BottomOne h3 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
   font-weight: 500;
   color: #2f362a;
 }
+
 .BottomTwo {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 16px;
 }
+
 .BottomDetails {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 8px;
 }
+
 .BottomDetailsTop,
 .BottomDetailsBottom {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
+
 .BottomDetailsLeft,
 .BottomDetailsLeft {
   display: flex;
   justify-content: left;
 }
+
 .BottomDetailsLeft h5,
 .BottomDetailsLeft h5 {
   font-family: var(--lato);
@@ -357,11 +401,13 @@
   font-weight: 400;
   color: #6e736a;
 }
+
 .BottomDetailsRight,
 .BottomDetailsRight {
   display: flex;
   justify-content: right;
 }
+
 .BottomDetailsRight h4,
 .BottomDetailsRight h4 {
   font-family: var(--lato);
@@ -370,36 +416,43 @@
   color: #6e736a;
   text-transform: uppercase;
 }
+
 .line {
   width: 100%;
   height: 1px;
   background-color: #2f362a4d;
 }
+
 .PriceDetails {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
+
 .PriceDetailLeft {
   display: flex;
   justify-content: left;
 }
+
 .PriceDetailLeft h5 {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 700;
   color: #6e736a;
 }
+
 .PriceDetailRight {
   display: flex;
   justify-content: right;
 }
+
 .PriceDetailRight h4 {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 700;
   color: #6e736a;
 }
+
 .CheckOutCta {
   width: 100%;
   height: 48px;
@@ -411,15 +464,18 @@
   font-weight: 500;
   cursor: pointer;
 }
+
 @media (max-width: 640px) {
   .sidebar {
     width: 100%;
     right: -100%;
     height: 100svh;
-    overflow-y: auto;
+    overflow: hidden;
+    /* Changed from overflow-y: auto */
     /* z-index: 0; */
     background-color: #ffffff;
   }
+
   /* .overlay{
     z-index: 00;
   } */
@@ -427,18 +483,21 @@
   .open {
     right: 0;
   }
-  
+
 
   .Main {
-    padding: 50px 24px 50px 24px;
+    padding: 50px 24px 0px 24px;
+    height: 100%;
   }
 
   .Card {
     justify-content: space-between;
   }
+
   .qtyValue {
     font-size: 14px;
   }
+
   .CardLeft {
     width: 100%;
   }
@@ -459,18 +518,22 @@
   .Apply {
     width: 100px;
   }
+
   .ProdImage img {
     max-width: 75px;
     max-height: 75px;
   }
+
   .CheckOutCta {
     height: 46px;
   }
+
   .TopOneLeft h4,
   .TopTwoTop h3,
   .BottomOne h3 {
     font-size: 20px;
   }
+
   .TopOneLeft p,
   .BottomDetailsLeft h5,
   .BottomDetailsRight h4,
@@ -478,32 +541,37 @@
   .PriceDetailRight h4 {
     font-size: 14px;
   }
+
   .ProdDetails h5,
   .ProdDetails h4 {
     font-size: 14px;
     max-width: 147px;
   }
+
   .AvailableCouponsLeft p,
   .AvailableCouponsRight p,
   .CheckOutCta {
     font-size: 14px;
   }
 }
+
 @media (min-width: 641px) and (max-width: 1200px) {
   .sidebar {
     width: 60%;
     right: -60%;
     height: 100svh;
-    overflow-y: auto;
-   
+    overflow: hidden;
+    /* Changed from overflow-y: auto */
+
   }
-  
+
   .open {
     right: 0;
   }
 
   .Main {
-    padding: 50px 28px 30px 28px;
+    padding: 50px 28px 0px 28px;
+    height: 100%;
   }
 
   .Card {
@@ -519,11 +587,12 @@
     width: 110px;
   }
 }
+
 @media (min-width: 1201px) and (max-width: 1640px) {
   .sidebar {
     width: 30%;
     right: -30%;
-   
+
   }
 
   .open {
@@ -531,9 +600,11 @@
   }
 
   .Main {
-    padding: 80px 36px 30px 36px;
+    padding: 80px 36px 0px 36px;
+    height: 100%;
   }
 }
+
 @media (min-width: 1641px) and (max-width: 1890px) {
   .sidebar {
     width: 28%;
@@ -545,7 +616,8 @@
   }
 
   .Main {
-    padding:100px 40px 34px 40px;
+    padding: 100px 40px 0px 40px;
+    height: 100%;
   }
 }
 

@@ -124,7 +124,10 @@ const CartSideBar = () => {
                           </div>
                           <div className={styles.ProdDetails}>
                             <h5>
-                              {`${item.name} ${item.tagline}${item.variantName ? `, ${item.variantName}g` : ''}`}
+                              {`${item.name}`}
+                              <br />
+                              {item.tagline}
+                              {item.variantName ? `, ${item.variantName}g` : ''}
                             </h5>
                             <h4>
                               AED{" "}
@@ -282,20 +285,7 @@ const CartSideBar = () => {
                 </div> */}
               </div>
               <div className={styles.Bottom}>
-                <div className={styles.BottomOne}>
-                  <h3>Price details</h3>
-                </div>
                 <div className={styles.BottomTwo}>
-                  <div className={styles.BottomDetails}>
-                    <div className={styles.BottomDetailsTop}>
-                      <div className={styles.BottomDetailsLeft}>
-                        <h5>Subtotal</h5>
-                      </div>
-                      <div className={styles.BottomDetailsRight}>
-                        <h4>AED {(cartTotals?.subtotal || 0).toFixed(2)}</h4>
-                      </div>
-                    </div>
-                  </div>
                   <div className={styles.Line}></div>
                   <div
                     className={styles.PriceDetails}
@@ -305,7 +295,7 @@ const CartSideBar = () => {
                     }}
                   >
                     <div className={styles.PriceDetailLeft}>
-                      <h5>Total</h5>
+                      <h5>Subtotal</h5>
                     </div>
                     <div className={styles.PriceDetailRight}>
                       <h4>AED {(cartTotals?.total || 0).toFixed(2)}</h4>

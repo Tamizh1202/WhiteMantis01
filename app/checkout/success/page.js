@@ -104,14 +104,17 @@ function SuccessContent() {
     return order.payment_method_title || "Credit Card";
   };
 
+
   // Both orders and subscriptions use line_items (WC) or products (Payload)
   const rawItems = order.line_items || order.products || order.items || [];
+  console.log(rawItems)
   const items = rawItems.map(item => ({
     id: item.id || item.productId,
-    name: item.name || item.product?.productTitle || item.productName || "Product",
+    name: item.product?.name || item.product?.productTitle || item.productName || "Product",
     quantity: item.quantity,
     price: item.total || item.product?.salePrice || item.price,
-    image: item.image?.src || item.product?.productImages?.[0]?.image?.url || null
+    image: item.image?.src || item.product?.productImages?.[0]?.image?.url || null,
+    tagline: item.product?.tagline || ''
   }));
 
   const orderInfo = {
@@ -297,7 +300,7 @@ function SuccessContent() {
                   />
                 </div>
                 <div className={styles.ProdNameAndweight}>
-                  <h4>{(item.name)}</h4>
+                  <h4>{(item.name)} {item.tagline}</h4>
                 </div>
                 <div className={styles.ProdQnty}>
                   <p>x{item.quantity}</p>

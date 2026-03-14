@@ -153,6 +153,11 @@
     color: #6E736A;
 }
 
+.inputemail:focus {
+    border-color: #2F362A !important;
+    border-radius: 0 !important;
+}
+
 .RightTopTwo {
     display: flex;
     justify-content: left;

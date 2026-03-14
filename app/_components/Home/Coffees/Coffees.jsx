@@ -1,63 +1,17 @@
 "use client";
-
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import styles from "./Coffees.module.css";
 import Image from "next/image";
-// import coffeImg from "./1.png";
 import useEmblaCarousel from "embla-carousel-react";
 import { useRouter } from "next/navigation";
+import axiosClient from "@/lib/axios";
+import { formatImageUrl } from "@/lib/imageUtils";
 
-const coffeeData = [
-  {
-    id: 1330,
-    title: "Indonesia ALAMIN Co-Fermented Jasmine",
-    desc: "Jasmine tea, honey, floral",
-    slug: "indonesia-alamin-co-fermented-jasmine",
-    img:
-      "https://wordpressbackend.whitemantis.ae/wp-content/uploads/2026/01/Indonesia-jasmine-250g.png" ||
-      coffeImg,
-  },
-  {
-    id: 1301,
-    title: "Indonesia Meriah Classic Natural",
-    desc: "Floral, berry, honey",
-    slug: "indonesia-meriah-classic-natural",
-    img:
-      "https://wordpressbackend.whitemantis.ae/wp-content/uploads/2026/01/Classic-Natural-250g-1.png" ||
-      coffeImg,
-  },
-  {
-    id: 1290,
-    title: "Indonesia Bener Meriah Triple Wet Hull",
-    desc: "Brown sugar, chocolate, black tea",
-    slug: "indonesia-bener-meriah-triple-wet-hull",
-    img:
-      "https://wordpressbackend.whitemantis.ae/wp-content/uploads/2026/01/Wet-hulled-250g.png" ||
-      coffeImg,
-  },
-  {
-    id: 1280,
-    title: "El Salvador Santa Leticia",
-    desc: "Red apple, plum, caramel",
-    slug: "el-salvador-santa-leticia",
-    img:
-      "https://wordpressbackend.whitemantis.ae/wp-content/uploads/2026/01/El-Salvador-SL.png" ||
-      coffeImg,
-  },
-  {
-    id: 1262,
-    title: "Colombia Huila 720",
-    desc: "Cinnamon, chocolate, tropical fruit",
-    slug: "colombia-huila-720",
-    img:
-      "https://wordpressbackend.whitemantis.ae/wp-content/uploads/2026/01/Colombia-Huila-720-250g.png" ||
-      coffeImg,
-  },
-];
-
-const Coffees = () => {
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-  const [canScrollNext, setCanScrollNext] = React.useState(false);
+const Coffees = ({ category }) => {
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -65,7 +19,41 @@ const Coffees = () => {
     align: "start",
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
+    async function fetchProducts() {
+      if (!category?.slug) return;
+      setIsLoading(true);
+      try {
+        const productFields = [
+          "id",
+          "name",
+          "slug",
+          "description",
+          "tagline",
+          "productImage",
+          "createdAt",
+          "tastingNotes"
+        ];
+        const productSelectQuery = productFields
+          .map((f) => `select[${f}]=true`)
+          .join("&");
+
+        const res = await axiosClient.get(
+          `/api/web-products?where[categories.slug][equals]=${category.slug}&limit=5&${productSelectQuery}`
+        );
+        setProducts(res.data.docs || []);
+      } catch (err) {
+        console.error("Error fetching products for Coffees carousel:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchProducts();
+  }, [category]);
+
+  console.log(products);
+
+  useEffect(() => {
     if (!emblaApi) return;
 
     const updateButtons = () => {
@@ -82,7 +70,7 @@ const Coffees = () => {
       emblaApi.off("select", updateButtons);
       emblaApi.off("reInit", updateButtons);
     };
-  }, [emblaApi]);
+  }, [emblaApi, products]); // Re-init embla when products load
 
   const scrollPrev = useCallback(() => {
     if (!emblaApi || !canScrollPrev) return;
@@ -94,12 +82,32 @@ const Coffees = () => {
     emblaApi.scrollNext();
   }, [emblaApi, canScrollNext]);
 
+  if (isLoading && products.length === 0) {
+    return (
+      <div className={styles.Main}>
+        <div className={styles.MainContainer} style={{ justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+          <Image
+            src="/White-mantis-green-loader.gif"
+            alt="Loading products"
+            width={120}
+            height={120}
+            unoptimized
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLoading && products.length === 0) {
+    return null; // Or show nothing if no products
+  }
+
   return (
     <div className={styles.Main}>
       <div className={styles.MainContainer}>
         <div className={styles.Left}>
           <div className={styles.LeftTop}>
-            <h3>Selected coffees</h3>
+            <h3>{category?.title || "Selected coffees"}</h3>
             <p>
               The White Mantis coffee experience, delivered seamlessly to your
               door. Subscribe for a never-ending supply of excellence.
@@ -159,13 +167,13 @@ const Coffees = () => {
               className={styles.EmblaContainer}
               style={{ cursor: "pointer" }}
             >
-              {coffeeData.map((item, index) => (
+              {products.map((item, index) => (
                 <div
                   onClick={() =>
-                    router.push(`/shop/coffee-beans/${item.slug}-${item.id}`)
+                    router.push(`/shop/${category.slug}/${item.slug}`)
                   }
                   className={styles.EmblaSlide}
-                  key={`coffee-${item.title.replace(/\s+/g, "-").toLowerCase()}`}
+                  key={`coffee-${item.id}`}
                 >
                   <div className={styles.Card}>
                     <div className={styles.CardTop}>
@@ -194,8 +202,8 @@ const Coffees = () => {
 
                       <div className={styles.ProductImage}>
                         <Image
-                          src={item.img}
-                          alt={item.title}
+                          src={formatImageUrl(item.productImage)}
+                          alt={item.name}
                           width={300}
                           height={300}
                         />
@@ -203,8 +211,8 @@ const Coffees = () => {
                     </div>
 
                     <div className={styles.CardBottom}>
-                      <h3>{item.title}</h3>
-                      <p>{item.desc}</p>
+                      <h3>{item.name} {item.tagline}</h3>
+                      <p>{item.tastingNotes || item.description}</p>
                     </div>
                   </div>
                 </div>

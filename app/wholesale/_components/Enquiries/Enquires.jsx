@@ -76,9 +76,11 @@ const Enquires = () => {
           coffee_shop: formData.categories.includes("Coffee Shop"),
           restaurant: formData.categories.includes("Restaurant"),
           other: formData.categories.includes("Other"),
-          other_specification: formData.categories.includes("Other") ? formData.message : ""
+          other_specification: formData.categories.includes("Other")
+            ? formData.message
+            : "",
         },
-        message: formData.message
+        message: formData.message,
       };
 
       const res = await axiosClient.post("/api/wholesale", payload);
@@ -87,7 +89,7 @@ const Enquires = () => {
         setResponseError(false);
         setResponseMessage(
           "Thank you! Your wholesale enquiry has been submitted.",
-        ); 
+        );
 
         setFormData({
           businessName: "",
@@ -165,17 +167,17 @@ const Enquires = () => {
                     suppressHydrationWarning
                     required
                   />
-                  <input
-                    type="text"
-                    name="phone"
-                    placeholder="Phone number*"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    suppressHydrationWarning
-                    required
-                  />
                 </div>
 
+                <input
+                  type="text"
+                  name="phone"
+                  placeholder="Phone number*"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  suppressHydrationWarning
+                  required
+                />
                 <input
                   type="text"
                   name="location"

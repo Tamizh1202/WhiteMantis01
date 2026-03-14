@@ -5,15 +5,21 @@
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-  padding-left: clamp(24px,
-      calc(24px + (386 * ((100vw - 320px) / 1120))),
-      410px);
-  padding-right: clamp(24px,
-      calc(24px + (386 * ((100vw - 320px) / 1120))),
-      410px);
-  padding-bottom: clamp(80px,
-      calc(80px + (120 * ((100vw - 320px) / 1120))),
-      200px);
+  padding-left: clamp(
+    24px,
+    calc(24px + (386 * ((100vw - 320px) / 1120))),
+    410px
+  );
+  padding-right: clamp(
+    24px,
+    calc(24px + (386 * ((100vw - 320px) / 1120))),
+    410px
+  );
+  padding-bottom: clamp(
+    80px,
+    calc(80px + (120 * ((100vw - 320px) / 1120))),
+    200px
+  );
 }
 
 .MainConatiner {
@@ -236,7 +242,7 @@
   font-family: var(--lato);
   font-size: 16px;
   font-weight: 400;
-  color: #2F362A;
+  color: #2f362a;
   line-height: 1.4;
 }
 
@@ -245,14 +251,14 @@
   align-items: center;
   font-family: var(--lato);
   font-size: 15px;
-  color: #2F362A;
+  color: #2f362a;
   margin-top: 4px;
 }
 
 .ItemFrequencyRow {
   font-family: var(--lato);
   font-size: 15px;
-  color: #2F362A;
+  color: #2f362a;
   margin-top: 4px;
 }
 
@@ -591,8 +597,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 20px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .BillingToggle input {
@@ -656,41 +662,8 @@
   color: #2f362a;
 }
 
-.CheckBox input[type="checkbox"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid #9b9b9b;
-  border-radius: 0px;
-  background-color: transparent;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-
-.CheckBox input[type="checkbox"]:hover {
-  border-color: #2f362a;
-}
-
-
-.CheckBox input[type="checkbox"]:checked {
-  background-color: #2f7a3f;
-  border-color: #2f7a3f;
-}
-
-
-.CheckBox input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 8px;
-  border: solid #ffffff;
-  border-width: 0 0px 0px 0;
-  transform: rotate(45deg);
+.CheckBox{
+  padding-top: 20px;
 }
 
 @media (max-width: 640px) {
@@ -791,21 +764,21 @@
   }
 }
 
-@media(min-width: 641px) and (max-width: 1024px) {
+@media (min-width: 641px) and (max-width: 1024px) {
   .Main {
     padding-left: 40px;
     padding-right: 40px;
   }
 }
 
-@media(min-width: 1025px) and (max-width: 1480px) {
+@media (min-width: 1025px) and (max-width: 1480px) {
   .Main {
     padding-left: 80px;
     padding-right: 80px;
   }
 }
 
-@media(min-width: 1481px) and (max-width: 1820px) {
+@media (min-width: 1481px) and (max-width: 1820px) {
   .Main {
     padding-left: 150px;
     padding-right: 150px;
@@ -841,9 +814,9 @@
 }
 
 .AddressCard.Selected {
-  border-color: #2F362A;
+  border-color: #2f362a;
   z-index: 1;
-  outline: 1px solid #2F362A;
+  outline: 1px solid #2f362a;
 }
 
 .AddressContent {
@@ -892,18 +865,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  justify-content: right;
-  padding: 12px 0;
+  justify-content: left;
   background: none;
   border: none;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 20px;
 }
 
 .AddNewAddress p {
   font-family: var(--lato);
   font-size: 14px;
-  color: #6E736A;
+  color: #6e736a;
   margin: 0;
 }
 
@@ -959,7 +931,7 @@
 .CouponSection {
   margin-top: 30px;
   padding-top: 30px;
-  border-top: 1px solid #2F362A1A;
+  border-top: 1px solid #2f362a1a;
 }
 
 .CouponHeader {
@@ -973,7 +945,7 @@
   font-family: var(--lexend);
   font-size: 18px;
   font-weight: 500;
-  color: #2F362A;
+  color: #2f362a;
   margin: 0;
 }
 
@@ -987,7 +959,7 @@
 .ViewAll span {
   font-family: var(--lato);
   font-size: 14px;
-  color: #6E736A;
+  color: #6e736a;
 }
 
 .CouponInputGroup {
@@ -1002,9 +974,9 @@
   justify-content: space-between;
   align-items: center;
   height: 48px;
-  border: 1px solid #2F362A33;
+  border: 1px solid #2f362a33;
   padding: 0 16px;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .AppliedText {
@@ -1021,12 +993,12 @@
 }
 
 .SavingsBadge {
-  background: #D9E8D9;
+  background: #d9e8d9;
   padding: 6px 12px;
   border-radius: 2px;
   font-family: var(--lato);
   font-size: 14px;
-  color: #6E736A;
+  color: #6e736a;
 }
 
 .RemoveCouponBtn {
@@ -1040,18 +1012,18 @@
 
 .CouponInputGroup input {
   flex: 1;
-  border: 1px solid #2F362A33;
+  border: 1px solid #2f362a33;
   border-right: none !important;
   padding: 0 16px;
   font-family: var(--lato);
   font-size: 15px;
   outline: none;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .CouponInputGroup button {
-  background: #6D7763;
-  color: #FFFFFF;
+  background: #6d7763;
+  color: #ffffff;
   border: none;
   padding: 0 30px;
   font-family: var(--lato);
@@ -1061,17 +1033,17 @@
 }
 
 .RewardsSection {
-  border: 1px solid #2F362A33;
+  border: 1px solid #2f362a33;
   border-top: none;
   padding: 16px 20px;
   display: flex;
   gap: 12px;
   justify-content: space-between;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .SubRewardsSection {
-  border-top: 1px solid #2F362A33 !important;
+  border-top: 1px solid #2f362a33 !important;
 }
 
 .CheckboxContainer {
@@ -1094,21 +1066,21 @@
 .Checkmark {
   height: 20px;
   width: 20px;
-  background-color: #FFFFFF;
-  border: 1.5px solid #2F362A66;
+  background-color: #ffffff;
+  border: 1.5px solid #2f362a66;
   border-radius: 2px;
   flex-shrink: 0;
   position: relative;
   margin-top: 2px;
 }
 
-.CheckboxContainer:hover input~.Checkmark {
-  border-color: #6D7763;
+.CheckboxContainer:hover input ~ .Checkmark {
+  border-color: #6d7763;
 }
 
-.CheckboxContainer input:checked~.Checkmark {
-  background-color: #6D7763;
-  border-color: #6D7763;
+.CheckboxContainer input:checked ~ .Checkmark {
+  background-color: #6d7763;
+  border-color: #6d7763;
 }
 
 .Checkmark:after {
@@ -1117,7 +1089,7 @@
   display: none;
 }
 
-.CheckboxContainer input:checked~.Checkmark:after {
+.CheckboxContainer input:checked ~ .Checkmark:after {
   display: block;
 }
 
@@ -1141,14 +1113,14 @@
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 550;
-  color: #2F362A;
+  color: #2f362a;
 }
 
 .RewardsBalance {
   margin: 4px 0 0 0;
   font-family: var(--lato);
   font-size: 13px;
-  color: #6E736A;
+  color: #6e736a;
 }
 
 .PotentialSavings {
@@ -1171,14 +1143,14 @@
 .CouponInfoMessage span {
   font-family: var(--lato);
   font-size: 13px;
-  color: #6E736A;
+  color: #6e736a;
 }
 
 .EarningBadge {
   margin-top: 15px;
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 12px 16px;
-  border: 1px solid #2F362A1A;
+  border: 1px solid #2f362a1a;
 }
 
 .EarningBadge p {

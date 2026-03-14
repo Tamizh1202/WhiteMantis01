@@ -52,6 +52,8 @@ export default function OrdersPage() {
         'select[deliveringBy]': 'true',
         'select[deliveredOn]': 'true',
         'select[refundedAmount]': 'true',
+        'select[deliveryOption]': 'true',
+        'select[origin]': 'true',
       };
 
       const query = new URLSearchParams(queryParams);
