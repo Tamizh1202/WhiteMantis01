@@ -33,7 +33,7 @@
 
 .orderDateSub {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 14px;
   color: #2f362a;
   margin-top: 6px;
   line-height: 100%;
@@ -122,6 +122,7 @@
   color: #2f362a;
   text-decoration: underline;
   font-weight: 500;
+  width: max-content;
 }
 
 .cancelContainer {
@@ -170,6 +171,10 @@
 
   .orderActions {
     align-items: flex-end;
+  }
+
+  .cancelContainer{
+    padding-right: 30px;
   }
 
   .cancelBtn {
