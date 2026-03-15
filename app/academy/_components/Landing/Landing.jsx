@@ -3,18 +3,18 @@ import React from "react";
 import styles from "./Landing.module.css";
 import Image from "next/image";
 import one from "./1.png";
-import two from "./2.png";
+import two from "./cropped.png";
 
 const Landing = () => {
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.MainConatiner}>
+        <div className={styles.MainConatiner} >
           <div className={styles.LeftConatiner}>
             <div className={styles.LeftConatinerTop}>
-              <h3>Art & Science of Coffee Mastery</h3>
+              {/* <h3>Art & Science of Coffee Mastery</h3>
               <div className={styles.line}></div>
-              <p>The White Mantis Roster</p>
+              <p>The White Mantis Roster</p> */}
             </div>
             <div className={styles.LeftConatinerBottom}>
               <Image src={one} alt="workshop image one" />

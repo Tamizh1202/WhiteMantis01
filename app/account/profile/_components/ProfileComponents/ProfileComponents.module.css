@@ -4,11 +4,9 @@
   align-items: center;
   height: auto;
   width: 100%;
-  padding-left: clamp(
-    24px,
-    calc(24px + (226 * ((100vw - 320px) / 1120))),
-    50px
-  );
+  padding-left: clamp(24px,
+      calc(24px + (226 * ((100vw - 320px) / 1120))),
+      50px);
   padding-bottom: 100px;
   background-color: #ffffff;
 }
@@ -88,7 +86,7 @@
   gap: 30px;
 }
 
-.Field {
+/* .Field {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -126,6 +124,68 @@
   cursor: pointer;
   margin-left: 12px;
   color: #6c7a5f;
+} */
+.Field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #e2e4df;
+  padding: 14px 16px;
+  font-family: var(--lato);
+  font-size: 14px;
+  color: #6e736a;
+  background-color: #fff;
+  position: relative;
+  /* Essential for the dropdown list */
+}
+
+.Field input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+  color: #6e736a;
+}
+
+.Field input:enabled {
+  color: #2f362a;
+}
+
+/* --- Custom Gender Dropdown --- */
+.CustomSelectTrigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+}
+
+.Arrow {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  color: #6c7a5f;
+}
+
+.Rotate {
+  transform: rotate(180deg);
+}
+
+
+
+.OptionItem {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #6e736a;
+  transition: background 0.2s;
+}
+
+.OptionItem:hover {
+  background-color: #f8f9f7;
+  color: #2f362a;
 }
 
 .Row {
@@ -148,7 +208,56 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.ActionRow {
+.SelectContainer {
+  position: relative;
+  width: 100%;
+}
+
+.Field,
+.SelectContainer {
+  /* Whichever div wraps both the Trigger and the List */
+  position: relative;
+}
+
+.CustomOptionsList {
+  position: absolute;
+  top: calc(100% + 14px);
+  /* Moves it exactly below the Field padding */
+  left: -16px;
+  /* Counteracts the Field padding to align with border */
+  width: calc(100% + 32px);
+  /* Makes it flush with the outer Field border */
+  background: #ffffff;
+  border: 1px solid #e2e4df;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.OptionItem {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #6e736a;
+  transition: background 0.2s;
+  background: #ffffff;
+}
+
+.OptionItem:hover {
+  background-color: #f8f9f7;
+  color: #2f362a;
+}
+
+.ErrorText {
+  color: #ff4d4d;
+  font-size: 12px;
+  margin-top: 5px;
+  font-family: var(--lato);
+  font-weight: 500;
+}
+
+/* .ActionRow {
   display: flex;
   gap: 14px;
   margin-top: 10px;
@@ -172,7 +281,54 @@
   font-family: var(--lato);
   font-size: 14px;
   cursor: pointer;
+} */
+
+.ActionRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
 }
+
+.SaveBtn {
+  background: #6c7a5f;
+  color: #ffffff;
+  border: none;
+  padding: 12px 26px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.CancelBtn {
+  background: #ffffff;
+  color: #6c7a5f;
+  border: 1px solid #6c7a5f;
+  padding: 12px 26px;
+  cursor: pointer;
+}
+
+/* --- Misc --- */
+.VerifyBtn {
+  cursor: pointer;
+  margin-left: 12px;
+  color: #6c7a5f;
+  text-decoration: underline;
+}
+
+.ErrorText {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* --- Grid Rows --- */
+.Name1,
+.Row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  /* Adjust if you want a gap between first/last name */
+}
+
 
 .AddressSection {
   display: flex;
@@ -358,6 +514,8 @@
   align-items: center;
   justify-content: center;
   z-index: 999;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 .Popup {
@@ -375,7 +533,7 @@
   background: #ffffff;
   width: 100%;
   max-width: 520px;
-  padding: 32px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -417,7 +575,7 @@
   margin-top: 6px !important;
 }
 
-.Popup > div + p[style*="color: red"] {
+.Popup>div+p[style*="color: red"] {
   margin-top: 6px;
   margin-bottom: 12px;
 }
@@ -586,9 +744,9 @@
 
 .div2 .input {
   border: 1px solid #2f362a4d;
-  width: 80px;
-  height: 80px;
-  font-size: 25px;
+  width: 60px;
+  height: 60px;
+  font-size: 15px;
   text-align: center;
 }
 
@@ -746,6 +904,10 @@
 
   .buttons {
     padding: 13px 40px;
+  }
+  .DeletePopupOverlay{
+    padding-left: 25px;
+    padding-right: 25px;
   }
 }
 

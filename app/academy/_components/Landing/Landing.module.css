@@ -15,15 +15,15 @@
     width: 100%;
     position: relative;
     align-items: center;
-
+    height: 100vh;
 }
 
 .LeftConatiner {
     display: flex;
-    justify-content: left;
     flex-direction: column;
-    gap: 30px;
     width: 50%;
+    /* Parent must have a defined height for 'bottom' to exist */
+    height: 100vh;
 }
 
 .LeftConatinerTop {
@@ -51,29 +51,30 @@
 
 .LeftConatinerBottom {
     display: flex;
-    justify-content: left;
-
-
+    /* This makes this div 'grow' to fill all empty space */
+    flex: 1;
+    /* This pushes the image to the bottom of the stretched space */
+    align-items: flex-end;
 }
 
 .LeftConatinerBottom img {
     width: 100%;
-    height: 100%;
-    max-width: 940px;
+    /* Keep height auto so it doesn't stretch/distort */
+    height: auto;
     max-height: 300px;
+    object-fit: contain;
 }
 
 .MiddleConatiner {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     background-color: #FFFFFF;
     padding: 33.5px 34px;
     border: none;
     max-width: 466px;
     gap: 30px;
     flex-direction: column;
-    border-radius: 6px;
     position: absolute;
     top: 74%;
     left: 38%;
@@ -85,7 +86,7 @@
     font-weight: 500;
     font-size: 15px;
     color: #6C7A5F;
-    text-align: left;
+    text-align: justify;
 
 }
 
@@ -103,6 +104,7 @@
     font-size: 22px;
     color: #6C7A5F;
     text-transform: uppercase;
+    text-align: left;
 }
 
 .MiddleConatinerBottomRight {
@@ -124,80 +126,97 @@
 
 .RightConatiner {
     display: flex;
-    justify-content: left;
     width: 50%;
-
+    /* This makes it match the height of the LeftConatiner */
+    height: 100vh;
+    /* This ensures the image starts from the top/left of its 50% section */
+    justify-content: flex-start;
+    align-items: stretch;
 }
 
 .RightConatiner img {
     width: 100%;
     height: 100%;
-    max-width: 960px;
-    max-height: 854px;
+    /* Force it to fill the 100vh */
+    /* This is the secret: it 'crops' the image to fill the 
+       space instead of squishing it */
+    object-fit: cover;
+
+    /* Optional: if you want the 'focus' of the image to stay center */
+    object-position: center;
 }
 
 @media (max-width: 768px) {
     .main {
-        padding-top: 150px;
-        padding-bottom: 0px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 0; /* Removed large padding to allow 50/50 split */
         width: 100%;
-        height: 100%;
+        height: 100vh; /* Lock the whole view to the screen height */
+        display: flex;
+        flex-direction: column;
         background-color: #6C7A5F;
+        overflow: hidden;
     }
 
     .MainConatiner {
         display: flex;
-        justify-content: center;
         flex-direction: column;
         width: 100%;
-        position: relative;
-        align-items: center;
+        height: 100%; /* Fill the main container */
+        position: relative; /* Anchor for the middle container */
     }
 
+    /* Top Half (Green Image/Background) */
     .LeftConatiner {
         display: flex;
-        justify-content: start;
         flex-direction: column;
         width: 100%;
+        height: 50%; /* Force 50% height */
+        justify-content: flex-end; /* Pushes the image/content to the bottom of the top half */
     }
 
     .LeftConatinerBottom {
         display: flex;
-        width: auto;
-        height: 100%;
+        width: 100%;
+        height: auto;
     }
 
+    .LeftConatinerBottom img {
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        object-fit: cover;
+    }
+
+    /* Bottom Half (Actual Image) */
     .RightConatiner {
         display: flex;
         width: 100%;
+        height: 50%; /* Force 50% height */
     }
- .LeftConatinerTop {
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
-    gap: 10px;
-    padding-left: 60px;
-    width: 80%;
-}
+
+    .RightConatiner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures the image fills its 50% section perfectly */
+    }
+
+    /* Middle Container - The Floating Box */
     .MiddleConatiner {
-        /* 1. Kill the absolute positioning */
-        position: relative !important;
-
-        /* 2. Reset the coordinates that are pushing it off-screen */
-        top: 70px !important;
-        left: 0 !important;
-
-        /* 3. Make it fit the phone screen */
-        width: 90% !important;
+        /* Switch back to absolute to float exactly in the center of the split */
+        position: absolute !important;
+        top: 50% !important; 
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important; /* Perfect centering */
+        
+        width: 85% !important;
         max-width: none !important;
-
-        /* 4. Center it */
-        margin: 0px auto !important;
-
-        /* 5. Ensure it doesn't create that 'gap' on the right */
+        z-index: 10;
+        margin: 0 !important;
         box-sizing: border-box;
+        padding: 20px !important; /* Tighter padding for mobile */
+    }
+
+    .LeftConatinerTop {
+        display: none; /* Hide the empty top div to save space on 50/50 split */
     }
 }

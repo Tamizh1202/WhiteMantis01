@@ -36,13 +36,13 @@ const AddToCart = ({ product }) => {
       disabled={loading}
       style={{
         width: "100%",
+        boxSizing: "border-box", // <--- ADD THIS LINE
         backgroundColor: "#6C7A5F",
         color: "#ffffff",
         fontSize: "15px",
         fontWeight: 500,
         border: "none",
-        padding: "12px clamp(24px, 5vw, 61.5px)",
-
+        padding: "12px 22px",
         whiteSpace: "nowrap",
         cursor: loading ? "wait" : "pointer",
         transition: "background-color 0.2s ease",

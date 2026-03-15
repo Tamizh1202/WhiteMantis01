@@ -133,9 +133,13 @@
 
 .WorkShopCardBottom {
     display: flex;
-    justify-content: left;
+    justify-content: flex-start;
     flex-direction: column;
     gap: 28px;
+    width: 100%;
+    /* Ensure it spans the container */
+    padding: 0 20px;
+    /* Add internal padding so content doesn't touch edges */
 }
 
 .WorkShopCardBottomTop {
@@ -143,35 +147,41 @@
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
+    width: 100%;
+    gap: 10px;
+    /* Prevents the H2 and Button from touching */
+    flex-wrap: wrap;
+    /* CRITICAL: Allows button to move below H2 if space runs out */
 }
 
 .WorkShopCardBottomTop h2 {
     font-family: var(--lexend);
-    font-style: medium;
     font-weight: 500;
     font-size: 22px;
     color: #525252;
     text-transform: uppercase;
+    margin: 0;
 
+    flex: 1;
+    min-width: 0;
+    /* IMPORTANT: allows shrinking */
+    word-break: break-word;
 }
 
 .Button {
     padding: 12px 21px;
     background-color: #6C7A5F;
-    border-radius: 6px;
     cursor: pointer;
     color: #FFFFFF;
     font-family: var(--lato);
     font-size: 15px;
-    font-weight: 400;
     border: none;
+    white-space: nowrap;
+    /* Prevents the text inside the button from snapping */
+    flex-shrink: 0;
+    /* Ensures the button doesn't get squashed */
 }
 
-.WorkShopCardBottom {
-    display: flex;
-    justify-content: left;
-
-}
 
 .WorkShopCardBottom p {
     font-family: var(--lato);
@@ -205,20 +215,23 @@
 }
 
 @media (max-width: 768px) {
-    .main{
-        padding: 80px 24px;
+    .main {
+        padding: 90px 24px;
     }
+
     .ScrollWrapper {
         display: flex;
         overflow-x: auto;
         gap: 16px;
         padding: 20px;
-        /* This prevents the parent from squishing everything */
         width: 100%;
         box-sizing: border-box;
     }
-
-    /* Target all direct children of the scroll wrapper */
+.WorkShopCardBottom{
+    display: flex;
+    flex-direction: column;
+    gap:11px
+}
     .Left,
     .RightTop>div,
     .RightBottom>div,
@@ -236,5 +249,59 @@
         /* Give it a fixed height so it doesn't disappear */
         object-fit: cover;
         display: block;
+    }
+}
+
+
+
+@media (max-width: 480px) {
+    .main {
+        padding: 90px 24px;
+    }
+
+    .WorkShopCardBottomTop {
+        /* 1. Ensure it stays as a row to keep items side-by-side */
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .WorkShopCardBottomTop h2 {
+        font-family: var(--lexend);
+        font-weight: 500;
+        font-size: 18px;
+        /* Slightly smaller to fit better on small screens */
+        color: #525252;
+        text-transform: uppercase;
+        margin: 0;
+
+        /* 2. This is the secret to keeping the button on the right */
+        flex: 1;
+        min-width: 0;
+        /* Prevents long text from overflowing the container */
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        /* Limits title to 2 lines if it's too long */
+        -webkit-box-orient: vertical;
+    }
+
+    .Button {
+        padding: 10px 16px;
+        /* Slightly tighter padding for mobile */
+        background-color: #6C7A5F;
+        cursor: pointer;
+        color: #FFFFFF;
+        font-family: var(--lato);
+        font-size: 14px;
+        border: none;
+
+        /* 3. Forces the button to stay its original size and not shrink */
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 }

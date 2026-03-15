@@ -7,8 +7,10 @@ const OtpVerificationPopup = ({ email, countdown, otp, inputRefs, onChange, onKe
     const [focusedIndex, setFocusedIndex] = useState(null);
 
     return (
-        <div className={styles.styleOTP}>
-            <div className={styles.main1}>
+        /* Added onClick={onClose} to the overlay background */
+        <div className={styles.styleOTP} onClick={onClose}>
+            /* Added onClick with stopPropagation to the popup box so it doesn't close when clicking inside */
+            <div className={styles.main1} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.main11}>
                     {/* Header */}
                     <div className={styles.div1}>
@@ -32,9 +34,7 @@ const OtpVerificationPopup = ({ email, countdown, otp, inputRefs, onChange, onKe
                                 style={{
                                     borderColor: focusedIndex === index ? "#6C7A5F" : digit ? "#6C7A5F" : "#2F362A4D",
                                     color: digit ? "#6C7A5F" : "#2F362A",
-                                    boxShadow: focusedIndex === index ? "0 0 0 3px rgba(108, 122, 95, 0.25)" : "none",
                                     outline: "none",
-                                    transition: "border-color 0.2s, box-shadow 0.2s",
                                 }}
                             />
                         ))}

@@ -78,10 +78,17 @@ const BuyNowPopup = ({ product, handleOpenSubscribePopup, getDisplayData }) => {
                             {/* AddToCart Logic - Using the derived cartProduct */}
                             <div className={styles.CartWrapper}>
                                 {cartProduct ? (
-                                    <AddToCart product={cartProduct} quantity={quantity} />
+                                    <AddToCart
+                                        product={cartProduct}
+                                        quantity={quantity}
+                                        onAddSuccess={handleClose} // Pass handleClose as a prop
+                                    />
                                 ) : (
-                                    /* Fallback if cartProduct fails to derive */
-                                    <AddToCart product={product} quantity={quantity} />
+                                    <AddToCart
+                                        product={product}
+                                        quantity={quantity}
+                                        onAddSuccess={handleClose}
+                                    />
                                 )}
                             </div>
                         </div>

@@ -82,7 +82,9 @@ const Highlights = () => {
               </div>
             </div>
             <div className={styles.imageWrapper}>
-              <Image src={four} alt="Highlights Image" className={styles.image} />
+              <Image src={four} 
+              alt="Highlights Image" 
+              className={styles.image} />
               <div className={styles.overlay}>
                 <h4>Cupping Session</h4>
                 <p>July 2024</p>
@@ -90,9 +92,9 @@ const Highlights = () => {
             </div>
           </div>
 
-          <button data-newsletter="open" className={styles.DesktopOnlyBtn}>
+          {/* <button data-newsletter="open" className={styles.DesktopOnlyBtn}>
             sample
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

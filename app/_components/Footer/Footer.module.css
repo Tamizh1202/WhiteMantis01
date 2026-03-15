@@ -1,21 +1,47 @@
+.Main p {
+  font-family: var(--lexend);
+  font-size: var(--fs-22);
+  font-weight: 500;
+  color: #ffffff;
+}
+
 .Main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
   background-color: #6c7a5f;
-  padding: clamp(40px, calc(40px + (51 * ((100vw - 320px) / 1120))), 91px)
-    clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px)
-    clamp(23px, calc(48px + (-25 * ((100vw - 320px) / 1120))), 48px)
-    clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+  padding: clamp(40px, calc(40px + (51 * ((100vw - 320px) / 1120))), 91px) clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px) clamp(23px, calc(48px + (-25 * ((100vw - 320px) / 1120))), 48px) clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+  gap: 150px;
 }
+
 .LogoImage {
   height: 300px;
   width: auto;
   object-fit: contain;
+
 }
-.MainConatiner {
+
+.MainConatiner1 {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  /* This pushes the Logo to the far left and the Content to the far right */
+  justify-content: space-between;
+  align-items: flex-start;
+  /* Remove gap: 450px; entirely */
+}
+
+.topright {
+  display: flex;
+  flex-direction: row;
+  gap: 83px;
+}
+
+.MainConatiner2 {
   display: flex;
   justify-content: left;
   flex-direction: column;
@@ -24,35 +50,298 @@
   width: 100%;
   height: 100%;
 }
+
 .Top {
+
   display: flex;
-  justify-content: space-between;
+  gap: 220px;
   flex-direction: row;
 }
+
+.MainConatiner1 {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 40px;
+}
+
 .TopLeft {
   display: flex;
-  justify-content: left;
-}
-.TopLeft img {
+  align-items: center;
+  /* This prevents the flex-item from collapsing to 0 */
+  flex-shrink: 0;
   width: 100%;
-  height: 100%;
   max-width: 157px;
-  max-height: 97px;
 }
+
+.LogoImage {
+  width: 100%;
+  height: auto !important;
+  /* Maintains the 157/97 ratio */
+  display: block;
+  object-fit: contain;
+}
+
+.MainConatiner1 .topright {
+  display: flex;
+  flex-direction: row;
+  gap: 83px;
+}
+
+.topright1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  gap: 15px;
+  /* Match your design */
+  height: 195px;
+  /* Match your design */
+  /* If you want the border visible */
+
+  box-sizing: border-box;
+}
+
+.topright1 h2 {
+  font-family: var(--lexend);
+  font-weight: 500;
+  color: #ffffff;
+  padding: 0%;
+}
+
+.txt1 {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+}
+
+
+.topright1 p {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #ffffff;
+  width: 65%;
+}
+
+.toprightBottom p {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #ffffff;
+  width: 65%;
+}
+
+.toprightBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 24px
+}
+
+.topright2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.topright21 {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.topright21 h2 {
+  font-family: var(--lexend);
+  font-weight: 500;
+  color: #ffffff;
+  padding: 0%;
+}
+
+.topright21txt {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+}
+
+.topright21 p {
+  width: 100%;
+  /* Let the text fill its container */
+  max-width: 400px;
+  /* Use max-width instead of width to keep it readable */
+  font-family: var(--lato);
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.topright21Bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.btns2 {
+  padding: 4px 31px;
+  /* Increased slightly for better padding */
+  background-color: #6d7a61;
+  /* The green color from your image */
+  color: white;
+  border: 1px solid white;
+
+  /* Common for store buttons */
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  /* Align to the left */
+  gap: 10px;
+  /* Space between icon and text */
+}
+
+.TextContainer {
+  display: flex;
+  flex-direction: column;
+  /* Stacks "Get it on" above "Google Play" */
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.btnhead {
+  font-size: 15px;
+  /* Smaller text for "Get it on" */
+  font-family: var(--lato);
+
+  font-weight: 400;
+}
+
+.btnbody {
+  font-size: 16px;
+  /* Larger text for "Google Play" */
+  font-weight: 600;
+  font-family: var(--lato);
+  margin: 0;
+}
+
+.ButtonIcon {
+  flex-shrink: 0;
+  /* Prevents the icon from squishing */
+}
+
+.splitButtoms {
+  display: flex;
+  flex-direction: row;
+  gap: 16px
+}
+
+
+@media (max-width: 768px) {
+
+  /* 1. Stack everything vertically and align to the left */
+  .MainConatiner1 {
+    flex-direction: column !important;
+    gap: 40px !important;
+    /* Replaces that huge 450px desktop gap */
+    /* padding: 47px 24px !important; */
+    align-items: flex-start !important;
+
+  }
+
+  /* 2. Reset the right-side grouping to stack vertically too */
+  .topright {
+    flex-direction: column !important;
+    gap: 40px !important;
+    width: 100% !important;
+  }
+
+  /* 3. Make the Rewards Box (BREW. EARN. ENJOY) responsive */
+  .topright1 {
+    width: 100% !important;
+    /* Take full phone width */
+    max-width: 340px;
+    height: auto !important;
+    /* Let height grow with text */
+    border: none !important;
+    /* Matches your screenshot (border removed on mobile) */
+    padding: 0 !important;
+    gap: 15px !important;
+  }
+
+  /* 4. Fix text widths - no more 65% or 85% */
+  .topright1 p,
+  .topright21 p {
+    width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* 5. App Experience Section */
+  .topright2 {
+    width: 100% !important;
+  }
+
+  /* 6. Fix the App Buttons (Google/Apple) */
+  .splitButtoms {
+    flex-direction: row !important;
+    /* Keep them side-by-side or use column if too tight */
+    gap: 10px !important;
+    width: 100% !important;
+
+  }
+
+  .btns2 {
+    flex: 1;
+    /* Make buttons equal width */
+    padding: 8px 10px !important;
+    height: 48px !important;
+    justify-content: center !important;
+  }
+
+  /* 7. Shrink text sizes inside buttons for small screens */
+  .btnhead {
+    font-size: 8px !important;
+  }
+
+  .btnbody {
+    font-size: 11px !important;
+    white-space: nowrap;
+  }
+
+  /* 8. Logo sizing for mobile */
+  .TopLeft {
+    max-width: 120px !important;
+  }
+
+  .topright21Bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
 .TopMiddle {
   display: flex;
   justify-content: left;
-  gap: clamp(65px, calc(65px + (55 * ((100vw - 320px) / 1120))), 120px);
+  gap: 167px;
 
   flex-direction: row;
 }
+
 .MobOne,
 .MobTwo {
   display: flex;
   justify-content: left;
   flex-direction: row;
-  gap: clamp(65px, calc(65px + (55 * ((100vw - 320px) / 1120))), 120px);
+  gap: 90px;
 }
+
 .TopMiddleOne,
 .TopMiddleTwo,
 .TopMiddleThree,
@@ -62,6 +351,7 @@
   flex-direction: column;
   gap: 32px;
 }
+
 .TopMiddleOneTop h4,
 .TopMiddleTwoTop h4,
 .TopMiddleThreeTop h4,
@@ -72,6 +362,7 @@
   color: #ffffff;
   text-transform: uppercase;
 }
+
 .TopMiddleOneBottom,
 .TopMiddleTwoBottom,
 .TopMiddleThreeBottom,
@@ -81,6 +372,7 @@
   flex-direction: column;
   gap: clamp(16px, calc(16px + (4 * ((100vw - 320px) / 1120))), 20px);
 }
+
 .TopMiddleOneBottom p,
 .TopMiddleTwoBottom p,
 .TopMiddleThreeBottom p,
@@ -91,18 +383,21 @@
   color: #ffffff;
   cursor: pointer;
 }
+
 .TopRight {
   display: flex;
   justify-content: right;
   flex-direction: column;
   gap: clamp(16px, calc(16px + (24 * ((100vw - 320px) / 1120))), 40px);
 }
+
 .TopRightTop {
   display: flex;
   justify-content: left;
   gap: 12px;
   flex-direction: column;
 }
+
 .NewslHeading h4 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
@@ -110,15 +405,17 @@
   color: #ffffff;
   text-transform: uppercase;
 }
+
 .NewsLetter {
   display: flex;
   justify-content: left;
-   flex-direction: column; 
+  flex-direction: column;
   gap: 8px;
 }
+
 .NewsLetterRow {
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   align-items: stretch;
 }
 
@@ -133,8 +430,9 @@
 .NewsletterError {
   font-family: var(--lato);
   font-size: 14px;
-  color: #d32f2f; 
+  color: #d32f2f;
 }
+
 .NewsLetterInput {
   padding: 13px 12px 13px 18px;
   border: none;
@@ -147,16 +445,19 @@
   border: 1px solid #ffffff;
   background-color: transparent;
 }
+
 .NewsLetterInput::placeholder {
   color: #ffffff;
   opacity: 1;
 }
+
 .TopRightMiddle {
   display: flex;
   justify-content: left;
   flex-direction: row;
   gap: 80px;
 }
+
 .Phone,
 .Email,
 .Address {
@@ -165,16 +466,20 @@
   flex-direction: column;
   gap: 6px;
 }
+
 .TopRightBottom {
   display: flex;
   justify-content: left;
 }
+
 .TopRightBottom p {
-  font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
+  font-family: var(--lexend);
+  font-size: var(--fs-22);
+  font-weight: 500;
   color: #ffffff;
+
 }
+
 .Phone p,
 .Email p,
 .Address p {
@@ -193,44 +498,52 @@
   background-color: #ffffff;
   cursor: pointer;
 }
+
 .Bottom {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 20px;
 }
+
 .line {
   width: 100%;
   height: 1px;
   background-color: #ffffff;
 }
+
 .BottomBottom {
   display: flex;
-  justify-content: space-between;
+  gap: 220px;
   align-items: center;
   width: 100%;
 }
+
 .BottomBottomLeft p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
   color: #ffffff;
 }
+
 .BottomBottomLeft {
   display: flex;
   justify-content: left;
 }
+
 .BottomBottomMiddle {
   display: flex;
   justify-content: center;
   gap: 40px;
 }
+
 .TandC,
 .PrivacyPolicy {
   display: flex;
   justify-content: left;
   cursor: pointer;
 }
+
 .TandC p,
 .PrivacyPolicy p {
   font-family: var(--lato);
@@ -238,6 +551,7 @@
   font-weight: 400;
   color: #ffffff;
 }
+
 .Socials {
   display: flex;
   justify-content: left;
@@ -245,29 +559,35 @@
   gap: 5px;
   cursor: pointer;
 }
+
 .Socials p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
   color: #ffffff;
 }
+
 .BottomBottomRight {
   display: flex;
   justify-content: right;
 }
+
 .BottomBottomRight p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
   color: #ffffff;
 }
+
 .IM {
   text-decoration: underline;
   cursor: pointer;
 }
-.BottomBottomRight a{
+
+.BottomBottomRight a {
   color: #FFFFFF;
 }
+
 .TandC a,
 .PrivacyPolicy a,
 
@@ -283,33 +603,46 @@
   color: inherit;
   text-decoration: none;
 }
+
 .TopRightBottomMobile a {
   text-decoration: none;
   color: inherit;
 }
+
 .TopRightBottomMobile {
   display: none;
 }
+
 @media (max-width: 640px) {
   .Main {
     padding: 40px 24px 48px 24px;
+    gap: 80px;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 80px
   }
+
   .MainConatiner {
     gap: 40px;
   }
+
   .BottomBottomMiddle {
     display: none;
   }
+
   .BottomBottomLeft p,
   .BottomBottomRight p {
     font-size: 14px;
   }
+
   .TopRightBottomMobile {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 16px;
   }
+
   .TopRightBottomMobile p {
     font-family: var(--lato);
     font-size: 14px;
@@ -317,20 +650,24 @@
     color: #ffffff;
     cursor: pointer;
   }
+
   .TopLeft img {
     max-width: 120px;
     max-height: 74px;
     width: 100%;
     height: 100%;
   }
+
   .Top {
     flex-direction: column;
     gap: 72px;
   }
+
   .TopMiddle {
     flex-direction: column;
     gap: 72px;
   }
+
   .TopMiddleOneTop h4,
   .TopMiddleTwoTop h4,
   .TopMiddleThreeTop h4,
@@ -338,6 +675,7 @@
   .NewslHeading h4 {
     font-size: 20px;
   }
+
   .TopMiddleOneBottom p,
   .TopMiddleTwoBottom p,
   .TopMiddleThreeBottom p,
@@ -349,29 +687,35 @@
   .TopRightBottom p {
     font-size: 14px;
   }
+
   .SubscribeButton {
     padding: 10px 25px;
     font-size: 14px;
   }
+
   .TopRightMiddle {
     flex-direction: column;
     gap: 16px;
   }
 }
+
 @media (min-width: 641px) and (max-width: 1024px) {
   .BottomBottomMiddle {
     display: none;
   }
+
   .BottomBottomLeft p,
   .BottomBottomRight p {
     font-size: 14px;
   }
+
   .TopRightBottomMobile {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 16px;
   }
+
   .TopRightBottomMobile p {
     font-family: var(--lato);
     font-size: 14px;
@@ -379,36 +723,44 @@
     color: #ffffff;
     cursor: pointer;
   }
+
   .TopLeft img {
     max-width: 120px;
     max-height: 74px;
     width: 100%;
     height: 100%;
   }
+
   .Top {
     flex-direction: column;
     gap: 72px;
   }
+
   .TopMiddle {
     /* flex-direction: column; */
     gap: 72px;
   }
 }
+
 @media (min-width: 1025px) and (max-width: 1640px) {
   .NewsLetterInput {
     width: 140px;
   }
+
   .Main {
     padding-left: 50px;
     padding-right: 50px;
   }
+
   .MobOne,
   .MobTwo {
     gap: 40px;
   }
+
   .TopMiddle {
     gap: 40px;
   }
+
   .TopRightMiddle {
     gap: 20px;
   }

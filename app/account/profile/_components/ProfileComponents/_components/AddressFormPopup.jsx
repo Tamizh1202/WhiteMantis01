@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "../ProfileComponents.module.css";
 import { ADDRESS_LABELS, UAE_STATES } from "../profileConstants";
 
@@ -17,7 +17,7 @@ const AddressFormPopup = ({
 }) => {
     const title = mode === "edit" ? "EDIT ADDRESS" : "ADD ADDRESS";
     const saveLabel = mode === "edit" ? "Update Address" : "Save Address";
-
+    const [isEmirateOpen, setIsEmirateOpen] = useState(false);
     return (
         <div className={styles.PopupOverlay}>
             <div className={styles.Popup}>
@@ -56,33 +56,68 @@ const AddressFormPopup = ({
                         {addressErrors.address}
                     </p>
                 )}
+                <div className="styles.AddSplit" style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
 
+
+
+
+                }}>
+                    <input
+                        placeholder="Apartment, suite, etc. (Optional)"
+                        value={addressForm.apartment || ""}
+                        onChange={(e) => onFormChange("apartment", e.target.value)}
+                    />
+                    <div className={styles.SelectContainer}
+                    style={{
+                        border:"1px solid #2F362A4D",
+                        display:"flex",
+                        flexDirection:"row",
+                        alignContent:"center",
+                        paddingLeft:"25px",
+                        paddingRight:"25px",
+                    }}>
+                        {/* The visible box that looks like an input */}
+                        <div
+                            className={styles.CustomSelectTrigger}
+                            onClick={() => setIsEmirateOpen(!isEmirateOpen)}
+                        >
+                            <span>
+                                {/* Logic to show the label of the selected state or the placeholder */}
+                                {UAE_STATES.find(s => s.value === addressForm.state)?.label || "Select Emirate"}
+                            </span>
+                            <span className={`${styles.Arrow} ${isEmirateOpen ? styles.Rotate : ""}`}>
+                                ▼
+                            </span>
+                        </div>
+
+                        {/* The actual dropdown list */}
+                        {isEmirateOpen && (
+                            <div className={styles.CustomOptionsList}>
+                                {UAE_STATES.map((s) => (
+                                    <div
+                                        key={s.value}
+                                        className={styles.OptionItem}
+                                        onClick={() => {
+                                            onFormChange("state", s.value);
+                                            setIsEmirateOpen(false); // Close after selection
+                                        }}
+                                    >
+                                        {s.label}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
                 {/* Apartment */}
-                <input
-                    placeholder="Apartment, suite, etc. (Optional)"
-                    value={addressForm.apartment || ""}
-                    onChange={(e) => onFormChange("apartment", e.target.value)}
-                />
+
 
                 {/* City + Emirate row */}
-                <div className={styles.Row2} >
-                    <input
-                        placeholder="City"
-                        value={addressForm.city || ""}
-                        onChange={(e) => onFormChange("city", e.target.value)}
-                    />
-                    <select
-                        className={styles.StateSelect}
-                        value={addressForm.state || ""}
-                        onChange={(e) => onFormChange("state", e.target.value)}
-                        
-                    >
-                        <option value="" disabled>Select Emirate</option>
-                        {UAE_STATES.map((s) => (
-                            <option key={s.value} value={s.value}>{s.label}</option>
-                        ))}
-                    </select>
-                </div>
+                {/* <div className={styles.Row2} >
+
+                </div> */}
 
                 {/* Phone input with +971 prefix */}
                 <div
