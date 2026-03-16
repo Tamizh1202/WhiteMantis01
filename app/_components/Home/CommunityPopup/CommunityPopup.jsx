@@ -11,21 +11,29 @@ const CommunityPopup = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
 
   if (!isOpen) return null;
-const isValidEmail = (email) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
+  React.useEffect(() => {
+    if (subscribed) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [subscribed, onClose]);
 
-const handleSubscribe = async () => {
-  if (!email) {
-    setError("Email is required.");
-    return;
-  }
+  const handleSubscribe = async () => {
+    if (!email) {
+      setError("Email is required.");
+      return;
+    }
 
-  if (!isValidEmail(email)) {
-    setError("Please enter a valid email address.");
-    return;
-  }
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
 
     setLoading(true);
     setError("");

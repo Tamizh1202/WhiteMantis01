@@ -4,9 +4,11 @@
   align-items: center;
   height: auto;
   width: 100%;
-  padding-left: clamp(24px,
-      calc(24px + (226 * ((100vw - 320px) / 1120))),
-      50px);
+  padding-left: clamp(
+    24px,
+    calc(24px + (226 * ((100vw - 320px) / 1120))),
+    50px
+  );
   padding-bottom: 100px;
   background-color: #ffffff;
 }
@@ -173,8 +175,6 @@
   transform: rotate(180deg);
 }
 
-
-
 .OptionItem {
   padding: 12px 16px;
   cursor: pointer;
@@ -328,7 +328,6 @@
   gap: 0;
   /* Adjust if you want a gap between first/last name */
 }
-
 
 .AddressSection {
   display: flex;
@@ -553,6 +552,7 @@
   font-weight: 500;
   color: #2f362a;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .Popup p {
@@ -575,7 +575,7 @@
   margin-top: 6px !important;
 }
 
-.Popup>div+p[style*="color: red"] {
+.Popup > div + p[style*="color: red"] {
   margin-top: 6px;
   margin-bottom: 12px;
 }
@@ -585,6 +585,7 @@
   font-family: var(--lato);
   font-size: 14px;
   color: #6e736a;
+  text-align: center;
 }
 
 .Popup input,
@@ -905,7 +906,7 @@
   .buttons {
     padding: 13px 40px;
   }
-  .DeletePopupOverlay{
+  .DeletePopupOverlay {
     padding-left: 25px;
     padding-right: 25px;
   }

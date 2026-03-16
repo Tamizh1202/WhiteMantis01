@@ -35,7 +35,10 @@ const SubToday = () => {
               <div className={styles.CardContent}>
                 <div className={styles.CardContentTop}>
                   <div className={styles.CardContentTopTop}>
-                    <h3>The Roaster's Choice: <br />Whole Beans</h3>
+                    <h3>
+                      The Roaster's Choice: <br />
+                      Whole Beans
+                    </h3>
                     <p>
                       Our full collection of single-origin and blended specialty
                       coffee, delivered fresh after roasting.
@@ -71,7 +74,7 @@ const SubToday = () => {
                             strokeLinejoin="round"
                           />
                         </svg>
-                        <p>Always 20% off regular price.</p>
+                        <p>Always 10% off regular price.</p>
                       </div>
                       <div className={styles.line}></div>
                       <div className={styles.benefitItem}>
@@ -172,9 +175,9 @@ const SubToday = () => {
                   </div>
                 </div>
                 <div className={styles.CardContentBottom}>
-                    {/* <Link href="/shop/coffee-beans"> */}
+                  {/* <Link href="/shop/coffee-beans"> */}
                   <button>Subscribe now</button>
-                    {/* </Link> */}
+                  {/* </Link> */}
                 </div>
               </div>
             </div>
@@ -193,7 +196,10 @@ const SubToday = () => {
               <div className={styles.CardContent}>
                 <div className={styles.CardContentTop}>
                   <div className={styles.CardContentTopTop}>
-                    <h3>Drip Bag Essentials:<br /> Filter Coffee</h3>
+                    <h3>
+                      Drip Bag Essentials:
+                      <br /> Filter Coffee
+                    </h3>
                     <p>
                       Pre-ground specialty coffee, perfectly measured and sealed
                       in a single-serve drip filter for travel or convenience.
@@ -330,9 +336,9 @@ const SubToday = () => {
                   </div>
                 </div>
                 <div className={styles.CardContentBottom}>
-                    {/* <Link href="/shop/coffee-dripbags"> */}
+                  {/* <Link href="/shop/coffee-dripbags"> */}
                   <button>Subscribe now</button>
-                    {/* </Link> */}
+                  {/* </Link> */}
                 </div>
               </div>
             </div>
@@ -351,7 +357,10 @@ const SubToday = () => {
               <div className={styles.CardThreeContent}>
                 <div className={styles.CardContentTop}>
                   <div className={styles.CardContentTopTop}>
-                    <h3>Capsule Convenience: <br />Single-Serve</h3>
+                    <h3>
+                      Capsule Convenience: <br />
+                      Single-Serve
+                    </h3>
                     <p>
                       Nespresso-compatible capsules filled with our best
                       specialty blends for easy, high-quality brewing.
@@ -488,9 +497,9 @@ const SubToday = () => {
                   </div>
                 </div>
                 <div className={styles.CardContentBottom}>
-                    {/* <Link href="/shop/coffee-capsules"> */}
+                  {/* <Link href="/shop/coffee-capsules"> */}
                   <button>Subscribe now</button>
-                    {/* </Link> */}
+                  {/* </Link> */}
                 </div>
               </div>
             </div>

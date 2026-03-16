@@ -5,10 +5,10 @@
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-  padding:
-    clamp(80px, calc(80px + (80 * ((100vw - 320px) / 1120))), 160px) clamp(24px, calc(24px + (16 * ((100vw - 320px) / 1120))), 40px) 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+  padding: clamp(80px, calc(80px + (80 * ((100vw - 320px) / 1120))), 160px)
+    clamp(24px, calc(24px + (16 * ((100vw - 320px) / 1120))), 40px) 0px
+    clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
   padding-bottom: 80px;
-
 }
 
 .MainConatiner {
@@ -18,7 +18,6 @@
   height: 100%;
   flex-direction: column;
   gap: clamp(40px, calc(40px + (20 * ((100vw - 320px) / 1120))), 60px);
-
 }
 
 .Top {
@@ -38,43 +37,36 @@
   justify-content: left;
   flex-direction: column;
   gap: clamp(56px, calc(56px + (24 * ((100vw - 320px) / 1120))), 80px);
-
 }
 
-.BottomTop {
-  display: flex;
-  justify-content: left;
-  gap: clamp(10px, calc(10px + (110 * ((100vw - 320px) / 1120))), 120px);
-
-  flex-direction: row;
+.ProductsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 121px;
+  column-gap: 41px;
 }
 
-.RCardOne,
-.RCardTwo,
-.RCardThree {
+.ProductCard {
   display: flex;
-  width: 100%;
-  justify-content: left;
   flex-direction: column;
-  gap: clamp(16px, calc(16px + (8 * ((100vw - 320px) / 1120))), 24px);
-
-  max-width: 400px;
+  height: 100%;
+  gap: 24px;
 }
 
-.RCardTop {
+.ProductTop {
   display: flex;
-  justify-content: center;
+  justify-content: left;
+  cursor: pointer;
+  flex-direction: column;
   position: relative;
-  border: 1.5px solid #6C7A5F12;
-  padding-top: 15px;
-  padding-right: 15px;
 }
 
 .WishlistIcon {
   position: absolute;
   top: 16px;
-  right: 16px;
+  right: 3px;
   cursor: pointer;
+  z-index: 5;
 }
 
 .ProductImage {
@@ -94,82 +86,119 @@
   border: 1px solid #2f362a;
 }
 
-.ProductImage img:hover {
-  transform: scale(1.05);
-}
-
 .ProductImage img {
   width: 100%;
   height: 100%;
   max-width: 401px;
   max-height: 305px;
   object-fit: contain;
-   transition: transform 0.35s ease-in-out; 
-  will-change: transform; 
+  transition: transform 0.35s ease-in-out;
+  will-change: transform;
 }
 
-.RCardInfo {
+.ProductImage img:hover {
+  transform: scale(1.05);
+}
+
+.NoImage {
+  font-family: var(--lato);
+  font-size: 14px;
+  color: #6e736a;
+}
+
+.ProductBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-grow: 1;
+}
+
+.ProductInfo {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 12px;
 }
 
-.RCardPricing {
+.ProductPrice {
   display: flex;
   justify-content: left;
-  align-items: center;
-  gap: 8px;
   flex-direction: row;
+  gap: 8px;
+  align-items: center;
 }
 
-.RCardPricing h4 {
-  font-family: var(--lato);
+.ProductPrice h4 {
+  font-family: var(--lexend);
   font-size: 15px;
   font-weight: 400;
-  color: #2F362A;
+  color: #2f362a;
 }
 
-.RCardPricing p {
+.OldPrice {
   font-family: var(--lato);
   font-size: 11px;
   font-weight: 400;
-  color: #BA0E0E;
+  color: #ba0e0e;
   text-decoration: line-through;
 }
 
 .Line {
   width: 100%;
   height: 0.5px;
-  background-color: #2F362A4D;
+  background-color: #2f362a4d;
 }
 
-.RCardTitle {
+.ProductName {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 4px;
-
 }
 
-.RCardTitle h4 {
+.ProductName h3 {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
-  color: #2F362A;
+  color: #2f362a;
 }
 
-.RCardTitle p {
+.ProductName p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
-  color: #6E736A;
+  color: #6e736a;
 }
 
-.RCardBottom {
+.ProductActions {
   display: flex;
   justify-content: left;
-  max-width: 200px;
+  flex-direction: row;
+  width: 100%;
+}
+
+.DesktopActions {
+  display: contents;
+}
+
+.MobileActions {
+  display: none;
+  width: 100%;
+}
+
+.Subscribe {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  width: 100%;
+  background-color: #ffffff;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+  color: #464646;
+  font-family: var(--lato);
+  border: 0.75px solid #6c7a5f;
 }
 
 .BottomBottom {
@@ -182,13 +211,19 @@
 .Exploremore {
   font-size: 15px;
   font-family: var(--lato);
-  color: #6C7A5F;
+  color: #6c7a5f;
   cursor: pointer;
   font-weight: 500;
   padding: 13px 38.5px;
   background: transparent;
-  border: none;
-  border: 1px solid #6C7A5F;
+  border: 1px solid #6c7a5f;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.Exploremore:hover {
+  background: #6c7a5f;
+  color: #ffffff;
 }
 
 @media (max-width: 640px) {
@@ -208,42 +243,104 @@
     gap: 56px;
   }
 
-  .BottomTop {
-    flex-direction: row;
-    gap: 10px;
+  .ProductsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    row-gap: 61px;
+    column-gap: 10px;
   }
 
-  .RCardOne,
-  .RCardTwo {
-    max-width: 100%;
-  }
-
-  .RCardThree {
-    display: none;
-  }
-
-  .RCardBottom {
-    max-width: 124px;
-  }
-
-  .RCardPricing h4 {
-    font-size: 14px;
-  }
-
-  .RCardPricing p {
-    font-size: 12px;
-  }
-
-  .RCardTitle h4 {
-    font-size: 14px;
-  }
-
-  .RCardTitle p {
-    font-size: 14px;
+  .ProductImage img {
+    max-width: 170px;
+    max-height: 200px;
+    padding: 10px;
   }
 
   .WishlistIcon {
-    top: 8px;
     right: 2px;
   }
+
+  .ProductActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .DesktopActions {
+    display: none;
+  }
+
+  .MobileActions {
+    display: flex;
+  }
+
+  .ProductCard {
+    width: 100%;
+    max-width: 170px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 940px) {
+  .ProductsGrid {
+    gap: 24px;
+  }
+
+  .DesktopActions {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0 !important;
+    width: 100%;
+  }
+
+  .DesktopActions > * {
+    flex: 1;
+    border-radius: 0;
+  }
+
+  .Subscribe {
+    display: flex;
+    width: 100%;
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+}
+
+@media (min-width: 941px) and (max-width: 1440px) {
+  .ProductsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+}
+
+.LowStockBadge {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  background-color: #6c7a5f;
+  color: #ffffff;
+  padding: 10px 20px;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  z-index: 10;
+}
+
+.OutOfStockRow {
+  width: 100%;
+  display: flex;
+}
+
+.OutOfStockBtn {
+  width: 100%;
+  padding: 13px;
+  background-color: #6e736a;
+  color: #ffffff;
+  border: none;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  cursor: not-allowed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

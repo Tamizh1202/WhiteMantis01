@@ -1,0 +1,104 @@
+.RichText {
+  color: #333;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+}
+
+.RichText p {
+  margin-bottom: 1.5rem;
+}
+
+.RichText h1,
+.RichText h2,
+.RichText h3,
+.RichText h4,
+.RichText h5,
+.RichText h6 {
+  color: #1a1a1a;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.RichText h1 {
+  font-size: 2.5rem;
+}
+.RichText h2 {
+  font-size: 2rem;
+}
+.RichText h3 {
+  font-size: 1.75rem;
+}
+
+.RichText ul,
+.RichText ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.RichText li {
+  margin-bottom: 0.5rem;
+}
+
+.RichText a {
+  color: #51624d;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.RichText a:hover {
+  opacity: 0.8;
+}
+
+.RichText blockquote {
+  border-left: 4px solid #51624d;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #555;
+}
+
+.RichText code {
+  background: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.RichText pre {
+  background: #f4f4f4;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.RichText bold {
+  font-weight: bold;
+}
+.RichText italic {
+  font-style: italic;
+}
+.RichText underline {
+  text-decoration: underline;
+}
+.RichText strikethrough {
+  text-decoration: line-through;
+}
+
+/* Indentation support */
+.RichText .indent-1 {
+  padding-left: 20px;
+}
+.RichText .indent-2 {
+  padding-left: 40px;
+}
+.RichText .indent-3 {
+  padding-left: 60px;
+}
+.RichText .indent-4 {
+  padding-left: 80px;
+}

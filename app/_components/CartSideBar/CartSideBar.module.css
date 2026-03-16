@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
   /* Prevent whole sidebar from scrolling */
 }
 
@@ -29,8 +30,10 @@
   justify-content: center;
   /* align-items: center; */
   width: 100%;
-  height: 100%;
-  padding: 100px 24px 0px 40px;
+  height: 100vh;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 30px 24px 0px 40px;
   /* Remove bottom padding here */
 }
 
@@ -38,18 +41,23 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
+  height: 100%; /* Keeps the container locked to the sidebar height */
   overflow: hidden;
 }
 
 .Top {
   display: flex;
-  justify-content: left;
   flex-direction: column;
   gap: 32px;
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 5px;
+
+  /* Update these lines: */
+  flex: 1; /* Take up all available space */
+  overflow-y: auto; /* Enable scrolling */
+  min-height: 0; /* CRITICAL: Allows flex item to shrink smaller than content */
+
+  overscroll-behavior: contain;
   padding-right: 12px;
 }
 
@@ -106,7 +114,6 @@
   flex-direction: row;
   align-items: flex-start;
   /* Align to top like screenshot */
-  padding-bottom: 24px;
 }
 
 .CardLeft {
@@ -169,7 +176,7 @@
   font-size: 15px;
   font-family: var(--lato);
   font-weight: 700;
-  color: #6C7A5F;
+  color: #6c7a5f;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -484,10 +491,9 @@
     right: 0;
   }
 
-
   .Main {
-    padding: 50px 24px 0px 24px;
-    height: 100%;
+    padding: 30px 24px 0px 24px;
+    height: 100vh;
   }
 
   .Card {
@@ -562,7 +568,6 @@
     height: 100svh;
     overflow: hidden;
     /* Changed from overflow-y: auto */
-
   }
 
   .open {
@@ -570,8 +575,8 @@
   }
 
   .Main {
-    padding: 50px 28px 0px 28px;
-    height: 100%;
+    padding: 30px 28px 0px 28px;
+    height: 100vh;
   }
 
   .Card {
@@ -592,7 +597,6 @@
   .sidebar {
     width: 30%;
     right: -30%;
-
   }
 
   .open {
@@ -600,8 +604,8 @@
   }
 
   .Main {
-    padding: 80px 36px 0px 36px;
-    height: 100%;
+    padding: 30px 36px 0px 36px;
+    height: 100vh;
   }
 }
 
@@ -616,8 +620,8 @@
   }
 
   .Main {
-    padding: 100px 40px 0px 40px;
-    height: 100%;
+    padding: 30px 40px 0px 40px;
+    height: 100vh;
   }
 }
 

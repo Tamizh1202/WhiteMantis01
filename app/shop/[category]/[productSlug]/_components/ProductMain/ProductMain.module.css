@@ -126,13 +126,12 @@
   justify-content: left;
   gap: 110px;
   width: 33.3%;
- 
 }
 .DetailsLeft {
   display: flex;
   flex-direction: column;
   justify-content: right;
-   text-align: right;
+  text-align: right;
   gap: 110px;
   width: 33.3%;
 }
@@ -583,4 +582,17 @@
     width: 33.33%;
     gap: 90px;
   }
+}
+
+.LowStockBadge {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  background-color: #6c7a5f;
+  color: #ffffff;
+  padding: 10px 20px;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  z-index: 10;
 }

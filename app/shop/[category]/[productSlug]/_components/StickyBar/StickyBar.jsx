@@ -9,7 +9,8 @@ import React, { useState, useEffect, useRef } from "react";
 const StickyBar = ({ product }) => {
   const router = useRouter();
   const { addToCart, refresh } = useCart();
-  const { setSelectedImage } = useProductImage();
+  const { setSelectedImage, selectedVariant, setSelectedVariant } =
+    useProductImage();
   const popupRef = useRef(null);
 
   // Helper to get variants sorted by weight
@@ -24,7 +25,7 @@ const StickyBar = ({ product }) => {
 
   const sortedVariants = getSortedVariants(product);
   const [selectedWeight, setSelectedWeight] = useState(
-    product?.hasVariantOptions ? sortedVariants[0] : null
+    product?.hasVariantOptions ? sortedVariants[0] : null,
   );
 
   const [qty, setQty] = useState(1);
@@ -34,7 +35,21 @@ const StickyBar = ({ product }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [selectedSubWeight, setSelectedSubWeight] = useState(null);
 
-  // Initialize subscription defaults when popup opens
+  // Sync selectedWeight with context's selectedVariant
+  useEffect(() => {
+    if (product?.hasVariantOptions) {
+      if (selectedWeight) {
+        setSelectedVariant(selectedWeight);
+        if (selectedWeight.variantImage?.url) {
+          setSelectedImage(selectedWeight.variantImage);
+        }
+      }
+    } else {
+      setSelectedVariant(null);
+    }
+  }, [selectedWeight, product, setSelectedVariant, setSelectedImage]);
+
+  // Initial setup for simple product subscription defaults
   useEffect(() => {
     if (showSubscribe) {
       if (product?.hasVariantOptions && selectedWeight) {
@@ -50,6 +65,7 @@ const StickyBar = ({ product }) => {
 
   // Handle buy now - add to cart
   const handleBuyNow = async () => {
+    if (isOutOfStock) return;
     try {
       await addToCart(product.id, qty, selectedWeight?.id || null);
     } catch (error) {
@@ -72,8 +88,10 @@ const StickyBar = ({ product }) => {
 
   // Handle subscription checkout
   const handleSubscription = () => {
-    if (!selectedFrequency) {
-      console.error("Please select all subscription options");
+    if (!selectedFrequency || isOutOfStock) {
+      console.error(
+        "Please select all subscription options or item is out of stock",
+      );
       return;
     }
 
@@ -86,6 +104,7 @@ const StickyBar = ({ product }) => {
       quantity: selectedQuantity.toString(),
     });
 
+    setShowSubscribe(false);
     router.push(`/checkout?${params.toString()}`);
   };
 
@@ -94,15 +113,31 @@ const StickyBar = ({ product }) => {
     return `Every ${freq.duration} ${freq.interval}${freq.duration > 1 ? "s" : ""}`;
   };
 
+
+  // Determine current stock status
+  const isOutOfStock = product?.hasVariantOptions
+    ? !selectedWeight?.variantInStock
+    : product?.inStock === false;
+
+  const stockQuantity = product?.hasVariantOptions
+    ? selectedWeight?.variantStockQuantity
+    : product?.stockQuantity;
+
+  const isLowStock = !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
+
   // Determine current price based on product type and selection
   const simplePrice = product?.hasVariantOptions
-    ? (selectedWeight?.variantSalePrice || selectedWeight?.variantRegularPrice || 0)
-    : (product?.salePrice || product?.regularPrice || 0);
+    ? selectedWeight?.variantSalePrice ||
+      selectedWeight?.variantRegularPrice ||
+      0
+    : product?.salePrice || product?.regularPrice || 0;
 
   const subscriptionOptions = {
     quantities: [1, 2, 3], // Default bag amounts
-    weights: sortedVariants.map(v => v.variantName),
-    frequencies: product?.hasVariantOptions ? selectedWeight?.subFreq : product?.subFreq || []
+    weights: sortedVariants.map((v) => v.variantName),
+    frequencies: product?.hasVariantOptions
+      ? selectedWeight?.subFreq
+      : product?.subFreq || [],
   };
 
   return (
@@ -115,66 +150,79 @@ const StickyBar = ({ product }) => {
           </div>
 
           <div className={styles.Center}>
-            <div className={styles.WeightDropdown}>
-              {product?.hasVariantOptions ? (
-                <>
-                  <button
-                    className={styles.WeightSelect}
-                    onClick={() => setShowWeightMenu((prev) => !prev)}
-                  >
-                    <span>{selectedWeight?.variantName}g</span>
-
-                    <svg
-                      width="13"
-                      height="8"
-                      viewBox="0 0 13 8"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={
-                        showWeightMenu ? styles.RotateUp : styles.RotateDown
-                      }
+            {product?.hasVariantOptions && (
+              <div className={styles.WeightDropdown}>
+                {product?.hasVariantOptions ? (
+                  <>
+                    <button
+                      className={styles.WeightSelect}
+                      onClick={() => setShowWeightMenu((prev) => !prev)}
                     >
-                      <path
-                        d="M6.25635 0L0.0000755461 7.40326L12.5126 7.40326L6.25635 0Z"
-                        fill="#6C7A5F"
-                      />
-                    </svg>
-                  </button>
+                      <span>{selectedWeight?.variantName}g</span>
 
-                  {showWeightMenu && (
-                    <div className={styles.WeightMenu}>
-                      {product?.variants?.map((v) => (
-                        <button
-                          key={v.id}
-                          className={styles.WeightMenuItem}
-                          onClick={() => {
-                            setSelectedWeight(v);
-                            setShowWeightMenu(false);
-                          }}
-                        >
-                          {v.variantName}g
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className={styles.SingleWeight}>
-                  {selectedWeight?.variantName}g
-                </div>
-              )}
-            </div>
+                      <svg
+                        width="13"
+                        height="8"
+                        viewBox="0 0 13 8"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={
+                          showWeightMenu ? styles.RotateUp : styles.RotateDown
+                        }
+                      >
+                        <path
+                          d="M6.25635 0L0.0000755461 7.40326L12.5126 7.40326L6.25635 0Z"
+                          fill="#6C7A5F"
+                        />
+                      </svg>
+                    </button>
+
+                    {showWeightMenu && (
+                      <div className={styles.WeightMenu}>
+                        {product?.variants?.map((v) => {
+                          const variantOutOfStock = !v.variantInStock;
+                          const variantLowStock =
+                            !variantOutOfStock &&
+                            v.variantStockQuantity > 0 &&
+                            v.variantStockQuantity <= 10;
+
+                          return (
+                            <button
+                              key={v.id}
+                              className={`${styles.WeightMenuItem} ${variantOutOfStock ? styles.OutOfStockMenuItem : ""} ${variantLowStock ? styles.LowStockMenuItem : ""}`}
+                              onClick={() => {
+                                setSelectedWeight(v);
+                                setShowWeightMenu(false);
+                              }}
+                            >
+                              {v.variantName}g
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className={styles.SingleWeight}>
+                    {selectedWeight?.variantName}g
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className={styles.CountIncDec}>
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))}>
+              <button
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                disabled={isOutOfStock}
+              >
                 −
               </button>
               <span>{String(qty).padStart(2, "0")}</span>
               <button
                 onClick={() => setQty((q) => Math.min(5, q + 1))}
-                disabled={qty >= 5}
+                disabled={qty >= 5 || isOutOfStock}
                 style={{
-                  opacity: qty >= 5 ? 0.5 : 1,
-                  cursor: qty >= 5 ? "not-allowed" : "pointer",
+                  opacity: qty >= 5 || isOutOfStock ? 0.5 : 1,
+                  cursor: qty >= 5 || isOutOfStock ? "not-allowed" : "pointer",
                 }}
               >
                 +
@@ -188,8 +236,9 @@ const StickyBar = ({ product }) => {
             <div className={styles.Cta}>
               {(selectedWeight?.hasVariantSub || product?.hasSimpleSub) && (
                 <button
-                  className={styles.SubscribeCta}
-                  onClick={() => setShowSubscribe(true)}
+                  className={`${styles.SubscribeCta} ${isOutOfStock ? styles.DisabledCta : ""}`}
+                  onClick={() => !isOutOfStock && setShowSubscribe(true)}
+                  disabled={isOutOfStock}
                 >
                   <span>Subscribe &amp; save</span>
 
@@ -218,121 +267,146 @@ const StickyBar = ({ product }) => {
               )}
 
               <button
-                className={styles.AddtoCartPriceCta}
+                className={`${styles.AddtoCartPriceCta} ${isOutOfStock ? styles.DisabledCta : ""}`}
                 onClick={handleBuyNow}
+                disabled={isOutOfStock}
               >
-                Buy for AED {simplePrice.toFixed(2)}
+                {isOutOfStock
+                  ? "Out of Stock"
+                  : `Buy for AED ${simplePrice.toFixed(2)}`}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {showSubscribe && (selectedWeight?.hasVariantSub || product?.hasSimpleSub) && (
-        <div className={styles.PopupOverlay}>
-          <div className={styles.Popup} ref={popupRef}>
+      {showSubscribe &&
+        (selectedWeight?.hasVariantSub || product?.hasSimpleSub) && (
+          <div className={styles.PopupOverlay}>
+            <div className={styles.Popup} ref={popupRef}>
+              <button
+                className={styles.PopupClose}
+                onClick={() => setShowSubscribe(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
 
-            <button
-              className={styles.PopupClose}
-              onClick={() => setShowSubscribe(false)}
-              aria-label="Close"
-            >
-              ✕
-            </button>
+              <h3>COFFEE BEANS SUBSCRIPTION</h3>
 
-            <h3>COFFEE BEANS SUBSCRIPTION</h3>
-
-            {/* Bag Amount */}
-            <div className={styles.SubscriptionSection}>
-              <h4>Bag Amount</h4>
-              <div className={styles.FrequencyOptions}>
-                {subscriptionOptions.quantities.map((quantity) => (
-                  <button
-                    key={quantity}
-                    className={
-                      selectedQuantity === quantity
-                        ? styles.ActiveFrequency
-                        : styles.FrequencyBtn
-                    }
-                    onClick={() => setSelectedQuantity(quantity)}
-                  >
-                    {quantity}x
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Size */}
-            {product.hasVariantOptions && (
+              {/* Bag Amount */}
               <div className={styles.SubscriptionSection}>
-                <h4>Size</h4>
+                <h4>Bag Amount</h4>
                 <div className={styles.FrequencyOptions}>
-                  {sortedVariants.map((v) => (
+                  {subscriptionOptions.quantities.map((quantity) => (
                     <button
-                      key={v.id}
+                      key={quantity}
                       className={
-                        selectedSubWeight === v.variantName
+                        selectedQuantity === quantity
                           ? styles.ActiveFrequency
                           : styles.FrequencyBtn
                       }
-                      onClick={() => {
-                        setSelectedWeight(v);
-                        setSelectedSubWeight(v.variantName);
-                      }}
+                      onClick={() => setSelectedQuantity(quantity)}
                     >
-                      {v.variantName}g
+                      {quantity}x
                     </button>
                   ))}
                 </div>
               </div>
-            )}
 
-            {/* Frequency */}
-            <div className={styles.SubscriptionSection}>
-              <h4>Frequency</h4>
-              <div className={styles.FrequencyOptions}>
-                {subscriptionOptions.frequencies.map((freq) => (
-                  <button
-                    key={freq.id}
-                    className={
-                      selectedFrequency?.id === freq.id
-                        ? styles.ActiveFrequency
-                        : styles.FrequencyBtn
-                    }
-                    onClick={() => setSelectedFrequency(freq)}
-                  >
-                    {getFrequencyLabel(freq)}
-                  </button>
-                ))}
+              {/* Size */}
+              {product.hasVariantOptions && (
+                <div className={styles.SubscriptionSection}>
+                  <h4>Size</h4>
+                  <div className={styles.FrequencyOptions}>
+                    {sortedVariants.map((v) => {
+                      const vOutOfStock = !v.variantInStock;
+                      const vLowStock =
+                        !vOutOfStock &&
+                        v.variantStockQuantity > 0 &&
+                        v.variantStockQuantity <= 10;
+
+                      return (
+                        <button
+                          key={v.id}
+                          className={`${
+                            selectedSubWeight === v.variantName
+                              ? styles.ActiveFrequency
+                              : styles.FrequencyBtn
+                          } ${vOutOfStock ? styles.OutOfStockMenuItem : ""} ${vLowStock ? styles.LowStockMenuItem : ""}`}
+                          onClick={() => {
+                            setSelectedWeight(v);
+                            setSelectedSubWeight(v.variantName);
+                          }}
+                        >
+                          {v.variantName}g
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Frequency */}
+              <div className={styles.SubscriptionSection}>
+                <h4>Frequency</h4>
+                <div className={styles.FrequencyOptions}>
+                  {subscriptionOptions.frequencies.map((freq) => (
+                    <button
+                      key={freq.id}
+                      className={
+                        selectedFrequency?.id === freq.id
+                          ? styles.ActiveFrequency
+                          : styles.FrequencyBtn
+                      }
+                      onClick={() => setSelectedFrequency(freq)}
+                    >
+                      {getFrequencyLabel(freq)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.PopupActions}>
+                {(() => {
+                  const basePrice = product.hasVariantOptions
+                    ? Number(
+                        selectedWeight?.variantSalePrice ||
+                          selectedWeight?.variantRegularPrice,
+                      )
+                    : Number(product.salePrice || product.regularPrice);
+
+                  const discount = product.hasVariantOptions
+                    ? Number(selectedWeight?.subscriptionDiscount) || 0
+                    : Number(product.subscriptionDiscount) || 0;
+
+                  const finalPrice =
+                    discount > 0
+                      ? basePrice - (basePrice * discount) / 100
+                      : basePrice;
+
+                  return (
+                    <button
+                      onClick={handleSubscription}
+                      className={`${styles.PopupConfirm} ${isOutOfStock ? styles.DisabledCta : ""}`}
+                      disabled={isOutOfStock}
+                    >
+                      {isOutOfStock ? (
+                        "Out of Stock"
+                      ) : (
+                        <>
+                          Subscribe – AED{" "}
+                          {Math.round(finalPrice * selectedQuantity)}
+                          {discount > 0 && <> (Save {discount}%)</>}
+                        </>
+                      )}
+                    </button>
+                  );
+                })()}
               </div>
             </div>
-
-            <div className={styles.PopupActions}>
-              {(() => {
-                const basePrice = product.hasVariantOptions
-                  ? Number(selectedWeight?.variantSalePrice || selectedWeight?.variantRegularPrice)
-                  : Number(product.salePrice || product.regularPrice);
-
-                const discount = product.hasVariantOptions
-                  ? (Number(selectedWeight?.subscriptionDiscount) || 0)
-                  : (Number(product.subscriptionDiscount) || 0);
-
-                const finalPrice = discount > 0 ? basePrice - (basePrice * discount) / 100 : basePrice;
-
-                return (
-                  <button
-                    onClick={handleSubscription}
-                    className={styles.PopupConfirm}
-                  >
-                    Subscribe – AED {Math.round(finalPrice * selectedQuantity)}
-                    {discount > 0 && <> (Save {discount}%)</>}
-                  </button>
-                );
-              })()}
-            </div>
           </div>
-        </div>
-      )}
+        )}
     </>
   );
 };

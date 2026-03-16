@@ -449,7 +449,7 @@
 .RadioInner {
   width: 10px;
   height: 10px;
-  background-color: #2f362a;
+  background-color: #6c7a5f;
   border-radius: 50%;
 }
 
@@ -507,6 +507,8 @@
   border: 1px solid #d9d9d9;
   padding: 14px;
   border-radius: 2px;
+  outline: 1.5px solid #2f362a;
+  outline-offset: -1px;
 }
 
 .Three h3,
@@ -662,7 +664,7 @@
   color: #2f362a;
 }
 
-.CheckBox{
+.CheckBox {
   padding-top: 20px;
 }
 
@@ -671,6 +673,10 @@
     padding: 80px 24px;
   }
 
+  .CouponSection {
+    width: 100%;
+  }
+  
   .MainConatiner {
     flex-direction: column;
     align-items: center;
@@ -680,6 +686,9 @@
   .Right {
     width: 100%;
     padding-top: 0px;
+  }
+  .ThreeRow {
+    padding: 10px;
   }
 
   .Right {
@@ -768,6 +777,9 @@
   .Main {
     padding-left: 40px;
     padding-right: 40px;
+  }
+  .CouponSection {
+    width: 100%;
   }
 }
 
@@ -1053,6 +1065,13 @@
   cursor: pointer;
   position: relative;
   user-select: none;
+}
+.CheckboxContainer.Disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.CheckboxContainer.Disabled input {
+  cursor: not-allowed;
 }
 
 .CheckboxContainer input {

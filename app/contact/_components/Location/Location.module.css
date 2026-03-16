@@ -53,7 +53,7 @@
 
 .infoTitle {
   font-size: var(--fs-15);
-  color: #2F362A;
+  color: #2f362a;
   font-family: var(--lato);
   font-weight: 700;
   line-height: 1.2;
@@ -94,7 +94,7 @@
     height: 220px;
   }
   .infoCard {
-    right: 12px;
+    right: 93px;
     width: 160px;
     top: auto;
     bottom: 12px;

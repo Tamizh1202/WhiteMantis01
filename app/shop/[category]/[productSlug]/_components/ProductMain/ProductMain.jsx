@@ -12,7 +12,7 @@ import { getProductDetails } from "@/utils/PDPUtils";
 
 // ... (existing imports and helpers) ...
 const ProductMain = ({ product }) => {
-  const { selectedImage } = useProductImage(); // Use context
+  const { selectedImage, selectedVariant } = useProductImage(); // Use context
   const detailsRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
@@ -22,8 +22,25 @@ const ProductMain = ({ product }) => {
   const topRightRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  const productImage = formatImageUrl(selectedImage) || formatImageUrl(product?.productImage) || productImg;
-  const {leftDetails, rightDetails} = getProductDetails(product);
+  const isOutOfStock = product?.hasVariantOptions
+    ? selectedVariant
+      ? !selectedVariant.variantInStock
+      : !product?.variants?.some((v) => v.variantInStock)
+    : product?.inStock === false;
+
+  const stockQuantity = product?.hasVariantOptions
+    ? selectedVariant
+      ? selectedVariant.variantStockQuantity
+      : product?.variants?.[0]?.variantStockQuantity
+    : product?.stockQuantity;
+
+  const isLowStock = !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
+
+  const productImage =
+    formatImageUrl(selectedImage) ||
+    formatImageUrl(product?.productImage) ||
+    productImg;
+  const { leftDetails, rightDetails } = getProductDetails(product);
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,7 +54,6 @@ const ProductMain = ({ product }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   useEffect(() => {
     let ctx;
@@ -107,7 +123,7 @@ const ProductMain = ({ product }) => {
             scale: isMobile ? 0.6 : 0.95,
             ease: "none",
           },
-          0
+          0,
         );
 
         tl.to(
@@ -119,7 +135,7 @@ const ProductMain = ({ product }) => {
             scale: 1,
             ease: "power3.out",
           },
-          0
+          0,
         );
 
         tl.to(
@@ -130,7 +146,7 @@ const ProductMain = ({ product }) => {
             stagger: 0.12,
             ease: "power2.out",
           },
-          0.1
+          0.1,
         );
 
         tl.to(
@@ -141,7 +157,7 @@ const ProductMain = ({ product }) => {
             stagger: 0.12,
             ease: "power2.out",
           },
-          0.1
+          0.1,
         );
 
         tl.to(
@@ -151,7 +167,7 @@ const ProductMain = ({ product }) => {
             y: -30,
             ease: "power2.out",
           },
-          0
+          0,
         );
       }, detailsRef);
     };
@@ -173,30 +189,31 @@ const ProductMain = ({ product }) => {
               <h3>{product?.tagline}</h3>
             </div>
             <div className={styles.LeftBottom}>
-
               <div>
                 <h4>Farm</h4>
                 <p>{product?.farm}</p>
               </div>
-
 
               <div>
                 <h4>Tasting Notes</h4>
                 <p>{product?.tastingNotes}</p>
               </div>
 
-
               <div>
                 <h4>Variety</h4>
                 <p>{product?.variety}</p>
               </div>
-
             </div>
           </div>
           <div className={styles.Middle} ref={middleRef}>
+            {isLowStock && (
+              <div className={styles.LowStockBadge}>Only few left</div>
+            )}
             <Image src={productImage} alt="Product" width={500} height={500} />
           </div>
-          <div className={styles.Right} ref={topRightRef}>{product?.description}<div />
+          <div className={styles.Right} ref={topRightRef}>
+            {product?.description}
+            <div />
           </div>
         </div>
         <div className={styles.DetailsSection} ref={detailsRef}>

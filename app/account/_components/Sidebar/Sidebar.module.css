@@ -1,53 +1,55 @@
 .Main {
-    display: flex;
-    justify-content: left;
-    width: 100%;
-    height: 100%;
-    padding-left: clamp(40px, calc(40px + (370 * ((100vw - 320px) / 1120))), 410px);
-
+  display: flex;
+  justify-content: left;
+  width: 100%;
+  height: 100%;
+  padding-left: clamp(
+    40px,
+    calc(40px + (370 * ((100vw - 320px) / 1120))),
+    410px
+  );
 }
 
 .Sidebar {
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
-    gap: 32px;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  height: 100%;
 }
 
 .Top {
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .UserName,
 .UserEmail {
-    display: flex;
-    justify-content: left;
+  display: flex;
+  justify-content: left;
 }
 
 .UserName h3 {
-    font-family: var(--lexend);
-    font-size: var(--fs-22);
-    font-weight: 500;
-    color: #2F362A;
+  font-family: var(--lexend);
+  font-size: var(--fs-22);
+  font-weight: 500;
+  color: #2f362a;
 }
 
 .UserEmail h5 {
-    font-family: var(--lato);
-    font-size: 15px;
-    font-weight: 400;
-    color: #6E736A;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #6e736a;
 }
 
 .Bottom {
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
-
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
 }
 
 .Profile,
@@ -55,23 +57,35 @@
 .Subscription,
 .Wishlist,
 .Logout {
-    display: flex;
-    justify-content: left;
-    cursor: pointer;
-    align-items: center;
-    padding: 20.22px 10px 20px 16px;
-    width: clamp(100px, 30vw, 300px);
+  display: flex;
+  justify-content: left;
+  cursor: pointer;
+  align-items: center;
+  padding: 20.22px 10px 20px 16px;
+  width: clamp(100px, 30vw, 300px);
+  flex-direction: row;
+  gap: 8px;
+  border: 1px solid #2f362a4d;
+  transition: all 0.3s ease;
+}
 
-    flex-direction: row;
-    gap: 8px;
+.active {
+  background-color: #f1f2ef;
+}
 
-    border: 1px solid #2F362A4D;
+.active p {
+  color: #2f362a !important;
+  font-weight: 500 !important;
+}
+
+.active svg path {
+  fill: #2f362a !important;
 }
 
 .Bottom a {
-    text-decoration: none;
-    color: inherit;
-    width: 100%;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
 }
 
 .Profile p,
@@ -79,108 +93,103 @@
 .Subscription p,
 .Wishlist p,
 .Logout p {
-    font-family: var(--lato);
-    font-size: 15px;
-    font-weight: 400;
-    color: #6E736A;
-    cursor: pointer;
-    ;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #6e736a;
+  cursor: pointer;
 }
 
 .LogoutOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
 }
 
 .LogoutPopup {
-    background: #ffffff;
-    width: 100%;
-    max-width: 546px;
-    padding: 32px 32px;
-    z-index: 100000;
+  background: #ffffff;
+  width: 100%;
+  max-width: 546px;
+  padding: 32px 32px;
+  z-index: 100000;
 }
 
 .LogoutPopup h2 {
-    font-family: var(--lexend);
-    font-size: 24px;
-    font-weight: 500;
-    color: #2F362A;
-    text-align: left;
+  font-family: var(--lexend);
+  font-size: 24px;
+  font-weight: 500;
+  color: #2f362a;
+  text-align: left;
 }
 
 .LogoutPopup p {
-    font-family: var(--lato);
-    font-size: 16px;
-    color: #6E736A;
-    margin-top: 10px;
-    text-align: left;
+  font-family: var(--lato);
+  font-size: 16px;
+  color: #6e736a;
+  margin-top: 10px;
+  text-align: left;
 }
 
 .LogoutActions {
-    display: flex;
-    gap: 24px;
-    margin-top: 40px;
+  display: flex;
+  gap: 24px;
+  margin-top: 40px;
 }
 
 .CancelBtn {
-    min-width: 200px;
-    padding: 14px 0;
-    background: transparent;
-    border: 1px solid #6E736A;
-    color: #6E736A;
-    font-family: var(--lato);
-    font-size: 16px;
-    cursor: pointer;
+  min-width: 200px;
+  padding: 14px 0;
+  background: transparent;
+  border: 1px solid #6e736a;
+  color: #6e736a;
+  font-family: var(--lato);
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .ConfirmBtn {
-    min-width: 200px;
-    padding: 14px 0;
-    background: #6C7A5F;
-    border: none;
-    color: #ffffff;
-    font-family: var(--lato);
-    font-size: 16px;
-    cursor: pointer;
+  min-width: 200px;
+  padding: 14px 0;
+  background: #6c7a5f;
+  border: none;
+  color: #ffffff;
+  font-family: var(--lato);
+  font-size: 16px;
+  cursor: pointer;
 }
 
 @media (max-width: 640px) {
-    .Main {
-        display: none;
-    }
-
+  .Main {
+    display: none;
+  }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
-    .Main {
-        padding-left: 40px;
-    }
+  .Main {
+    padding-left: 40px;
+  }
 }
 
 @media (min-width: 1025px) and (max-width: 1280px) {
-    .Main {
-        padding-left: 120px;
-    }
-
+  .Main {
+    padding-left: 120px;
+  }
 }
 
 @media (min-width: 1281px) and (max-width: 1440px) {
-    .Main {
-        padding-left: 120px;
-    }
-
+  .Main {
+    padding-left: 120px;
+  }
 }
 
 @media (min-width: 1441px) and (max-width: 1850px) {
-    .Main {
-        padding-left: 160px;
-    }
-
+  .Main {
+    padding-left: 160px;
+  }
 }

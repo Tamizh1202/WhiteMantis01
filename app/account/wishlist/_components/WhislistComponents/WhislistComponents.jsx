@@ -14,7 +14,7 @@ const WhislistComponents = () => {
   const { items: wishlistData, loading, remove } = useWishlist();
   const router = useRouter();
 
-  console.log(wishlistData)
+  console.log(wishlistData);
   // const remove = async (id) => {
   //   try {
   //     // 1. Send the request to the specific ID URL
@@ -111,7 +111,8 @@ const WhislistComponents = () => {
     let discount = 0;
 
     if (product.hasVariantOptions && product.variants?.length > 0) {
-      const subVariant = product.variants.find((v) => v.hasVariantSub) || product.variants[0];
+      const subVariant =
+        product.variants.find((v) => v.hasVariantSub) || product.variants[0];
       subFreqs = subVariant.subFreq || [];
       discount = subVariant.subscriptionDiscount || 0;
       setSelectedProduct({
@@ -159,13 +160,13 @@ const WhislistComponents = () => {
     const plural = freq.duration > 1 ? "s" : "";
     return `Every ${freq.duration} ${freq.interval}${plural}`;
   };
-  console.log('initial data', wishlistData)
+  console.log("initial data", wishlistData);
   const handleWeightChange = (wishlistItemId, weight) => {
     const item = wishlistData.find((it) => it.id === wishlistItemId);
     const productDoc = item?.product?.value;
     if (productDoc?.variants) {
       const variation = productDoc.variants.find(
-        (v) => v.variantName === weight
+        (v) => v.variantName === weight,
       );
       if (variation) {
         setSelectedVariations((prev) => ({
@@ -176,7 +177,6 @@ const WhislistComponents = () => {
     }
   };
 
-
   const getVariationImage = (item) => {
     const selectedVariation = selectedVariations[item.id];
     if (selectedVariation?.variantImage) {
@@ -184,14 +184,20 @@ const WhislistComponents = () => {
     }
     const productDoc = item.product?.value;
     // Fallback to first variation image or parent image
-    return formatImageUrl(productDoc?.variants?.[0]?.variantImage) || formatImageUrl(productDoc?.productImage);
+    return (
+      formatImageUrl(productDoc?.variants?.[0]?.variantImage) ||
+      formatImageUrl(productDoc?.productImage)
+    );
   };
 
   const getVariationPrice = (item, productDoc) => {
     const selectedVariation = selectedVariations[item.id];
 
     if (selectedVariation) {
-      const price = selectedVariation.variantSalePrice || selectedVariation.variantRegularPrice || 0;
+      const price =
+        selectedVariation.variantSalePrice ||
+        selectedVariation.variantRegularPrice ||
+        0;
       return `AED ${parseFloat(price).toFixed(2)}`;
     }
 
@@ -211,7 +217,9 @@ const WhislistComponents = () => {
     }
 
     if (productDoc?.salePrice && productDoc?.regularPrice) {
-      if (parseFloat(productDoc.regularPrice) > parseFloat(productDoc.salePrice)) {
+      if (
+        parseFloat(productDoc.regularPrice) > parseFloat(productDoc.salePrice)
+      ) {
         return `AED ${parseFloat(productDoc.regularPrice).toFixed(2)}`;
       }
     }
@@ -265,7 +273,10 @@ const WhislistComponents = () => {
             <p className={styles.EmptySubText}>
               Explore more and shortlist some items.
             </p>
-            <button className={styles.ShopNow} onClick={() => router.push('/shop')}>
+            <button
+              className={styles.ShopNow}
+              onClick={() => router.push("/shop")}
+            >
               Shop now
             </button>
           </div>
@@ -281,28 +292,69 @@ const WhislistComponents = () => {
               // 3. Pass productDoc to your existing helper functions
               const availableWeights = getAvailableWeights(productDoc);
               const selectedVariation = selectedVariations[item.id];
-              const variationImage = formatImageUrl(item?.product?.value?.productImage?.url)
+              const variationImage = formatImageUrl(
+                item?.product?.value?.productImage?.url,
+              );
 
-              console.log(formatImageUrl(item?.product?.value?.productImage?.url))
+              console.log(
+                formatImageUrl(item?.product?.value?.productImage?.url),
+              );
+
+              const isOutOfStock = productDoc.hasVariantOptions
+                ? selectedVariation
+                  ? !selectedVariation.variantInStock
+                  : !productDoc.variants?.some((v) => v.variantInStock)
+                : productDoc.inStock === false;
+
+              const stockQuantity = productDoc.hasVariantOptions
+                ? selectedVariation
+                  ? selectedVariation.variantStockQuantity
+                  : productDoc.variants?.[0]?.variantStockQuantity
+                : productDoc.stockQuantity;
+
+              const isLowStock =
+                !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
 
               return (
                 <div className={styles.Card} key={item.id}>
                   <div className={styles.CardTop}>
+                    {isLowStock && (
+                      <div className={styles.LowStockBadge}>Only few left</div>
+                    )}
                     <div
                       className={styles.Remove}
                       onClick={() => handleRemove(item.product.value.id)}
                     >
                       {/* SVG remains the same */}
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <rect width="32" height="32" rx="16" fill="#6C7A5F" fillOpacity="0.2" />
-                        <path d="M11.0125 22.4016L9.60156 20.9906L14.6072 15.985L9.60156 11.0125L11.0125 9.60156L16.0181 14.6072L20.9906 9.60156L22.4016 11.0125L17.3959 15.985L22.4016 20.9906L20.9906 22.4016L16.0181 17.3959L11.0125 22.4016Z" fill="#6C7A5F" />
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                      >
+                        <rect
+                          width="32"
+                          height="32"
+                          rx="16"
+                          fill="#6C7A5F"
+                          fillOpacity="0.2"
+                        />
+                        <path
+                          d="M11.0125 22.4016L9.60156 20.9906L14.6072 15.985L9.60156 11.0125L11.0125 9.60156L16.0181 14.6072L20.9906 9.60156L22.4016 11.0125L17.3959 15.985L22.4016 20.9906L20.9906 22.4016L16.0181 17.3959L11.0125 22.4016Z"
+                          fill="#6C7A5F"
+                        />
                       </svg>
                     </div>
 
                     <div
                       className={styles.ImgContainer}
-                      onClick={() => handleProductClick(productDoc?.slug, productDoc?.categories?.slug)}
-                      style={{ cursor: 'pointer' }}
+                      onClick={() =>
+                        handleProductClick(
+                          productDoc?.slug,
+                          productDoc?.categories?.slug,
+                        )
+                      }
+                      style={{ cursor: "pointer" }}
                     >
                       {getVariationImage(item) ? (
                         <Image
@@ -313,7 +365,10 @@ const WhislistComponents = () => {
                           height={200}
                         />
                       ) : (
-                        <div className={styles.Img} style={{ background: '#f0f0f0' }} />
+                        <div
+                          className={styles.Img}
+                          style={{ background: "#f0f0f0" }}
+                        />
                       )}
                     </div>
                   </div>
@@ -322,44 +377,75 @@ const WhislistComponents = () => {
                     <div className={styles.Price}>
                       {/* Pass productDoc to helpers */}
                       <h4>{getVariationPrice(item, productDoc)}</h4>
-                      {getRegularPrice(item, productDoc) && <p>{getRegularPrice(item, productDoc)}</p>}
+                      {getRegularPrice(item, productDoc) && (
+                        <p>{getRegularPrice(item, productDoc)}</p>
+                      )}
                     </div>
                     <div className={styles.line}></div>
                     <div
                       className={styles.TagLine}
-                      onClick={() => handleProductClick(productDoc.slug || "", productDoc.categories?.slug || "")}
-                      style={{ cursor: 'pointer' }}
+                      onClick={() =>
+                        handleProductClick(
+                          productDoc.slug || "",
+                          productDoc.categories?.slug || "",
+                        )
+                      }
+                      style={{ cursor: "pointer" }}
                     >
-                      <h4>{productDoc.name} {productDoc.tagline}</h4>
+                      <h4>
+                        {productDoc.name} {productDoc.tagline}
+                      </h4>
                     </div>
                   </div>
 
                   <div className={styles.CardBottom}>
                     <div className={styles.DesktopActions}>
-                      <AddToCart
-                        product={{
-                          productId: productDoc.id,
-                          variationId: selectedVariation?.id || null,
-                          quantity: 1,
-                        }}
-                      />
-                      {(productDoc.hasSimpleSub ||
-                        (productDoc.hasVariantOptions &&
-                          productDoc.variants?.some((v) => v.hasVariantSub))) && (
-                          <button
-                            className={styles.Subscribe}
-                            onClick={() => handleOpenSubscribePopup(productDoc)}
-                          >
-                            Subscribe
+                      {isOutOfStock ? (
+                        <div className={styles.OutOfStockRow}>
+                          <button className={styles.OutOfStockBtn} disabled>
+                            Out of Stock
                           </button>
-                        )}
+                        </div>
+                      ) : (
+                        <>
+                          <AddToCart
+                            product={{
+                              productId: productDoc.id,
+                              variationId: selectedVariation?.id || null,
+                              quantity: 1,
+                            }}
+                          />
+                          {(productDoc.hasSimpleSub ||
+                            (productDoc.hasVariantOptions &&
+                              productDoc.variants?.some(
+                                (v) => v.hasVariantSub,
+                              ))) && (
+                            <button
+                              className={styles.Subscribe}
+                              onClick={() =>
+                                handleOpenSubscribePopup(productDoc)
+                              }
+                            >
+                              Subscribe
+                            </button>
+                          )}
+                        </>
+                      )}
                     </div>
                     <div className={styles.MobileActions}>
-                      <BuyNowPopup
-                        product={productDoc}
-                        getDisplayData={getDisplayData}
-                        handleOpenSubscribePopup={handleOpenSubscribePopup}
-                      />
+                      {isOutOfStock ? (
+                        <div className={styles.OutOfStockRow}>
+                          <button className={styles.OutOfStockBtn} disabled>
+                            Out of Stock
+                          </button>
+                        </div>
+                      ) : (
+                        <BuyNowPopup
+                          product={productDoc}
+                          getDisplayData={getDisplayData}
+                          handleOpenSubscribePopup={handleOpenSubscribePopup}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

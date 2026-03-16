@@ -150,6 +150,10 @@
     font-size: 18px;
   }
 
+  .Top a img{
+    width: 24px;
+  }
+
   .formBox input,
   .formBox select,
   .formBox textarea {

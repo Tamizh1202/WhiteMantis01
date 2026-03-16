@@ -540,10 +540,10 @@ export default function ShippingAddressSection({
       {delivery === "pickup" && (
         <div className={styles.PickupList}>
           <p>Pickup Locations Near You</p>
-          <div className={styles.PickupCard}>
+          <div className={styles.PickupCard}  >
             <input
               type="radio"
-              style={{ accentColor: "#2F362A" }}
+              style={{ accentColor: "#6c7a5f" }}
               checked
               readOnly
             />

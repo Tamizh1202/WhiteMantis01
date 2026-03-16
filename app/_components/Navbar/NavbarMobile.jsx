@@ -12,7 +12,6 @@ import { signOut } from "next-auth/react";
 // Removed duplicate useEffect import from here
 
 const NavbarMobile = ({ categories: initialCategories }) => {
-
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null); // Added Ref
@@ -45,6 +44,7 @@ const NavbarMobile = ({ categories: initialCategories }) => {
 
   const handleLogout = async () => {
     try {
+      setShowLogout(false);
       await fetch("/api/website/auth/logout", {
         method: "POST",
       });
@@ -112,7 +112,9 @@ const NavbarMobile = ({ categories: initialCategories }) => {
 
       {open && (
         <div className={styles.MenuWrapper}>
-          <div className={styles.MenuContainer} ref={menuRef}> {/* Attached ref here */}
+          <div className={styles.MenuContainer} ref={menuRef}>
+            {" "}
+            {/* Attached ref here */}
             <div className={styles.MenuHeader}>
               <button className={styles.IconBtn} onClick={() => setOpen(false)}>
                 <svg
@@ -145,10 +147,8 @@ const NavbarMobile = ({ categories: initialCategories }) => {
                   setOpen(false);
                   openCart();
                 }}
-              >
-              </button>
+              ></button>
             </div>
-
             <div className={styles.MenuContent}>
               <div className={styles.Section}>
                 <button
@@ -316,8 +316,14 @@ const NavbarMobile = ({ categories: initialCategories }) => {
         </div>
       )}
       {showLogout && (
-        <div className={styles.LogoutOverlay}>
-          <div className={styles.LogoutPopup}>
+        <div
+          className={styles.LogoutOverlay}
+          onClick={() => setShowLogout(false)}
+        >
+          <div
+            className={styles.LogoutPopup}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2>ARE YOU SURE YOU WANT TO LOGOUT?</h2>
             <p>
               You can always sign back in to access your specialty coffee

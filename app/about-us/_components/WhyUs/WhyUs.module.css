@@ -71,7 +71,7 @@
   font-size: 22px;
   font-family: var(--lexend);
   font-weight: 500;
-  color: #525252;
+  color: #6e736a;
   text-transform: uppercase;
 }
 .TextContainer p {
@@ -108,6 +108,7 @@
   }
   .TextContainer h3 {
     font-size: 20px;
+    color: #6e736a;
   }
   .TextContainer p {
     font-size: 14px;
@@ -119,6 +120,7 @@
   }
   .TextContainer h3 {
     font-size: 18px;
+    color: #6e736a;
   }
   .Main {
     padding-left: 40px;
@@ -137,6 +139,7 @@
   }
   .TextContainer h3 {
     font-size: 18px;
+    color: #6e736a;
   }
   .Main {
     padding-left: 40px;

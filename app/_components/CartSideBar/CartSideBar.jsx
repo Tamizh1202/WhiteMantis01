@@ -19,9 +19,20 @@ const CartSideBar = () => {
     openCouponModal,
   } = useCart();
 
-
   const router = useRouter();
   const isCartEmpty = !items || items.length === 0;
+
+  React.useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCartOpen]);
 
   const handleIncrease = async (product, vId, currentQty) => {
     if (currentQty >= 5) return;
@@ -36,7 +47,7 @@ const CartSideBar = () => {
 
   const handleRemove = async (product, vId) => {
     await removeItem(product, vId);
-  }
+  };
 
   const handleCheckout = () => {
     closeCart();
@@ -45,9 +56,7 @@ const CartSideBar = () => {
 
   return (
     <>
-      {isCartOpen && (
-        <div className={styles.overlay} onClick={closeCart} />
-      )}
+      {isCartOpen && <div className={styles.overlay} onClick={closeCart} />}
 
       <aside className={`${styles.sidebar} ${isCartOpen ? styles.open : ""}`}>
         <div className={styles.Main}>
@@ -108,87 +117,84 @@ const CartSideBar = () => {
                     </div>
                   </div>
                   <div className={styles.TopOneBottom}>
-                    {Array.isArray(items) && items.map((item) => (
-                      <div
-                        className={styles.Card}
-                        key={`${item.product}`}
-                      >
-                        <div className={styles.CardLeft}>
-                          <div className={styles.ProdImage}>
-                            <Image
-                              src={formatImageUrl(item.image)}
-                              alt={item.name}
-                              width={100}
-                              height={100}
-                            />
-                          </div>
-                          <div className={styles.ProdDetails}>
-                            <h5>
-                              {`${item.name}`}
-                              <br />
-                              {item.tagline}
-                              {item.variantName ? `, ${item.variantName}g` : ''}
-                            </h5>
-                            <h4>
-                              AED{" "}
-                              {(
-                                item.price ||
-                                0
-                              ).toFixed(2)}
-                            </h4>
-                          </div>
-                        </div>
-
-                        <div className={styles.CardRight}>
-                          <div className={styles.QuantitySelector}>
-                            <button
-                              className={styles.qtyBtn}
-                              onClick={() =>
-                                handleDecrease(
-                                  item.product,
-                                  item.vId,
-                                  item.quantity,
-                                )
-                              }
-                            >
-                              -
-                            </button>
-
-                            <span className={styles.qtyValue}>
-                              {String(item.quantity).padStart(2, "0")}
-                            </span>
-
-                            <button
-                              className={styles.qtyBtn}
-                              onClick={() =>
-                                handleIncrease(
-                                  item.product,
-                                  item.vId,
-                                  item.quantity,
-                                )
-                              }
-                              disabled={item.quantity >= 5}
-                              style={{
-                                opacity: item.quantity >= 5 ? 0.5 : 1,
-                                cursor: item.quantity >= 5 ? 'not-allowed' : 'pointer',
-                              }}
-                            >
-                              +
-                            </button>
+                    {Array.isArray(items) &&
+                      items.map((item) => (
+                        <div className={styles.Card} key={`${item.product}`}>
+                          <div className={styles.CardLeft}>
+                            <div className={styles.ProdImage}>
+                              <Image
+                                src={formatImageUrl(item.image)}
+                                alt={item.name}
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                            <div className={styles.ProdDetails}>
+                              <h5>
+                                {`${item.name}`}
+                                <br />
+                                {item.tagline}
+                                {item.variantName
+                                  ? `, ${item.variantName}g`
+                                  : ""}
+                              </h5>
+                              <h4>AED {(item.price || 0).toFixed(2)}</h4>
+                            </div>
                           </div>
 
-                          <div className={styles.RemoveItem}>
-                            <button
-                              onClick={() =>
-                                handleRemove(item.product, item.vId)
-                              }
-                            >
-                              Remove
-                            </button>
+                          <div className={styles.CardRight}>
+                            <div className={styles.QuantitySelector}>
+                              <button
+                                className={styles.qtyBtn}
+                                onClick={() =>
+                                  handleDecrease(
+                                    item.product,
+                                    item.vId,
+                                    item.quantity,
+                                  )
+                                }
+                              >
+                                -
+                              </button>
+
+                              <span className={styles.qtyValue}>
+                                {String(item.quantity).padStart(2, "0")}
+                              </span>
+
+                              <button
+                                className={styles.qtyBtn}
+                                onClick={() =>
+                                  handleIncrease(
+                                    item.product,
+                                    item.vId,
+                                    item.quantity,
+                                  )
+                                }
+                                disabled={item.quantity >= 5}
+                                style={{
+                                  opacity: item.quantity >= 5 ? 0.5 : 1,
+                                  cursor:
+                                    item.quantity >= 5
+                                      ? "not-allowed"
+                                      : "pointer",
+                                }}
+                              >
+                                +
+                              </button>
+                            </div>
+
+                            <div className={styles.RemoveItem}>
+                              <button
+                                onClick={() =>
+                                  handleRemove(item.product, item.vId)
+                                }
+                              >
+                                Remove
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </div>
                 {/* <div className={styles.TopTwo}>

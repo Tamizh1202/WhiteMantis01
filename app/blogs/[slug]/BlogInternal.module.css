@@ -1,0 +1,131 @@
+.Main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  background-color: #fdfdfb;
+}
+
+.Header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.Title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.Date {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #51624d;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.FeaturedImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  margin-bottom: 4rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.ContentWrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.LoaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+/* Related Blogs Section */
+.RelatedSection {
+  margin-top: 6rem;
+  padding-top: 4rem;
+  border-top: 1px solid #eee;
+}
+
+.SectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.BlogGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.BlogCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  /* box-shadow: 0 4px 15px rgba(0,0,0,0.05); */
+  transition: transform 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.BlogCard:hover {
+  transform: translateY(-5px);
+}
+
+.CardImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.CardContent {
+  padding: 1.5rem;
+}
+
+.CardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.ReadMoreBtn {
+  color: #51624d;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.ReadMoreBtn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .Title {
+    font-size: 2.5rem;
+  }
+
+  .FeaturedImageWrapper {
+    height: 350px;
+  }
+
+  .Main {
+    padding: 2rem 1rem;
+  }
+}

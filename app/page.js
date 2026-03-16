@@ -41,19 +41,20 @@ export const metadata = {
     card: "summary_large_image",
     title:
       "White Mantis Specialty Coffee Roasters | Built on Craft, Driven by Community",
-    description:
-      "Experience premium specialty coffee in Dubai.",
+    description: "Experience premium specialty coffee in Dubai.",
     images: ["/social-thumbnail.png"],
   },
-
 };
 
 export default async function Home() {
   let categories = [];
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/web-categories?sort=createdAt&select[title]=true&select[slug]=true&depth=0`, {
-      next: { revalidate: 3600 }
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/web-categories?sort=createdAt&select[title]=true&select[slug]=true&depth=0`,
+      {
+        next: { revalidate: 3600 },
+      },
+    );
     const data = await res.json();
     categories = data.docs || [];
   } catch (error) {
@@ -72,7 +73,7 @@ export default async function Home() {
       <div className="sectionPadding"></div>
       <Coffees category={coffeeCategory} />
       <div className="sectionPadding"></div>
-      <Shop />
+      <Shop categories={categories} />
       {/* <Subscribe /> */}
       <div className="sectionPadding"></div>
       <Community />

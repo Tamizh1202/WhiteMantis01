@@ -124,6 +124,7 @@ padding-right: clamp(24px, calc(24px + (102 * ((100vw - 320px) / 1120))), 125px)
  .BottomText p{
   width: 98%;
   font-size: 14px;
+  text-align: justify;
  }
  .Content{
   padding-left: 24px;

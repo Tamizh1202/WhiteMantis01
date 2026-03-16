@@ -6,7 +6,18 @@ import two from "./2.png";
 import three from "./3.png";
 import Link from "next/link";
 
-const Shop = () => {
+const Shop = ({ categories = [] }) => {
+  // Find specific categories from backend data
+  const beans = categories.find((cat) =>
+    cat.title.toLowerCase().includes("beans"),
+  );
+  const dripbags = categories.find((cat) =>
+    cat.title.toLowerCase().includes("dripbags"),
+  );
+  const capsules = categories.find((cat) =>
+    cat.title.toLowerCase().includes("capsules"),
+  );
+
   return (
     <>
       <div className={styles.main}>
@@ -16,7 +27,7 @@ const Shop = () => {
           </div>
           <div className={styles.Botttom}>
             <Link
-              href="/shop/coffee-beans"
+              href={`/shop/${beans?.slug || "coffee-beans"}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <div className={styles.One}>
@@ -54,7 +65,7 @@ const Shop = () => {
               </div>
             </Link>
             <Link
-              href="/shop/coffee-dripbags"
+              href={`/shop/${dripbags?.slug || "coffee-dripbags"}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <div className={styles.One}>
@@ -92,7 +103,7 @@ const Shop = () => {
               </div>
             </Link>
             <Link
-              href="/shop/coffee-capsules"
+              href={`/shop/${capsules?.slug || "coffee-capsules"}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <div className={styles.One}>
