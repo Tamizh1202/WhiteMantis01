@@ -73,6 +73,25 @@
   text-decoration: none;
 }
 
+.SectionHeader svg {
+  transition: transform 0.3s ease;
+}
+
+.DropdownWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out;
+  overflow: hidden;
+}
+
+.DropdownWrapperOpen {
+  grid-template-rows: 1fr;
+}
+
+.DropdownInner {
+  min-height: 0;
+}
+
 .Rotate {
   transform: rotate(180deg);
 }

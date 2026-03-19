@@ -10,9 +10,6 @@ export function PaymentCardSection({ validationErrors }) {
             <p>All transactions are secure and encrypted.</p>
 
             <div className={styles.PaymentContainer}>
-                <div className={styles.PaymentHeader}>
-                    <p>Payment Method</p>
-                </div>
                 <div className={styles.PaymentBody}>
                     <div className={styles.StripeInput}>
                         {/* 

@@ -216,9 +216,11 @@ const ProductMain = ({ product }) => {
         <div className={styles.DetailsSection} ref={detailsRef}>
           <div className={styles.DetailsLeft} ref={leftRef}>
             {leftDetails.map((item, i) => (
-              <div key={i}>
-                <h4>{item.title}</h4>
-                <p>{item.description || item.desc}</p>
+              <div key={i} className={styles.detailItem}>
+                <h4 className={styles.detailTitle}>{item.title}</h4>
+                <p className={styles.detailDesc}>
+                  {item.description || item.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -227,9 +229,11 @@ const ProductMain = ({ product }) => {
           </div>
           <div className={styles.DetailsRight} ref={rightRef}>
             {rightDetails.map((item, i) => (
-              <div key={i}>
-                <h4>{item.title}</h4>
-                <p>{item.description || item.desc}</p>
+              <div key={i} className={styles.detailItem}>
+                <h4 className={styles.detailTitle}>{item.title}</h4>
+                <p className={styles.detailDesc}>
+                  {item.description || item.desc}
+                </p>
               </div>
             ))}
           </div>

@@ -30,7 +30,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: space-between;
   position: relative;
   z-index: 1;
 }
@@ -99,6 +99,7 @@
   display: flex;
   justify-content: right;
   align-items: center;
+  gap: 35px;
 }
 .RightBottomText p {
   font-size: 15px;

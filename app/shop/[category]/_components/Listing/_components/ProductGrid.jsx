@@ -66,7 +66,18 @@ const ProductGrid = ({
                   sortOpen ? styles.SortArrowOpen : ""
                 }`}
               >
-                ▼
+                <svg
+                  width="13"
+                  height="7"
+                  viewBox="0 0 13 7"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.0625 6.75L12.1247 0H0.000322342L6.0625 6.75Z"
+                    fill="#2F362A"
+                  />
+                </svg>
               </span>
             </div>
             {sortOpen && (

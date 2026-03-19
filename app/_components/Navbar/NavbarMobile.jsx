@@ -158,19 +158,23 @@ const NavbarMobile = ({ categories: initialCategories }) => {
                   Our Shop
                   <svg
                     className={shopOpen ? styles.Rotate : ""}
-                    width="14"
-                    height="9"
-                    viewBox="0 0 14 9"
+                    width="13"
+                    height="7"
+                    viewBox="0 0 13 7"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M7 0L0 7L1.30466 8.30469L7 2.60935L12.6953 8.30469L14 7L7 0Z"
+                      d="M6.0625 6.75L12.1247 0H0.000322342L6.0625 6.75Z"
                       fill="#2F362A"
                     />
                   </svg>
                 </button>
 
-                {shopOpen && (
-                  <>
+                <div
+                  className={`${styles.DropdownWrapper} ${shopOpen ? styles.DropdownWrapperOpen : ""}`}
+                >
+                  <div className={styles.DropdownInner}>
                     <div className={styles.Line}></div>
                     <div className={styles.TwoCol}>
                       <div className={styles.Columnvee}>
@@ -186,8 +190,8 @@ const NavbarMobile = ({ categories: initialCategories }) => {
                         ))}
                       </div>
                     </div>
-                  </>
-                )}
+                  </div>
+                </div>
               </div>
               <div className={styles.Line}></div>
               <Link
@@ -240,67 +244,72 @@ const NavbarMobile = ({ categories: initialCategories }) => {
                     Account
                     <svg
                       className={accountOpen ? styles.Rotate : ""}
-                      width="14"
-                      height="9"
-                      viewBox="0 0 14 9"
+                      width="13"
+                      height="7"
+                      viewBox="0 0 13 7"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M7 0L0 7L1.30466 8.30469L7 2.60935L12.6953 8.30469L14 7L7 0Z"
+                        d="M6.0625 6.75L12.1247 0H0.000322342L6.0625 6.75Z"
                         fill="#2F362A"
                       />
                     </svg>
                   </button>
 
-                  <div className={styles.Line}></div>
-
-                  {accountOpen && (
-                    <div className={styles.Column}>
-                      <Link
-                        href="/account/profile"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        href="/account/orders"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        Orders
-                      </Link>
-                      <Link
-                        href="/account/subscription"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        Manage Subscription
-                      </Link>
-                      <Link
-                        href="/account/wishlist"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        Wishlist
-                      </Link>
-                      <Link
-                        href="/account/whitemantis-beans"
-                        onClick={() => setOpen(false)}
-                        className={styles.subLinks}
-                      >
-                        White Mantis Beans
-                      </Link>
-                      <button
-                        className={styles.LogoutLink}
-                        onClick={() => {
-                          setOpen(false);
-                          setShowLogout(true);
-                        }}
-                      >
-                        Logout
-                      </button>
+                  <div
+                    className={`${styles.DropdownWrapper} ${accountOpen ? styles.DropdownWrapperOpen : ""}`}
+                  >
+                    <div className={styles.DropdownInner}>
+                      <div className={styles.Line}></div>
+                      <div className={styles.Column}>
+                        <Link
+                          href="/account/profile"
+                          onClick={() => setOpen(false)}
+                          className={styles.subLinks}
+                        >
+                          Profile
+                        </Link>
+                        <Link
+                          href="/account/orders"
+                          onClick={() => setOpen(false)}
+                          className={styles.subLinks}
+                        >
+                          Orders
+                        </Link>
+                        <Link
+                          href="/account/subscription"
+                          onClick={() => setOpen(false)}
+                          className={styles.subLinks}
+                        >
+                          Manage Subscription
+                        </Link>
+                        <Link
+                          href="/account/wishlist"
+                          onClick={() => setOpen(false)}
+                          className={styles.subLinks}
+                        >
+                          Wishlist
+                        </Link>
+                        <Link
+                          href="/account/whitemantis-beans"
+                          onClick={() => setOpen(false)}
+                          className={styles.subLinks}
+                        >
+                          White Mantis Beans
+                        </Link>
+                        <button
+                          className={styles.LogoutLink}
+                          onClick={() => {
+                            setOpen(false);
+                            setShowLogout(true);
+                          }}
+                        >
+                          Logout
+                        </button>
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               ) : (
                 <Link

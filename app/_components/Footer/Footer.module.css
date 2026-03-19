@@ -497,6 +497,7 @@
   gap: 220px;
   align-items: center;
   width: 100%;
+  justify-content: space-between; 
 }
 
 .BottomBottomLeft p {

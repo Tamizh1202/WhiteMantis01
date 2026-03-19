@@ -3,11 +3,9 @@ import React, { useState, useRef, useLayoutEffect } from "react";
 import styles from "./Crafting.module.css";
 import Image from "next/image";
 import { CraftingComponentData } from "@/utils/PDPUtils";
-import image from "./1.png";    
+import image from "./1.png";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_SERVER_URL;
-const IMAGE_URL = `${BACKEND_URL}${process.env.NEXT_PUBLIC_CRAFTING_IMAGE_URL}`
-const VIDEO_URL = `${BACKEND_URL}${process.env.NEXT_PUBLIC_CRAFTING_VIDEO_URL}`
 
 const Crafting = ({ product }) => {
   const specsRef = useRef(null);
@@ -18,11 +16,21 @@ const Crafting = ({ product }) => {
 
   const current = active ? craftingData[active] : null;
 
+  const getVideoUrl = (filter) => {
+    const normalized = filter.toLowerCase();
+    if (normalized === "espresso") return "/videos/crafting/espresso-video.mp4";
+    if (normalized === "filter" || normalized === "milk")
+      return "/videos/crafting/filter.mp4";
+    return null;
+  };
+
+  const VIDEO_URL = active ? getVideoUrl(active) : null;
+  const IMAGE_URL = image;
+
   useLayoutEffect(() => {
     if (!specsRef.current) return;
 
-    const updateHeight = () =>
-      setSyncedHeight(specsRef.current.offsetHeight);
+    const updateHeight = () => setSyncedHeight(specsRef.current.offsetHeight);
 
     updateHeight();
 
@@ -37,31 +45,35 @@ const Crafting = ({ product }) => {
   return (
     <div className={styles.main}>
       <div className={styles.MainContainer}>
-
         <div className={styles.Left}>
           <div className={styles.LeftTop}>
             <h3>Brewing guide</h3>
           </div>
 
           <div className={styles.LeftBottom}>
-
             <div className={styles.LeftBottomFilters}>
               {Object.keys(craftingData).map((key, index) => (
                 <React.Fragment key={key}>
                   <div
-                    className={`${styles.FilterName} ${active === key
-                      ? styles.activeFilter
-                      : styles.inactiveFilter
-                      }`}
+                    className={`${styles.FilterName} ${
+                      active === key
+                        ? styles.activeFilter
+                        : styles.inactiveFilter
+                    }`}
                     onClick={() => setActive(key)}
                   >
-                    <h4 style={{ cursor: "pointer", textTransform: "capitalize" }}>{key}</h4>
+                    <h4
+                      style={{ cursor: "pointer", textTransform: "capitalize" }}
+                    >
+                      {key}
+                    </h4>
                   </div>
-                  {index < Object.keys(craftingData).length - 1 && <div className={styles.Line}></div>}
+                  {index < Object.keys(craftingData).length - 1 && (
+                    <div className={styles.Line}></div>
+                  )}
                 </React.Fragment>
               ))}
             </div>
-
 
             <div className={styles.LeftBottomFiltersData}>
               <div
@@ -79,14 +91,16 @@ const Crafting = ({ product }) => {
                     className={styles.videoveer}
                   />
                 ) : (
-                  <Image src={IMAGE_URL} alt={active} width={500} height={500} />
+                  <Image
+                    src={IMAGE_URL}
+                    alt={active}
+                    width={500}
+                    height={500}
+                  />
                 )}
               </div>
 
-              <div
-                className={styles.LeftBottomFiltersDataInfo}
-                ref={specsRef}
-              >
+              <div className={styles.LeftBottomFiltersDataInfo} ref={specsRef}>
                 {current.map((item, i) => (
                   <div className={styles.one} key={i}>
                     <h4>{item.title}</h4>
@@ -100,13 +114,16 @@ const Crafting = ({ product }) => {
 
         <div className={styles.Right}>
           <div className={styles.RightTop}>
-            <p>To achieve exceptional coffee, prepare your clean brewing tools and be consistent with grind size (based on roast date/method), water quality, weight, ratios, and time. Remember, let your palate guide you to personalize the best recipe, so brew often and have fun!</p>
+            <p>
+              To achieve exceptional coffee, prepare your clean brewing tools
+              and be consistent with grind size (based on roast date/method),
+              water quality, weight, ratios, and time. Remember, let your palate
+              guide you to personalize the best recipe, so brew often and have
+              fun!
+            </p>
           </div>
 
-          <div
-            className={styles.RightBottom}
-            style={{ height: syncedHeight }}
-          >
+          <div className={styles.RightBottom} style={{ height: syncedHeight }}>
             <Image src={image} alt="Brewing Guide" width={500} height={500} />
           </div>
         </div>
