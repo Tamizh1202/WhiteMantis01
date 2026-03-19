@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import google from "../Footer/appstore.png"
-import apple from "../Footer/googleplay.png"
+import apple from "../Footer/appstore.png"
+import google from "../Footer/googleplay.png"
 const Logo = "/White-Mantis-White-Logo.svg";
 
 

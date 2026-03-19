@@ -98,7 +98,8 @@
   flex-direction: column;
   gap: 60px;
 }
-.RelatedSection h2{
+
+.RelatedSection h2 {
   font-family: var(--lexend);
   font-weight: 500;
   font-size: 22px;

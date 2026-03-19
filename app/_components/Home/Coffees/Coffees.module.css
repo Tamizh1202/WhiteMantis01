@@ -4,8 +4,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0px clamp(0px, calc(24px + (-24 * ((100vw - 320px) / 1120))), 24px)
-    0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+  padding: 0px clamp(0px, calc(24px + (-24 * ((100vw - 320px) / 1120))), 24px) 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
   /* padding: clamp(80px, calc(80px + (80 * ((100vw - 320px) / 1120))), 160px)
     clamp(0px, calc(24px + (-24 * ((100vw - 320px) / 1120))), 24px)
     clamp(80px, calc(80px + (80 * ((100vw - 320px) / 1120))), 160px)
@@ -85,11 +84,7 @@
   gap: 24px;
 }
 
-.ProductImage {
-  cursor: pointer;
-  border: 1px solid #2f362a;
-  /* padding: 10px; */
-}
+
 
 .Card:hover img {
   /* cursor: pointer; */
@@ -100,23 +95,23 @@
 .ProductImage {
   width: 100%;
   height: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 280/244;
   background-color: #f8f8f8;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid transparent;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  padding: 50px 80px;
 }
 
 .ProductImage img {
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
   object-fit: contain;
   transition: all 0.2s ease-in-out;
-  padding: 20px;
+
 }
 
 .CardTop {
@@ -199,6 +194,7 @@
     display: flex;
     justify-content: center;
     gap: 8px;
+
   }
 
   .MobileArrows svg {
@@ -234,45 +230,91 @@
   }
 }
 
+
 @media (min-width: 641px) and (max-width: 940px) {
   .Main {
-    padding: 0px 40px;
+    padding-left: 40px; 
+    padding-right: 40px; 
+    width: 100%;
+    overflow-x: hidden;
   }
 
   .MainContainer {
-    gap: 60px;
+    display: grid;
+    
+    grid-template-columns: 320px 1fr; 
+    gap: 0px;
+    width: 100%;
+    align-items: flex-start;
   }
 
   .Left {
-    gap: 48px;
+    width: 260px;
+    z-index: 10; /* Keep text on top just in case */
+    background: white; /* Ensures cards don't show 'under' the text */
   }
 
   .Right {
     width: 100%;
+    min-width: 0;
+    
+    position: relative; 
+  }
+
+  .Embla {
+    overflow: hidden; 
+    
+    
+    margin-right: -100px; 
+    padding-right: 100px;
   }
 
   .EmblaContainer {
+    display: flex;
     gap: 32px;
+    
+    padding-right: 120px; 
   }
 
   .EmblaSlide {
+    flex: 0 0 280px;
+    width: 280px;
+  }
+
+  .ProductImage {
+    /* FLUID FIX: Be 100% of the parent, but never larger than 320px */
+    width: 100%;
+    max-width: 320px;
+    height: 300px;
+    padding: 30px 40px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f8f8;
+    overflow: visible;
     flex: 0 0 auto;
   }
 
   .ProductImage img {
-    max-width: 530px;
-    max-height: 280px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.18));
   }
 
   .Card {
     width: 100%;
-    max-width: 530px;
+    max-width: 320px;
     min-width: 170px;
+    box-sizing: border-box;
   }
 
   .LinkSvg {
     right: 0px;
     top: 0px;
+    position: absolute;
+    /* Ensures it stays within the relative card container */
   }
 
   .LinkSvg svg {
@@ -281,19 +323,55 @@
   }
 }
 
+/* 2. Large Tablet / Laptop View (941px - 1440px) */
 @media (min-width: 941px) and (max-width: 1440px) {
-  .ProductImage img {
-    max-width: 100%;
-    max-height: 100%;
+
+  /* 1. THE PARENT FIX: You must apply this to the div HOLDING the ProductImage */
+  .EmblaSlide,
+  .CarouselItem,
+  .Right {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    /* Forces the container to respect the screen edge */
   }
 
-  .LinkSvg svg {
-    width: 20px;
-    height: 20px;
+  .ProductImage {
+    /* 2. THE FLUID FIX: Stay at 400px, but shrink to fit the screen 100% */
+    width: 100% !important;
+    max-width: 400px !important;
+    height: 350px !important;
+
+    /* 3. THE MATH FIX: Keeps 120px total padding INSIDE the 400px box */
+    box-sizing: border-box !important;
+    padding: 40px 60px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #f8f8f8;
+
+    /* 4. THE SHADOW FIX: Use 'hidden' if it's still overflowing, or 'visible' if it fits */
+    overflow: visible;
+    flex: 0 1 auto !important;
+    /* Changed '0 0' to '0 1' to ALLOW shrinking */
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .ProductImage img {
+    /* 5. THE IMAGE SAFETY: Never let the bag push the box wider */
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain;
+    filter: drop-shadow(12px 12px 20px rgba(0, 0, 0, 0.2));
   }
 
   .LinkSvg {
-    right: 0px;
-    top: 0px;
+    right: 15px;
+    top: 15px;
+    position: absolute;
+    z-index: 10;
   }
 }

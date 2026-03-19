@@ -369,7 +369,7 @@
     flex-direction: column;
     flex: 1;
     gap: 16px;
-     width: 100%;   
+    width: 100%;
     align-items: stretch;
     justify-content: flex-start;
   }

@@ -31,7 +31,7 @@ const BlogsLanding = () => {
 
     // Filter logic: Get top 3 featured blogs
     const featuredBlogs = blogs.filter(blog => Boolean(blog.isFeatured)).slice(0, 3);
-    
+
     // Grid logic: Exclude the 3 featured blogs from the grid
     const gridBlogs = blogs.filter(blog => !featuredBlogs.find(fb => fb.id === blog.id));
 
@@ -40,7 +40,7 @@ const BlogsLanding = () => {
         if (featuredBlogs.length <= 1) return;
 
         const timer = setInterval(() => {
-            setCurrentIndex((prevIndex) => 
+            setCurrentIndex((prevIndex) =>
                 prevIndex === featuredBlogs.length - 1 ? 0 : prevIndex + 1
             );
         }, 3000); // 3 seconds
@@ -115,7 +115,7 @@ const BlogsLanding = () => {
                     </div>
                 </section>
             )}
-            
+
             <section className={styles.GridSection}>
                 <div className={styles.SectionHeader}>
                     <h2 className={styles.SectionTitle}>Latest Blogs</h2>
