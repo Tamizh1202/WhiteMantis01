@@ -113,7 +113,7 @@ const Navbar = ({ categories: initialCategories }) => {
                 <div className={styles.DummyMainCoantiner}>
                   <div className={styles.DummyLeft}>
                     <div className={styles.DummyLeftOne}>
-                      <h3>OUR Shop</h3>
+                      <h3>OUR SHOP</h3>
                       <p>
                         From home brewing to bulk supply, discover coffee and
                         equipment made to perform.
@@ -171,7 +171,7 @@ const Navbar = ({ categories: initialCategories }) => {
                       </div>
                     </div>
 
-                    {/* <div className={styles.DummyRightTwo}>
+                    <div className={styles.DummyRightTwo}>
                       <div className={styles.DummyRightTwoTop}>
                         <h4>Subscription</h4>
                         <p>Coffee to your door</p>
@@ -183,7 +183,7 @@ const Navbar = ({ categories: initialCategories }) => {
                           </button>
                         </Link>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>

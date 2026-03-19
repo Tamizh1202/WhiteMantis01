@@ -14,7 +14,16 @@ import { signOut } from "next-auth/react";
 const NavbarMobile = ({ categories: initialCategories }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const menuRef = useRef(null); // Added Ref
+  const menuRef = useRef(null);
+  const toggleBtnRef = useRef(null);
+  const navbarRef = useRef(null);
+  const [navbarHeight, setNavbarHeight] = useState(0);
+
+  useEffect(() => {
+    if (navbarRef.current) {
+      setNavbarHeight(navbarRef.current.offsetHeight);
+    }
+  }, []);
   const [shopOpen, setShopOpen] = useState(true);
   const [accountOpen, setAccountOpen] = useState(true);
   const [showLogout, setShowLogout] = useState(false);
@@ -28,7 +37,12 @@ const NavbarMobile = ({ categories: initialCategories }) => {
   // Logic to close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (open && menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        open &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        !toggleBtnRef.current?.contains(event.target)
+      ) {
         setOpen(false);
       }
     };
@@ -58,20 +72,39 @@ const NavbarMobile = ({ categories: initialCategories }) => {
   return (
     <>
       {/* update the links here also dont't forgeet */}
-      <div className={styles.Navbar}>
-        <button className={styles.IconBtn} onClick={() => setOpen(true)}>
-          <svg
-            width="24"
-            height="16"
-            viewBox="0 0 24 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 0H24V2.66667H0V0ZM0 6.66667H24V9.33333H0V6.66667ZM0 13.3333H24V16H0V13.3333Z"
-              fill="#6C7A5F"
-            />
-          </svg>
+      <div className={styles.Navbar} ref={navbarRef}>
+        <button
+          ref={toggleBtnRef}
+          className={styles.IconBtn}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? (
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1.6 16L0 14.4L6.4 8L0 1.6L1.6 0L8 6.4L14.4 0L16 1.6L9.6 8L16 14.4L14.4 16L8 9.6L1.6 16Z"
+                fill="#6C7A5F"
+              />
+            </svg>
+          ) : (
+            <svg
+              width="24"
+              height="16"
+              viewBox="0 0 24 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 0H24V2.66667H0V0ZM0 6.66667H24V9.33333H0V6.66667ZM0 13.3333H24V16H0V13.3333Z"
+                fill="#6C7A5F"
+              />
+            </svg>
+          )}
         </button>
 
         <Link href="/">
@@ -111,26 +144,11 @@ const NavbarMobile = ({ categories: initialCategories }) => {
       </div>
 
       {open && (
-        <div className={styles.MenuWrapper}>
+        <div className={styles.MenuWrapper} style={{ top: navbarHeight }}>
           <div className={styles.MenuContainer} ref={menuRef}>
             {" "}
             {/* Attached ref here */}
-            <div className={styles.MenuHeader}>
-              <button className={styles.IconBtn} onClick={() => setOpen(false)}>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1.6 16L0 14.4L6.4 8L0 1.6L1.6 0L8 6.4L14.4 0L16 1.6L9.6 8L16 14.4L14.4 16L8 9.6L1.6 16Z"
-                    fill="#6C7A5F"
-                  />
-                </svg>
-              </button>
-
+            {/* <div className={styles.MenuHeader}>
               <Link href="/" onClick={() => setOpen(false)}>
                 <Image
                   src={Logo}
@@ -148,7 +166,7 @@ const NavbarMobile = ({ categories: initialCategories }) => {
                   openCart();
                 }}
               ></button>
-            </div>
+            </div> */}
             <div className={styles.MenuContent}>
               <div className={styles.Section}>
                 <button

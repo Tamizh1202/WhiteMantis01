@@ -153,6 +153,14 @@ const CartSideBar = () => {
                                     item.quantity,
                                   )
                                 }
+                                disabled={item.quantity <= 1}
+                                style={{
+                                  opacity: item.quantity <= 1 ? 0.5 : 1,
+                                  cursor:
+                                    item.quantity <= 1
+                                      ? "not-allowed"
+                                      : "pointer",
+                                }}
                               >
                                 -
                               </button>
