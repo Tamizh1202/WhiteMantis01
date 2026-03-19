@@ -120,7 +120,7 @@ const ProductMain = ({ product }) => {
 
               return polyCenter - imgCenter;
             },
-            scale: isMobile ? 0.6 : 0.95,
+            scale: isMobile ? 0.6 : 1.2,
             ease: "none",
           },
           0,

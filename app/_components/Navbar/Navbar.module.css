@@ -64,9 +64,9 @@
 .Subscriptionpg p,
 .Right p {
   font-family: var(--lexend);
-  font-size: 16px;
+  font-size: var(--fs-16);
   font-weight: 400;
-  color: #2f362a;
+  color: var(--body-color);
   /* color: #2f362a; */
   cursor: pointer;
 }
@@ -112,7 +112,7 @@
   text-decoration: underline;
   text-underline-offset: 6px;
   font-weight: 500;
-  color: #6e736a;
+  color: var(--body-color);
 }
 .Right a,
 .Left a {
@@ -164,10 +164,9 @@
 }
 .DummyLeftOne p {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-weight: 400;
-  color: #6e736a;
- 
+  color: var(--body-color);
 }
 .DummyLine {
   width: 100%;
@@ -197,8 +196,7 @@
   font-family: var(--lexend);
   font-size: var(--fs-22);
   font-weight: 500;
-  color: #6e736a;
-  
+  color: var(--body-color);
 }
 .DummyLeftTwoLeftBottom,
 .DummyLeftTwoRightBottom {
@@ -210,17 +208,16 @@
 .DummyLeftTwoLeftBottom p,
 .DummyLeftTwoRightBottom p {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-weight: 400;
-  color: #6e736a;
+  color: var(--body-color);
   cursor: pointer;
-  
 }
 .DummyRight {
   display: flex;
   justify-content: left;
   flex-direction: row;
-  gap: 3px;
+  /* gap: 3px; */
   padding-right: 2px;
   width: 50%;
 }
@@ -249,14 +246,13 @@
   font-size: var(--fs-22);
   font-weight: 500;
   color: #ffffff;
-  
 }
 .DummyRightOneTop p {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-weight: 400;
   color: #ffffff;
-   cursor: pointer;
+  cursor: pointer;
 }
 .DummyRightOneBottom,
 .DummyRightTwoBottom {
@@ -268,7 +264,7 @@
   background-color: transparent;
   border: 1px solid #ffffff;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
@@ -279,6 +275,8 @@
   flex-direction: column;
   gap: 20px;
   background: url("./2.png");
+  background-repeat: no-repeat;
+  background-size: cover;
   padding-bottom: 32px;
   padding-left: 29px;
   height: 432px;
@@ -293,27 +291,32 @@
 }
 .DummyRightTwoTop p {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-weight: 400;
-  color: #6e736a;
+  color: var(--body-color);
 }
 .DummyTwoExplore {
   padding: 6px 25px;
   background-color: transparent;
   border: 1px solid #525252;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-weight: 500;
   color: #525252;
   cursor: pointer;
 }
-@media (max-width: 1300px) {
+@media (max-width: 960px) {
   .Main {
     display: none;
   }
 }
+/* @media (max-width: 1300px) {
+  .Main {
+    display: none;
+  }
+} */
 
-@media (min-width: 1301px) and (max-width: 1440px) {
+@media (min-width: 961px) and (max-width: 1440px) {
   .Main {
     padding-left: 40px;
     padding-right: 40px;
