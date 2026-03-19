@@ -100,7 +100,7 @@ const ProductMain = ({ product }) => {
             // 🔥 FIX: different start/end for mobile
             start: isMobile ? "top 65%" : "top 90%",
             end: isMobile ? "top 20%" : "top 30%",
-            // markers: true,
+            markers: true,
             scrub: isMobile ? 0.6 : 1,
             invalidateOnRefresh: true,
           },
