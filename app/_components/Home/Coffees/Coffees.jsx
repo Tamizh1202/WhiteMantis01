@@ -17,8 +17,8 @@ const Coffees = ({ category }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
+    containScroll: false, // Allows the last item to scroll past the "limit"
   });
-
   useEffect(() => {
     async function fetchProducts() {
       if (!category?.slug) return;

@@ -1,7 +1,7 @@
 .Main {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
   background-color: #ffffff;
@@ -29,7 +29,7 @@
   width: 100%;
   height: 100%;
   gap: clamp(16px, calc(16px + (34 * ((100vw - 320px) / 1120))), 50px);
-
+  padding-top: 150px;
   flex-direction: row;
 }
 
@@ -39,7 +39,6 @@
   flex-direction: column;
   gap: 32px;
   width: 100%;
-  padding-top: 150px;
 }
 
 .ThreeRow {
@@ -127,11 +126,10 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: clamp(24px, calc(24px + (8 * ((100vw - 320px) / 1120))), 32px);
-  padding-top: 120px;
+  gap: 16px;
   width: 100%;
   position: sticky;
-  top: 40px;
+  top: 150px;
   height: fit-content;
 }
 
@@ -144,7 +142,7 @@
 
 .RightOne h3 {
   font-family: var(--lexend);
-  font-size: var(--fs-22);
+  font-size: 16px;
   font-weight: 400;
   color: #2f362a;
   text-transform: uppercase;
@@ -152,7 +150,7 @@
 
 .RightOne p {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 13px;
   color: #2f362a;
   font-weight: 400;
 }
@@ -161,10 +159,10 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 12px;
-  max-height: 480px;
+  gap: 8px;
+  max-height: 150px;
   overflow-y: auto;
-  padding-right: 5px;
+  padding-right: 12px;
 }
 
 .RightTwo::-webkit-scrollbar {
@@ -186,16 +184,16 @@
 
 .SummaryItem {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   width: 100%;
-  padding: 6px 0;
-  gap: 24px;
+  padding: 4px 0;
+  gap: 12px;
 }
 
 .ItemImage {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   flex-shrink: 0;
 }
 
@@ -208,7 +206,7 @@
 .ItemInfo {
   flex: 3;
   font-family: var(--lato);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: #2f362a;
 }
@@ -216,7 +214,7 @@
 .ItemQty {
   flex: 1;
   font-family: var(--lato);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 550;
   color: #2f362a;
   text-align: center;
@@ -225,7 +223,7 @@
 .ItemPrice {
   flex: 1.5;
   font-family: var(--lato);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: #2f362a;
   text-align: right;
@@ -240,7 +238,7 @@
 
 .ItemName {
   font-family: var(--lato);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: #2f362a;
   line-height: 1.4;
@@ -250,14 +248,14 @@
   display: flex;
   align-items: center;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 12px;
   color: #2f362a;
   margin-top: 4px;
 }
 
 .ItemFrequencyRow {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 12px;
   color: #2f362a;
   margin-top: 4px;
 }
@@ -270,7 +268,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
 }
 
 .Subtotal,
@@ -295,7 +293,7 @@
 .CuponDiscount p,
 .EstimatedTax p {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 400;
   color: #2f362a;
 }
@@ -305,7 +303,7 @@
 .CuponDiscount h4,
 .EstimatedTax h4 {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 400;
   color: #2f362a;
 }
@@ -313,9 +311,15 @@
 .Total p,
 .Total h4 {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #2f362a;
+}
+
+.Total {
+  padding: 10px 0;
+  border-top: 1px solid #2f362a4d;
+  border-bottom: 1px solid #2f362a4d;
 }
 
 .Two {
@@ -671,10 +675,11 @@
   .CouponSection {
     width: 100%;
   }
-  
+
   .MainConatiner {
     flex-direction: column;
     align-items: center;
+    padding-top: 80px;
   }
 
   .Left,
@@ -935,20 +940,16 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
-.CouponSection {
-
-}
-
 .CouponHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .CouponHeader h3 {
   font-family: var(--lexend);
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
   color: #2f362a;
   margin: 0;
@@ -971,14 +972,14 @@
   display: flex;
   gap: 0;
   margin-bottom: 0;
-  height: 48px;
+  height: 40px;
 }
 
 .AppliedCouponGroup {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 48px;
+  height: 40px;
   border: 1px solid #2f362a33;
   padding: 0 16px;
   background: #ffffff;
@@ -986,7 +987,7 @@
 
 .AppliedText {
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 13px;
   color: #227336;
   margin: 0;
 }
@@ -999,10 +1000,10 @@
 
 .SavingsBadge {
   background: #d9e8d9;
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 2px;
   font-family: var(--lato);
-  font-size: 14px;
+  font-size: 12px;
   color: #6e736a;
 }
 
@@ -1019,9 +1020,9 @@
   flex: 1;
   border: 1px solid #2f362a33;
   border-right: none !important;
-  padding: 0 16px;
+  padding: 0 12px;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 13px;
   outline: none;
   background: #ffffff;
 }
@@ -1030,9 +1031,9 @@
   background: #6d7763;
   color: #ffffff;
   border: none;
-  padding: 0 30px;
+  padding: 0 20px;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
 }
@@ -1040,7 +1041,7 @@
 .RewardsSection {
   border: 1px solid #2f362a33;
   border-top: none;
-  padding: 16px 20px;
+  padding: 10px 16px;
   display: flex;
   gap: 12px;
   justify-content: space-between;
@@ -1123,22 +1124,22 @@
 .RewardsLabel {
   margin: 0;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 550;
   color: #2f362a;
 }
 
 .RewardsBalance {
-  margin: 4px 0 0 0;
+  margin: 2px 0 0 0;
   font-family: var(--lato);
-  font-size: 13px;
+  font-size: 11px;
   color: #6e736a;
 }
 
 .PotentialSavings {
   margin: 0;
   font-family: var(--lato);
-  font-size: 13px;
+  font-size: 11px;
   color: #227336;
   display: flex;
   align-items: center;
@@ -1159,13 +1160,12 @@
 }
 
 .EarningBadge {
-  margin-top: 15px;
   background: #ffffff;
 }
 
 .EarningBadge p {
   margin: 0;
   font-family: var(--lato);
-  font-size: 14px;
+  font-size: 12px;
   color: #227336;
 }

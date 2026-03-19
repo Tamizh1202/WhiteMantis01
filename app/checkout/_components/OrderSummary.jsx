@@ -67,8 +67,8 @@ export default function OrderSummary({
                 {isSubscription ? (
                   <>
                     <div className={styles.ItemSubRow}>
-                      {item.weight && <span>{item.weight}g</span>}
-                      {item.weight && <span>&nbsp;|&nbsp;</span>}
+                      {item?.vId && <span>{item?.variantName}g</span>}
+                      {item?.vId && <span>&nbsp;|&nbsp;</span>}
                       <span>{item.quantity}x Bag amount</span>
                     </div>
                     {item?.frequency && (
@@ -79,7 +79,7 @@ export default function OrderSummary({
                   </>
                 ) : (
                   <>
-                    {item?.vId && <span>, {item?.variantName}g</span>}
+                    {item?.vId && <span>{item?.variantName}g</span>}
                     {item?.frequency && (
                       <div
                         className={styles.ItemFrequency}
@@ -246,8 +246,6 @@ export default function OrderSummary({
           <p>Estimated Taxes ({cartTotals.taxPercent || 0}%)</p>
           <h5>AED {cartTotals.tax.toFixed(2)}</h5>
         </div>
-
-        <div className={styles.RightLine}></div>
 
         <div className={styles.Total}>
           <p>Total</p>
