@@ -279,58 +279,67 @@ export default function SubscriptionDetailPage({ params }) {
             [data].map((transaction) => (
               <div key={transaction.id} className={styles.TableRow}>
                 {/* Transaction Date */}
-                <span>{formatDate(transaction.createdAt)}</span>
+                <span data-label="Date">
+                  {formatDate(transaction.createdAt)}
+                </span>
 
                 {/* Brand: Uses stripeData or fallback */}
-                <span style={{ textAlign: "center" }}>
+                <span
+                  data-label="Payment Method"
+                  style={{ textAlign: "center" }}
+                >
                   {transaction.stripeData?.brand || "-"}
                 </span>
 
                 {/* Invoice Column */}
                 <div
+                  data-label="Invoice"
                   style={{
                     display: "flex",
-                    flexDirection: "column",
-                    gap: "5px",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
                   }}
                 >
-                  {transaction.stripeData?.receipt_url && (
-                    <a
-                      href={transaction.stripeData.receipt_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    {transaction.stripeData?.receipt_url && (
+                      <a
+                        href={transaction.stripeData.receipt_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.ViewLink}
+                      >
+                        View Receipt
+                      </a>
+                    )}
+                    <button
+                      style={{
+                        color: "#6C7A5F",
+                        cursor: "pointer",
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        textDecoration: "underline",
+                        fontSize: "14px",
+                      }}
+                      onClick={async (e) => {
+                        const btn = e.target;
+                        const originalText = btn.innerText;
+                        btn.innerText = "Downloading...";
+                        btn.disabled = true;
+                        await downloadInvoice("subscription", transaction.id);
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                      }}
                       className={styles.ViewLink}
                     >
-                      View Receipt
-                    </a>
-                  )}
-                  <button
-                    style={{
-                      color: "#6C7A5F",
-                      cursor: "pointer",
-                      background: "none",
-                      border: "none",
-                      padding: 0,
-                      textDecoration: "underline",
-                      fontSize: "14px",
-                    }}
-                    onClick={async (e) => {
-                      const btn = e.target;
-                      const originalText = btn.innerText;
-                      btn.innerText = "Downloading...";
-                      btn.disabled = true;
-                      await downloadInvoice("subscription", transaction.id);
-                      btn.innerText = originalText;
-                      btn.disabled = false;
-                    }}
-                    className={styles.ViewLink}
-                  >
-                    Download PDF
-                  </button>
+                      Download PDF
+                    </button>
+                  </div>
                 </div>
 
                 {/* Amount: Fixed to 2 decimals */}
-                <span>
+                <span data-label="Total">
                   AED {(transaction.financials?.subtotal / 100).toFixed(2)}
                 </span>
               </div>

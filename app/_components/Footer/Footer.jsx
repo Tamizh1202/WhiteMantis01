@@ -114,12 +114,12 @@ const Footer = ({ categories }) => {
                     {/* <Link href="/careers">
                       <p>Careers</p>
                     </Link> */}
-                    <Link href="/wholesale">
+                    {/* <Link href="/wholesale">
                       <p>Wholesale</p>
-                    </Link>
-                    <Link href="/contact">
+                    </Link> */}
+                    {/* <Link href="/contact">
                       <p>Contact Us</p>
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
 
@@ -171,7 +171,7 @@ const Footer = ({ categories }) => {
                       <p>Manage Subscription</p>
                     </Link>
                     <Link href="account/whitemantis-beans">
-                      <p>White Manits Beans</p>
+                      <p>White Mantis Beans</p>
                     </Link>
                   </div>
                 </div>

@@ -140,6 +140,7 @@
   display: flex;
   gap: 24px;
   margin-top: 40px;
+  justify-content: center;
 }
 
 .CancelBtn {

@@ -15,12 +15,12 @@
 }
 
 .BgBase {
-  background-image: url("./2.webp");
+  background-image: url("./2.jpg");
   z-index: 0;
 }
 
 .BgNext {
-  background-image: url("./1.webp");
+  background-image: url("./1.jpg");
   opacity: 0;
   z-index: 0.1;
 }
