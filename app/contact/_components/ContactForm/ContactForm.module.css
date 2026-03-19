@@ -13,7 +13,7 @@
   justify-content: left;
   flex-direction: row;
   width: 100%;
-  gap: clamp(30px, calc(30px + (50 * ((100vw - 320px) / 1120))), 80px);
+  gap: clamp(30px, calc(30px + (50 * ((100vw - 320px) / 1120))), 180px);
 
   align-items: center;
 }

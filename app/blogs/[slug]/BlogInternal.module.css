@@ -1,46 +1,86 @@
 .Main {
-  max-width: 1200px;
+  max-width: 100%;
+  /* Changed from 1200px to allow full-width header if desired */
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding-top: 80px;
+  /* Remove padding here so the header can touch the edges */
   background-color: #fdfdfb;
 }
 
 .Header {
   text-align: center;
-  margin-bottom: 4rem;
+  background-color: #6C7A5F;
+  padding-top: 120px;
+  padding-bottom: 240px;
+  /* Responsive padding */
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  width: 100%;
+}
+
+.Header h1 {
+  font-family: var(--lexend);
+  font-weight: 500;
+  font-size: 60px;
+  color: #ffffff;
 }
 
 .Title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 1.5rem;
-  line-height: 1.1;
+  font-family: var(--lexend);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  /* Responsive font size */
+  color: #ffffff;
+
+  line-height: 1.2;
+  max-width: 65%;
+  /* Keeps long titles from stretching too wide */
   text-transform: uppercase;
-  letter-spacing: -0.02em;
 }
 
 .Date {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #51624d;
+  /* Font & Typography */
+  font-family: 'Lexend', var(--lexend), sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-style: normal;
+}
+
+
+.txtntxt {
+  display: flex;
+  flex-direction: column;
+  gap: 80px
 }
 
 .FeaturedImageWrapper {
   position: relative;
-  width: 100%;
-  height: 600px;
-  margin-bottom: 4rem;
-  border-radius: 12px;
+  width: 90%;
+  max-width: 1100px;
+  height: 500px;
+
+  /* SMARTER APPROACH: 
+     Using a clamp here ensures the overlap isn't TOO huge on small screens 
+     while staying exactly where you want it on desktop.
+  */
+  margin: clamp(-180px, -15vw, -100px) auto 4rem;
+
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
 .ContentWrapper {
-  max-width: 800px;
+
+  max-width: 750px;
   margin: 0 auto;
+  justify-content: center;
+
 }
 
 .LoaderWrapper {
@@ -52,36 +92,47 @@
 
 /* Related Blogs Section */
 .RelatedSection {
-  margin-top: 6rem;
-  padding-top: 4rem;
-  border-top: 1px solid #eee;
+  margin-top: 160px;
+  padding: 0px 126px 160px 126px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+.RelatedSection h2{
+  font-family: var(--lexend);
+  font-weight: 500;
+  font-size: 22px;
 }
 
 .SectionTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 2.5rem;
-  text-align: center;
+  color: #6C7A5F;
+}
+
+.SectionTitle h2 {
+  font-size: 22px;
+  font-weight: 500;
+  font-family: var(--lexend);
+  text-align: left;
+
 }
 
 .BlogGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 columns, equal width */
+  gap: 160px;
+  /* Note: 160px is a VERY large gap for a grid */
+
 }
 
 .BlogCard {
-  background: white;
-  border-radius: 12px;
+
   overflow: hidden;
   /* box-shadow: 0 4px 15px rgba(0,0,0,0.05); */
-  transition: transform 0.3s ease;
-  border: 1px solid #f0f0f0;
+  cursor: pointer;
 }
 
-.BlogCard:hover {
-  transform: translateY(-5px);
-}
+
 
 .CardImageWrapper {
   position: relative;
@@ -89,16 +140,57 @@
   height: 200px;
 }
 
-.CardContent {
-  padding: 1.5rem;
+.ReadMoreBtn {
+  width: fit-content;
+  padding: 10px 24px;
+  border: 1px solid #6e736a;
+  background: transparent;
+  font-family: var(--lato);
+  font-weight: 500;
+  font-size: 15px;
+  color: #6e736a;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.ReadMoreBtn:hover {
+  background-color: #6c7a5f;
+  color: #ffffff;
+  border-color: #6c7a5f;
+}
+
+.CardFooter {
+  display: flex;
+  justify-content: space-between;
+  /* Pushes items to the far left and right */
+  align-items: center;
+  /* Keeps them vertically aligned */
+  width: 100%;
+  margin-top: 16px;
+  /* Adds some space below the title */
+}
+
+.DateText {
+  color: #6C7A5F;
+  font-size: 15px;
+  font-family: var(--lato);
+  font-weight: 700;
+}
+
+.ReadMoreBtn {
+  /* No margin-left needed now because space-between handles it */
+  padding: 8px 20px;
+  border: 1px solid #6c7a5f;
+  color: #6c7a5f;
+  font-size: 14px;
+  text-decoration: none;
 }
 
 .CardTitle {
-  font-size: 1.25rem;
+  padding-top: 20px;
+  font-family: var(--lato);
   font-weight: 700;
-  margin-bottom: 1rem;
-  color: #1a1a1a;
-  line-height: 1.4;
+  font-size: 15px;
 }
 
 .ReadMoreBtn {
@@ -116,16 +208,251 @@
   text-decoration: underline;
 }
 
+.Separator {
+  border: 0.5px solid #2F362A4D;
+  margin: 8px 0;
+}
+
+.minute {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #6C7A5F;
+  margin-top: 17px;
+}
+
 @media (max-width: 768px) {
-  .Title {
-    font-size: 2.5rem;
+
+  .Header {
+    /* This increases the height of the green block */
+    min-height: 450px;
+
+    /* We add more top padding to push the text down, 
+       leaving the bottom area clear for the floating card */
+    padding: 0px 20px 80px 20px;
+
+    /* Ensure the gap between Title and Date stays consistent */
+    gap: 12px;
   }
+
+  .Title {
+    /* Adjusting title size for mobile so it fits the taller header better */
+    font-size: 28px;
+    max-width: 90%
+  }
+
+  .Header h1 {
+    font-size: var(--lexend);
+    font-weight: 500;
+    font-size: 32px;
+  }
+
+  /* .Date{
+    font-size: var(--lexend);
+    font-weight: 500;
+    font-size: 20px;
+  } */
+  .Date {
+    /* Font & Typography */
+    font-family: 'Lexend', var(--lexend), sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-style: normal;
+    display: block;
+  }
+
 
   .FeaturedImageWrapper {
-    height: 350px;
+    /* 1. Pull it up */
+    margin: -120px auto 2rem;
+
+    /* 2. Narrow the container to create more side spacing */
+    width: 85%;
+    /* Lowering this adds more space to the left and right */
+    max-width: 600px;
+    /* Prevents it from getting too wide */
+
+    /* 3. Aspect Ratio Control (Prevents Cropping) */
+    /* Instead of a fixed height (like 300px), use aspect-ratio.
+     This ensures that as the width gets smaller, the height follows, 
+     keeping the image's original composition. */
+    height: auto;
+    aspect-ratio: 16 / 9;
+
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
   }
 
-  .Main {
-    padding: 2rem 1rem;
+  .SlidingImage {
+    /* Ensure the image fills the new narrower box properly */
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
+
+  .txtntxt {
+    display: flex;
+    flex-direction: column;
+    gap: 40px
+  }
+
+  .ContentWrapper {
+    /* 1. Center the container on the screen */
+    width: 90%;
+    max-width: 800px;
+    /* Limits the width for better readability */
+    margin: 0 auto;
+
+    /* 2. Center the text inside the container */
+    text-align: justify;
+
+    /* 3. Spacing */
+    padding: 0 20px;
+    line-height: 1.6;
+    /* Makes the text easier to read */
+  }
+
+  /* If you want to make sure the RichText children (p, h2, etc.) also center */
+  .ContentWrapper div,
+  .ContentWrapper p,
+  .ContentWrapper h1,
+  .ContentWrapper h2 {
+    text-align: justify;
+  }
+
+  /* 1. Section Container */
+  .RelatedSection {
+    padding: 40px 20px;
+    background-color: #fff;
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .SectionTitle {
+    font-family: var(--lexend);
+    font-size: 20px;
+    color: #6c7a5f;
+    /* Your signature green */
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: left;
+    letter-spacing: 1px;
+  }
+
+  /* 2. Grid turns into a single column stack */
+  .BlogGrid {
+    display: flex;
+    /* Changed from column to row */
+    flex-direction: row;
+    /* Horizontal flow */
+    gap: 20px;
+    /* Space between cards */
+    overflow-x: auto;
+    /* Enable swipe */
+    scroll-snap-type: x mandatory;
+    /* Snap effect */
+    padding-bottom: 20px;
+    /* Space for shadow/scroll */
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .BlogGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 3. The Individual Card (Reference Layout) */
+  .BlogGrid {
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+    /* Removed gap so cards touch edge-to-edge */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 20px;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .BlogGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 3. The Individual Card */
+  .BlogCard {
+    display: flex;
+    flex-direction: column;
+    /* CHANGE: 100% ensures only one card is visible at a time */
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    width: 100%;
+    /* CHANGE: Remove all rounded corners */
+    border-radius: 0;
+  }
+
+  .CardImageWrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    /* CHANGE: Remove rounded corners from image wrapper */
+    border-radius: 0;
+  }
+
+  /* 4. Text Styling */
+  .CardTitle h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #2F362A;
+    text-align: left;
+    font-family: var(--lexend);
+    margin: 0;
+  }
+
+  .CardMeta {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 16px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+
+  .CardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    /* Added horizontal padding so text doesn't hit the screen edge */
+    padding: 0 10px;
+  }
+
+  .CardDate {
+    font-size: 14px;
+    color: #777;
+    font-weight: 500;
+  }
+
+  .ReadMoreBtn {
+    margin-left: auto;
+    padding: 8px 20px;
+    border: 1px solid #6c7a5f;
+    background: transparent;
+    color: #6c7a5f;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    /* CHANGE: Remove rounded corners from button */
+    border-radius: 0;
+  }
+
 }

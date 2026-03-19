@@ -5,6 +5,7 @@
   width: 100%;
   height: 100%;
   background-color: #6c7a5fe5;
+    margin-top: 160px;
 }
 .MainContainer {
   display: flex;

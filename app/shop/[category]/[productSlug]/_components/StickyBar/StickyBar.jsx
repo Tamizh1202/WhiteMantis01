@@ -146,7 +146,7 @@ const StickyBar = ({ product }) => {
         <div className={styles.MainContainer}>
           <div className={styles.Left}>
             <h4>{`${product?.name} ${product?.tagline}`}</h4>
-            <p>{product?.description || ""}</p>
+            <p>{product?.tastingNotes || ""}</p>
           </div>
 
           <div className={styles.Center}>

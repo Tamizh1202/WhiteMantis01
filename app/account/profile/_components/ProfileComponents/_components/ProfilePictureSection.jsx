@@ -76,9 +76,11 @@ const ProfilePictureSection = ({
             />
           </label>
 
-          <button className={styles.pfrembtn} onClick={onRemove}>
-            Remove Profile Picture
-          </button>
+          {profileImageUrl && (
+            <button className={styles.pfrembtn} onClick={onRemove}>
+              Remove Profile Picture
+            </button>
+          )}
         </div>
       )}
     </div>

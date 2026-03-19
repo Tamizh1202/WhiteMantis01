@@ -27,7 +27,7 @@
 }
 .Bottom {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   flex-direction: row;
 
   gap: clamp(30px, calc(30px + (40 * ((100vw - 320px) / 1120))), 70px);

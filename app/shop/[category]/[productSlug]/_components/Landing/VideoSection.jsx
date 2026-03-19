@@ -6,6 +6,8 @@ const VideoSection = ({ product }) => {
 
   const videoUrl = formatImageUrl(product?.videoBanner);
 
+
+
   return (
     <section className={styles.banner}>
       <video
@@ -19,7 +21,7 @@ const VideoSection = ({ product }) => {
       <div className={styles.overlay} />
       <div className={styles.content}>
         <h3 className={styles.title}>{product?.farm || ""}</h3>
-        <p className={styles.text}>{product?.description || ""}</p>
+        <p className={styles.text}>{`${typeof(product?.farmDescription) === "object" ? product?.farmDescription?.root?.children?.[0]?.text : product?.farmDescription || ""}`}</p>
       </div>
     </section>
   );

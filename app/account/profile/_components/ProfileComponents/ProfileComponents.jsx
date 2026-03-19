@@ -89,6 +89,7 @@ const ProfileComponents = ({ initialData }) => {
 
   const [showDeleteAddressPopup, setShowDeleteAddressPopup] = useState(false);
   const [deleteAddressId, setDeleteAddressId] = useState(null);
+  const [isSubmittingAddress, setIsSubmittingAddress] = useState(false);
 
   // ── Delete account state ────────────────────────────────────────────────────
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -370,6 +371,7 @@ const ProfileComponents = ({ initialData }) => {
 
   // ── Save address (add) ─────────────────────────────────────────────────────
   const handleSaveAddress = async () => {
+    if (isSubmittingAddress) return;
     const newErrors = {};
 
     const fnErr = validateRequired(
@@ -391,34 +393,40 @@ const ProfileComponents = ({ initialData }) => {
       return;
     }
 
-    const payload = {
-      label: addressForm.label || "Others",
-      addressFirstName: (addressForm.addressFirstName || "").trim(),
-      addressLastName: (addressForm.addressLastName || "").trim(),
-      street: (addressForm.address || addressForm.house || "").trim(),
-      apartment: (addressForm.apartment || addressForm.area || "").trim(),
-      country: "United Arab Emirates",
-      city: (addressForm.city || "").trim(),
-      emirates: addressForm.state || "",
-      phoneNumber: (addressForm.phone || "").trim(),
-      isDefaultAddress: addressForm.isDefault || false,
-    };
+    setIsSubmittingAddress(true);
+    try {
+      const payload = {
+        label: addressForm.label || "Others",
+        addressFirstName: (addressForm.addressFirstName || "").trim(),
+        addressLastName: (addressForm.addressLastName || "").trim(),
+        street: (addressForm.address || addressForm.house || "").trim(),
+        apartment: (addressForm.apartment || addressForm.area || "").trim(),
+        country: "United Arab Emirates",
+        city: (addressForm.city || "").trim(),
+        emirates: addressForm.state || "",
+        phoneNumber: (addressForm.phone || "").trim(),
+        isDefaultAddress: addressForm.isDefault || false,
+      };
 
-    const result = await saveAddressAPI(session?.user?.id, payload);
-    if (result?.success) {
-      setAddresses(result.updatedAddresses);
-      setShowAddressPopup(false);
-      setEditingAddressId(null);
-      toast.success(result.message || "Address saved successfully!");
-    } else {
-      const msg = result.error || "Failed to save address";
-      setAddressGeneralError(msg);
-      toast.error(msg);
+      const result = await saveAddressAPI(session?.user?.id, payload);
+      if (result?.success) {
+        setAddresses(result.updatedAddresses);
+        setShowAddressPopup(false);
+        setEditingAddressId(null);
+        toast.success(result.message || "Address saved successfully!");
+      } else {
+        const msg = result.error || "Failed to save address";
+        setAddressGeneralError(msg);
+        toast.error(msg);
+      }
+    } finally {
+      setIsSubmittingAddress(false);
     }
   };
 
   // ── Update address (edit) ───────────────────────────────────────────────────
   const handleUpdateAddress = async () => {
+    if (isSubmittingAddress) return;
     const newErrors = {};
 
     const fnErr = validateRequired(
@@ -440,30 +448,35 @@ const ProfileComponents = ({ initialData }) => {
       return;
     }
 
-    const payload = {
-      addressId: editingAddressId,
-      label: addressForm.label || "Others",
-      addressFirstName: (addressForm.addressFirstName || "").trim(),
-      addressLastName: (addressForm.addressLastName || "").trim(),
-      street: (addressForm.address || addressForm.house || "").trim(),
-      apartment: (addressForm.apartment || addressForm.area || "").trim(),
-      country: "United Arab Emirates",
-      city: (addressForm.city || "").trim(),
-      emirates: addressForm.state || "",
-      phoneNumber: (addressForm.phone || "").trim(),
-      isDefaultAddress: addressForm.isDefault || false,
-    };
+    setIsSubmittingAddress(true);
+    try {
+      const payload = {
+        addressId: editingAddressId,
+        label: addressForm.label || "Others",
+        addressFirstName: (addressForm.addressFirstName || "").trim(),
+        addressLastName: (addressForm.addressLastName || "").trim(),
+        street: (addressForm.address || addressForm.house || "").trim(),
+        apartment: (addressForm.apartment || addressForm.area || "").trim(),
+        country: "United Arab Emirates",
+        city: (addressForm.city || "").trim(),
+        emirates: addressForm.state || "",
+        phoneNumber: (addressForm.phone || "").trim(),
+        isDefaultAddress: addressForm.isDefault || false,
+      };
 
-    const result = await updateAddressAPI(session?.user?.id, payload);
-    if (result?.success) {
-      setAddresses(result.updatedAddresses);
-      setShowEditAddressPopup(false);
-      setEditingAddressId(null);
-      toast.success(result.message || "Address updated successfully!");
-    } else {
-      const msg = result.error || "Failed to update address";
-      setAddressGeneralError(msg);
-      toast.error(msg);
+      const result = await updateAddressAPI(session?.user?.id, payload);
+      if (result?.success) {
+        setAddresses(result.updatedAddresses);
+        setShowEditAddressPopup(false);
+        setEditingAddressId(null);
+        toast.success(result.message || "Address updated successfully!");
+      } else {
+        const msg = result.error || "Failed to update address";
+        setAddressGeneralError(msg);
+        toast.error(msg);
+      }
+    } finally {
+      setIsSubmittingAddress(false);
     }
   };
 
@@ -584,6 +597,7 @@ const ProfileComponents = ({ initialData }) => {
           addressGeneralError={addressGeneralError}
           activeLabelBtn={activeLabelBtn}
           UAE_STATES={UAE_STATES}
+          isSubmitting={isSubmittingAddress}
           onFormChange={handleAddressFormChange}
           onLabelSelect={(label) => {
             setActiveLabelBtn(label);
@@ -606,6 +620,7 @@ const ProfileComponents = ({ initialData }) => {
           addressGeneralError={addressGeneralError}
           activeLabelBtn={activeLabelBtn}
           UAE_STATES={UAE_STATES}
+          isSubmitting={isSubmittingAddress}
           onFormChange={handleAddressFormChange}
           onLabelSelect={(label) => {
             setActiveLabelBtn(label);

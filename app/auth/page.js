@@ -40,7 +40,7 @@ function AuthPageContent() {
             googleToken: session.googleIdToken,
           });
 
-          console.log(res.data)
+          console.log(res.data);
 
           if (!res.data.success) {
             throw new Error(res.data.message || "Social login failed");
@@ -61,7 +61,7 @@ function AuthPageContent() {
                 profileImage: res.data.user.profileImage,
                 stripeCustomerId: res.data.user.stripeCustomerId,
                 "paylaod-token": res.data.token,
-              }
+              },
             });
           }
 
@@ -71,7 +71,11 @@ function AuthPageContent() {
             window.location.href = "/";
           }
         } catch (e) {
-          setError(e.response?.data?.message || e.message || "Failed to complete sign-in");
+          setError(
+            e.response?.data?.message ||
+              e.message ||
+              "Failed to complete sign-in",
+          );
           setLoading(false);
         }
       }
@@ -100,7 +104,7 @@ function AuthPageContent() {
       const signupRes = await axiosClient.post("api/otp/send-web", {
         email,
       });
-      console.log(signupRes)
+      console.log(signupRes);
 
       const signupJson = signupRes.data;
 
@@ -146,17 +150,14 @@ function AuthPageContent() {
                 </div>
                 <div className={styles.RightTopOneBottom}>
                   <div className={styles.RightTopOneBottomTop}>
-                    <h3>Login / SIGN UP</h3>
-                    <p>
-                      We'll send a one-time password (OTP) to this email address
-                      to securely verify your account.
-                    </p>
+                    <h3>ENTER YOUR EMAIL</h3>
+                    <p>We'll send a quick code - no password needed.</p>
                   </div>
                   <div className={styles.RightTopOneBottomBottom}>
                     {error && <p className={styles.errorMessage}>{error}</p>}
                     <input
                       type="email"
-                      placeholder="Email Address"
+                      placeholder="Enter your email address"
                       className={styles.inputemail}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -168,19 +169,19 @@ function AuthPageContent() {
                 </div>
               </div>
               <div className={styles.RightTopTwo}>
+                <button
+                  className={styles.ctacontinue}
+                  onClick={handleContinue}
+                  disabled={loading || !email}
+                >
+                  {loading ? "Processing..." : "Send Code"}
+                </button>
                 <p>
                   By continuing, you agree to our{" "}
                   <Link href="/terms-and-conditions" className={styles.Tnc}>
                     Terms & Privacy Policy
                   </Link>
                 </p>
-                <button
-                  className={styles.ctacontinue}
-                  onClick={handleContinue}
-                  disabled={loading || !email}
-                >
-                  {loading ? "Processing..." : "Continue"}
-                </button>
               </div>
             </div>
             <div className={styles.RightBottom}>
@@ -237,7 +238,6 @@ function AuthPageContent() {
                     </defs>
                   </svg>
                   <p>Sign in with Google</p>
-
                 </button>
               </div>
             </div>

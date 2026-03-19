@@ -77,9 +77,9 @@
   }
   .Track img {
     width: 100%;
+    max-width: 100px;
     height: 100%;
-    max-width: 66px;
-    max-height: 40px;
+    max-height: 76px;
   }
   .Bottom {
     gap: 40px;

@@ -73,7 +73,7 @@
 .OneTopTop h4 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  color: #6C7A5F;
+  color: #6c7a5f;
   font-weight: 500;
   white-space: nowrap;
   text-transform: uppercase;
@@ -84,21 +84,20 @@
   flex-direction: column;
   gap: 16px;
 }
-.arrowextra svg{
+.arrowextra svg {
   width: 10px;
   height: 10px;
   margin: 0;
   margin-top: 2px;
- 
 }
-.arrowextra{
+.arrowextra {
   display: flex;
   justify-content: left;
   flex-direction: row;
   gap: 8px;
   align-items: center;
 }
-.arrowextra h5{
+.arrowextra h5 {
   font-size: 15px;
   font-family: var(--lato);
   color: #6e736a;
@@ -111,7 +110,7 @@
   font-size: 15px;
   font-weight: 400;
   width: 70%;
-  color: #6C7A5F;
+  color: #6c7a5f;
   font-family: var(--lato);
 }
 .OneBottom {

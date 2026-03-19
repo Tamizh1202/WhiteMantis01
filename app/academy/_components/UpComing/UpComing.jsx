@@ -3,11 +3,15 @@ import React, { useEffect, useState } from "react";
 import styles from "./UpComing.module.css";
 import one from "./1.png";
 import axiosClient from "@/lib/axios";
+import { useRouter } from "next/navigation";
 
 const UpComing = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
 
   useEffect(() => {
     let cancelled = false;
@@ -15,7 +19,15 @@ const UpComing = () => {
     async function load() {
       try {
         const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).toISOString();
+        const today = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          0,
+          0,
+          0,
+          0,
+        ).toISOString();
         const nowISO = now.toISOString();
 
         // Constructing the route with dynamic filters for Upcoming workshops
@@ -25,7 +37,11 @@ const UpComing = () => {
         const data = res.data;
 
         if (!cancelled && data) {
-          const docs = Array.isArray(data.docs) ? data.docs : (Array.isArray(data.posts) ? data.posts : []);
+          const docs = Array.isArray(data.docs)
+            ? data.docs
+            : Array.isArray(data.posts)
+              ? data.posts
+              : [];
           setPosts(docs);
         }
       } catch (e) {
@@ -40,6 +56,19 @@ const UpComing = () => {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setItemsPerPage(3);
+      } else {
+        setItemsPerPage(6);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   function stripHtml(html) {
@@ -57,7 +86,6 @@ const UpComing = () => {
     if (!val) return null;
 
     if (typeof val !== "string" && typeof val !== "number") {
-
       if (val && typeof val === "object") {
         if (val.date) return formatDateStr(val.date);
         if (val.value) return formatDateStr(val.value);
@@ -84,7 +112,7 @@ const UpComing = () => {
     const parsed = Date.parse(val);
     if (isNaN(parsed)) return val;
     const d = new Date(parsed);
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   }
 
   const [modalItem, setModalItem] = useState(null);
@@ -107,23 +135,40 @@ const UpComing = () => {
 
   function renderCard(item, key, full = false) {
     const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "";
-    let imgSrc = item?.workshopImage?.url || item?.featuredImage?.url || item?.featuredImage || item?.acf?.image?.url || (one && (one.src || one));
+    let imgSrc =
+      item?.workshopImage?.url ||
+      item?.featuredImage?.url ||
+      item?.featuredImage ||
+      item?.acf?.image?.url ||
+      (one && (one.src || one));
 
     // Prefix relative paths with server URL
     if (typeof imgSrc === "string" && imgSrc.startsWith("/")) {
       imgSrc = `${serverUrl}${imgSrc}`;
     }
 
-    const rawDate = item?.eventDate || item?.workshop_date || item?.acf?.workshop_date || null;
+    const rawDate =
+      item?.eventDate ||
+      item?.workshop_date ||
+      item?.acf?.workshop_date ||
+      null;
     const dateText = formatDateStr(rawDate) || "";
-    const timeText = formatTimeStr(item?.eventTime) || item?.workshop_time || item?.acf?.workshop_time || "";
+    const timeText =
+      formatTimeStr(item?.eventTime) ||
+      item?.workshop_time ||
+      item?.acf?.workshop_time ||
+      "";
     const title = item?.title || "";
     const fullExcerpt =
       stripHtml(item?.excerpt || item?.content) ||
       "Discover the complete journey of coffee — from the farm to your cup.";
     const excerpt = full ? fullExcerpt : truncate(fullExcerpt, 100);
     const bookLink =
-      item?.calendyLink || item?.workshopLink || item?.acf?.workshop_redirect || item?.link || null;
+      item?.calendyLink ||
+      item?.workshopLink ||
+      item?.acf?.workshop_redirect ||
+      item?.link ||
+      null;
 
     return (
       <div className={styles.WorkShopCard} key={key}>
@@ -171,10 +216,9 @@ const UpComing = () => {
         </div>
         <div className={styles.WorkShopCardBottom}>
           <div className={styles.WorkShopCardBottomTop}>
-            <h2>{(full ? title : truncate(title, 28)).toUpperCase()}</h2>
+            <h2>{title}</h2>
             {bookLink ? (
               <button
-
                 className={styles.Button}
                 onClick={() => window.open(bookLink, "_blank")}
               >
@@ -209,19 +253,20 @@ const UpComing = () => {
     );
   }
 
-  const midpoint = Math.ceil(posts.length / 2) || 0;
-  function chunkArray(arr, size = 6) {
+  function chunkArray(arr, size) {
+    if (!arr) return [];
     const out = [];
     for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
     return out;
   }
 
-  const chunks = posts && posts.length ? chunkArray(posts, 6) : [];
-  const [visibleChunks, setVisibleChunks] = useState(1);
+  const chunks = posts && posts.length ? chunkArray(posts, itemsPerPage) : [];
 
   useEffect(() => {
-    setVisibleChunks(1);
-  }, [posts]);
+    setCurrentPage(1);
+  }, [posts, itemsPerPage]);
+
+  const totalPages = chunks.length;
 
   return (
     <>
@@ -237,12 +282,36 @@ const UpComing = () => {
                 Loading workshops…
               </div>
             ) : posts.length === 0 ? (
-              <div style={{ width: "100%", textAlign: "center", padding: 80 }}>
-                No workshops available right now
+              <div
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  padding: 80,
+                  fontFamily: "var(--lato)",
+                  fontWeight: "400",
+                }}
+              >
+                No Upcoming Courses available
+                <p
+                  style={{
+                    color: "#6E736A",
+                    fontSize: "15px",
+                    marginTop: "10px",
+                    fontFamily: "var(--lato)",
+                    fontWeight: "400",
+                  }}
+                >
+                  New coffee courses will be announced soon.
+                </p>
+                <button
+                  onClick={() => router.push("/shop")}
+                  className={styles.NoWorkShopButton}
+                >
+                  Explore Coffee
+                </button>
               </div>
             ) : (
-
-              chunks.slice(0, visibleChunks).map((chunk, chunkIndex) => (
+              chunks.slice(0, currentPage).map((chunk, chunkIndex) => (
                 <div
                   key={`chunk-${chunkIndex}`}
                   className={
@@ -252,7 +321,7 @@ const UpComing = () => {
                   }
                 >
                   {chunk.map((p, idx) =>
-                    renderCard(p, `c${chunkIndex}-${idx}`)
+                    renderCard(p, `c${chunkIndex}-${idx}`),
                   )}
                 </div>
               ))
@@ -276,7 +345,6 @@ const UpComing = () => {
                 padding: 20,
               }}
               onClick={(e) => {
-
                 if (e.target === e.currentTarget) closeModal();
               }}
             >
@@ -311,24 +379,28 @@ const UpComing = () => {
             </div>
           ) : null}
 
-          <div className={styles.BottomContainer}>
-            {chunks.length > visibleChunks ? (
+          <div className={styles.PaginationContainer}>
+            {totalPages > 1 && (
+              <div className={styles.PaginationDots}>
+                {Array.from({ length: totalPages }).map((_, i) => (
+                  <button
+                    key={i}
+                    className={`${styles.PaginationDot} ${
+                      currentPage > i ? styles.activeDot : ""
+                    }`}
+                    onClick={() => setCurrentPage(i + 1)}
+                    aria-label={`Go to page ${i + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {totalPages > currentPage ? (
               <button
                 onClick={() =>
-                  setVisibleChunks((v) => Math.min(chunks.length, v + 1))
+                  setCurrentPage((v) => Math.min(totalPages, v + 1))
                 }
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  cursor: "pointer",
-                  color: "inherit",
-                  font: "inherit",
-                }}
+                className={styles.ViewMoreButton}
                 aria-label="View more workshops"
               >
                 <span>View more</span>

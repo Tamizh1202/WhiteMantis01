@@ -11,15 +11,15 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
   background-color: #6c7a5f;
   padding: clamp(40px, calc(40px + (51 * ((100vw - 320px) / 1120))), 91px) clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px) clamp(23px, calc(48px + (-25 * ((100vw - 320px) / 1120))), 48px) clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
   gap: 150px;
 }
 
 .LogoImage {
-  height: 300px;
-  width: auto;
+  width: 157px;
+  height: 97px;
+  display: block;
   object-fit: contain;
 
 }
@@ -27,17 +27,20 @@
 .MainConatiner1 {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
   flex-direction: row;
-  /* This pushes the Logo to the far left and the Content to the far right */
   justify-content: space-between;
+  /* Pushes Logo left and topright right */
   align-items: flex-start;
-  /* Remove gap: 450px; entirely */
+  gap: 40px;
 }
 
 .topright {
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
+  /* Takes up remaining space */
+  justify-content: flex-end;
+  /* Pushes both right sections to the far right */
   gap: 83px;
 }
 
@@ -58,12 +61,7 @@
   flex-direction: row;
 }
 
-.MainConatiner1 {
-  position: relative;
-  width: 100%;
-  display: flex;
-  gap: 40px;
-}
+
 
 .TopLeft {
   display: flex;
@@ -91,15 +89,9 @@
 .topright1 {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 300px;
   gap: 15px;
-  /* Match your design */
-  height: 195px;
-  /* Match your design */
-  /* If you want the border visible */
-
-  box-sizing: border-box;
+  max-width: 400px;
+  /* Brew section width */
 }
 
 .topright1 h2 {
@@ -107,6 +99,7 @@
   font-weight: 500;
   color: #ffffff;
   padding: 0%;
+  font-size: 22px;
 }
 
 .txt1 {
@@ -121,7 +114,7 @@
   font-size: 15px;
   font-weight: 400;
   color: #ffffff;
-  width: 65%;
+  line-height: 1.4;
 }
 
 .toprightBottom p {
@@ -141,6 +134,11 @@
 .topright2 {
   display: flex;
   flex-direction: column;
+  /* Occupies 20% of the MainContainer1 width */
+  flex-basis: 20%;
+  min-width: 320px;
+  /* Prevents text from becoming a single column */
+  gap: 15px;
 }
 
 .topright21 {
@@ -154,6 +152,7 @@
   font-weight: 500;
   color: #ffffff;
   padding: 0%;
+  font-size: 22px;
 }
 
 .topright21txt {
@@ -163,13 +162,11 @@
 }
 
 .topright21 p {
-  width: 100%;
-  /* Let the text fill its container */
-  max-width: 400px;
-  /* Use max-width instead of width to keep it readable */
   font-family: var(--lato);
   font-size: 15px;
+  font-weight: 400;
   color: #ffffff;
+  line-height: 1.4;
 }
 
 .topright21Bottom {
@@ -179,46 +176,33 @@
 }
 
 .btns2 {
-  padding: 4px 31px;
-  /* Increased slightly for better padding */
-  background-color: #6d7a61;
-  /* The green color from your image */
+  padding: 4px 15px;
+  background-color: transparent;
   color: white;
   border: 1px solid white;
-
-  /* Common for store buttons */
   cursor: pointer;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  /* Align to the left */
   gap: 10px;
+
   /* Space between icon and text */
 }
 
 .TextContainer {
   display: flex;
   flex-direction: column;
-  /* Stacks "Get it on" above "Google Play" */
   align-items: flex-start;
-  line-height: 1.2;
 }
 
 .btnhead {
-  font-size: 15px;
-  /* Smaller text for "Get it on" */
+  font-size: 10px;
   font-family: var(--lato);
-
-  font-weight: 400;
 }
 
 .btnbody {
-  font-size: 16px;
-  /* Larger text for "Google Play" */
+  font-size: 14px;
   font-weight: 600;
   font-family: var(--lato);
-  margin: 0;
 }
 
 .ButtonIcon {
@@ -233,39 +217,32 @@
 }
 
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
 
-  /* 1. Stack everything vertically and align to the left */
+  
   .MainConatiner1 {
     flex-direction: column !important;
     gap: 40px !important;
-    /* Replaces that huge 450px desktop gap */
-    /* padding: 47px 24px !important; */
+    
     align-items: flex-start !important;
 
   }
 
-  /* 2. Reset the right-side grouping to stack vertically too */
   .topright {
     flex-direction: column !important;
     gap: 40px !important;
     width: 100% !important;
   }
 
-  /* 3. Make the Rewards Box (BREW. EARN. ENJOY) responsive */
   .topright1 {
     width: 100% !important;
-    /* Take full phone width */
     max-width: 340px;
     height: auto !important;
-    /* Let height grow with text */
     border: none !important;
-    /* Matches your screenshot (border removed on mobile) */
     padding: 0 !important;
     gap: 15px !important;
   }
 
-  /* 4. Fix text widths - no more 65% or 85% */
   .topright1 p,
   .topright21 p {
     width: 100% !important;
@@ -273,15 +250,12 @@
     line-height: 1.5 !important;
   }
 
-  /* 5. App Experience Section */
   .topright2 {
     width: 100% !important;
   }
 
-  /* 6. Fix the App Buttons (Google/Apple) */
   .splitButtoms {
     flex-direction: row !important;
-    /* Keep them side-by-side or use column if too tight */
     gap: 10px !important;
     width: 100% !important;
 
@@ -289,13 +263,11 @@
 
   .btns2 {
     flex: 1;
-    /* Make buttons equal width */
     padding: 8px 10px !important;
     height: 48px !important;
     justify-content: center !important;
   }
 
-  /* 7. Shrink text sizes inside buttons for small screens */
   .btnhead {
     font-size: 8px !important;
   }
@@ -305,7 +277,6 @@
     white-space: nowrap;
   }
 
-  /* 8. Logo sizing for mobile */
   .TopLeft {
     max-width: 120px !important;
   }
@@ -315,7 +286,7 @@
     flex-direction: column;
     gap: 16px;
   }
-}
+} */
 
 
 
@@ -328,10 +299,12 @@
 
 .TopMiddle {
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
+  /* Ensure it starts from the left */
   gap: 167px;
-
   flex-direction: row;
+  flex-grow: 1;
+  /* This pushes the TopRight section to the edge */
 }
 
 .MobOne,
@@ -339,7 +312,7 @@
   display: flex;
   justify-content: left;
   flex-direction: row;
-  gap: 90px;
+  gap: 167px;
 }
 
 .TopMiddleOne,
@@ -386,9 +359,13 @@
 
 .TopRight {
   display: flex;
-  justify-content: right;
+  justify-content: flex-start;
+  /* Changed from right */
   flex-direction: column;
   gap: clamp(16px, calc(16px + (24 * ((100vw - 320px) / 1120))), 40px);
+  /* CRITICAL: Set the fixed lane width */
+  flex: 0 0 20%;
+  min-width: 320px;
 }
 
 .TopRightTop {
@@ -417,8 +394,9 @@
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  width: 100%;
+  /* Ensure it fills the lane */
 }
-
 
 .NewsletterSuccess {
   font-family: var(--lato);
@@ -434,9 +412,10 @@
 }
 
 .NewsLetterInput {
-  padding: 13px 12px 13px 18px;
-  border: none;
-  width: 240px;
+  flex-grow: 1;
+  /* Let the input take available space */
+  width: auto;
+  /* Remove the fixed 240px */
   padding: 10px;
   font-family: var(--lato);
   font-size: 15px;
@@ -469,7 +448,8 @@
 
 .TopRightBottom {
   display: flex;
-  justify-content: left;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .TopRightBottom p {
@@ -614,58 +594,66 @@
 }
 
 @media (max-width: 640px) {
+  /* 1. Reset Global Container */
   .Main {
     padding: 40px 24px 48px 24px;
-    gap: 80px;
     display: flex;
+    flex-direction: column; /* Force vertical stacking */
     width: 100%;
-    height: 100%;
-    gap: 80px
+    gap: 48px; 
+    height: auto; /* Changed from 100% to avoid layout stretching */
   }
 
-  .MainConatiner {
-    gap: 40px;
+  /* 2. Top Section (Logo & Brew): Force Vertical */
+  .MainConatiner,
+  .MainConatiner1,
+  .topright {
+    display: flex !important;
+    flex-direction: column !important; /* Forces Logo, Brew, Coffee to stack */
+    width: 100% !important;
+    gap: 40px !important;
+    align-items: flex-start !important;
   }
 
-  .BottomBottomMiddle {
-    display: none;
-  }
-
-  .BottomBottomLeft p,
-  .BottomBottomRight p {
-    font-size: 14px;
-  }
-
-  .TopRightBottomMobile {
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .TopRightBottomMobile p {
-    font-family: var(--lato);
-    font-size: 14px;
-    font-weight: 400;
-    color: #ffffff;
-    cursor: pointer;
-  }
-
-  .TopLeft img {
-    max-width: 120px;
-    max-height: 74px;
-    width: 100%;
-    height: 100%;
-  }
-
+  /* 3. Navigation Links: The 2-Column Grid */
   .Top {
+    display: flex;
     flex-direction: column;
-    gap: 72px;
+    gap: 48px;
+    width: 100%;
   }
 
   .TopMiddle {
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: wrap;    
+    width: 100%;
+    justify-content: flex-start;
+    row-gap: 48px;      
+    column-gap: 40px;   
+  }
+
+  .MobOne,
+  .MobTwo {
+    display: contents; 
+  }
+
+  .TopMiddleOne, 
+  .TopMiddleTwo, 
+  .TopMiddleThree, 
+  .TopMiddleFour {
+    flex: 0 0 calc(50% - 20px); 
+    min-width: 0;
+  }
+
+  .TopMiddleOneBottom, 
+  .TopMiddleTwoBottom, 
+  .TopMiddleThreeBottom, 
+  .TopMiddleFourBottom {
+    display: flex;
     flex-direction: column;
-    gap: 72px;
+    gap: 8px;
+    margin-top: 12px;
   }
 
   .TopMiddleOneTop h4,
@@ -674,6 +662,7 @@
   .TopMiddleFourTop h4,
   .NewslHeading h4 {
     font-size: 20px;
+    margin: 0;
   }
 
   .TopMiddleOneBottom p,
@@ -684,84 +673,289 @@
   .Phone p,
   .Email p,
   .NewsLetterInput,
-  .TopRightBottom p {
+  .TopRightBottom p,
+  .BottomBottomLeft p,
+  .BottomBottomRight p,
+  .TopRightBottomMobile p {
     font-size: 14px;
+  }
+
+  /* Elements */
+  .TopLeft img {
+    max-width: 120px;
+    height: auto;
   }
 
   .SubscribeButton {
     padding: 10px 25px;
-    font-size: 14px;
+    width: fit-content;
   }
 
-  .TopRightMiddle {
+  .TopRightMiddle,
+  .TopRightBottomMobile {
+    display: flex;
     flex-direction: column;
     gap: 16px;
   }
-}
 
-@media (min-width: 641px) and (max-width: 1024px) {
   .BottomBottomMiddle {
     display: none;
   }
+}
 
-  .BottomBottomLeft p,
-  .BottomBottomRight p {
-    font-size: 14px;
+
+@media (min-width: 641px) and (max-width: 1024px) {
+
+.MainConatiner1,
+  .Top,
+  .topright {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 40px !important;
+    align-items: flex-start !important;
   }
 
+  /* 2. BREW SECTION FIX: Stop it from taking too much width */
+  .topright1 {
+    width: fit-content !important; /* Hums the text instead of stretching */
+    max-width: 100% !important;   /* Safety to prevent overflow */
+    height: auto !important;
+    border: none !important;
+    padding: 0 !important;
+    gap: 15px !important;
+  }
+
+  .topright1 p,
+  .topright21 p {
+    width: 100% !important;
+    max-width: 450px; /* Prevents text lines from becoming too long to read */
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* 3. NAVIGATION COLUMNS: Fluid 2x2 Grid */
+  .TopMiddle {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: clamp(20px, 4vw, 40px) !important;
+    row-gap: 40px !important;
+  }
+
+  .MobOne, .MobTwo {
+    display: flex !important;
+    flex: 1 1 45% !important; /* Forces 2x2 grid */
+    justify-content: space-between !important;
+    min-width: 0 !important;
+    gap: clamp(15px, 3vw, 30px) !important;
+  }
+
+  .TopMiddleOne, .TopMiddleTwo, .TopMiddleThree, .TopMiddleFour {
+    flex: 1 1 auto !important;
+    min-width: 0 !important; /* No more static 120px floor */
+  }
+
+  /* 4. APP BUTTONS & LOGO */
+  .TopLeft img {
+    max-width: 120px !important;
+    height: auto !important;
+  }
+
+  .splitButtoms {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 400px;
+  }
+
+  .btns2 {
+    flex: 1;
+    height: 48px !important;
+    justify-content: center !important;
+    padding: 8px 10px !important;
+  }
+
+  .btnhead { font-size: 8px !important; }
+  .btnbody { font-size: 11px !important; white-space: nowrap; }
+
+  /* 5. FOOTER BOTTOM & LEGAL */
   .TopRightBottomMobile {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .TopRightBottomMobile p,
+  .BottomBottomLeft p,
+  .BottomBottomRight p {
+    font-size: 14px !important;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .BottomBottomMiddle {
+    display: none !important;
+  }
+}
+
+@media (min-width: 755px) and (max-width: 1640px) {
+  .Main {
+    padding-left: clamp(24px, 5vw, 80px);
+    padding-right: clamp(24px, 5vw, 80px);
     display: flex;
-    justify-content: left;
+    gap: 0px;
+  }
+
+  /* 2. Top Header: Logo + Info Boxes */
+  .MainConatiner1 {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .TopLeft {
+    flex: 0 0 auto;
+    width: 25%;
+    max-width: none;
+    /* Prevents logo from being crushed */
+  }
+
+  .TopLeft img {
+    width: clamp(110px, 12vw, 157px);
+    height: auto;
+  }
+
+  /* 3. The Info Boxes (Brew + Experience) */
+  .topright {
+    display: flex;
+    flex: 1 1 500px;
+    /* Takes remaining space, but wants at least 500px */
+    justify-content: space-between;
+    gap: clamp(20px, 4vw, 50px);
+  }
+
+  .topright1,
+  .topright2 {
+    flex: 1 1 0;
+    /* Ensures both boxes grow/shrink at the exact same rate */
+    min-width: min-content;
+    /* Prevents overlap by honoring the longest word */
+    display: flex;
     flex-direction: column;
     gap: 16px;
   }
 
-  .TopRightBottomMobile p {
-    font-family: var(--lato);
+  .topright1 p,
+  .topright21 p {
     font-size: 14px;
-    font-weight: 400;
-    color: #ffffff;
-    cursor: pointer;
-  }
-
-  .TopLeft img {
-    max-width: 120px;
-    max-height: 74px;
+    line-height: 1.5;
     width: 100%;
-    height: 100%;
+    max-width: 400px;
   }
 
+  /* 4. The 4 Navigation Columns: No more static 120px */
   .Top {
-    flex-direction: column;
-    gap: 72px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 60px;
+    gap: clamp(30px, 5vw, 60px);
   }
 
   .TopMiddle {
-    /* flex-direction: column; */
-    gap: 72px;
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1640px) {
-  .NewsLetterInput {
-    width: 140px;
-  }
-
-  .Main {
-    padding-left: 50px;
-    padding-right: 50px;
+    display: flex;
+    flex: 0 0 100%;
+    /* Force nav to take full width for better distribution */
+    justify-content: space-between;
   }
 
   .MobOne,
   .MobTwo {
-    gap: 40px;
+    display: flex;
+    flex: 1 1 48%;
+    /* Each wrapper takes half of the footer width */
+    justify-content: space-between;
   }
 
-  .TopMiddle {
-    gap: 40px;
+  /* THE FIX: Percentage-based columns instead of 120px */
+  .TopMiddleOne,
+  .TopMiddleTwo,
+  .TopMiddleThree,
+  .TopMiddleFour {
+    flex: 1 1 45%;
+    /* Each list takes ~45% of its half-width parent */
+    min-width: min-content;
+    /* Only takes up as much as the longest word */
+    white-space: nowrap;
+  }
+
+  /* 5. Newsletter Section */
+  .TopRight {
+    flex: 0 0 100%;
+    /* Drops to its own row */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .TopRightTop {
+    width: 100%;
+    max-content: 450px;
+  }
+
+.TopRight {
+    width: 100%;
+    max-width: 500px; /* Limits the entire newsletter block's reach */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* 2. The Input Row: Fix the stretch */
+  .NewsLetterRow {
+    display: flex;
+    flex-direction: row; /* Keep input and button side-by-side on tablet */
+    width: 100%;
+    align-items: center;
+  }
+
+  .NewsLetterInput {
+    /* flex: grow shrink basis */
+    flex: 2 1 0; 
+    height: 52px; /* Slightly taller for better touch targets on tablet */
+    width: 100%;
+    max-width: 350px; 
+    min-width: 180px; /* Prevents it from becoming a tiny sliver */
+    padding: 0 16px;
+    
+    
+    font-size: 14px;
+  }
+
+  /* 3. The Button: Ensure it matches the input height */
+  .SubscribeButton {
+    flex: 1 0 auto;
+    height: 52px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
   }
 
   .TopRightMiddle {
-    gap: 20px;
+    display: flex;
+    gap: clamp(20px, 5vw, 60px);
   }
+  .BottomBottom {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
 }

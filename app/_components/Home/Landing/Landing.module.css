@@ -1,14 +1,17 @@
 .Main {
   width: 100%;
   height: 100vh;
- padding-top: clamp(80px, calc(80px + (70 * ((100vw - 320px) / 1120))), 180px);
+  padding-top: clamp(80px, calc(80px + (70 * ((100vw - 320px) / 1120))), 180px);
 
-padding-bottom: clamp(30px, calc(30px + (98 * ((100vw - 320px) / 1120))), 128px);
+  padding-bottom: clamp(
+    30px,
+    calc(30px + (98 * ((100vw - 320px) / 1120))),
+    128px
+  );
 
   position: relative;
   overflow: hidden;
 }
-
 
 .Video {
   position: absolute;
@@ -22,13 +25,12 @@ padding-bottom: clamp(30px, calc(30px + (98 * ((100vw - 320px) / 1120))), 128px)
   z-index: -1;
 }
 
-
 .Overlay {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: end;
   position: relative;
   z-index: 1;
 }
@@ -58,83 +60,88 @@ padding-bottom: clamp(30px, calc(30px + (98 * ((100vw - 320px) / 1120))), 128px)
     transform: translateX(-50%);
   }
 }
-.BottomText{
+.BottomText {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 12px;
 }
-.BottomText h4{
+.BottomText h4 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
   font-weight: 500;
-  color: #FFFFFF;
+  color: #ffffff;
 }
-.BottomText p{
+.BottomText p {
   width: 40%;
   font-size: var(--fs-15);
   color: #ffffff;
   font-weight: 400;
   font-family: var(--lato);
 }
-.Content{
+.Content {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   width: 100%;
-padding-left: clamp(24px, calc(24px + (102 * ((100vw - 320px) / 1120))), 125px);
-padding-right: clamp(24px, calc(24px + (102 * ((100vw - 320px) / 1120))), 125px);
-
+  padding-left: clamp(
+    24px,
+    calc(24px + (102 * ((100vw - 320px) / 1120))),
+    125px
+  );
+  padding-right: clamp(
+    24px,
+    calc(24px + (102 * ((100vw - 320px) / 1120))),
+    125px
+  );
 }
-.RightBottomText{
+.RightBottomText {
   display: flex;
   justify-content: right;
   align-items: center;
- 
 }
-.RightBottomText  p{
+.RightBottomText p {
   font-size: 15px;
   color: #ffffff;
   font-weight: 400;
   font-family: var(--lato);
 }
-.Explore{
+.Explore {
   display: flex;
   justify-content: left;
   flex-direction: row;
   align-items: flex-end;
   gap: 10px;
   cursor: pointer;
-
 }
-.Explore h4{
-  color: #FFFFFF;
+.Explore h4 {
+  color: #ffffff;
   font-weight: 500;
   font-size: var(--fs-22);
   font-family: var(--lexend);
   text-transform: uppercase;
 }
 @media (max-width: 640px) {
- .Marquee h2 {
-  font-size: 64px;
- }
- .Explore h4{
-  font-size: 20px;
- }
- .BottomText p{
-  width: 98%;
-  font-size: 14px;
-  text-align: justify;
- }
- .Content{
-  padding-left: 24px;
- }
- .Main {
-  padding-top:150px;
-  padding-bottom: 30px;
-  height: 100svh;
- }
- .RightBottomText{
-  display: none;
- }
+  .Marquee h2 {
+    font-size: 64px;
+  }
+  .Explore h4 {
+    font-size: 20px;
+  }
+  .BottomText p {
+    width: 98%;
+    font-size: 14px;
+    text-align: justify;
+  }
+  .Content {
+    padding-left: 24px;
+  }
+  .Main {
+    padding-top: 150px;
+    padding-bottom: 30px;
+    height: 100svh;
+  }
+  .RightBottomText {
+    display: none;
+  }
 }

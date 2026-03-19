@@ -36,8 +36,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: clamp(30px, calc(30px + (45 * ((100vw - 320px) / 1120))), 75px);
-
+  gap: clamp(30px, calc(30px + (45 * ((100vw - 320px) / 1120))), 32px);
   width: 100%;
   max-width: 416px;
   min-height: 410px;

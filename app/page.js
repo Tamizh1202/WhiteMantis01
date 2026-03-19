@@ -74,7 +74,7 @@ export default async function Home() {
       <Coffees category={coffeeCategory} />
       <div className="sectionPadding"></div>
       <Shop categories={categories} />
-      {/* <Subscribe /> */}
+      <Subscribe />
       <div className="sectionPadding"></div>
       <Community />
       <div className="sectionPadding"></div>

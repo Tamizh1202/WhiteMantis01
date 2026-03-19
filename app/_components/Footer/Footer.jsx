@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -25,25 +26,25 @@ const Footer = ({ categories }) => {
       <div className={styles.Main}>
         <div className={styles.MainConatiner1}>
 
-
-
+          {/* LEFT MOST: Logo */}
           <div className={styles.TopLeft}>
             <Link href="/">
               <Image
                 src={Logo}
                 alt="White Mantis Logo"
-                width={157} // Your specific data
-                height={97} // Your specific data
+                width={157}
+                height={97}
                 priority
                 className={styles.LogoImage}
               />
             </Link>
           </div>
 
+          {/* RIGHT SECTIONS WRAPPER */}
+          <div className={styles.topright}>
 
-          <div className={styles.topright} >
-            <div className={styles.topright1} >
-
+            {/* SECTION 1: BREW. EARN. ENJOY. */}
+            <div className={styles.topright1}>
               <h2>BREW. EARN. ENJOY.</h2>
               <div className={styles.toprightBottom}>
                 <div className={styles.txt1}>
@@ -54,44 +55,29 @@ const Footer = ({ categories }) => {
                   <button className={styles.SubscribeButton}>Explore Rewards</button>
                 </div>
               </div>
-
             </div>
 
+            {/* SECTION 2: YOUR COMPLETE COFFEE EXPERIENCE (20% Width) */}
             <div className={styles.topright2}>
               <div className={styles.topright21}>
                 <h2>YOUR COMPLETE COFFEE EXPERIENCE</h2>
                 <div className={styles.topright21Bottom}>
                   <div className={styles.topright21txt}>
-                    <p style={{ textDecoration: "underline" }}  >White Mantis App</p>
-                    <p>Order ahead at our cafés, earn rewards, manage subscriptions, and explore new releases all in one seamless experience.</p>
+                    <p style={{ textDecoration: "underline" }}>White Mantis App</p>
+                    <p>Order ahead at our cafés, earn rewards, manage subscriptions, and explore new releases.</p>
                   </div>
-
                   <div className={styles.splitButtoms}>
-
                     <button className={styles.btns2}>
-
-                      <Image
-                        src={apple}
-                        alt="Clickable Logo"
-                        width={24}
-                        height={24}
-                        className={styles.ButtonIcon}
-                      />
+                      <Image src={google} alt="Google Play" width={24} height={24} className={styles.ButtonIcon} />
                       <div className={styles.TextContainer}>
                         <span className={styles.btnhead}>Get it on</span>
                         <span className={styles.btnbody}>Google Play</span>
                       </div>
                     </button>
                     <button className={styles.btns2}>
-                      <Image
-                        src={google}
-                        alt="Clickable Logo"
-                        width={24}
-                        height={24}
-                        className={styles.ButtonIcon}
-                      />
+                      <Image src={apple} alt="App Store" width={24} height={24} className={styles.ButtonIcon} />
                       <div className={styles.TextContainer}>
-                        <span className={styles.btnhead}>Download on the </span>
+                        <span className={styles.btnhead}>Download on the</span>
                         <span className={styles.btnbody}>App Store</span>
                       </div>
                     </button>
@@ -99,6 +85,7 @@ const Footer = ({ categories }) => {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
         <div className={styles.MainConatiner2} >
@@ -204,24 +191,7 @@ const Footer = ({ categories }) => {
                 </div>
 
               </div>
-              {/* <div className={styles.TopMiddleTwo}>
-                <div className={styles.TopMiddleTwoTop}>
-                  <h4>Support</h4>
-                </div>
-                <div className={styles.TopMiddleTwoBottom}>
-
-                  <>
-                    <Link href="/shop/coffee-beans">
-                      <p>Wholesale</p>
-                    </Link>
-                    <Link href="/shop/capsules">
-                      <p>Contact Us</p>
-                    </Link>
-
-                  </>
-
-                </div>
-              </div> */}
+             
             </div>
 
             <div className={styles.TopRight}>

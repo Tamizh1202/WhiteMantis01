@@ -583,16 +583,3 @@
     gap: 90px;
   }
 }
-
-.LowStockBadge {
-  position: absolute;
-  top: 15px;
-  left: 0;
-  background-color: #6c7a5f;
-  color: #ffffff;
-  padding: 10px 20px;
-  font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  z-index: 10;
-}

@@ -11,7 +11,7 @@ const Highlights = () => {
     <div className={styles.main}>
       <div className={styles.MainConatiner}>
         <div className={styles.Heading}>
-          <h3>Workshop Highlights</h3>
+          <h3>Course Highlights</h3>
         </div>
 
         <div className={styles.BottomContainer}>

@@ -8,15 +8,11 @@ import Three from "./3.png";
 
 import CommunityPopup from "../CommunityPopup/CommunityPopup";
 
-
-
-
 const images = [One, Two, Three];
 
 const TheRoster = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openPopup, setOpenPopup] = useState(false);
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,11 +37,11 @@ const TheRoster = () => {
           </div>
           <div className={styles.LeftBottom}>
             <button
-  className={styles.JoinBtn}
-  onClick={() => setOpenPopup(true)}
->
-  Join Our Community
-</button>
+              className={styles.JoinBtn}
+              onClick={() => setOpenPopup(true)}
+            >
+              Join our community
+            </button>
           </div>
         </div>
 
@@ -62,11 +58,7 @@ const TheRoster = () => {
           ))}
         </div>
       </div>
-      <CommunityPopup
-  isOpen={openPopup}
-  onClose={() => setOpenPopup(false)}
-/>
-
+      <CommunityPopup isOpen={openPopup} onClose={() => setOpenPopup(false)} />
     </div>
   );
 };

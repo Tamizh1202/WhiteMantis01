@@ -19,7 +19,7 @@ const Shop = ({ categories = [] }) => {
   );
 
   return (
-    <>
+    <>    
       <div className={styles.main}>
         <div className={styles.MainConatiner}>
           <div className={styles.Top}>

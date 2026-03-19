@@ -100,7 +100,7 @@ const Lisiting = () => {
         const initOpen = {};
         if (subCats?.level1) {
           subCats.level1.forEach((l1) => {
-            initOpen[l1.slug] = false;
+            initOpen[l1.id] = false;
           });
         }
         setOpenMenus(initOpen);
@@ -182,8 +182,8 @@ const Lisiting = () => {
     setVisibleCount(ITEMS_PER_LOAD); // Reset scroll position on filter
   };
 
-  const toggleMenu = (slug) => {
-    setOpenMenus((prev) => ({ ...prev, [slug]: !prev[slug] }));
+  const toggleMenu = (id) => {
+    setOpenMenus((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const handleLoadMore = () => {

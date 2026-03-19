@@ -22,18 +22,6 @@ export default function Location() {
           referrerPolicy="no-referrer-when-downgrade"
           title="White Mantis Roastery map"
         ></iframe>
-
-        <aside className={styles.infoCard}>
-          <div className={styles.infoTitle}>White Mantis Roastery &amp; Lab</div>
-          <a
-            href={directionsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.directionsBtn}
-          >
-            Get Directions
-          </a>
-        </aside>
       </div>
     </section>
   );

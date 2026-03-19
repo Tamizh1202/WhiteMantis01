@@ -206,9 +206,6 @@ const ProductMain = ({ product }) => {
             </div>
           </div>
           <div className={styles.Middle} ref={middleRef}>
-            {isLowStock && (
-              <div className={styles.LowStockBadge}>Only few left</div>
-            )}
             <Image src={productImage} alt="Product" width={500} height={500} />
           </div>
           <div className={styles.Right} ref={topRightRef}>

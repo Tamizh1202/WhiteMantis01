@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,13 +12,16 @@ const BlogInternalPage = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // Scroller State
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     const fetchBlog = async () => {
       if (!slug) return;
       setLoading(true);
       try {
-        // Fetch the blog post by slug
         const response = await axiosClient.get(
           `/api/blogs?where[slug][equals]=${slug}`,
         );
@@ -37,6 +40,15 @@ const BlogInternalPage = () => {
 
     fetchBlog();
   }, [slug]);
+
+  // Handle Scroll for Mobile Dots
+  const handleScroll = () => {
+    if (scrollRef.current && window.innerWidth <= 640) {
+      const width = scrollRef.current.offsetWidth;
+      const index = Math.round(scrollRef.current.scrollLeft / width);
+      setActiveIndex(index);
+    }
+  };
 
   if (loading) {
     return (
@@ -71,9 +83,9 @@ const BlogInternalPage = () => {
     <main className={styles.Main}>
       <header className={styles.Header}>
         <h1 className={styles.Title}>{blog.title}</h1>
-        <div className={styles.Date}>
+        <div className={styles.DateText}>
           {new Date(blog.createdAt).toLocaleDateString("en-US", {
-            month: "long",
+            month: "short",
             day: "numeric",
             year: "numeric",
           })}
@@ -91,15 +103,37 @@ const BlogInternalPage = () => {
       </div>
 
       <article className={styles.ContentWrapper}>
+        {/* Rendering the Lexical JSON content from Payload */}
         <RichText content={blog.content} />
       </article>
 
       {blog.relatedBlogs && blog.relatedBlogs.length > 0 && (
         <section className={styles.RelatedSection}>
-          <h2 className={styles.SectionTitle}>Related Articles</h2>
-          <div className={styles.BlogGrid}>
+          <h2 className={styles.SectionTitle}>Explore More Blogs</h2>
+          
+          <div 
+            className={styles.BlogGrid} 
+            ref={scrollRef} 
+            onScroll={handleScroll}
+          >
             {blog.relatedBlogs.map((relatedBlog) => (
               <RelatedBlogCard key={relatedBlog.id} blog={relatedBlog} />
+            ))}
+          </div>
+
+          {/* Mobile Pagination Dots */}
+          <div className={styles.MobileOnlyPagination}>
+            {blog.relatedBlogs.map((_, index) => (
+              <svg 
+                key={index} 
+                width="12" 
+                height="12" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                className={activeIndex === index ? styles.activeDot : styles.dot}
+              >
+                <circle cx="12" cy="12" r="12" fill="currentColor"/>
+              </svg>
             ))}
           </div>
         </section>
@@ -122,10 +156,25 @@ const RelatedBlogCard = ({ blog }) => {
         />
       </div>
       <div className={styles.CardContent}>
-        <h3 className={styles.CardTitle}>{blog.title}</h3>
-        <Link href={`/blogs/${blog.slug}`} className={styles.ReadMoreBtn}>
-          Read Article
-        </Link>
+        <div className={styles.underline}>
+          <h3 className={styles.CardTitle}>{blog.title}</h3>
+        </div>
+        <div className={styles.minute}>
+          <span>Process Mastery | {blog.readTime || 5} Minutes</span>
+        </div>
+        <hr className={styles.Separator} />
+        <div className={styles.CardFooter}>
+          <span className={styles.DateText}>
+            {new Date(blog.createdAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </span>
+          <Link href={`/blogs/${blog.slug}`} className={styles.ReadMoreBtn}>
+            Read more
+          </Link>
+        </div>
       </div>
     </div>
   );

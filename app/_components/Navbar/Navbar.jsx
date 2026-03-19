@@ -300,7 +300,7 @@ const Navbar = ({ categories: initialCategories }) => {
               className={pathname.startsWith("/auth") ? styles.active : ""}
               style={{ cursor: "pointer" }}
             >
-              <p>Login/SignUp</p>
+              <p>Start Here</p>
             </Link>
           )}
         </div>

@@ -1,149 +1,201 @@
-.main{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: #FFFFFF;
-  padding:
-  clamp(0px, calc(0px + (0 * ((100vw - 320px) / 1120))), 0px)
-  clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  padding: clamp(0px, calc(0px + (0 * ((100vw - 320px) / 1120))), 0px)
+    clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+}
+.MainContainer {
+  display: flex;
+  justify-content: left;
+  width: 100%;
+  flex-direction: column;
+  gap: clamp(45px, calc(45px + (15 * ((100vw - 320px) / 1120))), 60px);
+}
+.TopContainer {
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+}
+.Top h3 {
+  font-family: var(--lexend);
+  font-weight: 500;
+  font-size: var(--fs-22);
+  color: #2f362a;
+  text-transform: uppercase;
+}
+.Middle {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+.One,
+.Two,
+.Three,
+.Four {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: clamp(30px, calc(30px + (11 * ((100vw - 320px) / 1120))), 41px)
+    clamp(30px, calc(30px + (2 * ((100vw - 320px) / 1120))), 32px)
+    clamp(73px, calc(73px + (194 * ((100vw - 320px) / 1120))), 267px)
+    clamp(30px, calc(30px + (2 * ((100vw - 320px) / 1120))), 32px);
 
+  width: 100%;
+  gap: 32px;
+  border: 1px solid #52525299;
+  transition: all 0.3s ease-in-out;
 }
-.MainContainer{
-    display: flex;
-    justify-content: left;
-    width: 100%;
-    flex-direction: column;
-    gap: clamp(45px, calc(45px + (15 * ((100vw - 320px) / 1120))), 60px);
 
-  
+.One:hover,
+.Two:hover,
+.Three:hover,
+.Four:hover {
+  background-color: #99a28f;
+  border-color: #6e736a;
+  cursor: pointer;
 }
-.TopContainer{
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
 
+.One:hover h3,
+.Two:hover h3,
+.Three:hover h3,
+.Four:hover h3,
+.One:hover p,
+.Two:hover p,
+.Three:hover p,
+.Four:hover p {
+  color: #ffffff !important;
 }
-.Top h3{
-    font-family: var(--lexend);
-    font-weight: 500;
-    font-size: var(--fs-22);
-    color: #2F362A;
-    text-transform: uppercase;
-}
-.Middle{
-    display: flex;
-    justify-content: left;
-    flex-direction: row;
-}
-.One, .Two, .Three, .Four{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-  padding:
-  clamp(30px, calc(30px + (11 * ((100vw - 320px) / 1120))), 41px)
-  clamp(30px, calc(30px + (2 * ((100vw - 320px) / 1120))), 32px)
-  clamp(73px, calc(73px + (194 * ((100vw - 320px) / 1120))), 267px)
-  clamp(30px, calc(30px + (2 * ((100vw - 320px) / 1120))), 32px);
 
-    max-height: 450px;
-    max-width: 415px;
+.One:hover svg,
+.Two:hover svg,
+.Three:hover svg,
+.Four:hover svg {
+  color: #ffffff !important;
+}
+.OneTop,
+.TwoTop,
+.ThreeTop,
+.FourTop {
+  display: flex;
+  justify-content: left;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
 
-    gap: 32px;
-    border:1px solid #52525299;
+.OneTop:hover,
+.TwoTop:hover,
+.ThreeTop:hover,
+.FourTop:hover {
+  cursor: pointer;
 }
-.OneTop, .TwoTop, .ThreeTop, .FourTop{
-    display: flex;
-    justify-content: left;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
 
+.OneTop svg,
+.TwoTop svg,
+.ThreeTop svg,
+.FourTop svg {
+  width: 100%;
+  height: 100%;
+  max-width: 37px;
+  max-height: 30px;
+  color: #525252;
+  transition: all 0.3s ease-in-out;
 }
-.OneTop svg , .TwoTop svg , .ThreeTop svg , .FourTop svg {
-    width: 100%;
-    height: 100%;
-    max-width: 37px;
-    max-height: 30px;
-    
-}
-.OneTop h3, .TwoTop h3, .ThreeTop h3, .FourTop h3{
-    font-family: var(--lexend);
-    font-weight: 500;
-    font-size: var(--fs-22);
-    color: #6E736A;
-    text-transform: uppercase;
+.OneTop h3,
+.TwoTop h3,
+.ThreeTop h3,
+.FourTop h3 {
+  font-family: var(--lexend);
+  font-weight: 500;
+  font-size: 22px;
+  color: #6e736a;
+  text-transform: uppercase;
 }
 .OneBottom {
-    display: flex;
-    justify-content: left;
-
+  display: flex;
+  justify-content: left;
 }
-.OneBottom p, .TwoBottom p, .ThreeBottom p, .FourBottom p{
-    font-family: var(--lato);
-    font-weight: 400;
-    font-size: 15px;
-    color: #6E736A;
+.OneBottom p,
+.TwoBottom p,
+.ThreeBottom p,
+.FourBottom p {
+  font-family: var(--lato);
+  font-weight: 400;
+  font-size: 15px;
+  color: #6e736a;
 }
-.Bottom{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 20px;
+.Bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
 }
-.Bottom p{
-    font-family: var(--lato);
-    font-weight: 500;
-    font-size: 15px;
-    color: #525252;
-
+.Bottom p {
+  font-family: var(--lato);
+  font-weight: 500;
+  font-size: 15px;
+  color: #525252;
 }
-.Button{
-    background: #6C7A5F;
-    color: #fff;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-size: 15px;
-      font-weight: 400;
-      font-family: var(--lato);
-    cursor: pointer;
+.Button {
+  background: #6c7a5f;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: var(--lato);
+  cursor: pointer;
 }
 @media (max-width: 640px) {
-    .main{
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-    .MainContainer{
-        flex-direction: column;
-        gap: 45px;
-    }
-    .One, .Two, .Three, .Four{
-        gap: 30px;
-        padding: 30px 30px 73px 30px;
-        max-width: 100%;
-        max-height: auto;
-
-    }
-    .Top h3, .OneTop h3, .TwoTop h3, .ThreeTop h3, .FourTop h3{
-        font-size: 20px;
-    }
-    .OneBottom p, .TwoBottom p, .ThreeBottom p, .FourBottom p{
-        font-size: 14px;
-    }
-    .Middle{
-        flex-direction: column;
-        
-    }
+  .main {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .MainContainer {
+    flex-direction: column;
+    gap: 45px;
+  }
+  .One,
+  .Two,
+  .Three,
+  .Four {
+    gap: 30px;
+    padding: 30px 30px 73px 30px;
+    max-width: 100%;
+    max-height: auto;
+  }
+  .Top h3,
+  .OneTop h3,
+  .TwoTop h3,
+  .ThreeTop h3,
+  .FourTop h3 {
+    font-size: 20px;
+  }
+  .OneBottom p,
+  .TwoBottom p,
+  .ThreeBottom p,
+  .FourBottom p {
+    font-size: 14px;
+  }
+  .Middle {
+    flex-direction: column;
+  }
 }
 @media (min-width: 641px) and (max-width: 1200px) {
-    .Middle{
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-    .One, .Two, .Three, .Four{
-        max-width: calc(50% - 10px);
-    }
+  .Middle {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .One,
+  .Two,
+  .Three,
+  .Four {
+    max-width: calc(50% - 10px);
+  }
 }

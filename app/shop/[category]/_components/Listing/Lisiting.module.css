@@ -561,6 +561,11 @@
     gap: 24px;
   }
 
+  .LowStockBadge {
+    padding: 6px 6px;
+    top: 6px;
+  }
+
   .ProductImage img {
     max-width: 170px;
     max-height: 200px;
@@ -672,6 +677,11 @@
   .MainContainer {
     flex-direction: column;
     gap: 32px;
+  }
+
+    .LowStockBadge {
+    padding: 6px 6px;
+    top: 6px;
   }
 
   .LeftConatiner {

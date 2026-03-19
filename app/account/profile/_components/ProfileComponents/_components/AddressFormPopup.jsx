@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "../ProfileComponents.module.css";
 import { ADDRESS_LABELS, UAE_STATES } from "../profileConstants";
 
@@ -14,9 +14,29 @@ const AddressFormPopup = ({
   onLabelSelect,
   onSave,
   onCancel,
+  isSubmitting,
 }) => {
+  // --- State for Custom Emirate Dropdown ---
+  const [isEmirateOpen, setIsEmirateOpen] = useState(false);
+  const emirateRef = useRef(null);
+
+  // --- Click Outside logic for Dropdown ---
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emirateRef.current && !emirateRef.current.contains(event.target)) {
+        setIsEmirateOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const title = mode === "edit" ? "EDIT ADDRESS" : "ADD ADDRESS";
-  const saveLabel = mode === "edit" ? "Update Address" : "Save Address";
+  const saveLabel = isSubmitting
+    ? "Saving..."
+    : mode === "edit"
+      ? "Update Address"
+      : "Save Address";
 
   return (
     <div className={styles.PopupOverlay} onClick={onCancel}>
@@ -50,7 +70,11 @@ const AddressFormPopup = ({
         )}
 
         {/* Country — always UAE, read-only */}
-        <input value="United Arab Emirates" readOnly />
+        <input
+          style={{ outline: "none" }}
+          value="United Arab Emirates"
+          readOnly
+        />
 
         {/* Street */}
         <input
@@ -85,20 +109,48 @@ const AddressFormPopup = ({
             value={addressForm.city || ""}
             onChange={(e) => onFormChange("city", e.target.value)}
           />
-          <select
-            className={styles.StateSelect}
-            value={addressForm.state || ""}
-            onChange={(e) => onFormChange("state", e.target.value)}
-          >
-            <option value="" disabled>
-              Select Emirate
-            </option>
-            {UAE_STATES.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
+          <div className={styles.Field} ref={emirateRef} style={{ padding: 0 }}>
+            <div
+              className={styles.SelectContainer}
+              style={{ position: "relative", width: "100%" }}
+            >
+              <div
+                className={styles.CustomSelectTrigger}
+                onClick={() => setIsEmirateOpen(!isEmirateOpen)}
+                style={{ padding: "19px 22px", border: "1px solid #2f362a4d" }}
+              >
+                <span style={{ textTransform: "capitalize" }}>
+                  {UAE_STATES.find((s) => s.value === addressForm.state)
+                    ?.label || "Select Emirate"}
+                </span>
+                <span
+                  className={`${styles.Arrow} ${isEmirateOpen ? styles.Rotate : ""}`}
+                >
+                  ▼
+                </span>
+              </div>
+
+              {isEmirateOpen && (
+                <div
+                  className={styles.CustomOptionsList}
+                  style={{ left: 0, width: "100%", top: "100%" }}
+                >
+                  {UAE_STATES.map((opt) => (
+                    <div
+                      key={opt.value}
+                      className={styles.OptionItem}
+                      onClick={() => {
+                        onFormChange("state", opt.value);
+                        setIsEmirateOpen(false);
+                      }}
+                    >
+                      {opt.label}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Phone input with +971 prefix */}
@@ -212,8 +264,24 @@ const AddressFormPopup = ({
               {addressGeneralError}
             </p>
           )}
-          <button onClick={onCancel}>Cancel</button>
-          <button className={styles.SaveBtn} onClick={onSave}>
+          <button
+            style={{
+              backgroundColor: "transparent",
+              border: "1px solid #6C7A5F",
+            }}
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className={styles.SaveBtn}
+            onClick={onSave}
+            disabled={isSubmitting}
+            style={{
+              opacity: isSubmitting ? 0.6 : 1,
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+            }}
+          >
             {saveLabel}
           </button>
         </div>

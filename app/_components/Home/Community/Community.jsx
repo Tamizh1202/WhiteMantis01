@@ -31,7 +31,7 @@ const Community = () => {
               </p>
               <Link href="/about-us">
                 <button className={styles.knowMore}>
-                  <span>Know more about us</span>
+                  <span>Explore about us</span>
 
                   <svg
                     width="13"

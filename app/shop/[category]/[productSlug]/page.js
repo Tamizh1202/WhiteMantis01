@@ -16,7 +16,7 @@ export default async function ProductDetailPage({ params }) {
   const selectedCategory = category.trim().toLowerCase();
   const selectedSlug = productSlug.trim().toLowerCase();
 
-  console.log(selectedCategory, selectedSlug)
+  console.log(selectedCategory, selectedSlug);
 
   if (!selectedSlug) {
     redirect("/shop");
@@ -28,12 +28,12 @@ export default async function ProductDetailPage({ params }) {
     const response = await fetch(
       `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[slug][equals]=${selectedSlug}&where[_status][equals]=published`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        next: { revalidate: 60 }
-      }
+        next: { revalidate: 60 },
+      },
     );
 
     if (!response.ok) {
@@ -43,7 +43,7 @@ export default async function ProductDetailPage({ params }) {
     const json = await response.json();
     product = json.docs?.[0] || null;
 
-    console.log("product", product)
+    console.log("product", product);
 
     if (!product) {
       console.warn(`Product not found for slug: ${slug}`);
@@ -60,7 +60,7 @@ export default async function ProductDetailPage({ params }) {
   return (
     <div>
       <ProductImageProvider>
-        <TopNavigation />
+        {/* <TopNavigation /> */}
         <ProductMain product={product} />
         <VideoSection product={product} />
         <Crafting product={product} />

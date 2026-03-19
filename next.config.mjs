@@ -15,17 +15,6 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "wordpressbackend.whitemantis.ae",
-      },
-      {
-        protocol: "https",
-        hostname: "whitemantis.marketingmomentum.in",
-      },
-      {
-        hostname: "whitemantis.marketingmomentum.local",
-      },
-      {
-        protocol: "https",
         hostname: "placehold.co",
       },
       {
@@ -38,7 +27,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "whitemantis-app.vercel.app",
+        hostname: "endpoint.whitemantis.ae",
       }
 
     ],

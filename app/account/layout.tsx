@@ -15,7 +15,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
 
   return (
     <div className={styles.accountRoot}>
-      <Breadcrumb />
+      {/* <Breadcrumb /> */}
       <div className={styles.shell}>
         <aside className={styles.sidebar}>
           <Sidebar />

@@ -1,7 +1,6 @@
 "use client";
-
 import styles from "./page.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Logo from "./logo.png";
 import flag from "./2.png";
@@ -13,35 +12,66 @@ export default function CreateProfile() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [email, setEmail] = useState(session?.user?.email || "");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isGenderOpen, setIsGenderOpen] = useState(false);
+  const genderRef = useRef(null);
+
+  const genderOptions = [
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+    { label: "Prefer not to say", value: "other" },
+  ];
+
+  // --- Click Outside logic for Dropdown ---
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (genderRef.current && !genderRef.current.contains(event.target)) {
+        setIsGenderOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/auth");
     }
-    setEmail(session?.user?.email)
+    setEmail(session?.user?.email);
     if (session?.user?.phone && !phone) {
       const formatted = session.user.phone.toString().replace(/[^0-9]/g, "");
       setPhone(formatted);
     }
-  }, [session])
+  }, [session]);
 
   async function submit(e) {
     e.preventDefault();
     setError("");
+
+    // UAE Phone Validation: 9 digits starting with 5 (after +971)
+    // Common prefixes: 50, 52, 54, 55, 56, 58
+    const uaePhoneRegex = /^5[024568]\d{7}$/;
+    if (!uaePhoneRegex.test(phone)) {
+      setError(
+        "Please enter a valid UAE mobile number (9 digits starting with 5).",
+      );
+      return;
+    }
+
     setLoading(true);
 
     try {
       const res = await axiosClient.patch(`/api/users/${session?.user?.id}`, {
-        firstName: name,
-        lastName: name,
+        firstName: firstName,
+        lastName: lastName,
         gender: gender.toLowerCase(),
         phone: phone,
-      })
+      });
 
       const json = await res.data;
 
@@ -76,7 +106,7 @@ export default function CreateProfile() {
             </div>
 
             <div className={styles.Header}>
-              <h3>CREATE YOUR ACCOUNT</h3>
+              <h3>YOU'RE ALMOST IN</h3>
               <p>Your specialty coffee journey begins here.</p>
             </div>
 
@@ -97,9 +127,17 @@ export default function CreateProfile() {
 
               <input
                 type="text"
-                placeholder="Full name *"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                placeholder="First Name*"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+                disabled={loading}
+              />
+              <input
+                type="text"
+                placeholder="Last Name*"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 required
                 disabled={loading}
               />
@@ -113,29 +151,30 @@ export default function CreateProfile() {
                   type="tel"
                   placeholder="Phone Number*"
                   value={phone}
-                  maxLength={10}
-                  onChange={(e) =>
-                    setPhone(e.target.value.replace(/[^0-9]/g, ""))
-                  }
+                  maxLength={9}
+                  onChange={(e) => {
+                    let val = e.target.value.replace(/[^0-9]/g, "");
+                    if (val.startsWith("0")) val = val.substring(1);
+                    setPhone(val);
+                  }}
                   required
                   disabled={loading}
                 />
               </div>
 
-              <div className={styles.SelectWrapper}>
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  disabled={loading}
+              <div className={styles.SelectWrapper} ref={genderRef}>
+                <div
+                  className={`${styles.CustomSelectTrigger} ${gender ? styles.hasValue : ""}`}
+                  onClick={() => !loading && setIsGenderOpen(!isGenderOpen)}
                 >
-                  <option value="">Gender (optional)</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Prefer not to say</option>
-                </select>
+                  <span>
+                    {genderOptions.find((o) => o.value === gender)?.label ||
+                      "Gender (optional)"}
+                  </span>
+                </div>
 
                 <svg
-                  className={styles.DropArrow}
+                  className={`${styles.DropArrow} ${isGenderOpen ? styles.Rotate : ""}`}
                   width="13"
                   height="7"
                   viewBox="0 0 13 7"
@@ -147,6 +186,23 @@ export default function CreateProfile() {
                     fill="#6E736A"
                   />
                 </svg>
+
+                {isGenderOpen && (
+                  <div className={styles.CustomOptionsList}>
+                    {genderOptions.map((option) => (
+                      <div
+                        key={option.value}
+                        className={styles.OptionItem}
+                        onClick={() => {
+                          setGender(option.value);
+                          setIsGenderOpen(false);
+                        }}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <button
@@ -154,7 +210,7 @@ export default function CreateProfile() {
                 type="submit"
                 disabled={loading}
               >
-                {loading ? "Creating Account..." : "Create Account"}
+                {loading ? "Proceding" : "Begin Your Journey"}
               </button>
             </div>
           </form>

@@ -23,7 +23,7 @@ export default async function ShopCategoryPage({ params }) {
   return (
     <>
       <Landing />
-      <NavigationStrip />
+      {/* <NavigationStrip /> */}
       <Listing />
     </>
   );

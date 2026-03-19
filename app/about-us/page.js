@@ -20,7 +20,7 @@ export default function AboutUs() {
       <div className="sectionPadding"></div>
       <Partnerships />
       <div className="sectionPadding"></div>
-      {/* <Recognitions /> */}
+      <Recognitions />
     </>
   );
 }

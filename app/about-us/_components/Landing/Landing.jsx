@@ -12,12 +12,6 @@ const Landing = () => {
         </video>
 
         <div className={styles.Overlay}>
-          <div className={styles.Marquee}>
-            <h2>
-              WHERE COFFEE MEETS CRAFT • WHERE COFFEE MEETS CRAFT • WHERE COFFEE
-              MEETS CRAFT •
-            </h2>
-          </div>
           <div className={styles.Content}>
             <div className={styles.BottomText}>
               <p>

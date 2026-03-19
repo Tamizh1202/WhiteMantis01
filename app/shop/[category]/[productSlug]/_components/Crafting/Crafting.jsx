@@ -3,6 +3,7 @@ import React, { useState, useRef, useLayoutEffect } from "react";
 import styles from "./Crafting.module.css";
 import Image from "next/image";
 import { CraftingComponentData } from "@/utils/PDPUtils";
+import image from "./1.png";    
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 const IMAGE_URL = `${BACKEND_URL}${process.env.NEXT_PUBLIC_CRAFTING_IMAGE_URL}`
@@ -106,7 +107,7 @@ const Crafting = ({ product }) => {
             className={styles.RightBottom}
             style={{ height: syncedHeight }}
           >
-            <Image src={IMAGE_URL} alt="Brewing Guide" width={500} height={500} />
+            <Image src={image} alt="Brewing Guide" width={500} height={500} />
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ export default function Sidebar() {
         <div className={styles.Sidebar}>
           <div className={styles.Top}>
             <div className={styles.UserName}>
-              <h3>{session?.user?.name || "Guest User"}</h3>
+              <h3>{session?.user?.name || ""}</h3>
             </div>
             <div className={styles.UserEmail}>
               <h5>{session?.user?.email || ""}</h5>
@@ -177,8 +177,14 @@ export default function Sidebar() {
       </div>
 
       {showLogout && (
-        <div className={styles.LogoutOverlay}>
-          <div className={styles.LogoutPopup}>
+        <div
+          className={styles.LogoutOverlay}
+          onClick={() => setShowLogout(false)}
+        >
+          <div
+            className={styles.LogoutPopup}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2>ARE YOU SURE YOU WANT TO LOGOUT?</h2>
             <p>
               You can always sign back in to access your specialty coffee

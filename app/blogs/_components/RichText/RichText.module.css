@@ -7,6 +7,11 @@
 
 .RichText p {
   margin-bottom: 1.5rem;
+  text-align: justify;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #6e736a;
 }
 
 .RichText h1,

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./ContactForm.module.css";
 import testStyles from "../TestFormUi/TestFormUi.module.css";
 import Image from "next/image";
@@ -19,36 +19,49 @@ const ContactForm = () => {
   const [responseMessage, setResponseMessage] = useState("");
   const [responseError, setResponseError] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
+  const enquiryRef = useRef(null);
+
+  // --- Click Outside logic for Dropdown ---
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (enquiryRef.current && !enquiryRef.current.contains(event.target)) {
+        setEnquiryOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const enquiryOptions = [
     {
-      "label": "Order issue",
-      "value": "order_issue"
+      label: "Order issue",
+      value: "order_issue",
     },
     {
-      "label": "Payment or refund",
-      "value": "payment_refund"
+      label: "Payment or refund",
+      value: "payment_refund",
     },
     {
-      "label": "Rewards & stamps",
-      "value": "rewards_stamps"
+      label: "Rewards & stamps",
+      value: "rewards_stamps",
     },
     {
-      "label": "Barista selection",
-      "value": "barista_selection"
+      label: "Barista selection",
+      value: "barista_selection",
     },
     {
-      "label": "Pickup or timing",
-      "value": "pickup_timing"
+      label: "Pickup or timing",
+      value: "pickup_timing",
     },
     {
-      "label": "Menu & availability",
-      "value": "menu_availability"
+      label: "Menu & availability",
+      value: "menu_availability",
     },
     {
-      "label": "Other",
-      "value": "other"
-    }
-  ]
+      label: "Other",
+      value: "other",
+    },
+  ];
 
   const ENDPOINT = "/api/web-contact-form";
 
@@ -57,7 +70,13 @@ const ContactForm = () => {
     setResponseMessage("");
     setResponseError(false);
 
-    if (!fullName.trim() || !email.trim() || !phone.trim() || !enquiryType.trim() || !message.trim()) {
+    if (
+      !fullName.trim() ||
+      !email.trim() ||
+      !phone.trim() ||
+      !enquiryType.trim() ||
+      !message.trim()
+    ) {
       setResponseError(true);
       setResponseMessage("All fields are required.");
       return;
@@ -89,19 +108,25 @@ const ContactForm = () => {
       const resp = await axiosClient.post(ENDPOINT, payload);
 
       if (resp.status === 201) {
-        setResponseMessage("Thank you for your message. We will get back to you soon!");
-      setFullName("");
+        setResponseMessage(
+          "Thank you for your message. We will get back to you soon!",
+        );
+        setFullName("");
         setEmail("");
         setPhone("");
         setEnquiryType("");
         setMessage("");
       } else {
         setResponseError(true);
-        setResponseMessage(resp.data.message || "Something went wrong. Please try again later.");
+        setResponseMessage(
+          resp.data.message || "Something went wrong. Please try again later.",
+        );
       }
     } catch (error) {
       setResponseError(true);
-      setResponseMessage(error.response?.data?.message || "Network error. Please try again.");
+      setResponseMessage(
+        error.response?.data?.message || "Network error. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -159,26 +184,35 @@ const ContactForm = () => {
                 </div>
 
                 <div
-                  className={`${testStyles.selectWrap} ${enquiryOpen ? testStyles.open : ""
-                    }`}
+                  className={`${testStyles.selectWrap} ${enquiryOpen ? testStyles.open : ""}`}
+                  ref={enquiryRef}
                 >
-                  <select
-                    value={enquiryType}
-                    onClick={() => setEnquiryOpen((prev) => !prev)}
-                    onChange={(e) => {
-                      setEnquiryType(e.target.value);
-                      setEnquiryOpen(false);
-                    }}
+                  <div
+                    className={`${testStyles.CustomSelectTrigger} ${enquiryType ? testStyles.hasValue : ""}`}
+                    onClick={() => setEnquiryOpen(!enquiryOpen)}
                   >
+                    <span>
+                      {enquiryOptions.find((o) => o.value === enquiryType)
+                        ?.label || "Please select enquiry type"}
+                    </span>
+                  </div>
 
-                    {/* comeback */}
-                    <option value="">Please select enquiry type</option>
-                    {enquiryOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  {enquiryOpen && (
+                    <div className={testStyles.CustomOptionsList}>
+                      {enquiryOptions.map((option) => (
+                        <div
+                          key={option.value}
+                          className={testStyles.OptionItem}
+                          onClick={() => {
+                            setEnquiryType(option.value);
+                            setEnquiryOpen(false);
+                          }}
+                        >
+                          {option.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <textarea

@@ -170,7 +170,7 @@ export default function Otp() {
 
               <div className={styles.RightTopOneBottom}>
                 <div className={styles.RightTopOneBottomTop}>
-                  <h3>VERIFY EMAIL</h3>
+                  <h3>CHECK INBOX</h3>
 
                   <div className={styles.OtpTextRow}>
                     <p>
@@ -239,7 +239,7 @@ export default function Otp() {
                 onClick={handleVerify}
                 disabled={loading}
               >
-                {loading ? "Verifying..." : "Verify"}
+                {loading ? "Verifying..." : "CONFIRM CODE"}
               </button>
               <p className={styles.ResendText}>
                 Didn't receive it? Check spam or{" "}
