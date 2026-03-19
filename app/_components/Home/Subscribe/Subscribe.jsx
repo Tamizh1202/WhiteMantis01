@@ -25,23 +25,16 @@ const Subscribe = () => {
                 </p>
               </div>
               <div className={styles.RightTopButton}>
-                <h4>Explore </h4>
+                <p>Explore subscription </p>
                 <svg
-                  width="30"
-                  height="30"
-                  viewBox="0 0 30 30"
+                  width="8"
+                  height="8"
+                  viewBox="0 0 8 8"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <rect
-                    x="0.5"
-                    y="0.5"
-                    width="29"
-                    height="28.6489"
-                    stroke="white"
-                  />
                   <path
-                    d="M21.0674 20.7266H19.0674V12.1366L9.47738 21.7266L8.06738 20.3166L17.6574 10.7266H9.06738V8.72656H21.0674V20.7266Z"
+                    d="M8 7.38462H6.76923V2.09846L0.867692 8L0 7.13231L5.90154 1.23077H0.615384V0H8V7.38462Z"
                     fill="white"
                   />
                 </svg>

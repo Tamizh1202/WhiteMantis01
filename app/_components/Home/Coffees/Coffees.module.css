@@ -38,7 +38,7 @@
   justify-content: left;
   flex-direction: column;
   gap: 12px;
-  max-width: 307px;
+  /* max-width: 307px; */
 }
 
 .LeftTop h3 {
@@ -94,7 +94,7 @@
 .ProductImage {
   width: 100%;
   height: 100%;
-  aspect-ratio: 280/244;
+  aspect-ratio: 8/7;
   background-color: #f8f8f8;
   display: flex;
   align-items: center;
@@ -279,8 +279,8 @@
   .ProductImage {
     /* FLUID FIX: Be 100% of the parent, but never larger than 320px */
     width: 100%;
-    max-width: 320px;
-    height: 300px;
+    /* max-width: 320px; */
+    /* height: 300px; */
     padding: 30px 40px;
     box-sizing: border-box;
     display: flex;
@@ -331,9 +331,10 @@
 
   .ProductImage {
     /* 2. THE FLUID FIX: Stay at 400px, but shrink to fit the screen 100% */
-    width: 100% !important;
-    max-width: 400px !important;
-    height: 350px !important;
+    aspect-ratio: 8/7;
+    /* max-width: 400px !important; */
+    /* height: 350px !important; */
+    width: auto;
 
     /* 3. THE MATH FIX: Keeps 120px total padding INSIDE the 400px box */
     box-sizing: border-box !important;

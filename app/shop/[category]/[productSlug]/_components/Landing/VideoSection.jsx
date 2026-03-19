@@ -5,9 +5,7 @@ import { formatImageUrl } from "@/lib/imageUtils";
 const VideoSection = ({ product }) => {
 
   const videoUrl = formatImageUrl(product?.videoBanner);
-
-
-
+  
   return (
     <section className={styles.banner}>
       <video
