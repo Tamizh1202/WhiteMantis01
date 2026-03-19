@@ -318,6 +318,12 @@
   color: #2f362a;
 }
 
+.Total {
+  padding: 15px 0;
+  border-top: 1px solid #2F362A4D;
+  border-bottom: 1px solid #2F362A4D;
+}
+
 .Two {
   display: flex;
   flex-direction: column;
@@ -1159,7 +1165,6 @@
 }
 
 .EarningBadge {
-  margin-top: 15px;
   background: #ffffff;
 }
 

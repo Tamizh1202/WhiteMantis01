@@ -107,7 +107,6 @@ input[type="checkbox"]:checked::after {
   transform: rotate(45deg);
 }
 
-
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
@@ -144,4 +143,30 @@ input[type="radio"]:checked::after {
   height: 10px;
   background-color: #6c7a5f;
   border-radius: 50%;
+}
+
+.WhatsAppFloat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  width: 80px !important;
+  height: 80px !important;
+}
+
+.WhatsAppFloat:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .WhatsAppFloat {
+    bottom: 0px;
+    right: 0px;
+  }
+  .WhatsAppFloat svg {
+    width: 60px !important;
+    height: 60px !important;
+  }
 }

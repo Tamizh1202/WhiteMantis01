@@ -223,6 +223,7 @@ const AddressFormPopup = ({
                 padding:
                   "17px clamp(20px, 5vw, 64px) 20px clamp(20px, 5vw, 64px)",
                 border: "1px solid #2F362A4D",
+                marginLeft: label === ADDRESS_LABELS[0] ? "0" : "-1px",
                 backgroundColor:
                   activeLabelBtn === label ? "#6C7A5F" : "#f8f9f8",
                 color: activeLabelBtn === label ? "#ffffff" : "#6C7A5F",

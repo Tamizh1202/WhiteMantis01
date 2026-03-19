@@ -196,6 +196,7 @@
 .Popup .Row2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  margin-top: -1px;
 }
 
 .Name1 {
@@ -206,6 +207,7 @@
 .divide {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  margin-top: -1px;
 }
 
 .SelectContainer {
@@ -318,6 +320,7 @@
   color: red;
   font-size: 12px;
   margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 /* --- Grid Rows --- */
@@ -497,6 +500,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -509,10 +513,11 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 10009;
   padding-left: 25px;
   padding-right: 25px;
 }
@@ -604,6 +609,7 @@
   color: #6e736a;
   opacity: 0.9;
   font-size: 15px;
+  margin-bottom: -1px;
 }
 
 .PopupActions {
@@ -699,6 +705,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
