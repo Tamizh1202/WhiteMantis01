@@ -5,11 +5,13 @@ import axiosClient from "@/lib/axios";
 import { formatImageUrl } from "@/lib/imageUtils";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const BlogsLanding = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -116,19 +118,40 @@ const BlogsLanding = () => {
                 </section>
             )}
 
-            <section className={styles.GridSection}>
+            <section className={`${styles.GridSection} ${featuredBlogs.length === 0 ? styles.NoHero : ""}`}>
                 <div className={styles.SectionHeader}>
                     <h2 className={styles.SectionTitle}>Latest Blogs</h2>
                 </div>
                 <div className={styles.lowersec}>
-                    <div className={styles.BlogGrid}>
-                        {gridBlogs.map((blog) => (
-                            <BlogCard key={blog.id} blog={blog} />
-                        ))}
-                    </div>
-                    <div className={styles.ViewMoreWrapper}>
-                        <button className={styles.ViewMoreBtn}>View more</button>
-                    </div>
+                    {gridBlogs && gridBlogs.length > 0 ? (
+                        <>
+                            <div className={styles.BlogGrid}>
+                                {gridBlogs.map((blog) => (
+                                    <BlogCard key={blog.id} blog={blog} />
+                                ))}
+                            </div>
+                            <div className={styles.ViewMoreWrapper}>
+                                <button className={styles.ViewMoreBtn}>View more</button>
+                            </div>
+                        </>
+                    ) : (
+                        /* THE EMPTY STATE: Shows inside the grid section if no blogs exist */
+                        <div className={styles.EmptyGridState}>
+                            <div className={styles.emptypt1}>
+                                <p className={styles.EmptyText}>Brewing stories soon</p>
+                                <p className={styles.EmptySubText}>
+                                    Our latest coffee guides and stories will appear here.
+                                </p>
+                            </div>
+
+                            <button
+                                className={styles.ShopNow}
+                                onClick={() => router.push("/shop")}
+                            >
+                                Shop Coffee
+                            </button>
+                        </div>
+                    )}
                 </div>
             </section>
         </div>

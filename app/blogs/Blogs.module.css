@@ -5,6 +5,53 @@
   padding-bottom: 200px;
 }
 
+.EmptyGridState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 30px;
+  margin-top: 70px;
+}
+
+.emptypt1 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 15%;
+}
+
+.EmptyText {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #2F362A;
+}
+
+.EmptySubText {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #6E736A;
+}
+
+.ShopNow {
+  padding: 14px 42px;
+  border: 1px solid #6C7A5F;
+  color: #6C7A5F;
+  font-family: var(--lato);
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+  text-transform: uppercase;
+  font-size: 15px;
+}
+
+.ShopNow:hover {
+  opacity: 0.9;
+}
+
 .HeroSection {
   background-color: #6c7a5f;
   position: relative;
@@ -15,7 +62,6 @@
   flex-direction: column;
   align-items: center;
   padding: 80px 24px 300px;
-  /* Higher z-index ensures the whole section is "above" the grid */
   z-index: 10;
 }
 
@@ -35,7 +81,6 @@
   overflow: visible !important;
   width: 100%;
   position: relative;
-  /* Critical: This layer must be higher than the section following it */
   z-index: 50;
 }
 
@@ -52,7 +97,6 @@
   flex: 0 0 100%;
   min-width: 0;
   padding-top: 10px;
-  /* Ensure the slide allows clicks to pass to the card */
   pointer-events: auto;
 }
 
@@ -91,7 +135,6 @@
   flex-direction: column;
   justify-content: center;
   gap: 16px;
-  /* Ensures content is on top of image wrapper if they collide */
   position: relative;
   z-index: 2;
 }
@@ -148,7 +191,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 10px;
-  /* Higher z-index for the specific button */
   position: relative;
   z-index: 10;
 }
@@ -179,10 +221,8 @@
   background-color: #6c7a5f;
 }
 
-/* Grid Section */
 .GridSection {
   position: relative;
-  /* Forces the grid to stay behind the HeroSection overlap */
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -193,6 +233,11 @@
   padding-top: 400px;
   padding-bottom: 80px;
 }
+
+.NoHero {
+  padding-top: clamp(150px, 10vh, 120px);
+}
+
 
 .SectionHeader {
   width: 100%;
@@ -328,37 +373,26 @@
   }
 
   .HeroSection {
-    /* We need enough bottom padding to provide the "green background" for the float */
     padding: 40px 20px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     background-color: #6c7a5f;
-    /* Your signature green */
   }
 
   .HeroCard {
     position: relative;
     z-index: 10;
 
-    /* 1. THE HEIGHT FIX: 
-        A stronger negative margin pulls it HIGHER into the green.
-      */
     margin: -120px auto 0;
 
-    /* 2. THE OVERFLOW FIX: 
-        'box-sizing: border-box' ensures the 90% width INCLUDES the padding.
-        Without this, the card becomes 90% + 32px (padding), which causes the overflow.
-      */
     width: 90%;
     box-sizing: border-box;
 
     background: #ffffff;
     padding: 16px;
 
-
-    /* Clean up any potential side shifts */
     left: 0;
     right: 0;
     transform: none;
@@ -382,7 +416,6 @@
     display: flex;
     gap: 6px;
     margin-top: auto;
-    /* pushes it to the bottom */
     justify-content: center;
   }
 
@@ -403,7 +436,6 @@
     flex: 0 0 100%;
     min-width: 0;
     padding-top: 0px;
-    /* This pushes the card down to create the overlap look */
   }
 
   .GridSection {

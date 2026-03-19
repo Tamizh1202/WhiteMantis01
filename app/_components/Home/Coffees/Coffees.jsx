@@ -15,10 +15,10 @@ const Coffees = ({ category }) => {
   const router = useRouter();
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    align: "start",
-    containScroll: false, // Allows the last item to scroll past the "limit"
-  });
+  loop: false,
+  align: "start",
+  containScroll: "trimSnaps", // Change this from false to "trimSnaps"
+});
   useEffect(() => {
     async function fetchProducts() {
       if (!category?.slug) return;

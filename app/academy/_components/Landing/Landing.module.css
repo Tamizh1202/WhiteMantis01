@@ -67,18 +67,24 @@
 
 .MiddleConatiner {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: start;
+    align-items: flex-start;
     background-color: #FFFFFF;
     padding: 33.5px 34px;
     border: none;
     max-width: 466px;
+    width: 90%; 
     gap: 30px;
-    flex-direction: column;
+    
     position: absolute;
-    top: 74%;
-    left: 38%;
-
+    top: 75%;  
+    
+    left: 50%;
+    transform: translateX(-50%); /* This perfectly offsets the box from its own center */
+    
+    z-index: 10;
+    box-sizing: border-box;
 }
 
 .MiddleConatinerTop p {

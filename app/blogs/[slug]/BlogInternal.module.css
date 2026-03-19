@@ -7,6 +7,23 @@
   background-color: #fdfdfb;
 }
 
+
+.ShopNow {
+  padding: 12px 32px;
+  background-color: #2f362a;
+  color: #ffffff;
+  border: none;
+  font-family: var(--lexend);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.ShopNow:hover {
+  opacity: 0.9;
+}
 .Header {
   text-align: center;
   background-color: #6C7A5F;
@@ -123,8 +140,8 @@
   /* 3 columns, equal width */
   gap: 160px;
   /* Note: 160px is a VERY large gap for a grid */
-
 }
+
 
 .BlogCard {
 
