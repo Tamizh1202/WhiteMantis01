@@ -54,9 +54,8 @@ const ProductMain = ({ product }) => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 640);
       ScrollTrigger.refresh();
-    };
+    }; // Initial check
 
-    // Initial check
     handleResize();
 
     window.addEventListener("resize", handleResize);
@@ -71,14 +70,10 @@ const ProductMain = ({ product }) => {
       // const { gsap } = await import("gsap");
       // const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);
-      gsap.registerPlugin(Observer);
-      // const isMobile = window.innerWidth <= 640; // Removed local declaration
-
+      gsap.registerPlugin(Observer); // const isMobile = window.innerWidth <= 640; // Removed local declaration
       ctx = gsap.context(() => {
         const tl = gsap.timeline({ paused: true });
-        tl.timeScale(0.4);
-
-        // console.log("Timeline active: ", tl.isActive());
+        tl.timeScale(0.4); // console.log("Timeline active: ", tl.isActive());
 
         tl.fromTo(
           [topLeftRef.current, topRightRef.current],
@@ -87,34 +82,6 @@ const ProductMain = ({ product }) => {
           0,
         );
 
-        gsap.set(polygonRef.current, {
-          autoAlpha: 0,
-          rotation: -45,
-          y: 80,
-          scale: 0.85,
-        });
-
-        gsap.set(middleRef.current, {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-        });
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: detailsRef.current,
-
-            // 🔥 FIX: different start/end for mobile
-            start: isMobile ? "top 65%" : "top 90%",
-            end: isMobile ? "top 20%" : "top 30%",
-            markers: true,
-            scrub: isMobile ? 0.6 : 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        tl.to(
-          middleRef.current,
         tl.fromTo(
           [leftRef.current, rightRef.current],
           { opacity: 1, y: 0 },
@@ -136,24 +103,16 @@ const ProductMain = ({ product }) => {
         tl.fromTo(
           [polygonRefImage.current],
           {
-            y: () => {
-              const imgRect = middleRef.current.getBoundingClientRect();
-              const polyRect = polygonRef.current.getBoundingClientRect();
-
-              const polyY = gsap.getProperty(polygonRef.current, "y");
-
-              const imgCenter = imgRect.top + imgRect.height / 2;
-              const polyCenter = polyRect.top + polyRect.height / 2 - polyY;
-
-              return polyCenter - imgCenter;
-            },
-            scale: isMobile ? 0.6 : 0.95,
-            ease: "none",
+            rotateX: 0,
+            scale: 1,
+            y: 0,
+            origin: "center center",
+            perspective: 1000,
           },
+          { rotateX: -180, scale: 0.5, y: 600 },
           0,
-        );
+        ); // Check scroll position for initial state
 
-        // Check scroll position for initial state
         if (window.scrollY > 100) {
           tl.progress(0);
         } else {
@@ -171,8 +130,7 @@ const ProductMain = ({ product }) => {
             // console.log("Down in this section");
             tl.reverse();
           },
-          tolerance: 10,
-          // wheelSpeed: -1,
+          tolerance: 10, // wheelSpeed: -1,
           // preventDefault: ,
         });
       }, containerRef);
@@ -187,72 +145,112 @@ const ProductMain = ({ product }) => {
   }, [isMobile]);
   return (
     <div className={styles.main}>
+            
       <div className={styles.MainConatiner} ref={containerRef}>
+                
         <div className={styles.Top} ref={topRef}>
+                    
           <div className={styles.left} ref={topLeftRef}>
+                        
             <div className={styles.LeftTop}>
-              <h1>{product?.name || "Product Name"}</h1>
-              <h3>{product?.tagline}</h3>
+                            <h1>{product?.name || "Product Name"}</h1>
+                            <h3>{product?.tagline}</h3>
+                          
             </div>
+                        
             <div className={styles.LeftBottom}>
+                            
               <div>
-                <h4>Farm</h4>
-                <p>{product?.farm}</p>
+                                <h4>Farm</h4>
+                                <p>{product?.farm}</p>
+                              
               </div>
-
+                            
               <div>
-                <h4>Tasting Notes</h4>
-                <p>{product?.tastingNotes}</p>
+                                <h4>Tasting Notes</h4>
+                                <p>{product?.tastingNotes}</p>
+                              
               </div>
-
+                            
               <div>
-                <h4>Variety</h4>
-                <p>{product?.variety}</p>
+                                <h4>Variety</h4>
+                                <p>{product?.variety}</p>
+                              
               </div>
+                          
             </div>
+                      
           </div>
+                    
           <div className={styles.Middle} ref={middleRef}>
+                        
             <Image src={productImage} alt="Product" width={500} height={500} />
+                      
           </div>
+                    
           <div className={styles.Right} ref={topRightRef}>
-            {product?.description}
+                        {product?.description}
+                        
             <div />
+                      
           </div>
+                  
         </div>
+                
         <div className={styles.DetailsSection} ref={detailsRef}>
+                    
           <div className={styles.DetailsLeft} ref={leftRef}>
+                        
             {leftDetails.map((item, i) => (
               <div
                 key={i}
                 ref={(el) => (leftRefDetails.current[i] = el)}
                 className={styles.detailItem}
               >
+                                
                 <h4 className={styles.detailTitle}>{item.title}</h4>
+                                
                 <p className={styles.detailDesc}>
-                  {item.description || item.desc}
+                                    {item.description || item.desc}
+                                  
                 </p>
+                              
               </div>
             ))}
+                      
           </div>
+                    
           <div className={styles.DetailsCenter} ref={polygonRef}>
+                        
             <Image src={Polygon} alt="Polygon" ref={polygonRefImage} />
+                      
           </div>
+                    
           <div className={styles.DetailsRight} ref={rightRef}>
+                        
             {rightDetails.map((item, i) => (
               <div
                 key={i}
                 ref={(el) => (rightRefDetails.current[i] = el)}
                 className={styles.detailItem}
               >
+                                
                 <h4 className={styles.detailTitle}>{item.title}</h4>
+                                
                 <p className={styles.detailDesc}>
-                  {item.description || item.desc}
+                                    {item.description || item.desc}
+                                  
                 </p>
+                              
               </div>
             ))}
+                      
           </div>
+                  
         </div>
+              
       </div>
+          
     </div>
   );
 };

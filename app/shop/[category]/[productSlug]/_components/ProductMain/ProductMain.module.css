@@ -4,8 +4,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-top: 100px;
-  /* margin-top: 150px; */
+  /* padding-top: 100px; */
 }
 .MainConatiner {
   display: flex;
@@ -13,14 +12,20 @@
   flex-direction: column;
   width: 100%;
   gap: 133px;
+  width: 100vw;
+  height: 80vh;
+  position: relative;
+  overflow: hidden;
 }
 .Top {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   padding-left: 123px;
-
+  height: 60vh;
+  width: 100vw;
   padding-right: 123px;
+  align-items: center;
 }
 .left {
   display: flex;
@@ -411,7 +416,7 @@
 }
 @media (max-width: 640px) {
   .main {
-    padding-top: 100px;
+    padding-top: 50px;
   }
 
   .MainConatiner {
@@ -424,7 +429,6 @@
     padding: 0 20px;
     gap: 24px;
     text-align: center;
-    height: 40vh;
   }
 
   .left {
@@ -495,7 +499,7 @@
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .main {
-    /* padding-top: 70px; */
+    padding-top: 70px;
   }
 
   .MainConatiner {
@@ -569,7 +573,7 @@
 
 @media (min-width: 1025px) and (max-width: 1640px) {
   .main {
-    /* padding-top: 220px; */
+    padding-top: 220px;
   }
 
   .Top {
