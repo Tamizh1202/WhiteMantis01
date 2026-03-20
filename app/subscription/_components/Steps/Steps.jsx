@@ -36,8 +36,7 @@ const stepsData = [
 
 const imgs = [TopImage1, TopImage2, TopImage3, TopImage4];
 const BREAKPOINT = 1240;
-const DOT_RADIUS = 8;
-const DOT_RADIUS_MOBILE = 7;
+const n = stepsData.length;
 
 export default function Steps() {
   const rootRef = useRef(null);
@@ -45,13 +44,167 @@ export default function Steps() {
   const imgBRef = useRef(null);
   const baselineRef = useRef(null);
   const activeLineRef = useRef(null);
-  const centersRef = useRef([]);
-  const baselineWidthRef = useRef(0);
+  const timelineRef = useRef(null);
+  const baselineSizeRef = useRef(0);
 
   useLayoutEffect(() => {
-    let tl = gsap.timeline();
+    if (!rootRef.current) return;
+    const root = rootRef.current;
 
-    
+    let isMobile = window.innerWidth <= BREAKPOINT;
+    let st = null;
+    let ctx = null;
+    let isMounted = true;
+    let resizeTimer = null;
+
+    const getDotEls = () => Array.from(root.querySelectorAll("[data-dot]"));
+    const getStepEls = () => Array.from(root.querySelectorAll("[data-step]"));
+
+    const measureBaseline = () => {
+      if (!baselineRef.current) return;
+      const rect = baselineRef.current.getBoundingClientRect();
+      baselineSizeRef.current = isMobile ? rect.height : rect.width;
+    };
+
+    const computeDotPositions = () => {
+      if (!isMobile || !timelineRef.current) return;
+      const timelineRect = timelineRef.current.getBoundingClientRect();
+      const DOT_SIZE = 14;
+      getStepEls().forEach((step, i) => {
+        const h3 = step.querySelector("h3");
+        if (!h3) return;
+        const h3Rect = h3.getBoundingClientRect();
+        const center = h3Rect.top + h3Rect.height / 2 - timelineRect.top - DOT_SIZE / 2;
+        gsap.set(getDotEls()[i], { top: Math.max(0, center) });
+      });
+    };
+
+    const getActiveIndex = (progress) =>
+      Math.min(Math.floor(progress * n), n - 1);
+
+    const updateFromProgress = (progress) => {
+      if (!activeLineRef.current) return;
+
+      const size = baselineSizeRef.current;
+      if (isMobile) {
+        gsap.set(activeLineRef.current, { height: `${progress * size}px` });
+      } else {
+        gsap.set(activeLineRef.current, { width: `${progress * size}px` });
+      }
+
+      const activeIndex = getActiveIndex(progress);
+
+      getDotEls().forEach((dot, i) => {
+        gsap.set(dot, {
+          opacity: i <= activeIndex ? 1 : 0.45,
+          scale: i === activeIndex ? 1.15 : 1,
+        });
+      });
+
+      getStepEls().forEach((step, i) => {
+        gsap.set(step, { opacity: i === activeIndex ? 1 : 0.35 });
+      });
+
+      if (
+        imgs[activeIndex] &&
+        imgARef.current &&
+        imgARef.current.dataset.current !== String(activeIndex)
+      ) {
+        imgARef.current.src = imgs[activeIndex].src ?? imgs[activeIndex];
+        imgARef.current.dataset.current = String(activeIndex);
+        gsap.set(imgARef.current, { autoAlpha: 1 });
+        if (imgBRef.current) gsap.set(imgBRef.current, { autoAlpha: 0 });
+      }
+    };
+
+    const initVisuals = () => {
+      measureBaseline();
+
+      if (imgARef.current) {
+        imgARef.current.src = imgs[0].src ?? imgs[0];
+        imgARef.current.dataset.current = "0";
+        gsap.set(imgARef.current, { autoAlpha: 1 });
+      }
+      if (imgBRef.current) gsap.set(imgBRef.current, { autoAlpha: 0 });
+
+      if (isMobile) {
+        gsap.set(activeLineRef.current, { width: "2px", height: "0px" });
+      } else {
+        gsap.set(activeLineRef.current, { height: "2px", width: "0px" });
+      }
+
+      getDotEls().forEach((d, i) =>
+        gsap.set(d, {
+          opacity: i === 0 ? 1 : 0.45,
+          scale: i === 0 ? 1.15 : 1,
+          ...(isMobile ? { xPercent: -50 } : {}),
+        }),
+      );
+      getStepEls().forEach((s, i) =>
+        gsap.set(s, { opacity: i === 0 ? 1 : 0.35 }),
+      );
+
+      computeDotPositions();
+    };
+
+    const buildST = () => {
+      if (st) { st.kill(); st = null; }
+      const pinDistance = window.innerHeight * (n + 0.5);
+      st = ScrollTrigger.create({
+        trigger: root,
+        start: "top top",
+        end: `+=${pinDistance}`,
+        scrub: 0.6,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate(self) {
+          if (!isMounted) return;
+          updateFromProgress(self.progress);
+        },
+        onRefresh() {
+          measureBaseline();
+          if (st) updateFromProgress(st.progress);
+        },
+      });
+    };
+
+    const rebuild = () => {
+      if (ctx) ctx.revert();
+      ctx = gsap.context(() => {
+        initVisuals();
+        buildST();
+      }, root);
+    };
+
+    rebuild();
+    ScrollTrigger.refresh();
+
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const wasMobile = isMobile;
+        isMobile = window.innerWidth <= BREAKPOINT;
+        if (wasMobile !== isMobile) {
+          rebuild();
+          ScrollTrigger.refresh();
+        } else {
+          measureBaseline();
+          computeDotPositions();
+          if (st) updateFromProgress(st.progress);
+        }
+      }, 100);
+    };
+
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(resizeTimer);
+      if (st) st.kill();
+      window.removeEventListener("resize", onResize);
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (
@@ -84,7 +237,7 @@ export default function Steps() {
                 ))}
               </div>
 
-              <div className={styles.timeline}>
+              <div ref={timelineRef} className={styles.timeline}>
                 <div ref={baselineRef} className={styles.timelineBaseline} />
                 <div ref={activeLineRef} className={styles.timelineActive} />
                 {stepsData.map((_, i) => (
