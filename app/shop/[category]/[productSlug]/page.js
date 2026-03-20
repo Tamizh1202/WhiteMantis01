@@ -16,8 +16,6 @@ export default async function ProductDetailPage({ params }) {
   const selectedCategory = category.trim().toLowerCase();
   const selectedSlug = productSlug.trim().toLowerCase();
 
-  console.log(selectedCategory, selectedSlug);
-
   if (!selectedSlug) {
     redirect("/shop");
   }

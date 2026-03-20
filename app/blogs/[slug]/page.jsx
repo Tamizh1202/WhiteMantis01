@@ -120,24 +120,6 @@ const BlogInternalPage = () => {
               <RelatedBlogCard key={relatedBlog.id} blog={relatedBlog} />
             ))}
           </div>
-
-          {/* Mobile Pagination Dots */}
-          <div className={styles.MobileOnlyPagination}>
-            {blog.relatedBlogs.map((_, index) => (
-              <svg
-                key={index}
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                className={
-                  activeIndex === index ? styles.activeDot : styles.dot
-                }
-              >
-                <circle cx="12" cy="12" r="12" fill="currentColor" />
-              </svg>
-            ))}
-          </div>
         </section>
       )}
     </main>

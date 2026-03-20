@@ -130,7 +130,10 @@ const ProductGrid = ({
               !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
 
             return (
-              <div className={styles.ProductCard} key={product.id}>
+              <div
+                className={`${styles.ProductCard} ${isOutOfStock ? styles.Muted : ""}`}
+                key={product.id}
+              >
                 <div className={styles.ProductTop}>
                   {isLowStock && (
                     <div className={styles.LowStockBadge}>Only few left</div>
