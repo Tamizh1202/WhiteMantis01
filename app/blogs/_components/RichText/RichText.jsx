@@ -1,5 +1,7 @@
 import React from "react";
 import styles from "./RichText.module.css";
+import Image from "next/image";
+import { formatImageUrl } from "@/lib/imageUtils";
 
 const RichText = ({ content }) => {
   if (!content || !content.root || !content.root.children) {
@@ -91,6 +93,30 @@ const RichText = ({ content }) => {
             {node.children.map((child, i) => renderNode(child, i))}
           </a>
         );
+
+      case "upload":
+        const imageUrl = formatImageUrl(node.value);
+        if (!imageUrl) return null;
+        return (
+          <div key={index} className={styles.ImageWrapper}>
+            <Image
+              src={imageUrl}
+              alt={node.value?.alt || "Blog image"}
+              width={node.value?.width || 800}
+              height={node.value?.height || 450}
+              className={styles.Image}
+            />
+            {node.value?.caption && (
+              <p className={styles.Caption}>{node.value.caption}</p>
+            )}
+          </div>
+        );
+
+      case "linebreak":
+        return <br key={index} />;
+
+      case "horizontalrule":
+        return <hr key={index} className={styles.HorizontalRule} />;
 
       case "quote":
         return (

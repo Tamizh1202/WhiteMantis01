@@ -153,7 +153,10 @@ const Recommendation = ({ product }) => {
                 const productUrl = `/shop/${category}/${item.slug}`;
 
                 return (
-                  <div className={styles.ProductCard} key={item.id}>
+                  <div
+                    className={`${styles.ProductCard} ${isOutOfStock ? styles.Muted : ""}`}
+                    key={item.id}
+                  >
                     <div className={styles.ProductTop}>
                       {isLowStock && (
                         <div className={styles.LowStockBadge}>

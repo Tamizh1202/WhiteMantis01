@@ -25,15 +25,13 @@ export default function Sidebar() {
     signOut({ callbackUrl: "/" });
   };
 
-  console.log(session);
-
   return (
     <>
       <div className={styles.Main}>
         <div className={styles.Sidebar}>
           <div className={styles.Top}>
             <div className={styles.UserName}>
-              <h3>{session?.user?.name || ""}</h3>
+              <h3>{session?.user?.name || "Hello"}</h3>
             </div>
             <div className={styles.UserEmail}>
               <h5>{session?.user?.email || ""}</h5>

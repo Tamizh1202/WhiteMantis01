@@ -316,7 +316,10 @@ const WhislistComponents = () => {
                 !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
 
               return (
-                <div className={styles.Card} key={item.id}>
+                <div
+                  className={`${styles.Card} ${isOutOfStock ? styles.Muted : ""}`}
+                  key={item.id}
+                >
                   <div className={styles.CardTop}>
                     {isLowStock && (
                       <div className={styles.LowStockBadge}>Only few left</div>

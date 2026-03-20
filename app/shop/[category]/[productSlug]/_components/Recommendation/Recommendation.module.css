@@ -36,7 +36,13 @@
   height: 100%;
   gap: 24px;
   width: 100%;
-  /* Removed hard width: 400px to allow the grid's minmax to handle it */
+  max-width: 401px;
+  transition: opacity 0.35s ease-in-out;
+}
+
+.Muted {
+  opacity: 0.7;
+  filter: grayscale(1);
 }
 
 .ProductTop {
@@ -57,7 +63,8 @@
 
 .ProductImage {
   width: 100%;
-  aspect-ratio: 8 / 7;
+  max-width: 401px;
+  aspect-ratio: 401 / 350;
   background-color: #f8f8f8;
   display: flex;
   align-items: center;
@@ -133,6 +140,13 @@
   font-size: 16px;
   font-weight: 400;
   color: #2f362a;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ProductName p {
@@ -260,7 +274,14 @@
 
   .ProductName h3 {
     font-size: 16px;
-    line-height: 1.3;
+    line-height: 1.4;
+    height: 2.8em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .ProductName p {
@@ -268,6 +289,7 @@
     /* Limit tasting notes to 2 lines so cards stay uniform height */
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }

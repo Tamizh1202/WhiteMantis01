@@ -16,8 +16,6 @@ export default async function ProductDetailPage({ params }) {
   const selectedCategory = category.trim().toLowerCase();
   const selectedSlug = productSlug.trim().toLowerCase();
 
-  console.log(selectedCategory, selectedSlug);
-
   if (!selectedSlug) {
     redirect("/shop");
   }
@@ -26,7 +24,7 @@ export default async function ProductDetailPage({ params }) {
 
   try {
     const response = await fetch(
-      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[slug][equals]=${selectedSlug}&where[_status][equals]=published&where[category][equals]=${selectedCategory}`,
+      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[and][0][slug][equals]=${selectedSlug}&where[and][1][_status][equals]=published&where[and][2][categories.slug][equals]=${selectedCategory}`,
       {
         method: "GET",
         headers: {

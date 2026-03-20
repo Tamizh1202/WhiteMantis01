@@ -38,6 +38,7 @@
   font-size: var(--fs-22);
   font-weight: 500;
   color: #2f362a;
+  text-transform: uppercase;
 }
 
 .UserEmail h5 {

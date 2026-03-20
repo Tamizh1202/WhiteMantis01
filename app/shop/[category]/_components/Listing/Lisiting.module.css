@@ -127,6 +127,13 @@
   flex-direction: column;
   height: 100%;
   gap: 24px;
+  max-width: 401px;
+  transition: opacity 0.35s ease-in-out;
+}
+
+.Muted {
+  opacity: 0.7;
+  filter: grayscale(1);
 }
 
 .ProductTop {
@@ -141,7 +148,7 @@
 .ProductImage {
   width: 100%;
   max-width: 401px;
-  aspect-ratio: 401 / 305;
+  aspect-ratio: 401 / 350;
   background-color: #f8f8f8;
   display: flex;
   align-items: center;
@@ -197,8 +204,8 @@
 } */
 .WishlistIcon {
   position: absolute;
-  top: 16px;
-  right: 3px;
+  top: 10px;
+  right: 10px;
   cursor: pointer;
   z-index: 5;
 }
@@ -258,6 +265,13 @@
   font-size: 15px;
   font-weight: 400;
   color: #2f362a;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ProductName p {
@@ -563,18 +577,46 @@
   }
 
   .LowStockBadge {
-    padding: 6px 6px;
-    top: 6px;
+    /* padding: 6px 6px;
+    top: 6px; */
+    /* display: none; */
+
+    font-size: 10px !important;
+    top: 10px !important;
+    padding: 5px 10px !important;
   }
 
   .ProductImage {
+    aspect-ratio: 170 / 200;
     max-width: 170px;
+    padding: 20px;
   }
 
   .ProductImage img {
     width: 100%;
     height: 100%;
-    padding: 10px;
+    padding: 26px 10px 20px 10px;
+  }
+
+  .ProductName h3 {
+    font-size: 14px;
+    line-height: 1.4;
+    height: 2.8em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* The magic number of lines */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden; /* Hides the extra text */
+    text-overflow: ellipsis;
+  }
+
+  .ProductName p {
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* The magic number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden; /* Hides the extra text */
+    text-overflow: ellipsis;
   }
 
   .LeftConatiner {
@@ -685,8 +727,19 @@
   }
 
   .LowStockBadge {
-    padding: 6px 6px;
-    top: 6px;
+    /* padding: 6px 6px;
+    top: 6px; */
+    /* display: none; */
+
+    font-size: 10px !important;
+    top: 10px !important;
+    padding: 5px 10px !important;
+  }
+
+  .ProductImage img {
+    width: 100%;
+    height: 100%;
+    padding: 26px 10px 20px 10px;
   }
 
   .LeftConatiner {
@@ -782,6 +835,16 @@
 @media (min-width: 941px) and (max-width: 1440px) {
   .main {
     padding: 40px 60px 160px;
+  }
+
+  .LowStockBadge {
+    /* padding: 6px 6px;
+    top: 6px; */
+    /* display: none; */
+
+    font-size: 12px !important;
+    top: 10px !important;
+    padding: 5px 10px !important;
   }
 
   .MainContainer {
@@ -1118,7 +1181,7 @@
 
 .OutOfStockBtn {
   width: 100%;
-  padding: 13px;
+  padding: 10px 24px;
   background-color: #6e736a;
   color: #ffffff;
   border: none;

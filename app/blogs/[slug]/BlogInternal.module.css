@@ -325,8 +325,6 @@
     margin: 0 auto;
 
     /* 2. Center the text inside the container */
-    text-align: justify;
-
     /* 3. Spacing */
     padding: 0 20px;
     line-height: 1.6;
@@ -338,7 +336,6 @@
   .ContentWrapper p,
   .ContentWrapper h1,
   .ContentWrapper h2 {
-    text-align: justify;
   }
 
   /* 1. Section Container */

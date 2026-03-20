@@ -1,5 +1,5 @@
 richtext.module.jsx .RichText {
-  color: #333;
+  color: #6e736a;
   line-height: 1.8;
   font-size: 1.1rem;
   letter-spacing: 0.01em;
@@ -7,7 +7,6 @@ richtext.module.jsx .RichText {
 
 .RichText p {
   margin-bottom: 1.5rem;
-  text-align: justify;
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
@@ -20,7 +19,7 @@ richtext.module.jsx .RichText {
 .RichText h4,
 .RichText h5,
 .RichText h6 {
-  color: #1a1a1a;
+  color: #2f362a;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   font-weight: 700;
@@ -43,6 +42,7 @@ richtext.module.jsx .RichText {
 .RichText ol {
   margin-bottom: 1.5rem;
   padding-left: 1.5rem;
+  color: #6e736a;
 }
 
 .RichText li {
@@ -64,7 +64,7 @@ richtext.module.jsx .RichText {
   padding-left: 1.5rem;
   margin: 2rem 0;
   font-style: italic;
-  color: #555;
+  color: #6e736a;
 }
 
 .RichText code {
@@ -114,4 +114,32 @@ richtext.module.jsx .RichText {
 
 .RichText .indent-4 {
   padding-left: 80px;
+}
+
+.ImageWrapper {
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.Image {
+  width: 100%;
+  height: auto;
+}
+
+.Caption {
+  margin-top: 12px;
+  font-family: var(--lato);
+  font-size: 14px;
+  color: #6e736a;
+  font-style: italic;
+  text-align: center;
+}
+
+.HorizontalRule {
+  margin: 40px 0;
+  border: 0;
+  border-top: 1px solid rgba(47, 54, 42, 0.2);
 }
