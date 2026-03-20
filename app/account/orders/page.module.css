@@ -1,119 +1,169 @@
 .main {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding-left: clamp(24px, calc(24px + (26 * ((100vw - 320px) / 1120))), 50px);
-    padding-bottom: clamp(100px, calc(100px + (199 * ((100vw - 320px) / 1120))), 100px);
-    padding-right: clamp(100px, calc(100px + (199 * ((100vw - 320px) / 1120))), 460px);
-    background-color: #ffffff;
+  display: flex;
+  justify-content: left;
+  align-items: start;
+  width: 100%;
+  height: 100%;
+  padding-left: clamp(24px, calc(24px + (26 * ((100vw - 320px) / 1120))), 50px);
+  padding-bottom: clamp(
+    100px,
+    calc(100px + (199 * ((100vw - 320px) / 1120))),
+    100px
+  );
+  padding-right: clamp(
+    100px,
+    calc(100px + (199 * ((100vw - 320px) / 1120))),
+    460px
+  );
+  background-color: #ffffff;
 }
 
 .container {
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
-    width: 100%;
-    gap: 30px;
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  width: 100%;
+  gap: 30px;
 }
 
 .Right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .Top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
 }
 
 .Top h1 {
-    font-family: var(--lexend);
-    font-size: var(--fs-22);
-    font-weight: 500;
-    color: #2F362A;
-    text-transform: uppercase;
-
+  font-family: var(--lexend);
+  font-size: var(--fs-22);
+  font-weight: 500;
+  color: #2f362a;
+  text-transform: uppercase;
 }
 
 .searchWrapper {
-    max-width: 442px;
-    width: 442px;
+  max-width: 442px;
+  width: 442px;
 }
 
 .searchInput {
-    width: 100%;
-    height: 45px;
-    padding: 0 16px;
-    font-family: var(--lato);
-    font-size: 15px;
-    color: #6E736A;
-    font-weight: 500;
-    border: 1px solid #2F362A4D;
+  width: 100%;
+  height: 45px;
+  padding: 0 16px;
+  font-family: var(--lato);
+  font-size: 15px;
+  color: #6e736a;
+  font-weight: 500;
+  border: 1px solid #2f362a4d;
 }
 
 .searchInput::placeholder {
-    font-family: var(--lato);
-    font-size: 15px;
-    color: #6E736A;
-    font-weight: 500;
+  font-family: var(--lato);
+  font-size: 15px;
+  color: #6e736a;
+  font-weight: 500;
 }
 
-
 .Filter {
-    padding: 12px;
-    border: 1px solid #2F362A4D;
+  padding: 12px;
+  border: 1px solid #2f362a4d;
 }
 
 @media (max-width: 640px) {
-    .Top {
-        flex-direction: column;
-        gap: 24px;
-        justify-content: left;
-        align-items: flex-start;
-        width: 100%;
-    }
+  .Top {
+    flex-direction: column;
+    gap: 24px;
+    justify-content: left;
+    align-items: flex-start;
+    width: 100%;
+  }
 
-    .Top h1{
-        display: none;
-    }
+  .Top h1 {
+    display: none;
+  }
 
-    .searchWrapper {
-        max-width: 542px;
-        width: 542px;
-    }
+  .searchWrapper {
+    max-width: 542px;
+    width: 542px;
+  }
 
-    .main {
-        padding-right: 24px;
-    }
-    .Right{
-        width: 100%;
-    }
-     .searchWrapper{
-        width: 100%;
-        max-width: 100%;
-    }
+  .main {
+    padding-right: 24px;
+  }
+  .Right {
+    width: 100%;
+  }
+  .searchWrapper {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 @media (min-width: 641px) and (max-width: 1024px) {
-    .main {
-        padding-right: 10px;
-    }
-    .container{
-        max-width: 450px;
-    }
-    .Top{
-flex-direction: column;
-    }
-    .searchInput{
-        max-width: 400px;
-    }
-    .searchWrapper{
-        width: 100%;
-        max-width: 100%;
-    }
+  .main {
+    padding-right: 10px;
+  }
+  .container {
+    max-width: 450px;
+  }
+  .Top {
+    flex-direction: column;
+  }
+  .searchInput {
+    max-width: 400px;
+  }
+  .searchWrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.EmptyOrdersState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  text-align: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.EmptyOrdersState h4 {
+  font-family: var(--lexend);
+  font-size: 20px;
+  font-weight: 400;
+  color: #2f362a;
+  margin: 0;
+}
+
+.EmptyOrdersState p {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #6e736a;
+  margin: 0;
+}
+
+.ShopNowBtn {
+  margin-top: 24px;
+  padding: 12px 40px;
+  background: #ffffff;
+  border: 1px solid #6c7a5f;
+  color: #6c7a5f;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ShopNowBtn:hover {
+  background: #6c7a5f;
+  color: #ffffff;
 }
