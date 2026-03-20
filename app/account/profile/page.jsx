@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/nextauth";
+import { auth } from "@/auth";
 import axiosClient from "@/lib/axios";
 import ProfileComponents from "./_components/ProfileComponents/ProfileComponents";
 
@@ -18,7 +17,7 @@ async function getProfile(payloadToken) {
 }
 
 export default async function ProfilePage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const payloadToken = session?.user?.["paylaod-token"];
 
   const data = await getProfile(payloadToken);

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Logo from "./logo.png";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { getSession, signIn, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axiosClient from "@/lib/axios";
 
@@ -23,22 +23,31 @@ function AuthPageContent() {
     }
   }, [status, router]);
 
-  // Handle Google OAuth callback
+  // Handle social OAuth callbacks (Google & Apple)
   useEffect(() => {
-    async function handleGoogleCallback() {
+    async function handleSocialCallback() {
       if (status === "authenticated" && session?.user?.email) {
+        const fromParam = searchParams.get("from");
         const isFromGoogle =
-          searchParams.get("from") === "google" ||
-          window.location.href.includes("callbackUrl");
+          fromParam === "google" ||
+          (!fromParam && window.location.href.includes("callbackUrl") && session?.isGoogleLogin);
+        const isFromApple = fromParam === "apple";
 
-        if (!isFromGoogle) return;
+        if (!isFromGoogle && !isFromApple) return;
 
         setLoading(true);
 
         try {
-          const res = await axiosClient.post("/api/website/google-auth", {
-            googleToken: session.googleIdToken,
-          });
+          let res;
+          if (isFromGoogle) {
+            res = await axiosClient.post("/api/website/google-auth", {
+              googleToken: session.googleIdToken,
+            });
+          } else {
+            res = await axiosClient.post("/api/website/apple-auth", {
+              appleToken: session.appleIdToken,
+            });
+          }
 
           console.log(res.data);
 
@@ -81,7 +90,7 @@ function AuthPageContent() {
       }
     }
 
-    handleGoogleCallback();
+    handleSocialCallback();
   }, [status, session, searchParams, router]);
 
   async function handleContinue(e) {
@@ -128,6 +137,12 @@ function AuthPageContent() {
   function handleGoogleSignIn() {
     signIn("google", {
       callbackUrl: "/auth?from=google",
+    });
+  }
+
+  function handleAppleSignIn() {
+    signIn("apple", {
+      callbackUrl: "/auth?from=apple",
     });
   }
 
@@ -238,6 +253,33 @@ function AuthPageContent() {
                     </defs>
                   </svg>
                   <p>Sign in with Google</p>
+                </button>
+                <button
+                  onClick={handleAppleSignIn}
+                  disabled={loading}
+                  className={styles.googleButton}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: loading ? "not-allowed" : "pointer",
+                    opacity: loading ? 0.6 : 1,
+                    padding: 0,
+                  }}
+                  aria-label="Sign in with Apple"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M17.0435 12.7249C17.0279 10.8504 17.8935 9.44785 19.6404 8.41441C18.6607 7.00535 17.1638 6.22754 15.1794 6.07629C13.3013 5.92816 11.2544 7.14472 10.5076 7.14472C9.71729 7.14472 7.90603 6.12629 6.47197 6.12629C3.50978 6.17316 0.359985 8.46129 0.359985 13.1249C0.359985 14.5218 0.611235 15.9656 1.11373 17.4562C1.78435 19.4093 4.25291 24.126 6.82416 24.0478C8.15853 24.0165 9.09666 23.1196 10.8279 23.1196C12.5123 23.1196 13.3779 24.0478 14.8654 24.0478C17.4522 24.0087 19.6873 19.7249 20.3267 17.7718C16.961 16.1624 17.0435 12.8187 17.0435 12.7249ZM14.0813 4.22629C15.5063 2.53129 15.3738 0.985039 15.3269 0.454102C14.0657 0.532227 12.6004 1.31629 11.7663 2.28754C10.8435 3.33254 10.3254 4.62691 10.4423 6.04535C11.8073 6.14941 13.0529 5.44472 14.0813 4.22629Z"
+                      fill="#2F362A"
+                    />
+                  </svg>
+                  <p>Sign in with Apple</p>
                 </button>
               </div>
             </div>

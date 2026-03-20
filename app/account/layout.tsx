@@ -2,12 +2,11 @@ import React from "react";
 import Breadcrumb from "./_components/Breadcrumb/Breadcrumb";
 import Sidebar from "./_components/Sidebar/Sidebar";
 import styles from "./layout.module.css";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/nextauth";
+import { auth } from "@/auth";
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions as any);
+  const session = await auth();
 
   if (!session) {
     redirect("/auth");

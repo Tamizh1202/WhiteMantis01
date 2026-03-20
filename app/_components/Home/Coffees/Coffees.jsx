@@ -17,7 +17,7 @@ const Coffees = ({ category }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
-    containScroll: false, // Allows the last item to scroll past the "limit"
+    containScroll: "trimSnaps",
   });
   useEffect(() => {
     async function fetchProducts() {
@@ -32,14 +32,14 @@ const Coffees = ({ category }) => {
           "tagline",
           "productImage",
           "createdAt",
-          "tastingNotes"
+          "tastingNotes",
         ];
         const productSelectQuery = productFields
           .map((f) => `select[${f}]=true`)
           .join("&");
 
         const res = await axiosClient.get(
-          `/api/web-products?where[categories.slug][equals]=${category.slug}&limit=5&${productSelectQuery}`
+          `/api/web-products?where[categories.slug][equals]=${category.slug}&limit=5&${productSelectQuery}`,
         );
         setProducts(res.data.docs || []);
       } catch (err) {
@@ -85,7 +85,14 @@ const Coffees = ({ category }) => {
   if (isLoading && products.length === 0) {
     return (
       <div className={styles.Main}>
-        <div className={styles.MainContainer} style={{ justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+        <div
+          className={styles.MainContainer}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            height: "400px",
+          }}
+        >
           <Image
             src="/White-mantis-green-loader.gif"
             alt="Loading products"
@@ -211,7 +218,9 @@ const Coffees = ({ category }) => {
                     </div>
 
                     <div className={styles.CardBottom}>
-                      <h3>{item.name} {item.tagline}</h3>
+                      <h3>
+                        {item.name} {item.tagline}
+                      </h3>
                       <p>{item.tastingNotes || item.description}</p>
                     </div>
                   </div>

@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from "./logo.png";
-import { getSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/lib/axios";
 

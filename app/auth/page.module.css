@@ -227,11 +227,19 @@
     align-items: center;
     align-self: center;
     flex-direction: row;
+    gap: 16px;
     width: 100%;
-    border: 1px solid #2F362A4D;
     background-color: #ffffff;
-    padding: 16px 26px;
     cursor: pointer;
+}
+
+.socials > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    border: 1px solid #2F362A4D !important;
+    padding: 16px 26px !important;
 }
 .googleButton{
      display: flex;
