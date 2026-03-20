@@ -51,14 +51,13 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-
   /* Update these lines: */
   flex: 1; /* Take up all available space */
   overflow-y: auto; /* Enable scrolling */
   min-height: 0; /* CRITICAL: Allows flex item to shrink smaller than content */
-
   overscroll-behavior: contain;
   padding-right: 12px;
+  border-bottom: 1px solid rgba(47, 54, 42, 0.3);
 }
 
 .TopOne {
@@ -232,131 +231,12 @@
   flex-direction: column;
 }
 
-.CouponInput {
-  display: flex;
-  width: 100%;
-  height: 48px;
-  border: 1px solid #2f362a4d;
-}
-
-.CouponInput input {
-  flex: 1;
-  border: none;
-  padding: 13px 14px;
-  font-size: 14px;
-  color: #333;
-  outline: none;
-}
-
-.CouponInput input::placeholder {
-  color: #a8a8a8;
-}
-
-.Apply {
-  width: 120px;
-  border: none;
-
-  background-color: #6c7a5f;
-  color: #ffffff;
-  font-size: 15px;
-  font-family: var(--lato);
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.Apply:focus,
-.CouponInput input:focus {
-  outline: none;
-}
-
-.AppliedCoupon {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 48px;
-  border: 1px solid #6c7a5f;
-  background-color: #f0f4ed;
-  padding: 13px 14px;
-}
-
-.AppliedCouponLeft {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.AppliedCouponLeft p {
-  font-family: var(--lato);
-  font-size: 14px;
-  font-weight: 500;
-  color: #6c7a5f;
-}
-
-.RemoveCoupon {
-  background-color: transparent;
-  border: 1px solid #6c7a5f;
-  color: #6c7a5f;
-  font-size: 13px;
-  font-family: var(--lato);
-  font-weight: 500;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.RemoveCoupon:hover {
-  background-color: #6c7a5f;
-  color: #ffffff;
-}
-
-.AvailableCoupons {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
-  padding: 13px 15px;
-  border-left: 1px solid #2f362a4d;
-  border-right: 1px solid #2f362a4d;
-  border-bottom: 1px solid #2f362a4d;
-}
-
-.AvailableCouponsLeft {
-  display: flex;
-  justify-content: left;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-}
-
-.AvailableCouponsLeft p {
-  font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #6e736a;
-}
-
-.AvailableCouponsRight {
-  display: flex;
-  justify-content: right;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-}
-
-.AvailableCouponsRight p {
-  font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #6e736a;
-}
-
 .Bottom {
   display: flex;
   flex-direction: column;
   justify-content: left;
   gap: 24px;
-  padding: 10px 0 34px 0;
+  padding: 0px 0 34px 0;
   background-color: #ffffff;
   box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
   z-index: 10;
@@ -632,4 +512,48 @@
   width: 100%;
   height: 100%;
   flex: 1;
+}
+
+.EmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px;
+  gap: 8px;
+}
+
+.EmptyState h4 {
+  font-family: var(--lexend);
+  font-size: 20px;
+  font-weight: 400;
+  color: #2f362a;
+  margin: 0;
+}
+
+.EmptyState p {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  color: #6e736a;
+  margin: 0;
+}
+
+.StartShopping {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: #ffffff;
+  border: 1px solid #6c7a5f;
+  color: #6c7a5f;
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.StartShopping:hover {
+  background: #6c7a5f;
+  color: #ffffff;
 }
