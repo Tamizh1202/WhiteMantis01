@@ -51,7 +51,7 @@ const Coffees = ({ category }) => {
     fetchProducts();
   }, [category]);
 
-  console.log(products);
+  // console.log(products);
 
   useEffect(() => {
     if (!emblaApi) return;

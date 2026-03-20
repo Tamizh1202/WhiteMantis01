@@ -80,7 +80,7 @@ const FilterSidebar = ({
       }
 
       return (
-        <label key={item?.id}>
+        <label key={item.id}>
           <input
             type="checkbox"
             checked={selectedSubCatIds.includes(itemId)}
