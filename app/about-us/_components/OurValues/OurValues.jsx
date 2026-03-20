@@ -122,7 +122,7 @@ const OurValues = () => {
             start: "top top",
             end: "+=10%",
             scrub: 1,
-            markers: true,
+            markers: false,
             // anticipatePin: 1,
             invalidateOnRefresh: true,
             id: "mobile-st",
