@@ -58,23 +58,6 @@ const ProductDetail = ({ order }) => {
           <p>
             Order ID: <span>#{order.id}</span>
           </p>
-          <button
-            onClick={handleDownload}
-            disabled={isDownloading}
-            style={{
-              marginTop: "10px",
-              padding: "6px 12px",
-              backgroundColor: "#6C7A5F",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: isDownloading ? "not-allowed" : "pointer",
-              opacity: isDownloading ? 0.7 : 1,
-              fontSize: "12px",
-            }}
-          >
-            {isDownloading ? "Downloading..." : "Download Invoice"}
-          </button>
         </div>
       </div>
 

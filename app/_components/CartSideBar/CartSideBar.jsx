@@ -117,7 +117,22 @@ const CartSideBar = () => {
                     </div>
                   </div>
                   <div className={styles.TopOneBottom}>
-                    {Array.isArray(items) &&
+                    {isCartEmpty ? (
+                      <div className={styles.EmptyState}>
+                        <h4>Your Cart is empty</h4>
+                        <p>Explore our curated coffee collections.</p>
+                        <button
+                          className={styles.StartShopping}
+                          onClick={() => {
+                            closeCart();
+                            router.push("/");
+                          }}
+                        >
+                          Start Shopping
+                        </button>
+                      </div>
+                    ) : (
+                      Array.isArray(items) &&
                       items.map((item) => (
                         <div className={styles.Card} key={`${item.product}`}>
                           <div className={styles.CardLeft}>
@@ -202,7 +217,8 @@ const CartSideBar = () => {
                             </div>
                           </div>
                         </div>
-                      ))}
+                      ))
+                    )}
                   </div>
                 </div>
                 {/* <div className={styles.TopTwo}>
@@ -301,13 +317,7 @@ const CartSideBar = () => {
               <div className={styles.Bottom}>
                 <div className={styles.BottomTwo}>
                   <div className={styles.Line}></div>
-                  <div
-                    className={styles.PriceDetails}
-                    style={{
-                      borderTop: "1px solid #2F362A4D",
-                      paddingTop: "10px",
-                    }}
-                  >
+                  <div className={styles.PriceDetails}>
                     <div className={styles.PriceDetailLeft}>
                       <h5>Subtotal</h5>
                     </div>
@@ -328,10 +338,10 @@ const CartSideBar = () => {
                   </button>
                   <p
                     style={{
-                      fontFamily: "--lato",
+                      fontFamily: "var(--lato)",
                       fontSize: "15px",
                       fontWeight: "400",
-                      color: "#6E736A",
+                      color: "#2f362a80",
                       marginTop: "0px",
                     }}
                   >

@@ -7,30 +7,37 @@
   height: 100%;
   max-width: 700px;
   padding-left: clamp(24px, calc(24px + (26 * ((100vw - 320px) / 1120))), 50px);
-  padding-right: clamp(24px, calc(24px + (76 * ((100vw - 320px) / 1120))), 100px);
-  padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px);
-
+  padding-right: clamp(
+    24px,
+    calc(24px + (76 * ((100vw - 320px) / 1120))),
+    100px
+  );
+  padding-bottom: clamp(
+    80px,
+    calc(80px + (120 * ((100vw - 320px) / 1120))),
+    100px
+  );
 }
 
 .PageTitle {
   font-family: var(--lexend);
   font-size: 22px;
   font-weight: 500;
-  color: #2F362A;
+  color: #2f362a;
   margin-bottom: 20px;
 }
 
 .StatusBar {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   padding: 14px 18px;
   margin-bottom: 24px;
   font-family: var(--lato);
   font-size: 15px;
-  color: #6E736A;
+  color: #6e736a;
 }
 
 .Card {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   padding: 24px;
   margin-bottom: 32px;
 }
@@ -60,21 +67,21 @@
 
 .ProductName {
   font-size: 15px;
-  color: #2F362A;
+  color: #2f362a;
 }
 
 .ProductMeta {
   font-size: 13px;
-  color: #6E736A;
+  color: #6e736a;
 }
 
 .DetailsGrid p {
   font-size: 13px;
-  color: #6E736A;
+  color: #6e736a;
 }
 
 .DetailsGrid span {
-  color: #2F362A;
+  color: #2f362a;
 }
 
 .Section {
@@ -85,25 +92,25 @@
   font-family: var(--lexend);
   font-size: 22px;
   font-weight: 500;
-  color: #2F362A;
+  color: #2f362a;
   margin-bottom: 12px;
 }
 
 .InfoBox {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   padding: 16px;
   font-size: 15px;
-  color: #6E736A;
+  color: #6e736a;
   display: flex;
   flex-direction: column;
   gap: 19px;
 }
 
 .InfoBoxbt {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   padding: 16px;
   font-size: 15px;
-  color: #6E736A;
+  color: #6e736a;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -129,8 +136,7 @@
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
-  color: #6E736A;
-
+  color: #6e736a;
 }
 
 .InfoFooter {
@@ -138,12 +144,10 @@
   justify-content: left;
   flex-direction: row;
   gap: 19px;
-
-
 }
 
 .Table {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   margin-top: 16px;
 }
 
@@ -156,12 +160,12 @@
 }
 
 .TableHeader {
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #e0e0e0;
   font-weight: 500;
 }
 
 .TableRow {
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .ViewLink {
@@ -171,32 +175,62 @@
 
 .CancelBtn {
   width: 100%;
-  background-color: #6C7A5F;
+  background-color: #6c7a5f;
   color: #fff;
   border: none;
   padding: 15px;
   font-family: var(--lato);
-  font-size: 14px;
-  margin-top: 20px;
+  font-size: 15px;
   cursor: pointer;
 }
 
 .Note {
   font-size: 12px;
-  color: #6E736A;
-  text-align: center;
+  color: #6e736a;
+  text-align: left;
   margin-top: 8px;
 }
-
 
 @media (max-width: 640px) {
   .ProductRow {
     flex-direction: column;
   }
 
-  .TableHeader,
+  .TableHeader {
+    display: none;
+  }
+
   .TableRow {
-    grid-template-columns: 1fr;
-    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .TableRow > span,
+  .TableRow > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: 14px;
+    text-align: right !important;
+  }
+
+  /* Reset layout for the Invoice container's inner div */
+  .TableRow > div > div {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .TableRow > span::before,
+  .TableRow > div::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: #2f362a;
+    text-align: left;
+    margin-right: 10px;
+    flex-shrink: 0;
   }
 }

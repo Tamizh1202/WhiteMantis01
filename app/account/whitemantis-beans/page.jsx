@@ -113,8 +113,6 @@ const WhiteMantisBeans = () => {
                             </div>
                         </div>
 
-                        <hr />
-
                         <div className={styles.months}>
                             <h1 className={styles.validity}>White Mantis Beans are valid for 12 months from the date they're earned.</h1>
                         </div>

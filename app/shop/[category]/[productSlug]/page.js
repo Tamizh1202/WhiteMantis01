@@ -26,7 +26,7 @@ export default async function ProductDetailPage({ params }) {
 
   try {
     const response = await fetch(
-      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[slug][equals]=${selectedSlug}&where[_status][equals]=published`,
+      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[slug][equals]=${selectedSlug}&where[_status][equals]=published&where[category][equals]=${selectedCategory}`,
       {
         method: "GET",
         headers: {

@@ -16,7 +16,7 @@ const Subscribe = () => {
             <div className={styles.RightTop}>
               <div className={styles.RightTopContent}>
                 <h3>Subscribe and save </h3>
-                <p>
+                <p style={{width: "100%"}}>
                   Your coffee, always on time. Set your preferred delivery
                   schedule and receive freshly roasted coffee at regular
                   intervals. Enjoy added savings, priority roasting, and the

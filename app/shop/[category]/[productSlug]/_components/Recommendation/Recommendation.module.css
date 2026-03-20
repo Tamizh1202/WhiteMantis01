@@ -23,7 +23,7 @@
 .ProductsGrid {
   display: grid;
   /* FIX: repeat(3, minmax(0, 400px)) prevents overflow by allowing shrinking */
-  grid-template-columns: repeat(3, minmax(0, 400px)); 
+  grid-template-columns: repeat(3, minmax(0, 400px));
   row-gap: 121px;
   column-gap: 80px;
   width: 100%;
@@ -57,7 +57,7 @@
 
 .ProductImage {
   width: 100%;
-  aspect-ratio: 4 / 4;
+  aspect-ratio: 8 / 7;
   background-color: #f8f8f8;
   display: flex;
   align-items: center;
@@ -66,7 +66,7 @@
   overflow: hidden;
   border: 1px solid transparent;
   transition: border 0.3s ease;
-  padding: 70px; 
+  padding: 70px;
 }
 
 .ProductImage:hover {
@@ -76,9 +76,9 @@
 .ProductImage img {
   width: 100%;
   height: 100%;
-  max-width: 100%; 
+  max-width: 100%;
   max-height: 100%;
-  object-fit: contain; 
+  object-fit: contain;
   transition: transform 0.35s ease-in-out;
 }
 
@@ -192,6 +192,7 @@
   border: 1px solid #6c7a5f;
   text-decoration: none;
   transition: all 0.3s ease;
+  margin-top: 80px;
 }
 
 .Exploremore:hover {
@@ -208,13 +209,13 @@
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
     gap: 16px;
-    
+
     /* Allow cards to bleed to the edge of the screen */
     padding: 0 24px 20px 24px;
     margin-left: -24px;
     margin-right: -24px;
     width: calc(100% + 48px);
-    
+
     /* Hide scrollbar for a cleaner look */
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -237,7 +238,7 @@
   /* 3. The Image Wrapper Fix */
   .ProductImage {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Keep it perfectly square */
+    aspect-ratio: 8 / 7; /* Keep it perfectly square */
     background-color: #f8f8f8;
     display: flex;
     align-items: center;

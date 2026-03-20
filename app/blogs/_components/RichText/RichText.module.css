@@ -1,4 +1,4 @@
-.RichText {
+richtext.module.jsx .RichText {
   color: #333;
   line-height: 1.8;
   font-size: 1.1rem;
@@ -30,9 +30,11 @@
 .RichText h1 {
   font-size: 2.5rem;
 }
+
 .RichText h2 {
   font-size: 2rem;
 }
+
 .RichText h3 {
   font-size: 1.75rem;
 }
@@ -84,12 +86,15 @@
 .RichText bold {
   font-weight: bold;
 }
+
 .RichText italic {
   font-style: italic;
 }
+
 .RichText underline {
   text-decoration: underline;
 }
+
 .RichText strikethrough {
   text-decoration: line-through;
 }
@@ -98,12 +103,15 @@
 .RichText .indent-1 {
   padding-left: 20px;
 }
+
 .RichText .indent-2 {
   padding-left: 40px;
 }
+
 .RichText .indent-3 {
   padding-left: 60px;
 }
+
 .RichText .indent-4 {
   padding-left: 80px;
 }

@@ -74,7 +74,7 @@ const Lisiting = () => {
         // 1. Fetch Products and Subcategories in parallel using the slug directly
         const [prodRes, subCatRes] = await Promise.all([
           axiosClient.get(
-            `/api/web-products?where[categories.slug][equals]=${categorySlug}&limit=0&${productSelectQuery}`,
+            `/api/web-products?where[categories.slug][equals]=${categorySlug}&where[_status][equals]=published&limit=0&${productSelectQuery}`,
           ),
           axiosClient.get(
             `/api/web-sub-categories?where[parentCategory.slug][equals]=${categorySlug}&depth=1&select[level1]=true&select[parentCategory]=true`,

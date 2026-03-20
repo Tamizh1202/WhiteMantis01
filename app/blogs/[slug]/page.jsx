@@ -12,7 +12,7 @@ const BlogInternalPage = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   // Scroller State
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
@@ -110,10 +110,10 @@ const BlogInternalPage = () => {
       {blog.relatedBlogs && blog.relatedBlogs.length > 0 && (
         <section className={styles.RelatedSection}>
           <h2 className={styles.SectionTitle}>Explore More Blogs</h2>
-          
-          <div 
-            className={styles.BlogGrid} 
-            ref={scrollRef} 
+
+          <div
+            className={styles.BlogGrid}
+            ref={scrollRef}
             onScroll={handleScroll}
           >
             {blog.relatedBlogs.map((relatedBlog) => (
@@ -124,15 +124,17 @@ const BlogInternalPage = () => {
           {/* Mobile Pagination Dots */}
           <div className={styles.MobileOnlyPagination}>
             {blog.relatedBlogs.map((_, index) => (
-              <svg 
-                key={index} 
-                width="12" 
-                height="12" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                className={activeIndex === index ? styles.activeDot : styles.dot}
+              <svg
+                key={index}
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={
+                  activeIndex === index ? styles.activeDot : styles.dot
+                }
               >
-                <circle cx="12" cy="12" r="12" fill="currentColor"/>
+                <circle cx="12" cy="12" r="12" fill="currentColor" />
               </svg>
             ))}
           </div>

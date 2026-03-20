@@ -5,8 +5,10 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import axiosClient from "@/lib/axios";
+import { formatImageUrl } from "@/lib/imageUtils";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL;
 
 export default function SubscriptionPage() {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -22,7 +24,9 @@ export default function SubscriptionPage() {
 
       try {
         setLoading(true);
-        const response = await axiosClient.get(`${BASE_URL}/api/web-subscription?where[user][equals]=${session.user.id}&where[paymentStatus][equals]=completed&depth=3`);
+        const response = await axiosClient.get(
+          `${BASE_URL}/api/web-subscription?where[user][equals]=${session.user.id}&where[paymentStatus][equals]=completed&depth=3`,
+        );
 
         const data = response.data;
         console.log(data);
@@ -50,15 +54,27 @@ export default function SubscriptionPage() {
   };
 
   const activeSubscriptions = subscriptions.filter(
-    (s) => s.subsStatus?.toLowerCase() === "active"
+    (s) => s.subsStatus?.toLowerCase() === "active",
   );
 
   const pastSubscriptions = subscriptions.filter(
-    (s) => s.subsStatus === "cancelled" || s.subsStatus === "expired" || s.subsStatus === "on-hold" || s.subsStatus === "inactive"
+    (s) =>
+      s.subsStatus === "cancelled" ||
+      s.subsStatus === "expired" ||
+      s.subsStatus === "on-hold" ||
+      s.subsStatus === "inactive",
   );
 
   if (loading) {
-    return <div className={styles.Main}><div className={styles.MainContainer}><p style={{ padding: 20, textAlign: "center" }}>Loading subscriptions...</p></div></div>;
+    return (
+      <div className={styles.Main}>
+        <div className={styles.MainContainer}>
+          <p style={{ padding: 20, textAlign: "center" }}>
+            Loading subscriptions...
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -121,11 +137,17 @@ export default function SubscriptionPage() {
 
                     <div className={styles.ActiveListTopNextDevelivery}>
                       <p>Next Payment: </p>
-                      <h4>{sub.nextPaymentDate ? formatDate(sub.nextPaymentDate) : "N/A"}</h4>
+                      <h4>
+                        {sub.nextPaymentDate
+                          ? formatDate(sub.nextPaymentDate)
+                          : "N/A"}
+                      </h4>
                     </div>
                   </div>
 
-                  <div className={`${styles.ActiveListTopRight} ${styles.DesktopOnly}`}>
+                  <div
+                    className={`${styles.ActiveListTopRight} ${styles.DesktopOnly}`}
+                  >
                     <div className={styles.ActiveOrderDate}>
                       <p>Start Date:</p>
                       <p>{formatDate(sub.createdAt)}</p>
@@ -135,14 +157,16 @@ export default function SubscriptionPage() {
                       <p>#{sub.id}</p>
                     </div>
                   </div>
-
                 </div>
 
                 <div className={styles.ActiveListBottom}>
                   <div className={styles.ActiveListBottomtOP}>
                     <div className={styles.ActiveSubLeft}>
                       <div className={styles.ActiveSubLeftTop}>
-                        <p>{((`${sub.items?.[0]?.product?.categories?.title} Subscription`) || "Subscription Product")}</p>
+                        <p>
+                          {`${sub.items?.[0]?.product?.categories?.title} Subscription` ||
+                            "Subscription Product"}
+                        </p>
                       </div>
 
                       <div className={styles.ActiveSubLeftBottom}>
@@ -150,7 +174,9 @@ export default function SubscriptionPage() {
                           <Image
                             src={
                               sub.items?.[0]?.product?.productImage?.url
-                                ? `https://whitemantis-app.vercel.app${sub.items?.[0]?.product?.productImage?.url}`
+                                ? formatImageUrl(
+                                    sub.items?.[0]?.product?.productImage?.url,
+                                  )
                                 : "https://placehold.co/100x100"
                             }
                             alt="product image"
@@ -162,13 +188,19 @@ export default function SubscriptionPage() {
 
                         <div className={styles.ProdDetails}>
                           <div className={styles.ProdTitle}>
-                            <h3>{sub.items?.[0]?.product?.name} {sub.items?.[0]?.product?.tagline}</h3>
+                            <h3>
+                              {sub.items?.[0]?.product?.name}{" "}
+                              {sub.items?.[0]?.product?.tagline}
+                            </h3>
                           </div>
                           {/* varient field is first cross checked with the varID and then it is displayed */}
                           <div className={styles.ProdTooDetails}>
                             {(() => {
                               const item = sub?.items?.[0];
-                              const selectedVariant = item?.product?.variants?.find(v => v.id === item.variantID);
+                              const selectedVariant =
+                                item?.product?.variants?.find(
+                                  (v) => v.id === item.variantID,
+                                );
 
                               // Only render the weight and the line if a variant is matched
                               if (selectedVariant) {
@@ -186,7 +218,9 @@ export default function SubscriptionPage() {
                             })()}
 
                             <div className={styles.prodQty}>
-                              <p>Qty: {sub.items?.[0]?.quantity || 0}x Bag amount</p>
+                              <p>
+                                Qty: {sub.items?.[0]?.quantity || 0}x Bag amount
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -210,23 +244,34 @@ export default function SubscriptionPage() {
                       </div>
 
                       <div className={styles.AtciveSubDeliveryTiming}>
-                        <p>Delivers Every {(() => {
-                          const item = sub?.items?.[0];
-                          const variantID = item?.variantID;
+                        <p>
+                          Delivers Every{" "}
+                          {(() => {
+                            const item = sub?.items?.[0];
+                            const variantID = item?.variantID;
 
-                          // 1. Find the active variant (if one is selected)
-                          const selectedVariant = item?.product?.variants?.find(v => v.id === variantID);
+                            // 1. Find the active variant (if one is selected)
+                            const selectedVariant =
+                              item?.product?.variants?.find(
+                                (v) => v.id === variantID,
+                              );
 
-                          // 2. Get the list of frequencies (check variant first, then product)
-                          const availableFreqs = selectedVariant?.subFreq || item?.product?.subFreq || [];
+                            // 2. Get the list of frequencies (check variant first, then product)
+                            const availableFreqs =
+                              selectedVariant?.subFreq ||
+                              item?.product?.subFreq ||
+                              [];
 
-                          // 3. Match the specific frequency choice by ID
-                          const matchedFreq = availableFreqs.find(f => f.id === item?.subFreqID);
+                            // 3. Match the specific frequency choice by ID
+                            const matchedFreq = availableFreqs.find(
+                              (f) => f.id === item?.subFreqID,
+                            );
 
-                          return matchedFreq
-                            ? `${matchedFreq.duration} ${matchedFreq.interval}${matchedFreq.duration > 1 ? 's' : ''}`
-                            : "Standard Interval";
-                        })()}</p>
+                            return matchedFreq
+                              ? `${matchedFreq.duration} ${matchedFreq.interval}${matchedFreq.duration > 1 ? "s" : ""}`
+                              : "Standard Interval";
+                          })()}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -239,17 +284,18 @@ export default function SubscriptionPage() {
                       View Subscription
                     </Link>
                   </div>
-                  <div className={`${styles.ActiveMobileMeta} ${styles.MobileOnly}`}>
+                  <div
+                    className={`${styles.ActiveMobileMeta} ${styles.MobileOnly}`}
+                  >
                     <div className={styles.MobileMetaRow}>
                       <span style={{ color: "black" }}>Order Date:</span>
                       <span>{formatDate(sub.date_created)}</span>
                     </div>
                     <div className={styles.MobileMetaRow}>
-                      <span >Subscription ID:</span>
+                      <span>Subscription ID:</span>
                       <span>{sub.id}</span>
                     </div>
                   </div>
-
                 </div>
               </div>
             ))
@@ -289,13 +335,23 @@ export default function SubscriptionPage() {
                     </svg>
 
                     <div>
-                      <p>{sub.subsStatus === "inactive" ? "Cancelled" : sub.subsStatus} Subscription</p>
+                      <p>
+                        {sub.subsStatus === "inactive"
+                          ? "Cancelled"
+                          : sub.subsStatus}{" "}
+                        Subscription
+                      </p>
                       <p>on {formatDate(sub.updatedAt)}</p>
                     </div>
                   </div>
 
-                  <div className={`${styles.pastTopRight} ${styles.DesktopOnly}`}>
-                    <p>Last delivery&nbsp;&nbsp;{formatDate(sub.createdAt || sub.updatedAt)}</p>
+                  <div
+                    className={`${styles.pastTopRight} ${styles.DesktopOnly}`}
+                  >
+                    <p>
+                      Last delivery&nbsp;&nbsp;
+                      {formatDate(sub.createdAt || sub.updatedAt)}
+                    </p>
                     <p>Order ID:&nbsp;&nbsp;#{sub.id}</p>
                   </div>
                 </div>
@@ -304,7 +360,10 @@ export default function SubscriptionPage() {
                     <div className={styles.edit1}>
                       <div className={styles.edit11}>
                         <div className={styles.pastProdTitle}>
-                          <h4>{`${sub.items?.[0]?.product?.categories?.title} Subscription  ` || "Subscription Product"}</h4>
+                          <h4>
+                            {`${sub.items?.[0]?.product?.categories?.title} Subscription  ` ||
+                              "Subscription Product"}
+                          </h4>
                         </div>
                         <div className={styles.PastListBottomRight}>
                           <Link href={`/account/subscription/${sub.id}`}>
@@ -330,11 +389,17 @@ export default function SubscriptionPage() {
                       </div>
                       <div className={styles.coloumn}>
                         <div className={styles.pastprodTag}>
-                          <p>{sub.items?.[0]?.product?.name} {sub.items?.[0]?.product?.tagline}</p>
+                          <p>
+                            {sub.items?.[0]?.product?.name}{" "}
+                            {sub.items?.[0]?.product?.tagline}
+                          </p>
                           <div className={styles.edit21}>
                             {(() => {
                               const item = sub?.items?.[0];
-                              const selectedVariant = item?.product?.variants?.find(v => v.id === item.variantID);
+                              const selectedVariant =
+                                item?.product?.variants?.find(
+                                  (v) => v.id === item.variantID,
+                                );
 
                               // If we have a variant, show the Weight AND the Vertical Line
                               if (selectedVariant) {
@@ -352,31 +417,15 @@ export default function SubscriptionPage() {
                               return null;
                             })()}
                             <div className={styles.pastprodQty}>
-                        <p>Qty: {sub.items?.[0]?.quantity || 0}x Bag amount</p>
-                      </div>
+                              <p>
+                                Qty: {sub.items?.[0]?.quantity || 0}x Bag amount
+                              </p>
+                            </div>
                           </div>
                         </div>
-
                       </div>
-
-
-
-
-
-                      
-
                     </div>
-
                   </div>
-
-
-
-
-
-
-
-
-
 
                   {/* edit end */}
                 </div>
@@ -398,18 +447,25 @@ export default function SubscriptionPage() {
                     {/* comeback */}
                     <div className={styles.pastProdDetails}>
                       <div className={styles.pastProdTitle}>
-                        <h4>{`${sub.items?.[0]?.product?.categories?.title} Subscription  ` || "Subscription Product"}</h4>
+                        <h4>
+                          {`${sub.items?.[0]?.product?.categories?.title} Subscription  ` ||
+                            "Subscription Product"}
+                        </h4>
                       </div>
 
                       <div className={styles.pastProdSubTitledetails}>
                         <div className={styles.pastprodTag}>
-                          <p>{sub.items?.[0]?.product?.name} {sub.items?.[0]?.product?.tagline}</p>
-
+                          <p>
+                            {sub.items?.[0]?.product?.name}{" "}
+                            {sub.items?.[0]?.product?.tagline}
+                          </p>
                         </div>
 
                         {(() => {
                           const item = sub?.items?.[0];
-                          const selectedVariant = item?.product?.variants?.find(v => v.id === item.variantID);
+                          const selectedVariant = item?.product?.variants?.find(
+                            (v) => v.id === item.variantID,
+                          );
 
                           // If we have a variant, show the Weight AND the Vertical Line
                           if (selectedVariant) {
@@ -428,7 +484,9 @@ export default function SubscriptionPage() {
                         })()}
 
                         <div className={styles.pastprodQty}>
-                          <p>Qty: {sub.items?.[0]?.quantity || 0}x Bag amount</p>
+                          <p>
+                            Qty: {sub.items?.[0]?.quantity || 0}x Bag amount
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -440,7 +498,9 @@ export default function SubscriptionPage() {
                     </Link>
                   </div>
                 </div>
-                <div className={`${styles.PastMobileMeta} ${styles.MobileOnly}`}>
+                <div
+                  className={`${styles.PastMobileMeta} ${styles.MobileOnly}`}
+                >
                   <div className={styles.MobileDivider}></div>
 
                   <div className={styles.MobileMetaRow}>
@@ -453,7 +513,6 @@ export default function SubscriptionPage() {
                     <span>{sub.number}</span>
                   </div>
                 </div>
-
               </div>
             ))
           )}

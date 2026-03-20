@@ -9,7 +9,7 @@
   padding-bottom: clamp(
     100px,
     calc(100px + (199 * ((100vw - 320px) / 1120))),
-    299px
+    100px
   );
 
   background-color: #ffffff;
@@ -353,7 +353,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 11000;
 }
 
 .Popup {
