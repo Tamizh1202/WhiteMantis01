@@ -123,6 +123,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
           token.id = user.id;
           token.firstName = user.firstName;
           token.lastName = user.lastName;
+
+          if (account.provider === "apple") {
+            // Apple sends name only on first sign-in via user.name (not firstName/lastName)
+            // Override after the generic assignment since user.firstName is undefined for Apple
+            const appleName = user.name as any;
+            if (appleName) {
+              if (typeof appleName === "string") {
+                const parts = appleName.trim().split(/\s+/);
+                token.firstName = parts[0] || token.firstName;
+                token.lastName = parts.slice(1).join(" ") || token.lastName;
+              } else if (typeof appleName === "object") {
+                token.firstName = appleName.firstName || appleName.givenName || token.firstName;
+                token.lastName = appleName.lastName || appleName.familyName || token.lastName;
+              }
+            }
+          }
           token.profileImage = user.profileImage;
           token.stripeCustomerId = user.stripeCustomerId;
           token.payloadToken = user["paylaod-token"];

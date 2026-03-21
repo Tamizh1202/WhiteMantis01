@@ -44,12 +44,11 @@ function AuthPageContent() {
               googleToken: session.googleIdToken,
             });
           } else {
-            res = await axiosClient.post("/api/website/apple-auth", {
-              appleToken: session.appleIdToken,
-            });
+            const applePayload = { appleToken: session.appleIdToken };
+            if (session.user?.firstName) applePayload.firstName = session.user.firstName;
+            if (session.user?.lastName) applePayload.lastName = session.user.lastName;
+            res = await axiosClient.post("/api/website/apple-auth", applePayload);
           }
-
-          console.log(res.data);
 
           if (!res.data.success) {
             throw new Error(res.data.message || "Social login failed");
