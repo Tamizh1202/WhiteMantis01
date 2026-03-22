@@ -11,7 +11,20 @@ const BlogsLanding = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      setVisibleCount(mobile ? 3 : 6);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -31,12 +44,11 @@ const BlogsLanding = () => {
     fetchBlogs();
   }, []);
 
-  // Filter logic: Get top 3 featured blogs
-  const featuredBlogs = blogs
-    .filter((blog) => Boolean(blog.isFeatured))
-    .slice(0, 3);
+  // Filter logic: prefer isFeatured blogs; fall back to first 3 regular blogs
+  const markedFeatured = blogs.filter((blog) => Boolean(blog.isFeatured)).slice(0, 3);
+  const featuredBlogs = markedFeatured.length > 0 ? markedFeatured : blogs.slice(0, 3);
 
-  // Grid logic: Exclude the 3 featured blogs from the grid
+  // Grid logic: Exclude whichever blogs are used in the featured hero
   const gridBlogs = blogs.filter(
     (blog) => !featuredBlogs.find((fb) => fb.id === blog.id),
   );
@@ -72,9 +84,9 @@ const BlogsLanding = () => {
 
   return (
     <div className={styles.Main}>
-      {featuredBlogs.length > 0 && (
-        <section className={styles.HeroSection}>
-          <h1 className={styles.HeroTitle}>The Mantis Journal</h1>
+      <section className={`${styles.HeroSection} ${featuredBlogs.length === 0 ? styles.HeroNoCard : ""}`}>
+        <h1 className={styles.HeroTitle}>The Mantis Journal</h1>
+        {featuredBlogs.length > 0 && (
           <div className={styles.StaticHeroWrapper}>
             <div className={styles.HeroCard}>
               <div className={styles.HeroImageWrapper}>
@@ -84,7 +96,7 @@ const BlogsLanding = () => {
                   fill
                   className={styles.HeroImage}
                   priority
-                  key={currentBlog.id} // Forces image refresh on swap
+                  key={currentBlog.id}
                 />
               </div>
               <div className={styles.HeroContent}>
@@ -106,8 +118,6 @@ const BlogsLanding = () => {
                 <Link href={`/blogs/${currentBlog.slug}`}>
                   <button className={styles.ReadMoreBtn}>Read more</button>
                 </Link>
-
-                {/* Stage Indicators (Dots) */}
                 <div className={styles.HeroDots}>
                   {featuredBlogs.map((_, index) => (
                     <div
@@ -120,8 +130,8 @@ const BlogsLanding = () => {
               </div>
             </div>
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
       <section
         className={`${styles.GridSection} ${featuredBlogs.length === 0 ? styles.NoHero : ""}`}
@@ -133,24 +143,37 @@ const BlogsLanding = () => {
           {gridBlogs && gridBlogs.length > 0 ? (
             <>
               <div className={styles.BlogGrid}>
-                {gridBlogs.map((blog) => (
+                {gridBlogs.slice(0, visibleCount).map((blog) => (
                   <BlogCard key={blog.id} blog={blog} />
                 ))}
               </div>
-              <div className={styles.ViewMoreWrapper}>
-                <button className={styles.ViewMoreBtn}>View more</button>
-              </div>
+              {visibleCount < gridBlogs.length && (
+                <div className={styles.ViewMoreWrapper}>
+                  <button
+                    className={styles.ViewMoreBtn}
+                    onClick={() => setVisibleCount((prev) => prev + (isMobile ? 3 : 6))}
+                  >
+                    View more
+                  </button>
+                </div>
+              )}
             </>
           ) : (
-            /* THE EMPTY STATE: Shows inside the grid section if no blogs exist */
             <div className={styles.EmptyGridState}>
-              <div className={styles.emptypt1}>
+              <div className={styles.EmptyIcon}>
+                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="28" cy="28" r="27" stroke="#6C7A5F" strokeWidth="1.5"/>
+                  <path d="M28 16C22 16 17 21 17 27C17 33 22 38 28 38C34 38 39 33 39 27" stroke="#6C7A5F" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M28 16C28 16 33 20.5 33 27C33 31.5 30.5 35 28 37" stroke="#6C7A5F" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M39 22C39 22 41 21 42 22.5C43 24 41.5 26 39 27" stroke="#6C7A5F" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className={styles.EmptyBody}>
                 <p className={styles.EmptyText}>Brewing stories soon</p>
                 <p className={styles.EmptySubText}>
                   Our latest coffee guides and stories will appear here.
                 </p>
               </div>
-
               <button
                 className={styles.ShopNow}
                 onClick={() => router.push("/shop")}

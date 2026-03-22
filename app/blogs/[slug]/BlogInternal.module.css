@@ -7,7 +7,6 @@
   background-color: #fdfdfb;
 }
 
-
 .ShopNow {
   padding: 12px 32px;
   background-color: #2f362a;
@@ -26,12 +25,11 @@
 }
 .Header {
   text-align: center;
-  background-color: #6C7A5F;
-  padding-top: 120px;
-  padding-bottom: 240px;
-  /* Responsive padding */
+  background-color: #6c7a5f;
+  padding-top: 80px;
+  padding-bottom: 160px;
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -61,7 +59,7 @@
 
 .Date {
   /* Font & Typography */
-  font-family: 'Lexend', var(--lexend), sans-serif;
+  font-family: "Lexend", var(--lexend), sans-serif;
   font-weight: 500;
   font-size: 22px;
   color: #ffffff;
@@ -69,11 +67,10 @@
   font-style: normal;
 }
 
-
 .txtntxt {
   display: flex;
   flex-direction: column;
-  gap: 80px
+  gap: 40px;
 }
 
 .FeaturedImageWrapper {
@@ -81,23 +78,15 @@
   width: 90%;
   max-width: 1100px;
   height: 500px;
-
-  /* SMARTER APPROACH: 
-     Using a clamp here ensures the overlap isn't TOO huge on small screens 
-     while staying exactly where you want it on desktop.
-  */
-  margin: clamp(-180px, -15vw, -100px) auto 4rem;
-
+  margin: clamp(-180px, -15vw, -100px) auto 2rem;
   overflow: hidden;
   z-index: 10;
 }
 
 .ContentWrapper {
-
   max-width: 750px;
   margin: 0 auto;
   justify-content: center;
-
 }
 
 .LoaderWrapper {
@@ -109,21 +98,22 @@
 
 /* Related Blogs Section */
 .RelatedSection {
-  margin-top: 160px;
-  padding: 0px 126px 160px 126px;
+  margin-top: 80px;
+  padding: 0px 126px 80px 126px;
   display: flex;
   flex-direction: column;
-  gap: 60px;
+  gap: 40px;
 }
 
 .RelatedSection h2 {
   font-family: var(--lexend);
   font-weight: 500;
   font-size: 22px;
+  color: #2f362a;
 }
 
 .SectionTitle {
-  color: #6C7A5F;
+  color: #2f362a;
 }
 
 .SectionTitle h2 {
@@ -131,7 +121,7 @@
   font-weight: 500;
   font-family: var(--lexend);
   text-align: left;
-
+  color: #2f362a;
 }
 
 .BlogGrid {
@@ -142,15 +132,11 @@
   /* Note: 160px is a VERY large gap for a grid */
 }
 
-
 .BlogCard {
-
   overflow: hidden;
   /* box-shadow: 0 4px 15px rgba(0,0,0,0.05); */
   cursor: pointer;
 }
-
-
 
 .CardImageWrapper {
   position: relative;
@@ -189,7 +175,7 @@
 }
 
 .DateText {
-  color: #6C7A5F;
+  color: #6e736a;
   font-size: 15px;
   font-family: var(--lato);
   font-weight: 700;
@@ -209,6 +195,7 @@
   font-family: var(--lato);
   font-weight: 700;
   font-size: 15px;
+  color: #2f362a;
 }
 
 .ReadMoreBtn {
@@ -227,7 +214,7 @@
 }
 
 .Separator {
-  border: 0.5px solid #2F362A4D;
+  border: 0.5px solid #2f362a4d;
   margin: 8px 0;
 }
 
@@ -235,28 +222,20 @@
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
-  color: #6C7A5F;
-  margin-top: 17px;
+  color: #6e736a;
+  margin-top: 10px;
 }
 
 @media (max-width: 768px) {
-
   .Header {
-    /* This increases the height of the green block */
-    min-height: 450px;
-
-    /* We add more top padding to push the text down, 
-       leaving the bottom area clear for the floating card */
     padding: 0px 20px 80px 20px;
-
-    /* Ensure the gap between Title and Date stays consistent */
     gap: 12px;
   }
 
   .Title {
     /* Adjusting title size for mobile so it fits the taller header better */
     font-size: 28px;
-    max-width: 90%
+    max-width: 90%;
   }
 
   .Header h1 {
@@ -272,7 +251,7 @@
   } */
   .Date {
     /* Font & Typography */
-    font-family: 'Lexend', var(--lexend), sans-serif;
+    font-family: "Lexend", var(--lexend), sans-serif;
     font-weight: 500;
     font-size: 20px;
     color: #ffffff;
@@ -280,7 +259,6 @@
     font-style: normal;
     display: block;
   }
-
 
   .FeaturedImageWrapper {
     /* 1. Pull it up */
@@ -314,7 +292,7 @@
   .txtntxt {
     display: flex;
     flex-direction: column;
-    gap: 40px
+    gap: 24px;
   }
 
   .ContentWrapper {
@@ -351,8 +329,7 @@
   .SectionTitle {
     font-family: var(--lexend);
     font-size: 20px;
-    color: #6c7a5f;
-    /* Your signature green */
+    color: #2f362a;
     font-weight: 500;
     text-transform: uppercase;
     text-align: left;
@@ -427,7 +404,7 @@
   .CardTitle h3 {
     font-size: 18px;
     font-weight: 500;
-    color: #2F362A;
+    color: #2f362a;
     text-align: left;
     font-family: var(--lexend);
     margin: 0;
@@ -469,5 +446,4 @@
     /* CHANGE: Remove rounded corners from button */
     border-radius: 0;
   }
-
 }
