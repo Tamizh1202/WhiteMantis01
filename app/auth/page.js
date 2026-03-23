@@ -31,7 +31,8 @@ function AuthPageContent() {
         const isFromGoogle =
           fromParam === "google" ||
           (!fromParam && window.location.href.includes("callbackUrl") && session?.isGoogleLogin);
-        const isFromApple = fromParam === "apple";
+        // const isFromApple = fromParam === "apple";
+        const isFromApple = false;
 
         if (!isFromGoogle && !isFromApple) return;
 
@@ -43,11 +44,11 @@ function AuthPageContent() {
             res = await axiosClient.post("/api/website/google-auth", {
               googleToken: session.googleIdToken,
             });
-          } else {
-            const applePayload = { appleToken: session.appleIdToken };
-            if (session.user?.firstName) applePayload.firstName = session.user.firstName;
-            if (session.user?.lastName) applePayload.lastName = session.user.lastName;
-            res = await axiosClient.post("/api/website/apple-auth", applePayload);
+          // } else {
+          //   const applePayload = { appleToken: session.appleIdToken };
+          //   if (session.user?.firstName) applePayload.firstName = session.user.firstName;
+          //   if (session.user?.lastName) applePayload.lastName = session.user.lastName;
+          //   res = await axiosClient.post("/api/website/apple-auth", applePayload);
           }
 
           if (!res.data.success) {
@@ -139,11 +140,11 @@ function AuthPageContent() {
     });
   }
 
-  function handleAppleSignIn() {
-    signIn("apple", {
-      callbackUrl: "/auth?from=apple",
-    });
-  }
+  // function handleAppleSignIn() {
+  //   signIn("apple", {
+  //     callbackUrl: "/auth?from=apple",
+  //   });
+  // }
 
   return (
     <>
@@ -253,6 +254,7 @@ function AuthPageContent() {
                   </svg>
                   <p>Sign in with Google</p>
                 </button>
+                {/* Apple Sign-In button commented out
                 <button
                   onClick={handleAppleSignIn}
                   disabled={loading}
@@ -280,6 +282,7 @@ function AuthPageContent() {
                   </svg>
                   <p>Sign in with Apple</p>
                 </button>
+                */}
               </div>
             </div>
           </div>

@@ -124,6 +124,7 @@ const PersonalInfoForm = ({
       {/* Phone + Gender row */}
       <div className={styles.Row}>
         <div className={styles.Field}>
+          <span className={styles.PhonePrefix}>+971</span>
           <input
             value={profile.phone || ""}
             placeholder={
@@ -212,4 +213,4 @@ const PersonalInfoForm = ({
   );
 };
 
-export default PersonalInfoForm;  
+export default PersonalInfoForm;

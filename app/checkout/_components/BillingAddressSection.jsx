@@ -115,13 +115,17 @@ export default function BillingAddressSection({
 
                     {/* Phone */}
                     <div>
-                        <input
-                            className={`${styles.Input} ${validationErrors.billingPhone ? styles.InputError : ""}`}
-                            placeholder="Phone"
-                            value={billingForm.phone}
-                            onChange={(e) => { setBillingForm({ ...billingForm, phone: e.target.value }); clearError("billingPhone"); }}
-                            onBlur={() => { const e = validateUAEPhone(billingForm.phone); if (e) setValidationErrors((p) => ({ ...p, billingPhone: e })); }}
-                        />
+                        <div className={`${styles.PhoneWrapper} ${validationErrors.billingPhone ? styles.InputError : ""}`}>
+                            <span className={styles.PhonePrefix}>+971</span>
+                            <input
+                                className={styles.PhoneInput}
+                                placeholder="Phone"
+                                value={billingForm.phone}
+                                inputMode="numeric"
+                                onChange={(e) => { const numeric = e.target.value.replace(/\D/g, ""); setBillingForm({ ...billingForm, phone: numeric }); clearError("billingPhone"); }}
+                                onBlur={() => { const e = validateUAEPhone(billingForm.phone); if (e) setValidationErrors((p) => ({ ...p, billingPhone: e })); }}
+                            />
+                        </div>
                         {validationErrors.billingPhone && <span className={styles.ErrorMessage}>{validationErrors.billingPhone}</span>}
                     </div>
                 </>

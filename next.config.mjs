@@ -27,9 +27,12 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "whitemantis-app.vercel.app",
+      },
+      {
+        protocol: "https",
         hostname: "endpoint.whitemantis.ae",
-      }
-
+      },
     ],
   },
   // Empty turbopack config to silence Next.js 16 warning
@@ -37,7 +40,7 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     // Handle canvas dependency for @react-pdf/renderer
     if (isServer) {
-      config.externals = [...(config.externals || []), 'canvas'];
+      config.externals = [...(config.externals || []), "canvas"];
     }
     return config;
   },

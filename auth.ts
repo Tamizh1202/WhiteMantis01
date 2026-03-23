@@ -1,26 +1,26 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import Apple from "next-auth/providers/apple";
-import { SignJWT, importPKCS8 } from "jose";
+// import Apple from "next-auth/providers/apple";
+// import { SignJWT, importPKCS8 } from "jose";
 
-async function generateAppleSecret(): Promise<string> {
-  const privateKey = await importPKCS8(
-    (process.env.APPLE_PRIVATE_KEY || "").replace(/\\n/g, "\n"),
-    "ES256"
-  );
-  return new SignJWT({})
-    .setProtectedHeader({ alg: "ES256", kid: process.env.APPLE_KEY_ID! })
-    .setIssuer(process.env.APPLE_TEAM_ID!)
-    .setIssuedAt()
-    .setExpirationTime("180d") // Apple's max is 6 months
-    .setAudience("https://appleid.apple.com")
-    .setSubject(process.env.APPLE_ID!)
-    .sign(privateKey);
-}
+// async function generateAppleSecret(): Promise<string> {
+//   const privateKey = await importPKCS8(
+//     (process.env.APPLE_PRIVATE_KEY || "").replace(/\\n/g, "\n"),
+//     "ES256"
+//   );
+//   return new SignJWT({})
+//     .setProtectedHeader({ alg: "ES256", kid: process.env.APPLE_KEY_ID! })
+//     .setIssuer(process.env.APPLE_TEAM_ID!)
+//     .setIssuedAt()
+//     .setExpirationTime("180d") // Apple's max is 6 months
+//     .setAudience("https://appleid.apple.com")
+//     .setSubject(process.env.APPLE_ID!)
+//     .sign(privateKey);
+// }
 
 export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
-  const appleSecret = await generateAppleSecret();
+  // const appleSecret = await generateAppleSecret();
 
   return {
     providers: [
@@ -66,10 +66,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
           },
         },
       }),
-      Apple({
-        clientId: process.env.APPLE_ID!,
-        clientSecret: appleSecret,
-      }),
+      // Apple({
+      //   clientId: process.env.APPLE_ID!,
+      //   clientSecret: appleSecret,
+      // }),
     ],
 
     session: {
@@ -86,13 +86,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
           }
           return true;
         }
-        if (account?.provider === "apple") {
-          if (!account.id_token) {
-            console.error("Apple Sign-In failed: No id_token returned");
-            return false;
-          }
-          return true;
-        }
+        // if (account?.provider === "apple") {
+        //   if (!account.id_token) {
+        //     console.error("Apple Sign-In failed: No id_token returned");
+        //     return false;
+        //   }
+        //   return true;
+        // }
         return !!user;
       },
 
@@ -115,30 +115,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
             token.googleIdToken = account.id_token;
             token.isGoogleLogin = true;
           }
-          if (account.provider === "apple") {
-            token.appleIdToken = account.id_token;
-            token.isAppleLogin = true;
-          }
+          // if (account.provider === "apple") {
+          //   token.appleIdToken = account.id_token;
+          //   token.isAppleLogin = true;
+          // }
 
           token.id = user.id;
           token.firstName = user.firstName;
           token.lastName = user.lastName;
 
-          if (account.provider === "apple") {
-            // Apple sends name only on first sign-in via user.name (not firstName/lastName)
-            // Override after the generic assignment since user.firstName is undefined for Apple
-            const appleName = user.name as any;
-            if (appleName) {
-              if (typeof appleName === "string") {
-                const parts = appleName.trim().split(/\s+/);
-                token.firstName = parts[0] || token.firstName;
-                token.lastName = parts.slice(1).join(" ") || token.lastName;
-              } else if (typeof appleName === "object") {
-                token.firstName = appleName.firstName || appleName.givenName || token.firstName;
-                token.lastName = appleName.lastName || appleName.familyName || token.lastName;
-              }
-            }
-          }
+          // if (account.provider === "apple") {
+          //   // Apple sends name only on first sign-in via user.name (not firstName/lastName)
+          //   // Override after the generic assignment since user.firstName is undefined for Apple
+          //   const appleName = user.name as any;
+          //   if (appleName) {
+          //     if (typeof appleName === "string") {
+          //       const parts = appleName.trim().split(/\s+/);
+          //       token.firstName = parts[0] || token.firstName;
+          //       token.lastName = parts.slice(1).join(" ") || token.lastName;
+          //     } else if (typeof appleName === "object") {
+          //       token.firstName = appleName.firstName || appleName.givenName || token.firstName;
+          //       token.lastName = appleName.lastName || appleName.familyName || token.lastName;
+          //     }
+          //   }
+          // }
           token.profileImage = user.profileImage;
           token.stripeCustomerId = user.stripeCustomerId;
           token.payloadToken = user["paylaod-token"];
@@ -173,8 +173,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
         session.user.success = token.success;
         session.googleIdToken = token.googleIdToken;
         session.isGoogleLogin = token.isGoogleLogin;
-        session.appleIdToken = token.appleIdToken;
-        session.isAppleLogin = token.isAppleLogin;
+        // session.appleIdToken = token.appleIdToken;
+        // session.isAppleLogin = token.isAppleLogin;
 
         return session;
       },

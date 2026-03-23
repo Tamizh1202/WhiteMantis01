@@ -117,7 +117,7 @@ const AddressFormPopup = ({
               <div
                 className={styles.CustomSelectTrigger}
                 onClick={() => setIsEmirateOpen(!isEmirateOpen)}
-                style={{ padding: "19px 22px", border: "1px solid #2f362a4d" }}
+                style={{ padding: "19px 22px", }}
               >
                 <span style={{ textTransform: "capitalize" }}>
                   {UAE_STATES.find((s) => s.value === addressForm.state)

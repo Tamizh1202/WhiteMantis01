@@ -141,6 +141,15 @@
   /* Essential for the dropdown list */
 }
 
+.PhonePrefix {
+  font-family: var(--lato);
+  font-size: 14px;
+  color: #6e736a;
+  white-space: nowrap;
+  margin-right: 6px;
+  user-select: none;
+}
+
 .Field input {
   border: none;
   outline: none;
