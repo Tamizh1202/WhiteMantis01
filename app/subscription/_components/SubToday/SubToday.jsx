@@ -201,10 +201,11 @@ const SubToday = () => {
       <div className={styles.main}>
         <div className={styles.MainContainer}>
           <div className={styles.left}>
-            <h3>Subscribe today</h3>
+            <h3>Ready to get started?</h3>
             <p>
-              The White Mantis coffee experience, delivered seamlessly to your
-              door. Subscribe for a never-ending supply of excellence.
+              Choose your plan above and your first bag
+              ships within two days of roasting.
+              Freshness guaranteed. Flexibility built in.
             </p>
           </div>
           <div className={styles.right}>
@@ -255,7 +256,7 @@ const SubToday = () => {
                     </div>
                     <div className={styles.CardContentBottom}>
                       {/* <Link href={card.link}> */}
-                      <button>Subscribe now</button>
+                      <button>Start This Plan</button>
                       {/* </Link> */}
                     </div>
                   </div>

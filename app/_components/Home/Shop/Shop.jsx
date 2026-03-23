@@ -19,11 +19,11 @@ const Shop = ({ categories = [] }) => {
   );
 
   return (
-    <>    
+    <>
       <div className={styles.main}>
         <div className={styles.MainConatiner}>
           <div className={styles.Top}>
-            <h3>Shop BY Category</h3>
+            <h3>Find Your Coffee</h3>
           </div>
           <div className={styles.Botttom}>
             <Link
@@ -34,13 +34,14 @@ const Shop = ({ categories = [] }) => {
                 <div className={styles.OneTop}>
                   <div className={styles.OneTopTop}>
                     <h4>01</h4>
-                    <h4>Coffee Beans</h4>
+                    <h4>Whole Beans</h4>
                   </div>
                   <div className={styles.OneTopBottom}>
                     <p>
-                      Freshly roasted specialty beans crafted for balance and
-                      clarity. Designed for consistent performance across
-                      espresso and filter brewing.
+                      Single-origin and seasonal blends, roasted
+                      to order in Al Quoz. Every bag reflects a
+                      decision — about where it comes from, how
+                      it's processed, and how it's meant to taste.
                     </p>
                     <div className={styles.arrowextra}>
                       <h5>Shop now</h5>
@@ -76,9 +77,10 @@ const Shop = ({ categories = [] }) => {
                   </div>
                   <div className={styles.OneTopBottom}>
                     <p>
-                      Single-serve drip bags designed for easy, no-equipment
-                      brewing. Enjoy a balanced, clean cup anywhere, just add
-                      hot water and brew with ease.
+                      Specialty coffee that travels. Tear open,
+                      pour over hot water, and get the same
+                      roastery quality whether you're at the
+                      office, in a hotel, or on the road.
                     </p>
                     <div className={styles.arrowextra}>
                       <h5>Shop now</h5>
@@ -114,9 +116,10 @@ const Shop = ({ categories = [] }) => {
                   </div>
                   <div className={styles.OneTopBottom}>
                     <p>
-                      Precision-packed capsules crafted for consistent
-                      extraction and smooth flavor. Perfect for quick,
-                      effortless coffee without compromising on quality.
+                      Nespresso-compatible. Specialty-grade. For
+                      mornings when the machine does the work
+                      — but the coffee still comes from
+                      somewhere worth knowing.
                     </p>
                     <div className={styles.arrowextra}>
                       <h5>Shop now</h5>

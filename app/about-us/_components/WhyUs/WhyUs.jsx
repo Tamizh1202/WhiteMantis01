@@ -22,7 +22,10 @@ const WhyUs = () => {
               <div className={styles.TextContainer}>
                 <h3>Tailored Business Solutions </h3>
                 <p>
-                  Designing customized coffee programs for every business need
+                  We build your coffee program from scratch
+                  — from bean selection to brew recipe to
+                  staff training. No template. No generic
+                  blend.
                 </p>
               </div>
             </div>
@@ -32,7 +35,10 @@ const WhyUs = () => {
               </div>
               <div className={styles.TextContainer}>
                 <h3>Sustainable & Ethical Sourcing </h3>
-                <p>Partnering with responsible farmers worldwide.</p>
+                <p>We pay above fair trade price, visit our farm
+                  partners in person, and only work with
+                  growers whose practices we can stand
+                  behind publicly.</p>
               </div>
             </div>
             <div className={styles.Card}>
@@ -42,7 +48,10 @@ const WhyUs = () => {
               <div className={styles.TextContainer}>
                 <h3>Expert Craftsmanship </h3>
                 <p>
-                  Years of mastery in roasting and sourcing the finest beans
+                  A decade of roasting means we've made
+                  every mistake and fixed it. Our profiles are
+                  built on data and refined by taste —
+                  obsessively.
                 </p>
               </div>
             </div>
@@ -52,7 +61,10 @@ const WhyUs = () => {
               </div>
               <div className={styles.TextContainer}>
                 <h3>A Legacy of Quality </h3>
-                <p>Building on a strong foundation since 2016</p>
+                <p>We were roasting specialty coffee in Dubai
+                  before it was a trend. That early
+                  commitment built something you can taste
+                  in every bag today.</p>
               </div>
             </div>
           </div>

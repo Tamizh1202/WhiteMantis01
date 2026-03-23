@@ -173,7 +173,7 @@ const NavbarMobile = ({ categories: initialCategories }) => {
                   className={styles.SectionHeader}
                   onClick={() => setShopOpen(!shopOpen)}
                 >
-                  Our Shop
+                  Shop
                   <svg
                     className={shopOpen ? styles.Rotate : ""}
                     width="13"

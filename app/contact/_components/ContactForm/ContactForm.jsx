@@ -34,7 +34,7 @@ const ContactForm = () => {
 
   const enquiryOptions = [
     {
-      label: "Order issue",
+      label: "Order or delivery issue",
       value: "order_issue",
     },
     {

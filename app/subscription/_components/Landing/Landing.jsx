@@ -14,9 +14,13 @@ const Landing = () => {
         <div className={styles.Right}>
           <div className={styles.RightTop}>
             <p>
-              Commit to a continuous supply of our specialty, expertly sourced
-              coffee. Choose your flavor profile and schedule your delivery for
-              ultimate brewing convenience.
+              Set up your coffee once and never think
+              about it again. Pick your roast, pick your
+              format, pick your schedule — and we'll
+              send freshly roasted coffee to your door
+              every week, fortnight, or month. Pause or
+              cancel anytime. Free delivery on 6 and 12-
+              month plans.
             </p>
           </div>
 

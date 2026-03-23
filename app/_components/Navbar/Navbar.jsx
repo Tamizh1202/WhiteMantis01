@@ -90,7 +90,7 @@ const Navbar = ({ categories: initialCategories }) => {
                   }`}
                 onClick={() => setShopOpen((prev) => !prev)}
               >
-                <p>Our Shop</p>
+                <p>Shop</p>
                 <svg
                   className={`${styles.Arrow} ${shopOpen ? styles.ArrowOpen : ""
                     }`}
@@ -113,7 +113,7 @@ const Navbar = ({ categories: initialCategories }) => {
                 <div className={styles.DummyMainCoantiner}>
                   <div className={styles.DummyLeft}>
                     <div className={styles.DummyLeftOne}>
-                      <h3>OUR SHOP</h3>
+                      <h3>SHOP</h3>
                       <p>
                         From home brewing to bulk supply, discover coffee and
                         equipment made to perform.
@@ -300,7 +300,7 @@ const Navbar = ({ categories: initialCategories }) => {
               className={pathname.startsWith("/auth") ? styles.active : ""}
               style={{ cursor: "pointer" }}
             >
-              <p>Start Here</p>
+              <p>Sign In</p>
             </Link>
           )}
         </div>

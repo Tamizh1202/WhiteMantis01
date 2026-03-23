@@ -12,15 +12,17 @@ const Landing = () => {
         <div className={styles.MainConatiner}>
           <div className={styles.LeftConatiner}>
             <div className={styles.heading}>
-              <h2>Let&apos;s Talk Coffee</h2>
+              <h2>Get in Touch</h2>
               <div className={styles.lineleft}></div>
               <h3>Support and Sourcing</h3>
             </div>
             <div className={styles.para}>
               <p>
-                Whether seeking technical support for your brew or exploring
-                wholesale sourcing for specialty beans, our experts are ready to
-                assist.
+                For orders, subscriptions, wholesale
+                enquiries, or anything else — our team is
+                based in Dubai and typically responds
+                within a few hours. WhatsApp is the fastest
+                way to reach us.
               </p>
             </div>
           </div>
@@ -31,7 +33,7 @@ const Landing = () => {
             <div className={styles.RightContainerTop}>
               <div className={styles.First}>
                 <div className={styles.FirstTop}>
-                  <p>Need to speak with us?</p>
+                  <p>Call Us</p>
                 </div>
                 <div className={styles.FirstBottom}>
                   <Link href="tel:+9715589535337">+971 - 05 8953 5337</Link>
@@ -40,7 +42,7 @@ const Landing = () => {
               <div className={styles.line}></div>
               <div className={styles.Second}>
                 <div className={styles.SecondTop}>
-                  <p>Want to send an email?</p>
+                  <p>Email</p>
                 </div>
                 <div className={styles.SecondBottom}>
                   <Link
@@ -54,12 +56,12 @@ const Landing = () => {
               <div className={styles.line}></div>
               <div className={styles.Third}>
                 <div className={styles.ThirdTop}>
-                  <p>Where can you find us?</p>
+                  <p>Visit</p>
                 </div>
                 <div className={styles.ThirdBottom}>
-                  <p>Warehouse #2 - 26 </p>
-                  <p>26th St - Al Qouz Ind.fourth</p>
-                  <p>Al Quoz, Dubai</p>
+                  <p>Warehouse 2-26, </p>
+                  <p>26th Street Al Quoz Industrial Area 4</p>
+                  <p>Dubai, UAE</p>
                 </div>
                 {/* <div className={styles.mobline}></div> */}
               </div>
@@ -72,23 +74,23 @@ const Landing = () => {
                 <div className={styles.RightContainerBottomSocials}>
                   <div className={styles.socialOne}>
                     <a
-                    href="https://www.instagram.com/whitemantis.ae?igsh=cHl5NnQ3ZDY4OGNt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <p>Instagram </p>
-                    <svg
-                      width="8"
-                      height="8"
-                      viewBox="0 0 8 8"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                      href="https://www.instagram.com/whitemantis.ae?igsh=cHl5NnQ3ZDY4OGNt"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <path
-                        d="M0.352421 7.57268L7.42349 0.501613M7.42349 0.501613V6.86557M7.42349 0.501613H1.05953"
-                        stroke="#6C7A5F"
-                      />
-                    </svg>
+                      <p>Instagram </p>
+                      <svg
+                        width="8"
+                        height="8"
+                        viewBox="0 0 8 8"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M0.352421 7.57268L7.42349 0.501613M7.42349 0.501613V6.86557M7.42349 0.501613H1.05953"
+                          stroke="#6C7A5F"
+                        />
+                      </svg>
                     </a>
                   </div>
 

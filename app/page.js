@@ -10,7 +10,7 @@ import Partnerships from "./about-us/_components/Partnerships/Partnerships";
 
 export const metadata = {
   title:
-    "White Mantis Specialty Coffee Roasters | Built on Craft, Driven by Community",
+    "White Mantis — Specialty Coffee, Roasted in Dubai",
   description:
     "Experience premium specialty coffee in Dubai. Shop our curated selection of coffee beans, drips, and capsules.",
   keywords: [
@@ -23,7 +23,7 @@ export const metadata = {
   ],
   openGraph: {
     title:
-      "White Mantis Specialty Coffee Roasters | Built on Craft, Driven by Community",
+      "White Mantis — Specialty Coffee, Roasted in Dubai",
     description:
       "Experience premium specialty coffee in Dubai. Shop our curated selection of coffee beans, drips, and capsules.",
     url: "https://www.whitemantis.ae/",

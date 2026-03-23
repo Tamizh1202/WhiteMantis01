@@ -13,24 +13,24 @@ gsap.registerPlugin(ScrollTrigger);
 
 const stepsData = [
   {
-    title: "SELECT YOUR FORMAT",
+    title: "STEP 1 — PICK YOUR FORMAT",
     description:
-      "Choose your physical type: Coffee Beans, Capsules, or Drip Bags. This selection determines your immediate brewing and customization options.",
+      "Whole beans, drip bags, or Nespresso-compatible capsules. If you're not sure, whole beans give you the most flexibility.",
   },
   {
-    title: "DEFINE YOUR COFFEE PROFILE",
+    title: "STEP 2 — CHOOSE YOUR COFFEE",
     description:
-      "Curate your perfect flavor: Use Category, Brew Method, Origin, and Process filters to find your ideal blend and product name.",
+      "Filter by origin, roast level, or tasting notes. Or tell us how you brew — we'll suggest what works best for your setup.",
   },
   {
-    title: "SET YOUR SCHEDULE & QUANTITY",
+    title: "STEP 3 — SET YOUR DELIVERY SCHEDULE",
     description:
       "Customize your schedule: Confirm the number of bags per shipment and your delivery frequency. Select your total duration from the 3, 6, or 12-month plans.",
   },
   {
-    title: "REVIEW & CHECKOUT",
+    title: "STEP 4 — REVIEW AND CONFIRM",
     description:
-      "Review, pay, and receive: Your customized coffee arrives fresh. Subscription will not auto-renew, and you can cancel anytime.",
+      "Double-check your choices, pay once, and your first bag ships within 2 days of roasting. Your subscription won't auto-renew — we'll remind you before it ends.",
   },
 ];
 

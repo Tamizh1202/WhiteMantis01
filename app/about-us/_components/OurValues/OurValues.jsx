@@ -202,20 +202,35 @@ const OurValues = () => {
 
           <div className={styles.ContentWrapper}>
             <div className={styles.ValuesContent}>
-              <h3>OUR VALUES</h3>
+              <h3>What We Stand For</h3>
               <p>
-                Passion for quality drives our meticulous craft and innovation
-                in coffee defines our search for new techniques. We prioritize
-                community growth through ethical, sustained partnerships.
+                Quality without shortcuts. Every decision —
+                from the farm we select to the temperature
+                we roast at — is made with the final cup in
+                mind, not the final margin. Transparency at
+                every step. We publish origin details,
+                processing methods, and tasting notes
+                because we believe you should know
+                exactly what you're drinking and where it
+                came from. Partnerships that last. We work
+                with a small number of farms and
+                businesses deeply, not a large number
+                superficially. Our farmers know us. Our
+                café partners know us. That's intentional.
               </p>
             </div>
             <div className={styles.VisionContent}>
-              <h3>OUR VISION</h3>
+              <h3>Where We're Going</h3>
               <p>
-                Dedicated to selling high-quality coffee and growing together
-                with the community. Our vision is to become the most successful
-                coffee roastery globally. We ensure ethical practices while
-                setting worldwide standards.
+                To make White Mantis a name that matters
+                in global specialty coffee — not just
+                regionally. We want to be the roastery that
+                made Dubai a place the coffee world pays
+                attention to. That means keeping our
+                sourcing relationships honest, our roasting
+                disciplined, and our community close.
+                We're not in a rush. We're building
+                something that lasts.
               </p>
             </div>
           </div>

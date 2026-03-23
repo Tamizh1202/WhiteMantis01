@@ -131,8 +131,10 @@ const Enquires = () => {
 
         <div className={styles.Right}>
           <div className={styles.RightTop}>
-            <h3>Wholesale enquiries</h3>
-            <p>Submit your details and our team will contact you.</p>
+            <h3>Start the Conversation</h3>
+            <p>Tell us a little about your business and
+              what you're looking for. We'll follow up
+              within 24 hours.</p>
           </div>
 
           <div className={styles.RightBottom}>
@@ -205,8 +207,8 @@ const Enquires = () => {
 
                 <div className={styles.CheckboxBlock}>
                   <p>
-                    Which category best describes your business? Select all
-                    which apply
+                    What best describes your business? (Select
+                    all that apply)
                   </p>
 
                   <label>
@@ -272,7 +274,7 @@ const Enquires = () => {
                     className={styles.SubmitButton}
                     disabled={loading}
                   >
-                    {loading ? "Submitting..." : "Submit"}
+                    {loading ? "Sending..." : "Send Enquiry"}
                   </button>
 
                   {responseMessage && (

@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import google from "../Footer/appstore.png"
-import apple from "../Footer/googleplay.png"
+import apple from "../Footer/appstore.png"
+import google from "../Footer/googleplay.png"
 const Logo = "/White-Mantis-White-Logo.svg";
 
 
@@ -45,14 +45,18 @@ const Footer = ({ categories }) => {
 
             {/* SECTION 1: BREW. EARN. ENJOY. */}
             <div className={styles.topright1}>
-              <h2>BREW. EARN. ENJOY.</h2>
+              <h2>Every order earns. Redeem for free coffee.</h2>
               <div className={styles.toprightBottom}>
                 <div className={styles.txt1}>
                   <p style={{ textDecoration: "underline" }}>White Mantis Rewards</p>
-                  <p>Join White Mantis Rewards earn points on every purchase and redeem for free coffee, exclusives, and perks.</p>
+                  <p>Earn points on every order — beans,
+                    capsules, drip bags, subscriptions. Redeem
+                    for free coffee, early access to limited
+                    roasts, and exclusive member offers. It's
+                    automatic when you create an account.</p>
                 </div>
                 <div className={styles.btn1}>
-                  <button className={styles.SubscribeButton}>Explore Rewards</button>
+                  <button className={styles.SubscribeButton}>See How It Works</button>
                 </div>
               </div>
             </div>
@@ -60,11 +64,13 @@ const Footer = ({ categories }) => {
             {/* SECTION 2: YOUR COMPLETE COFFEE EXPERIENCE (20% Width) */}
             <div className={styles.topright2}>
               <div className={styles.topright21}>
-                <h2>YOUR COMPLETE COFFEE EXPERIENCE</h2>
+                <h2>Everything White Mantis, in one app.</h2>
                 <div className={styles.topright21Bottom}>
                   <div className={styles.topright21txt}>
                     <p style={{ textDecoration: "underline" }}>White Mantis App</p>
-                    <p>Order ahead at our cafés, earn rewards, manage subscriptions, and explore new releases.</p>
+                    <p>Order ahead. Track your subscription. Earn
+                      rewards. Get first access to new roasts.
+                      Available on iOS and Android.</p>
                   </div>
                   <div className={styles.splitButtoms}>
                     <button className={styles.btns2}>
@@ -165,7 +171,7 @@ const Footer = ({ categories }) => {
                       <p>Orders</p>
                     </Link>
                     <Link href="/account/wishlist">
-                      <p>Whishlist</p>
+                      <p>Wishlist</p>
                     </Link>
                     <Link href="/account/subscription">
                       <p>Manage Subscription</p>
@@ -191,19 +197,19 @@ const Footer = ({ categories }) => {
                 </div>
 
               </div>
-             
+
             </div>
 
             <div className={styles.TopRight}>
               <div className={styles.TopRightTop} id="join-community">
                 <div className={styles.NewslHeading}>
-                  <h4>Join Our Community</h4>
+                  <h4>Stay in the Loop</h4>
                 </div>
                 <div className={styles.NewsLetter}>
                   <div className={styles.NewsLetterRow}>
                     <input
                       type="email"
-                      placeholder="Email address"
+                      placeholder="Your email address"
                       className={styles.NewsLetterInput}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -292,10 +298,10 @@ const Footer = ({ categories }) => {
               </div>
 
               <div className={styles.Address}>
-                <p>Our Store</p>
+                <p>Roastery & Lab</p>
                 <p>
-                  Warehouse #2 - 26 <br />
-                  26th St - Al Qouz Ind.fourth, Al Quoz, Dubai
+                  Warehouse 2-26, <br />
+                  26th Street Al Quoz Industrial Area 4 Dubai, UAE
                 </p>
               </div>
 
@@ -335,7 +341,7 @@ const Footer = ({ categories }) => {
             <div className={styles.line}></div>
             <div className={styles.BottomBottom}>
               <div className={styles.BottomBottomLeft}>
-                <p>© 2026 White Mantis</p>
+                <p>© 2026 White Mantis Coffee Roasters LLC</p>
               </div>
 
               <div className={styles.BottomBottomMiddle}>

@@ -128,8 +128,8 @@ const StickyBar = ({ product }) => {
   // Determine current price based on product type and selection
   const simplePrice = product?.hasVariantOptions
     ? selectedWeight?.variantSalePrice ||
-      selectedWeight?.variantRegularPrice ||
-      0
+    selectedWeight?.variantRegularPrice ||
+    0
     : product?.salePrice || product?.regularPrice || 0;
 
   const subscriptionOptions = {
@@ -240,7 +240,7 @@ const StickyBar = ({ product }) => {
                   onClick={() => !isOutOfStock && setShowSubscribe(true)}
                   disabled={isOutOfStock}
                 >
-                  <span>Subscribe &amp; save</span>
+                  <span>Subscribe and Save 10–20% </span>
 
                   <svg
                     width="18"
@@ -329,11 +329,10 @@ const StickyBar = ({ product }) => {
                       return (
                         <button
                           key={v.id}
-                          className={`${
-                            selectedSubWeight === v.variantName
+                          className={`${selectedSubWeight === v.variantName
                               ? styles.ActiveFrequency
                               : styles.FrequencyBtn
-                          } ${vOutOfStock ? styles.OutOfStockMenuItem : ""} ${vLowStock ? styles.LowStockMenuItem : ""}`}
+                            } ${vOutOfStock ? styles.OutOfStockMenuItem : ""} ${vLowStock ? styles.LowStockMenuItem : ""}`}
                           onClick={() => {
                             setSelectedWeight(v);
                             setSelectedSubWeight(v.variantName);
@@ -371,9 +370,9 @@ const StickyBar = ({ product }) => {
                 {(() => {
                   const basePrice = product.hasVariantOptions
                     ? Number(
-                        selectedWeight?.variantSalePrice ||
-                          selectedWeight?.variantRegularPrice,
-                      )
+                      selectedWeight?.variantSalePrice ||
+                      selectedWeight?.variantRegularPrice,
+                    )
                     : Number(product.salePrice || product.regularPrice);
 
                   const discount = product.hasVariantOptions

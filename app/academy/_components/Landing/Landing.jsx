@@ -23,15 +23,18 @@ const Landing = () => {
           <div className={styles.MiddleConatiner}>
             <div className={styles.MiddleConatinerTop}>
               <p>
-                Join our expert-led sessions to deeply understand coffee
-                science, sourcing, and preparation techniques. Perfect your
-                palate and brewing skills in a single, immersive experience.
+                Learn directly from the people who source,
+                roast, and brew it every day. Our
+                workshops run from beginner tasting
+                sessions to professional barista training —
+                small groups, hands-on, inside our Al Quoz
+                roastery.
               </p>
             </div>
             <div className={styles.MiddleConatinerBottom}>
-                <div className={styles.MiddleConatinerBottomLeft}>
-                      <h5>Explore Workshops</h5>
-                </div>
+              <div className={styles.MiddleConatinerBottomLeft}>
+                <h5>Explore Workshops</h5>
+              </div>
               <div
                 className={styles.MiddleConatinerBottomRight}
                 onClick={() => {
@@ -40,18 +43,18 @@ const Landing = () => {
                 }}
                 style={{ cursor: "pointer" }}
               >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 13 13"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13 1H11V9.59L1.41 0L0 1.41L9.59 11H1V13H13V1Z"
-                  fill="#6C7A5F"
-                />
-              </svg>
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 13 13"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13 1H11V9.59L1.41 0L0 1.41L9.59 11H1V13H13V1Z"
+                    fill="#6C7A5F"
+                  />
+                </svg>
               </div>
             </div>
           </div>

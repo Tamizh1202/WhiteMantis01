@@ -13,18 +13,20 @@ const Landing = () => {
         <div className={styles.Overlay}>
           <div className={styles.Marquee}>
             <h2>
-              From the farm - through us - to everyone • From the farm - through
-              us - to everyone
+              Origin-roasted. Dubai-made. Delivered to
+              you.
             </h2>
           </div>
           <div className={styles.Content}>
             <div className={styles.BottomText}>
               <h4>WHITE MANTIS COFFEE ROASTERS</h4>
               <p>
-                An Emirati-owned specialty coffee brand, originally launched as
-                Surge Coffee and Roastery in 2016, the brand has evolved with a
-                renewed identity, blending tradition with innovation while
-                staying rooted in quality, sustainability, and craftsmanship.
+                Born in Dubai. Roasting since 2016. White
+                Mantis is an Emirati-owned specialty
+                roastery that sources rare beans direct
+                from origin, roasts with precision in Al
+                Quoz, and delivers coffee that's genuinely
+                worth drinking — every single morning.
               </p>
             </div>
             <div className={styles.RightBottomText}>

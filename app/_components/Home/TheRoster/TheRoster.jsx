@@ -27,12 +27,14 @@ const TheRoster = () => {
       <div className={styles.MainConatiner}>
         <div className={styles.Left}>
           <div className={styles.LeftTop}>
-            <h3>Meet the Roaster: Join the Inner Circle</h3>
+            <h3>The Inner Circle</h3>
             <p>
-              Beyond the cup, the Inner Circle is your access to exclusive
-              knowledge and offers. Join our community to receive new recipes,
-              advanced brewing tips and tricks, and limited-time deals directly
-              from the White Mantis craft.
+              First access to new roasts and seasonal
+              releases before they go live. Brewing
+              guides written by our team. Exclusive
+              subscriber-only deals. This is for people
+              who take coffee seriously — and want to
+              know more than just what's in the bag.
             </p>
           </div>
           <div className={styles.LeftBottom}>
@@ -40,7 +42,7 @@ const TheRoster = () => {
               className={styles.JoinBtn}
               onClick={() => setOpenPopup(true)}
             >
-              Join our community
+              Join the Inner Circle
             </button>
           </div>
         </div>
@@ -49,9 +51,8 @@ const TheRoster = () => {
           {images.map((img, index) => (
             <div
               key={index}
-              className={`${styles.imageWrap} ${
-                activeIndex === index ? styles.active : styles.inactive
-              }`}
+              className={`${styles.imageWrap} ${activeIndex === index ? styles.active : styles.inactive
+                }`}
             >
               <Image src={img} alt="image" fill />
             </div>

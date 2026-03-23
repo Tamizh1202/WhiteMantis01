@@ -11,7 +11,7 @@ export default function Location() {
 
   return (
     <section className={styles.sectionWrapper}>
-      <h3 className={styles.title}>VISIT US</h3>
+      <h3 className={styles.title}>VISIT THE ROASTERY</h3>
 
       <div className={styles.mapWrapper}>
         <iframe

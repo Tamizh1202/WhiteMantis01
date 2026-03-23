@@ -8,7 +8,7 @@ const Subscribe = () => {
       <div className={styles.main} id="Subscriptions">
         <div className={styles.MainContainer}>
           <div className={styles.Top}>
-            <h3>Why Subscribe to White mantis?</h3>
+            <h3>What You Get as a Subscriber</h3>
           </div>
           <div className={styles.Middle}>
             <div className={styles.One}>
@@ -37,9 +37,10 @@ const Subscribe = () => {
               </div>
               <div className={styles.OneBottom}>
                 <p>
-                  Subscribers on long-term plans enjoy free delivery on all
-                  orders.This ensures seamless delivery of your favorite White
-                  Mantis Products.
+                  Free delivery on all 6 and 12-month plans.
+                  That's every order, every time, for the
+                  length of your subscription — no minimum
+                  spend required.
                 </p>
               </div>
             </div>
@@ -75,9 +76,10 @@ const Subscribe = () => {
               </div>
               <div className={styles.TwoBottom}>
                 <p>
-                  Receive special subscriber pricing and discounts when
-                  purchasing items from selected product categories. Save money
-                  while exploring our premium offerings.
+                  Save up to 20% on every delivery. Whole
+                  beans: 10% off. Drip bags and capsules:
+                  20% off. Automatically applied — no codes
+                  needed.
                 </p>
               </div>
             </div>
@@ -114,9 +116,11 @@ const Subscribe = () => {
               </div>
               <div className={styles.ThreeBottom}>
                 <p>
-                  Be the first to taste our newest coffee releases and
-                  limited-edition launches before they are available to the
-                  public.
+                  Subscribers get 48-hour early access to
+                  every new roast, seasonal release, and
+                  limited-edition bean — before they're
+                  available to anyone else. Some of these sell
+                  out before they go public.
                 </p>
               </div>
             </div>

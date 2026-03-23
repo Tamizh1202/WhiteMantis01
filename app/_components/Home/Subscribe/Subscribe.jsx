@@ -15,17 +15,19 @@ const Subscribe = () => {
           <div className={styles.Right}>
             <div className={styles.RightTop}>
               <div className={styles.RightTopContent}>
-                <h3>Subscribe and save </h3>
-                <p style={{width: "100%"}}>
-                  Your coffee, always on time. Set your preferred delivery
-                  schedule and receive freshly roasted coffee at regular
-                  intervals. Enjoy added savings, priority roasting, and the
-                  confidence of consistent quality in every delivery, so your
-                  coffee routine stays effortless and uninterrupted.
+                <h3>Never run out. Never settle. </h3>
+                <p style={{ width: "100%" }}>
+                  Set your coffee once and forget the reorder.
+                  Choose your roast, your format, your
+                  schedule — and we'll send freshly roasted
+                  coffee to your door on time, every time.
+                  Subscribers get up to 20% off, early access
+                  to limited roasts, and free delivery on 6 and
+                  12-month plans.
                 </p>
               </div>
               <div className={styles.RightTopButton}>
-                <p>Explore subscription </p>
+                <p>Build Your Plan</p>
                 <svg
                   width="8"
                   height="8"

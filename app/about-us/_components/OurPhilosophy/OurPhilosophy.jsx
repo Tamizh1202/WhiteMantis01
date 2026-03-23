@@ -7,18 +7,23 @@ const OurPhilosophy = () => {
       <div className={styles.Main} id="philosophy">
         <div className={styles.MainConatiner}>
           <div className={styles.Left}>
-            <h4>Our Philosophy</h4>
+            <h4>How We Think About Coffee</h4>
           </div>
           <div className={styles.Right}>
             <p>
-              At White Mantis, coffee is a quiet balance - between people and
-              process, precision and patience, flavor and feeling. It’s not just
-              something we brew, but something we live. Every bean carries
-              intention, from the farms we partner with to the hands that roast
-              and pour. We believe in craft that honors its origin, choices that
-              sustain the planet, and experiences that bring people together.
-              Because for us, coffee is more than a ritual, it’s a way to slow
-              down, connect, and create moments that linger.
+              We think coffee is most interesting at its
+              edges: the moment a process changes how
+              a bean tastes, the decision a farmer makes
+              about when to pick, the seconds between
+              under-roasted and perfect. We're obsessed
+              with those details — not because it makes
+              us precious about it, but because we've
+              seen what happens to the cup when you get
+              them right. Every bean we source, we
+              source for a reason. Every roast profile we
+              build, we can defend. And we share all of it
+              — because transparency is the only honest
+              way to sell coffee.
             </p>
           </div>
         </div>

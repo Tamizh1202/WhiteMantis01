@@ -11,10 +11,12 @@ const Landing = () => {
         <div className={styles.Right}>
           <div className={styles.RightTop}>
             <p>
-              Partner with White Mantis to serve exceptional coffee. We support
-              cafés, restaurants, and offices with thoughtfully sourced beans,
-              consistent roasting, training, and long-term partnerships built
-              around quality and craft.
+              We've been supplying cafés, restaurants,
+              hotels, and offices across Dubai for over a
+              decade. What we offer isn't just coffee —
+              it's a complete program: bean selection,
+              recipe development, barista training, and a
+              team that picks up the phone.
             </p>
           </div>
 
