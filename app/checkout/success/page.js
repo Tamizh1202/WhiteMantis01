@@ -146,7 +146,7 @@ function SuccessContent() {
   const calcSubtotal = totals.subtotal.toFixed(2);
 
   return (
-    <div className={styles.Main}>
+    <div className={styles.Main} data-lenis-prevent>
       <div className={styles.MainConatiner}>
         <div className={styles.Left}>
           <div className={styles.LeftTop}>

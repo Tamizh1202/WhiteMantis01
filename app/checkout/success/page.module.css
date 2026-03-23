@@ -1,26 +1,28 @@
-.Main{
+.Main {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
     background-color: #ffffff;
-  padding-left: clamp(24px, calc(24px + (386 * ((100vw - 320px) / 1120))), 410px);
-padding-right: clamp(24px, calc(24px + (386 * ((100vw - 320px) / 1120))), 410px);
-padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px);
+    padding-left: clamp(24px, calc(24px + (386 * ((100vw - 320px) / 1120))), 410px);
+    padding-right: clamp(24px, calc(24px + (386 * ((100vw - 320px) / 1120))), 410px);
+    padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px);
 
 }
-.MainConatiner{
+
+.MainConatiner {
     display: flex;
     justify-content: left;
     align-items: center;
     width: 100%;
     height: 100%;
-  gap: clamp(16px, calc(16px + (34 * ((100vw - 320px) / 1120))), 50px);
+    gap: clamp(16px, calc(16px + (34 * ((100vw - 320px) / 1120))), 50px);
 
     flex-direction: row;
 }
-.Left{
+
+.Left {
     display: flex;
     justify-content: left;
     flex-direction: column;
@@ -28,7 +30,8 @@ padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px
     width: 100%;
     gap: 24px;
 }
-.LeftTop{
+
+.LeftTop {
     display: flex;
     justify-content: left;
     flex-direction: row;
@@ -36,21 +39,24 @@ padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px
     padding-top: 150px;
 
 }
-.LeftTop h3{
+
+.LeftTop h3 {
     font-family: var(--lexend);
     font-size: var(--fs-22);
     font-weight: 500;
     color: #428B54;
     text-transform: uppercase;
 }
-.LeftMiddle{
+
+.LeftMiddle {
     display: flex;
     justify-content: left;
     flex-direction: column;
     max-width: 500px;
-   
+
 }
-.LeftMiddleTop{
+
+.LeftMiddleTop {
     display: flex;
     justify-content: left;
     flex-direction: column;
@@ -58,21 +64,24 @@ padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px
     border: 1px solid #2F362A4D;
     padding: 10px 15px;
 }
-.LeftMiddleTop h4{
+
+.LeftMiddleTop h4 {
     font-family: var(--lexend);
     font-size: var(--fs-22);
     font-weight: 500;
     color: #2F362A;
     text-transform: uppercase;
 }
-.LeftMiddleTop p{
+
+.LeftMiddleTop p {
     font-family: var(--lato);
     font-size: 15px;
-    color: #6E736A; 
+    color: #6E736A;
     font-weight: 400;
     max-width: 470px;
 }
-.LeftMiddleBottom{
+
+.LeftMiddleBottom {
     display: flex;
     justify-content: left;
     flex-direction: column;
@@ -80,165 +89,198 @@ padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px
     border: 1px solid #2F362A4D;
     padding: 20px 25px;
 }
-.One{
+
+.One {
     display: flex;
     justify-content: left;
-   flex-direction: column;
-   gap:10px;
+    flex-direction: column;
+    gap: 10px;
 }
-.OneTop{display: flex;
+
+.OneTop {
+    display: flex;
     justify-content: left;
-    
+
 }
-.OneTop p{
+
+.OneTop p {
     font-family: var(--lato);
-    font-size:15px;
+    font-size: 15px;
     font-weight: 700;
     color: #2F362A;
 
 }
-.OneBottom{
+
+.OneBottom {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
 }
-.OneBottomLeft{
+
+.OneBottomLeft {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 10px;
 }
-.OrderText, .OrderIdNumber{
+
+.OrderText,
+.OrderIdNumber {
     display: flex;
     justify-content: left;
-    
+
 }
-.OrderText p{
-    font-family: var(--lato);
-    font-size:15px;
-    font-weight: 400;
-    color: #2F362A;
-}
-.OrderIdNumber h4{
+
+.OrderText p {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
-    color:#6E736A;
+    color: #2F362A;
 }
-.OneBottomRight{
+
+.OrderIdNumber h4 {
+    font-family: var(--lato);
+    font-size: 15px;
+    font-weight: 400;
+    color: #6E736A;
+}
+
+.OneBottomRight {
     display: flex;
     justify-content: right;
     flex-direction: column;
     gap: 10px;
-    
+
 }
-.PaymentText{
+
+.PaymentText {
     display: flex;
     justify-content: left;
 }
-.PaymentText p{
+
+.PaymentText p {
     font-family: var(--lato);
-    font-size:15px;
+    font-size: 15px;
     font-weight: 400;
     color: #2F362A;
 }
-.PaymentMethodCard{
+
+.PaymentMethodCard {
     display: flex;
     flex-direction: row;
     gap: 10px;
     align-items: center;
 }
-.PaymentMethodCard h4{
+
+.PaymentMethodCard h4 {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
-    color:#6E736A;
+    color: #6E736A;
 }
-.Two{
+
+.Two {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-     
+
 }
-.TwoLeft{
+
+.TwoLeft {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 10px;
     max-width: 206px;
 }
-.TwoLeftHeading, .BillingAddress{
+
+.TwoLeftHeading,
+.BillingAddress {
     display: flex;
     justify-content: left;
 
 }
-.TwoLeftHeading p{
-    font-family: var(--lato);
-    font-size:15px;
-    font-weight: 400;
-    color: #2F362A;
-}
-.BillingAddress p{
+
+.TwoLeftHeading p {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
-    color:#6E736A;
+    color: #2F362A;
+}
+
+.BillingAddress p {
+    font-family: var(--lato);
+    font-size: 15px;
+    font-weight: 400;
+    color: #6E736A;
 
 }
-.TwoRight{
+
+.TwoRight {
     display: flex;
     justify-content: right;
     max-width: 206px;
     flex-direction: column;
     gap: 10px;
-   
+
 }
-.TwoRightHeading, .ShippingAddress{
+
+.TwoRightHeading,
+.ShippingAddress {
     display: flex;
     justify-content: left;
 
 }
-.TwoRightHeading p{
-    font-family: var(--lato);
-    font-size:15px;
-    font-weight: 400;
-    color: #2F362A;
-}
-.ShippingAddress p{
+
+.TwoRightHeading p {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
-    color:#6E736A;
+    color: #2F362A;
 }
-.Three{
+
+.ShippingAddress p {
+    font-family: var(--lato);
+    font-size: 15px;
+    font-weight: 400;
+    color: #6E736A;
+}
+
+.Three {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 10px;
 }
-.ThreeTop, .ContactEmail{
+
+.ThreeTop,
+.ContactEmail {
     display: flex;
     justify-content: left;
 }
-.ThreeTop p{
-    font-family: var(--lato);
-    font-size:15px;
-    font-weight: 400;
-    color: #2F362A;
-}
-.ContactEmail p{
+
+.ThreeTop p {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
-    color:#6E736A;
+    color: #2F362A;
 }
-.LeftBottom{
+
+.ContactEmail p {
+    font-family: var(--lato);
+    font-size: 15px;
+    font-weight: 400;
+    color: #6E736A;
+}
+
+.LeftBottom {
     display: flex;
     justify-content: left;
 }
-.cont{
+
+.cont {
     padding: 13px 19px;
- 
+
     border: none;
     display: flex;
     background-color: #6C7A5F;
@@ -248,168 +290,238 @@ padding-bottom: clamp(80px, calc(80px + (120 * ((100vw - 320px) / 1120))), 200px
     font-weight: 500;
     cursor: pointer;
 }
-.Line{
+
+.Line {
     width: 1px;
     align-self: stretch;
     background-color: #2F362A4D;
 
 }
-.Right{
+
+.Right {
     display: flex;
     justify-content: left;
     flex-direction: column;
-   gap: clamp(24px, calc(24px + (8 * ((100vw - 320px) / 1120))), 32px);
+    gap: clamp(24px, calc(24px + (8 * ((100vw - 320px) / 1120))), 32px);
 
     padding-top: 150px;
     width: 100%;
 }
-.RightOne{
+
+.RightOne {
     display: flex;
     justify-content: left;
     flex-direction: row;
     gap: 13px;
 }
-.RightOne h3{
+
+.RightOne h3 {
     font-family: var(--lexend);
     font-size: var(--fs-22);
     font-weight: 400;
     color: #2F362A;
     text-transform: uppercase;
 }
-.RightOne p{
+
+.RightOne p {
     font-family: var(--lato);
     font-size: 15px;
-    color: #2F362A; 
+    color: #2F362A;
     font-weight: 400;
 }
-.RightTwo{
+
+.RightTwo {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 24px;
 }
-.ProdOne{
+
+.ProdOne {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
 }
-.ProdImage img{
+
+.ProdImage img {
     width: 100%;
     max-width: 81px;
     height: 100%;
     max-height: 80px;
     object-fit: cover;
 }
-.ProdNameAndweight h4{
+
+.ProdNameAndweight h4 {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
     color: #2F362A;
 }
-.ProdQnty p{
+
+.ProdQnty p {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
     color: #2F362A;
 }
-.ProdPrice h4{
+
+.ProdPrice h4 {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
     color: #2F362A;
 }
-.RightThree{
+
+.RightThree {
     display: flex;
     justify-content: left;
     flex-direction: column;
     gap: 15px;
 }
-.Subtotal, .Shipping, .Total, .CuponDiscount, .EstimatedTax{
+
+.Subtotal,
+.Shipping,
+.Total,
+.CuponDiscount,
+.EstimatedTax {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
 }
-.RightLine{
+
+.RightLine {
     width: 100%;
     height: 1px;
     background-color: #2F362A4D;
 }
-.Subtotal p, .Shipping p,  .CuponDiscount p, .EstimatedTax p{
+
+.Subtotal p,
+.Shipping p,
+.CuponDiscount p,
+.EstimatedTax p {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
     color: #2F362A;
 }
-.Subtotal h4, .Shipping h4, .CuponDiscount h4, .EstimatedTax h4{
+
+.Subtotal h4,
+.Shipping h4,
+.CuponDiscount h4,
+.EstimatedTax h4 {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 400;
     color: #2F362A;
 }
-.Total p , .Total h4{
+
+.Total p,
+.Total h4 {
     font-family: var(--lato);
     font-size: 15px;
     font-weight: 700;
     color: #2F362A;
 }
-@media (max-width: 640px){
-    .Main{
+
+@media (max-width: 640px) {
+    .Main {
         padding: 80px 24px;
     }
-    .MainConatiner{
+
+    .MainConatiner {
         flex-direction: column;
         align-items: center;
     }
-    .Left, .Right{
+
+    .Left,
+    .Right {
         width: 100%;
         padding-top: 0px;
     }
-    .Right{
+
+    .Right {
         align-items: baseline;
     }
-    .LeftTop{
+
+    .LeftTop {
         max-width: 100%;
         padding-top: 80px;
     }
-    .RightTwo, .RightThree{
+
+    .RightTwo,
+    .RightThree {
         width: 100%;
     }
-    .Line{
+
+    .Line {
         width: 100%;
         height: 1px;
     }
-    .LeftTop h3{
+
+    .LeftTop h3 {
         font-size: 20px;
     }
-    .Left{
+
+    .Left {
         gap: 32px;
         padding-bottom: 80px;
     }
-    .LeftMiddleTop h4, .RightOne h3{
+
+    .LeftMiddleTop h4,
+    .RightOne h3 {
         font-size: 20px;
     }
-    .LeftMiddleTop p, .OneTop p, .OrderText p, .OrderIdNumber h4, .PaymentText p, .PaymentMethodCard h4, .TwoLeftHeading p, .BillingAddress p, .TwoRightHeading p,.cont, .ShippingAddress p, .ThreeTop p, .ContactEmail p{
+
+    .LeftMiddleTop p,
+    .OneTop p,
+    .OrderText p,
+    .OrderIdNumber h4,
+    .PaymentText p,
+    .PaymentMethodCard h4,
+    .TwoLeftHeading p,
+    .BillingAddress p,
+    .TwoRightHeading p,
+    .cont,
+    .ShippingAddress p,
+    .ThreeTop p,
+    .ContactEmail p {
         font-size: 14px;
     }
-    .ProdNameAndweight h4, .ProdQnty p, .ProdPrice h4, .Subtotal p, .Shipping p,  .CuponDiscount p, .EstimatedTax p, .Subtotal h4, .Shipping h4, .CuponDiscount h4, .EstimatedTax h4, .Total p , .Total h4{
+
+    .ProdNameAndweight h4,
+    .ProdQnty p,
+    .ProdPrice h4,
+    .Subtotal p,
+    .Shipping p,
+    .CuponDiscount p,
+    .EstimatedTax p,
+    .Subtotal h4,
+    .Shipping h4,
+    .CuponDiscount h4,
+    .EstimatedTax h4,
+    .Total p,
+    .Total h4 {
         font-size: 14px;
     }
 }
-@media(min-width: 641px) and (max-width: 1024px){
-    .Main{
+
+@media(min-width: 641px) and (max-width: 1024px) {
+    .Main {
         padding-left: 40px;
         padding-right: 40px;
     }
 }
-@media(min-width: 1025px) and (max-width: 1480px){
-    .Main{
+
+@media(min-width: 1025px) and (max-width: 1480px) {
+    .Main {
         padding-left: 80px;
         padding-right: 80px;
     }
 }
-@media(min-width: 1481px) and (max-width: 1820px){
-    .Main{
+
+@media(min-width: 1481px) and (max-width: 1820px) {
+    .Main {
         padding-left: 150px;
         padding-right: 150px;
     }

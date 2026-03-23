@@ -94,7 +94,7 @@ const CartSideBar = () => {
             </div>
           ) : (
             <div className={styles.MainContainer}>
-              <div className={styles.Top}>
+              <div className={styles.Top} data-lenis-prevent >
                 <div className={styles.TopOne}>
                   <div className={styles.TopOneTop}>
                     <div className={styles.TopOneLeft}>
