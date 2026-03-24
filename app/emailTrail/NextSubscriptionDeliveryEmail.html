@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscription Renewal Reminder Email</title>
+</head>
+
+<body style="margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; background-color: #f5f5f5;">
+
+    <div id="email-container"></div>
+    <link href="https://fonts.cdnfonts.com/css/lato" rel="stylesheet">
+    <style>
+        /* 1. Set the Global Font (e.g., Lato for body text) */
+        body,
+        table,
+        td,
+        p,
+        span {
+            font-family: 'Lato', Helvetica, Arial, sans-serif !important;
+            font-weight: 400;
+        }
+
+        /* 2. Set the Heading Font (e.g., Lexend for Titles) */
+        h1,
+        h2,
+        strong,
+        .lexend-font {
+            font-family: 'Lexend', sans-serif !important;
+        }
+    </style>
+    <script>
+        // 1. DATA OBJECT
+        const order = {
+            id: "260323-GWEE", // Using the invoiceId from the subscription data
+            createdAt: "2026-03-23T09:12:41.968Z",
+            email: "yuvraj@integramagna.com",
+            deliveryOption: "delivery",
+            items: [
+                {
+                    productName: "Colombia",
+                    categoryTitle: "Coffee Beans", // From data.user.items[0].product.categories.title
+                    variantName: "250", // Bag weight (e.g., 250, 500, 1000)
+                    quantity: 2,
+                    nextPaymentDate: "12/02/2026",
+                    price: 115, // Price per bag
+                    frequency: "Every 2 weeks", // Derived from duration: 2, interval: week
+                    product: {
+                        productImage: {
+                            sizes: {
+                                thumbnail: {
+                                    url: "/api/media/file/Colombia%20Huila%20722-400x300.png"
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            shippingAddress: {
+                addressFirstName: "asdfsadfsadf",
+                addressLastName: "fsadffsfs",
+                addressLine1: "sdafsdaf",
+                addressLine2: "sadfasdf",
+                city: "saddfasdfdsgsdbs",
+                emirates: "dubai",
+                addressCountry: "United Arab Emirates",
+                phoneNumber: "+971585858585"
+            },
+            billingAddress: {
+                addressFirstName: "asdfsadfsadf",
+                addressLastName: "fsadffsfs",
+                addressLine1: "sdafsdaf",
+                addressLine2: "",
+                city: "saddfasdfdsgsdbs",
+                emirates: "dubai",
+                addressCountry: "United Arab Emirates",
+                phoneNumber: "+971585858585"
+            },
+            financials: {
+                subtotal: 230.00,
+                shippingCharge: 50.00,
+                subscriptionDiscount: 46.00, // Added for the 20% off
+                couponDiscount: 0,
+                wtCoinsDiscount: 0,
+                taxAmount: 11.70,
+                total: 245.70
+            }
+        };
+
+        const LOGO_URL = 'https://wordpressbackend.whitemantis.ae/wp-content/uploads/2026/01/image.png';
+        const BACKEND_URL = 'https://wordpressbackend.whitemantis.ae';
+
+        const formatAddress = (addr) =>
+            addr ? `${addr.addressLine1}, ${addr.addressLine2 ? addr.addressLine2 + ', ' : ''}${addr.city}, ${addr.emirates}, ${addr.addressCountry}` : 'N/A';
+
+        // 2. MAPPING LOGIC
+        const template = `
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td align="center" style="padding: 40px 0;">
+            <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+              <tr>
+                <td style="padding: 40px;">
+                  
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 32px;">
+                    <tr>
+                      <td align="left"><img src="${LOGO_URL}" width="50" style="display: block;"></td>
+                      <td align="right" style="font-size: 14px; color: #2F362A;font-weight:400; font-family: 'Lexend', sans-serif;">
+  Order Id: <span id="order-id-text" style="font-weight: 400;">#${order.id}</span>
+  
+  <span id="copy-btn" style="cursor: pointer; display: inline-block; vertical-align: middle; margin-left: 3px; margin-top:-2px" title="Copy Order ID">
+    <svg width="13" height="16" viewBox="0 0 13 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+      <path d="M4.42313 12.5C4.00215 12.5 3.64583 12.3542 3.35417 12.0625C3.0625 11.7708 2.91667 11.4145 2.91667 10.9935V1.50646C2.91667 1.08549 3.0625 0.729167 3.35417 0.4375C3.64583 0.145833 4.00215 0 4.42313 0H11.4102C11.8312 0 12.1875 0.145833 12.4792 0.4375C12.7708 0.729167 12.9167 1.08549 12.9167 1.50646V10.9935C12.9167 11.4145 12.7708 11.7708 12.4792 12.0625C12.1875 12.3542 11.8312 12.5 11.4102 12.5H4.42313ZM4.42313 11.25H11.4102C11.4744 11.25 11.5331 11.2233 11.5865 11.1698C11.6399 11.1165 11.6667 11.0577 11.6667 10.9935V1.50646C11.6667 1.44229 11.6399 1.38354 11.5865 1.33021C11.5331 1.27674 11.4744 1.25 11.4102 1.25H4.42313C4.35896 1.25 4.30021 1.27674 4.24688 1.33021C4.1934 1.38354 4.16667 1.44229 4.16667 1.50646V10.9935C11.6667 11.0577 4.1934 11.1165 4.24688 11.1698C4.30021 11.2233 4.35896 11.25 4.42313 11.25ZM1.50646 15.4167C1.08549 15.4167 0.729167 15.2708 0.4375 14.9792C0.145833 14.6875 0 14.3312 0 13.9102V3.17313H1.25V13.9102C1.25 13.9744 1.27674 14.0331 1.33021 14.0865C1.38354 14.1399 1.44229 14.1667 1.50646 14.1667H9.74354V15.4167H1.50646Z" fill="#2F362A"/>
+    </svg>
+  </span>
+</td>
+                    </tr>
+                  </table>
+
+                  <h1 style="font-size: 22px; font-weight: 700; color: #2F362A; text-transform: uppercase; margin: 0; display: block;">
+  
+  <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-top: -3px;">
+<path d="M2 20C1.45 20 0.979333 19.8043 0.588 19.413C0.196667 19.0217 0.000666667 18.5507 0 18V4C0 3.45 0.196 2.97933 0.588 2.588C0.98 2.19667 1.45067 2.00067 2 2H3V0H5V2H13V0H15V2H16C16.55 2 17.021 2.196 17.413 2.588C17.805 2.98 18.0007 3.45067 18 4V10H16V8H2V18H9V20H2ZM16 22C14.7833 22 13.721 21.621 12.813 20.863C11.905 20.105 11.334 19.1507 11.1 18H12.65C12.8667 18.7333 13.2793 19.3333 13.888 19.8C14.4967 20.2667 15.2007 20.5 16 20.5C16.9667 20.5 17.7917 20.1583 18.475 19.475C19.1583 18.7917 19.5 17.9667 19.5 17C19.5 16.0333 19.1583 15.2083 18.475 14.525C17.7917 13.8417 16.9667 13.5 16 13.5C15.5167 13.5 15.0667 13.5873 14.65 13.762C14.2333 13.9367 13.8667 14.1827 13.55 14.5H15V16H11V12H12.5V13.425C12.95 12.9917 13.475 12.646 14.075 12.388C14.675 12.13 15.3167 12.0007 16 12C17.3833 12 18.5627 12.4877 19.538 13.463C20.5133 14.4383 21.0007 15.6173 21 17C20.9993 18.3827 20.5117 19.562 19.537 20.538C18.5623 21.514 17.3833 22.0013 16 22ZM2 6H16V4H2V6Z" fill="#2F362A"/>
+</svg>
+
+
+
+  Your Next subscription delivery is coming up !
+</h1>
+                  <p style="font-size: 16px; color: #6E736A;">Hi ${order.billingAddress.addressFirstName},</p>
+                  <p style="font-size: 16px; color: #6E736A; margin: 0; line-height: 1.5;">
+  Just a quick reminder that your ${order.items[0]?.categoryTitle || 'Coffee'} subscription is scheduled to renew soon. 
+  Your subscription will be processed automatically on 
+  <b>${new Date(order.items[0].nextPaymentDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</b>
+</p>
+
+                  <div style="padding-bottom: 32px;padding-top:32px">
+                    <a href="https://whitemantis.ae/account/orders/${order.id}" style="background-color: #6c7a5f; color: #ffffff; text-decoration: none; padding: 13px 47px; font-size: 15px; display: inline-block;">View Active Subscription</a>
+                  </div>
+
+                  <div style="margin: 0 0 15px 0;">
+  <h2 style="font-size: 22px; font-family: 'Lexend', sans-serif; color: #2F362A; margin: 0 0 15px 0;">
+    Subscription Details
+  </h2>
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td align="left" style="font-family: 'Lato', sans-serif; font-size: 15px; color: #2F362A;">
+        ${order.items[0].categoryTitle} Subscription
+      </td>
+      <td align="right" style="font-family: 'Lato', sans-serif; font-size: 15px; color: #2F362A;">
+        Delivery ${order.items[0].frequency}
+      </td>
+    </tr>
+  </table>
+</div>
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style=""margin-bottom: 20px;">
+                    ${order.items.map(item => `
+  <tr>
+    <td style="padding: 15px 0; width: 80px; vertical-align: top;">
+      <img src="${BACKEND_URL}${item.product.productImage.sizes.thumbnail.url}" width="60" style="display: block; border-radius: 4px;">
+    </td>
+
+    <td style="padding: 15px 10px; vertical-align: top;">
+      <p style="font-family: 'Lato', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.4; color: #6E736A; margin: 0;">
+        ${item.productName}
+      </p>
+      <p style="font-family: 'Lato', sans-serif; font-weight: 400; font-size: 15px; line-height: 1.4; color: #6E736A; margin: 4px 0 0 0;">
+        ${item.variantName >= 1000 ? (item.variantName / 1000) + 'kg' : item.variantName + 'g'} 
+        <span style="color: #6E736A; margin: 0 8px;">|</span> 
+        ${item.quantity}x Bag amount
+      </p>
+    </td>
+
+    <td align="right" style="padding: 15px 0; vertical-align: top; font-family: 'Lexend', sans-serif; font-size: 15px; font-weight: 700; color: #2F362A;">
+      </td>
+  </tr>
+`).join('')}
+                  </table>
+
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 32px; font-size: 14px; color: #2F362A;">
+                    <tr>
+  <td style="border-top: 1px solid #e5e5e5; font-size:15px; padding: 20px 0 8px 0;">Subtotal</td>
+  <td align="right" style="border-top: 1px solid #e5e5e5; font-size:15px; padding: 20px 0 8px 0;">
+    ${order.financials.subtotal.toFixed(2)}
+  </td>
+</tr>
+<tr>
+  <td style="padding: 8px 0; font-size:15px;">Shipping</td>
+  <td align="right" style="padding: 8px 0;font-size:15px;">
+    AED ${order.financials.shippingCharge.toFixed(2)}
+  </td>
+</tr>
+                    
+                    ${order.financials.couponDiscount > 0 ? `
+                      <tr><td style="padding: 8px 0;font-size:15px;">Coupon Discount</td><td align="right" style="color: #2F362A;font-size:15px;">AED ${order.financials.couponDiscount.toFixed(2)}</td></tr>
+                    ` : ''}
+                    
+                    <tr><td style="padding: 8px 0 16px 0;font-size:15px;">VAT </td><td align="right" style="font-size:15px;">AED ${order.financials.taxAmount.toFixed(2)}</td></tr>
+                    <tr style="font-weight: 700; font-size: 16px;">
+                      <td style="border-top: 1px solid #e5e5e5; padding: 16px 0 20px 0; font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 800; color: #2F362A;">Total</td>
+                      <td align="right" style="border-top: 1px solid #e5e5e5; padding: 16px 0 20px 0; font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 800; color: #2F362A;">AED ${order.financials.total.toFixed(2)}</td>
+                    </tr>
+                  </table>
+
+                  <h2 style="font-size: 22px; font-family: "Lato";font-weight:40; padding-bottom: 10px; color: #2F362A;">Customer Information</h2>
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px; color: #666; line-height: 1.6;">
+                    <tr>
+                      <td width="50%" valign="top" style="padding-right: 20px;">
+                        <p style="margin: 0 0 15px 0;"><strong style="color: #333; display: block; margin-bottom: 4px;">Name</strong>${order.billingAddress.addressFirstName} ${order.billingAddress.addressLastName}</p>
+                        <p style="margin: 0 0 15px 0;"><strong style="color: #333; display: block; margin-bottom: 4px;">Email</strong>${order.email}</p>
+                        <p style="margin: 0 0 15px 0;"><strong style="color: #333; display: block; margin-bottom: 4px;">Phone</strong>${order.billingAddress.phoneNumber}</p>
+                        <p style="margin: 0 0 15px 0;"><strong style="color: #333; display: block; margin-bottom: 4px;">Order Date</strong>December 31, 2025</p>
+                      </td>
+                      <td width="50%" valign="top">
+                        <p style="margin: 0 0 15px 0;"><strong style="color: #333; display: block; margin-bottom: 4px;">Payment Method</strong>Stripe</p>
+                        <p style="margin: 0 0 15px 0;"><strong style="color: #333; display: block; margin-bottom: 4px;">Shipping Address</strong>${formatAddress(order.shippingAddress)}</p>
+                        <p style="margin: 0 0 15px 0;"><strong style="color: #333; display: block; margin-bottom: 4px;">Billing Address</strong>${formatAddress(order.billingAddress)}</p>
+                      </td>
+                    </tr>
+                  </table>
+
+                   <p style="font-size: 15px; color: #6E736A; padding-top:20px ;border-top: 1px solid #e5e5e5; font-family: "Lato",font-weight: 400">
+                Your payment will be charged automatically when the renewal is processed. After the order is shipped, it can no longer be cancelled.<br /></p>
+                
+
+                  <p style="font-size: 15px; color: #2F362A; line-height: 1.5; margin: 0;">
+                    Need help? Reach us at <br><a href="mailto:support@whitemantis.com" style="color: #6C7A5F; text-decoration: underline;">support@whitemantis.com</a>
+                    <br /><br />
+                    Happy brewing,<br />
+                    <strong>Team White Mantis</strong>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    `;
+
+        document.getElementById('email-container').innerHTML = template;
+        document.getElementById('copy-btn').addEventListener('click', function () {
+            const orderId = order.id.toString();
+
+            navigator.clipboard.writeText(orderId).then(() => {
+                // Optional: Visual feedback
+                alert("Order ID copied to clipboard: " + orderId);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -34,7 +34,7 @@ const Lisiting = () => {
   const [showSubscribePopup, setShowSubscribePopup] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedFrequency, setSelectedFrequency] = useState(null);
-  const [selectedQuantity, setSelectedQuantity] = useState(2);
+  const [selectedQuantity, setSelectedQuantity] = useState(null);
 
   // UI Ref for Mobile Filters
   const mobileFiltersRef = useRef(null);

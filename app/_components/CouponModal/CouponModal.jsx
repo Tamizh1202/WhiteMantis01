@@ -69,9 +69,9 @@ const CouponModal = () => {
     if (!isCouponModalOpen) return null;
 
     return (
-        <div className={styles.overlay} onClick={closeCouponModal}>
+        <div className={styles.overlay} onClick={closeCouponModal} data-lenis-prevent>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                <div className={styles.header}>
+                <div className={styles.header} data-lenis-prevent>
                     <div className={styles.headerText}>
                         <h3>COUPONS AND OFFERS</h3>
                         <p>Cart value : AED {cartTotals?.total?.toFixed(2) || "0.00"}</p>

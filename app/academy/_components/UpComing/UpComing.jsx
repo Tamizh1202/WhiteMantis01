@@ -273,7 +273,7 @@ const UpComing = () => {
       <div id="upcoming-workshops" className={styles.main}>
         <div className={styles.MainConatiner}>
           <div className={styles.TopHeading}>
-            <h3>Book a Session</h3>
+            <h3>UPCOMING COURSES</h3>
           </div>
 
           <div className={styles.WorkShopContainer}>

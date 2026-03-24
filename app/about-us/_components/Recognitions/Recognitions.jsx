@@ -20,7 +20,7 @@ const Recognitions = () => {
               <div className={styles.Content}>
                 <div className={styles.Text}>
                   <h4>01</h4>
-                  <h3>Coaching world barista</h3>
+                  <h3>COACHING WORLD BARISTA</h3>
                 </div>
                 <div className={styles.ImageContainer}>
                   <Image src={one} alt="Recognition 1" />
@@ -32,7 +32,7 @@ const Recognitions = () => {
               <div className={styles.Content}>
                 <div className={styles.Text}>
                   <h4>02</h4>
-                  <h3>Brewers championship</h3>
+                  <h3>BREWERS CHAMPIONSHIP</h3>
                 </div>
                 <div className={styles.ImageContainer}>
                   <Image src={two} alt="Recognition 1" />
@@ -44,7 +44,7 @@ const Recognitions = () => {
               <div className={styles.Content}>
                 <div className={styles.Text}>
                   <h4>03</h4>
-                  <h3>Cezve/Ibrik championship</h3>
+                  <h3>CEZVE/IBRIK CHAMPIONSHIP</h3>
                 </div>
                 <div className={styles.ImageContainer}>
                   <Image src={three} alt="Recognition 1" />
@@ -56,7 +56,7 @@ const Recognitions = () => {
               <div className={styles.Content}>
                 <div className={styles.Text}>
                   <h4>04</h4>
-                  <h3>Roasting championship</h3>
+                  <h3>ROASTING CHAMPIONSHIP</h3>
                 </div>
                 <div className={styles.ImageContainer}>
                   <Image src={four} alt="Recognition 1" />

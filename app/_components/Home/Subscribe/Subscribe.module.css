@@ -38,11 +38,8 @@
   justify-content: left;
   flex-direction: column;
   gap: 18px;
-  padding-left: clamp(
-    21px,
-    calc(21px + (239 * ((100vw - 320px) / 1120))),
-    260px
-  );
+  padding-left: clamp(20px, 15vw, 265px);
+  padding-right: clamp(16px, 8vw, 120px);
 }
 .RightTopButton {
   display: flex;
