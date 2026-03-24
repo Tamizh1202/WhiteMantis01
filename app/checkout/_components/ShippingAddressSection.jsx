@@ -495,20 +495,25 @@ export default function ShippingAddressSection({
               </div>
 
               <div>
-                <input
-                  className={`${styles.Input} ${validationErrors.shippingPhone ? styles.InputError : ""}`}
-                  placeholder="Phone"
-                  value={shippingForm.phone}
-                  onChange={(e) => {
-                    setShippingForm({ ...shippingForm, phone: e.target.value });
-                    clearError("shippingPhone");
-                  }}
-                  onBlur={() => {
-                    const e = validateUAEPhone(shippingForm.phone);
-                    if (e)
-                      setValidationErrors((p) => ({ ...p, shippingPhone: e }));
-                  }}
-                />
+                <div className={`${styles.PhoneWrapper} ${validationErrors.shippingPhone ? styles.InputError : ""}`}>
+                  <span className={styles.PhonePrefix}>+971</span>
+                  <input
+                    className={styles.PhoneInput}
+                    placeholder="Phone"
+                    value={shippingForm.phone}
+                    inputMode="numeric"
+                    onChange={(e) => {
+                      const numeric = e.target.value.replace(/\D/g, "");
+                      setShippingForm({ ...shippingForm, phone: numeric });
+                      clearError("shippingPhone");
+                    }}
+                    onBlur={() => {
+                      const e = validateUAEPhone(shippingForm.phone);
+                      if (e)
+                        setValidationErrors((p) => ({ ...p, shippingPhone: e }));
+                    }}
+                  />
+                </div>
                 {validationErrors.shippingPhone && (
                   <span className={styles.ErrorMessage}>
                     {validationErrors.shippingPhone}
