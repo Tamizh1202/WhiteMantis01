@@ -199,11 +199,19 @@ export default function OrderSummary({
               </p>
             </div>
           </label>
-          {beansBalance > 0 && (
-            <p className={styles.PotentialSavings}>
-              <span>Save up to 20% of this Order</span>
-            </p>
-          )}
+          {beansBalance > 0 && (() => {
+            const pointsToAed = coinConfig?.pointsToAed || 10;
+            const beansToUse = Math.min(
+              Math.floor(cartTotals.subtotal * 0.2 * pointsToAed),
+              beansBalance
+            );
+            const savingAed = (beansToUse / pointsToAed).toFixed(2);
+            return (
+              <p className={styles.PotentialSavings}>
+                <span>{beansToUse} Beans will be used · Save AED {savingAed}</span>
+              </p>
+            );
+          })()}
         </div>
       </div>
 

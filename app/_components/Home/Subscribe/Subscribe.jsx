@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import styles from "./Subscribe.module.css";
 import Image from "next/image";
@@ -26,7 +27,7 @@ const Subscribe = () => {
                   12-month plans.
                 </p>
               </div>
-              <div className={styles.RightTopButton}>
+              <div className={styles.RightTopButton} onClick={() => window.location.href = "/subscription"}>
                 <p>Build Your Plan</p>
                 <svg
                   width="8"

@@ -160,12 +160,8 @@
   transition: border 0.3s ease;
 }
 
-.ProductImage:hover {
-  border: 1px solid #2f362a;
-}
-
 .ProductImage img:hover {
-  transform: scale(1.05);
+  transform: scale(1.10);
 }
 
 .FilterBox .FilterBox {
@@ -194,7 +190,7 @@
   object-fit: contain;
   transition: transform 0.35s ease-in-out;
   will-change: transform;
-  padding: 30px 20px;
+  padding: 45px 20px;
 }
 
 /* .ProductTop img {
@@ -208,6 +204,8 @@
   right: 10px;
   cursor: pointer;
   z-index: 5;
+  opacity: 1;
+  filter: none;
 }
 
 .ProductBottom {

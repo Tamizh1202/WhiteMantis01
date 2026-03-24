@@ -154,7 +154,7 @@ const Recommendation = ({ product }) => {
 
                 return (
                   <div
-                    className={`${styles.ProductCard} ${isOutOfStock ? styles.Muted : ""}`}
+                    className={styles.ProductCard}
                     key={item.id}
                   >
                     <div className={styles.ProductTop}>
@@ -166,7 +166,7 @@ const Recommendation = ({ product }) => {
                       <div className={styles.WishlistIcon}>
                         <Wishlist product={item} />
                       </div>
-                      <Link href={productUrl} className={styles.ProductImage}>
+                      <Link href={productUrl} className={`${styles.ProductImage} ${isOutOfStock ? styles.Muted : ""}`}>
                         {displayData.image ? (
                           <Image
                             src={displayData.image}

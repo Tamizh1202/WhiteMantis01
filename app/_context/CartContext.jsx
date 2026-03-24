@@ -8,6 +8,7 @@ import {
   updateItemQuantity,
 } from "@/utils/guestCartUtils";
 import axiosClient from "@/lib/axios";
+import toast from "react-hot-toast";
 import { addToCartToast } from "./_components/addToCartToast";
 
 const CartContext = createContext(null);
@@ -203,6 +204,9 @@ export function CartProvider({ children }) {
         }
       } catch (e) {
         console.error("Error adding to cart:", e);
+        const resData = e?.response?.data;
+        const backendMsg = resData?.message || resData?.error || resData?.errors?.[0]?.message;
+        toast.error(backendMsg || e?.message || "Failed to add item to cart");
       }
     } else {
       try {
@@ -218,6 +222,9 @@ export function CartProvider({ children }) {
         }
       } catch (e) {
         console.error("Error adding to cart:", e);
+        const resData = e?.response?.data;
+        const backendMsg = resData?.message || resData?.error || resData?.errors?.[0]?.message;
+        toast.error(backendMsg || e?.message || "Failed to add item to cart");
       }
     }
   };
@@ -253,8 +260,13 @@ export function CartProvider({ children }) {
           action,
         });
         applyCartResponse(res.data);
+        return { ok: true };
       } catch (e) {
         console.error("Error updating cart quantity:", e);
+        const resData = e?.response?.data;
+        const backendMsg = resData?.message || resData?.error || resData?.errors?.[0]?.message;
+        const message = backendMsg || e?.message || "Failed to update quantity";
+        return { ok: false, message };
       }
     } else {
       // For guest: resolve new quantity from action or direct value

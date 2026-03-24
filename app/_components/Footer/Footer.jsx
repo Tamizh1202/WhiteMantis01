@@ -1,17 +1,15 @@
-
 "use client";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import apple from "../Footer/appstore.png"
-import google from "../Footer/googleplay.png"
+import apple from "../Footer/appstore.png";
+import google from "../Footer/googleplay.png";
+import axiosClient from "@/lib/axios";
 const Logo = "/White-Mantis-White-Logo.svg";
 
-
 const Footer = ({ categories }) => {
-
   const pathname = usePathname();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,7 +23,6 @@ const Footer = ({ categories }) => {
       {/* chnge link path with crct one later veer dont forget */}
       <div className={styles.Main}>
         <div className={styles.MainConatiner1}>
-
           {/* LEFT MOST: Logo */}
           <div className={styles.TopLeft}>
             <Link href="/">
@@ -42,21 +39,30 @@ const Footer = ({ categories }) => {
 
           {/* RIGHT SECTIONS WRAPPER */}
           <div className={styles.topright}>
-
             {/* SECTION 1: BREW. EARN. ENJOY. */}
             <div className={styles.topright1}>
               <h2>Every order earns. Redeem for free coffee.</h2>
               <div className={styles.toprightBottom}>
                 <div className={styles.txt1}>
-                  <p style={{ textDecoration: "underline" }}>White Mantis Rewards</p>
-                  <p>Earn points on every order — beans,
-                    capsules, drip bags, subscriptions. Redeem
-                    for free coffee, early access to limited
-                    roasts, and exclusive member offers. It's
-                    automatic when you create an account.</p>
+                  <p style={{ textDecoration: "underline" }}>
+                    White Mantis Rewards
+                  </p>
+                  <p>
+                    Earn points on every order — beans, capsules, drip bags,
+                    subscriptions. Redeem for free coffee, early access to
+                    limited roasts, and exclusive member offers. It's automatic
+                    when you create an account.
+                  </p>
                 </div>
                 <div className={styles.btn1}>
-                  <button className={styles.SubscribeButton}>See How It Works</button>
+                  <Link
+                    href="/account/whitemantis-beans"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <button className={styles.SubscribeButton}>
+                      See How It Works
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -67,21 +73,36 @@ const Footer = ({ categories }) => {
                 <h2>Everything White Mantis, in one app.</h2>
                 <div className={styles.topright21Bottom}>
                   <div className={styles.topright21txt}>
-                    <p style={{ textDecoration: "underline" }}>White Mantis App</p>
-                    <p>Order ahead. Track your subscription. Earn
-                      rewards. Get first access to new roasts.
-                      Available on iOS and Android.</p>
+                    <p style={{ textDecoration: "underline" }}>
+                      White Mantis App
+                    </p>
+                    <p>
+                      Order ahead. Track your subscription. Earn rewards. Get
+                      first access to new roasts. Available on iOS and Android.
+                    </p>
                   </div>
                   <div className={styles.splitButtoms}>
                     <button className={styles.btns2}>
-                      <Image src={google} alt="Google Play" width={24} height={24} className={styles.ButtonIcon} />
+                      <Image
+                        src={google}
+                        alt="Google Play"
+                        width={24}
+                        height={24}
+                        className={styles.ButtonIcon}
+                      />
                       <div className={styles.TextContainer}>
                         <span className={styles.btnhead}>Get it on</span>
                         <span className={styles.btnbody}>Google Play</span>
                       </div>
                     </button>
                     <button className={styles.btns2}>
-                      <Image src={apple} alt="App Store" width={24} height={24} className={styles.ButtonIcon} />
+                      <Image
+                        src={apple}
+                        alt="App Store"
+                        width={24}
+                        height={24}
+                        className={styles.ButtonIcon}
+                      />
                       <div className={styles.TextContainer}>
                         <span className={styles.btnhead}>Download on the</span>
                         <span className={styles.btnbody}>App Store</span>
@@ -91,13 +112,10 @@ const Footer = ({ categories }) => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
-        <div className={styles.MainConatiner2} >
+        <div className={styles.MainConatiner2}>
           <div className={styles.Top}>
-
-
             <div className={styles.TopMiddle}>
               <div className={styles.MobOne}>
                 <div className={styles.TopMiddleOne}>
@@ -155,7 +173,6 @@ const Footer = ({ categories }) => {
                     )}
                   </div>
                 </div>
-
               </div>
 
               <div className={styles.MobTwo}>
@@ -195,9 +212,7 @@ const Footer = ({ categories }) => {
                     </Link>
                   </div>
                 </div>
-
               </div>
-
             </div>
 
             <div className={styles.TopRight}>
@@ -233,31 +248,34 @@ const Footer = ({ categories }) => {
                         setNewsletterError(false);
 
                         try {
-                          const res = await fetch("/api/website/newsletter", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                              email,
-                              name: "",
-                              source: "footer",
-                            }),
-                          });
+                          const res = await axiosClient.post(
+                            "/api/newsletters",
+                            { email },
+                          );
 
-                          const data = await res.json();
-
-                          if (res.ok && data.success) {
-                            setNewsletterError(false);
-                            setNewsletterMsg("Subscribed successfully!");
-                            setEmail("");
-                          } else {
-                            setNewsletterError(true);
-                            setNewsletterMsg(
-                              data.message || "Subscription failed.",
-                            );
-                          }
+                          setNewsletterError(false);
+                          setNewsletterMsg(
+                            res?.data?.message || "Subscribed successfully!",
+                          );
+                          setEmail("");
                         } catch (err) {
+                          console.log("Newsletter error full:", err);
+                          console.log(
+                            "Newsletter error response:",
+                            err?.response,
+                          );
+                          console.log(
+                            "Newsletter error response data:",
+                            err?.response?.data,
+                          );
                           setNewsletterError(true);
-                          setNewsletterMsg("Network error. Please try again.");
+                          const errData = err?.response?.data;
+                          setNewsletterMsg(
+                            errData?.message ||
+                              errData?.error ||
+                              errData?.errors?.[0]?.message ||
+                              "You're already subscribed! We'll keep you in the loop.",
+                          );
                         } finally {
                           setLoading(false);
                           setTimeout(() => setNewsletterMsg(""), 4000);
@@ -312,27 +330,27 @@ const Footer = ({ categories }) => {
                 <Link href="/privacy-policy">
                   <p>Privacy Policy</p>
                 </Link>
-                <div className={styles.Socials}>
-                  <a
-                    href="https://www.instagram.com/whitemantis.ae?igsh=cHl5NnQ3ZDY4OGNt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <p>Instagram</p>
-                  </a>
-                  <svg
-                    width="8"
-                    height="8"
-                    viewBox="0 0 8 8"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0.354342 7.58134L7.36212 0.501629M7.36212 0.501629V6.87337M7.36212 0.501629H1.05512"
-                      stroke="white"
-                    />
-                  </svg>
-                </div>
+              </div>
+              <div className={styles.Socials}>
+                <a
+                  href="https://www.instagram.com/whitemantis.ae?igsh=cHl5NnQ3ZDY4OGNt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <p>Instagram</p>
+                </a>
+                <svg
+                  width="8"
+                  height="8"
+                  viewBox="0 0 8 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0.354342 7.58134L7.36212 0.501629M7.36212 0.501629V6.87337M7.36212 0.501629H1.05512"
+                    stroke="white"
+                  />
+                </svg>
               </div>
             </div>
           </div>
@@ -354,27 +372,6 @@ const Footer = ({ categories }) => {
                   <Link href="/privacy-policy">
                     <p>Privacy Policy</p>
                   </Link>
-                </div>
-                <div className={styles.Socials}>
-                  <a
-                    href="https://www.instagram.com/whitemantis.ae?igsh=cHl5NnQ3ZDY4OGNt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <p>Instagram</p>
-                  </a>
-                  <svg
-                    width="8"
-                    height="8"
-                    viewBox="0 0 8 8"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0.354342 7.58134L7.36212 0.501629M7.36212 0.501629V6.87337M7.36212 0.501629H1.05512"
-                      stroke="white"
-                    />
-                  </svg>
                 </div>
               </div>
 

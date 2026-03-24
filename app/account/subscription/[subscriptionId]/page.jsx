@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import { downloadInvoice } from "@/lib/pdf/utils/downloadInvoiceClient";
 import SubPopup from "../_components/SubscriptionPopup/SubscriptionPopup";
 import axiosClient from "@/lib/axios";
+import toast from "react-hot-toast";
 import { formatImageUrl } from "@/lib/imageUtils";
 
 export default function SubscriptionDetailPage({ params }) {
@@ -384,18 +385,13 @@ export default function SubscriptionDetailPage({ params }) {
                   if (response.status === 200) {
                     setData((prev) => ({ ...prev, subsStatus: "inactive" }));
                     setIsPopupOpen(false);
-                    alert("Subscription cancelled successfully.");
+                    toast.success("Subscription cancelled successfully.");
                   } else {
-                    console.error("Failed to cancel");
+                    toast.error("Failed to cancel subscription.");
                   }
                 } catch (err) {
-                  console.error("Network error:", err);
-                  if (err.response) {
-                    console.error("Server responded with:", err.response.data);
-                    alert(
-                      `Failed to cancel: ${err.response.data.message || "Unknown error"}`,
-                    );
-                  }
+                  const msg = err?.response?.data?.message || err?.message || "Failed to cancel subscription.";
+                  toast.error(msg);
                 } finally {
                   setCancelling(false);
                 }

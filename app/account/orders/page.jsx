@@ -6,6 +6,7 @@ import OrderCard from "./_components/OrderCard/OrderCard";
 import axiosClient from "@/lib/axios";
 import CancelOrderPopup from "./_components/CancelOrderPopup/CancelOrderPopup";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -120,13 +121,14 @@ export default function OrdersPage() {
       );
 
       if (response.status === 200) {
-        // Refresh orders or update local state
         fetchOrders(1);
         setIsCancelPopupOpen(false);
         setSelectedOrderId(null);
+        toast.success("Order cancelled successfully.");
       }
     } catch (error) {
-      console.log(error.message);
+      const msg = error?.response?.data?.message || error?.message || "Failed to cancel order.";
+      toast.error(msg);
     }
   };
 

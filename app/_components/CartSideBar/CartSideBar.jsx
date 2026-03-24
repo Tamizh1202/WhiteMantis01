@@ -21,6 +21,7 @@ const CartSideBar = () => {
 
   const router = useRouter();
   const isCartEmpty = !items || items.length === 0;
+  const [itemErrors, setItemErrors] = useState({});
 
   React.useEffect(() => {
     if (isCartOpen) {
@@ -36,11 +37,19 @@ const CartSideBar = () => {
 
   const handleIncrease = async (product, vId, currentQty) => {
     if (currentQty >= 5) return;
-    await updateQuantity(product, vId, null, "increment");
+    const key = `${product}_${vId || ""}`;
+    const result = await updateQuantity(product, vId, null, "increment");
+    if (result && !result.ok) {
+      setItemErrors((prev) => ({ ...prev, [key]: result.message }));
+    } else {
+      setItemErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
+    }
   };
 
   const handleDecrease = async (product, vId, currentQty) => {
     if (currentQty > 1) {
+      const key = `${product}_${vId || ""}`;
+      setItemErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
       await updateQuantity(product, vId, null, "decrement");
     }
   };
@@ -125,7 +134,7 @@ const CartSideBar = () => {
                           className={styles.StartShopping}
                           onClick={() => {
                             closeCart();
-                            router.push("/");
+                            router.push("/shop");
                           }}
                         >
                           Start Shopping
@@ -184,27 +193,43 @@ const CartSideBar = () => {
                                 {String(item.quantity).padStart(2, "0")}
                               </span>
 
-                              <button
-                                className={styles.qtyBtn}
-                                onClick={() =>
-                                  handleIncrease(
-                                    item.product,
-                                    item.vId,
-                                    item.quantity,
-                                  )
-                                }
-                                disabled={item.quantity >= 5}
-                                style={{
-                                  opacity: item.quantity >= 5 ? 0.5 : 1,
-                                  cursor:
-                                    item.quantity >= 5
-                                      ? "not-allowed"
-                                      : "pointer",
-                                }}
-                              >
-                                +
-                              </button>
+                              {(() => {
+                                const key = `${item.product}_${item.vId || ""}`;
+                                const hasError = !!itemErrors[key];
+                                const increaseDisabled = item.quantity >= 5 || hasError;
+                                return (
+                                  <button
+                                    className={styles.qtyBtn}
+                                    onClick={() =>
+                                      handleIncrease(
+                                        item.product,
+                                        item.vId,
+                                        item.quantity,
+                                      )
+                                    }
+                                    disabled={increaseDisabled}
+                                    style={{
+                                      opacity: increaseDisabled ? 0.5 : 1,
+                                      cursor: increaseDisabled ? "not-allowed" : "pointer",
+                                    }}
+                                  >
+                                    +
+                                  </button>
+                                );
+                              })()}
                             </div>
+
+                            {itemErrors[`${item.product}_${item.vId || ""}`] && (
+                              <p style={{
+                                color: "#c0392b",
+                                fontSize: "11px",
+                                marginTop: "4px",
+                                fontFamily: "var(--lato)",
+                                lineHeight: "1.3",
+                              }}>
+                                {itemErrors[`${item.product}_${item.vId || ""}`]}
+                              </p>
+                            )}
 
                             <div className={styles.RemoveItem}>
                               <button
