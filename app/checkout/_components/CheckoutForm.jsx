@@ -198,6 +198,9 @@ export default function CheckoutForm({
       if (!data.success)
         throw new Error(data.message || data.error || "Checkout failed");
 
+      // Mark that we're navigating to success from a real checkout
+      sessionStorage.setItem("checkout_success", "1");
+
       // 5. Confirm the payment with Stripe
       const secret = data.clientSecret || data.client_secret;
 

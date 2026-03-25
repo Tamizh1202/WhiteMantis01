@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import styles from "./ProfileComponents.module.css";
 import { UAE_STATES } from "./profileConstants";
 import {
@@ -504,18 +504,9 @@ const ProfileComponents = ({ initialData }) => {
     const result = await confirmDeleteAccountAPI(session?.user?.id);
     if (result.success) {
       setShowDeletePopup(false);
-      // Clear all local state and cookies
       localStorage.clear();
       sessionStorage.clear();
-      // Hit the logout route to clear httpOnly cookies
-      try {
-        await fetch("/api/logout");
-      } catch (e) {}
-
-      toast.success(result.data?.message || "Account deleted successfully.");
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1500);
+      await signOut({ callbackUrl: "/" });
     } else {
       toast.error(
         result.error || "Failed to delete account. Please try again.",

@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./SubToday.module.css";
 import Image from "next/image";
+import Link from "next/link";
 import one from "./1.png";
 import two from "./2.png";
 import three from "./3.png";
@@ -212,7 +213,7 @@ const SubToday = () => {
             {cardsData.map((card, i) => {
               const Sublabel = card.badge.sublabelTag;
               return (
-                <div key={i} className={styles.Card}>
+                <Link key={i} href={card.link} className={styles.Card} style={{ textDecoration: "none", cursor: "pointer" }}>
                   <div className={styles[card.imageContainerClass]}>
                     <div className={styles[card.imageClass]}>
                       <Image src={card.image} alt={card.imageAlt} />
@@ -255,12 +256,10 @@ const SubToday = () => {
                       </div>
                     </div>
                     <div className={styles.CardContentBottom}>
-                      {/* <Link href={card.link}> */}
                       <button>Start This Plan</button>
-                      {/* </Link> */}
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

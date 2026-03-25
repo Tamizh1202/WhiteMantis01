@@ -131,7 +131,7 @@ const ProductGrid = ({
 
             return (
               <div
-                className={`${styles.ProductCard} ${isOutOfStock ? styles.Muted : ""}`}
+                className={styles.ProductCard}
                 key={product.id}
               >
                 <div className={styles.ProductTop}>
@@ -141,7 +141,7 @@ const ProductGrid = ({
                   <div className={styles.WishlistIcon}>
                     <Wishlist product={product} />
                   </div>
-                  <Link href={productUrl} className={styles.ProductImage}>
+                  <Link href={productUrl} className={`${styles.ProductImage} ${isOutOfStock ? styles.Muted : ""}`}>
                     {displayData.image ? (
                       <Image
                         src={displayData.image}

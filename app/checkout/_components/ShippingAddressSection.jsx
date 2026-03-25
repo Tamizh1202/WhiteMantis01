@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 import styles from "../page.module.css";
 import { validateRequired, validateUAEPhone } from "@/utils/validatorFunctions";
 import DeleteAddressPopup from "@/app/account/profile/_components/ProfileComponents/_components/DeleteAddressPopup";
@@ -120,11 +121,11 @@ export default function ShippingAddressSection({
         setAddressToDelete(null);
       } else {
         // Rollback if failed (optional, but good practice if addresses were re-fetched)
-        alert(result.message || "Failed to delete address");
+        toast.error(result.message || "Failed to delete address");
       }
     } catch (error) {
       console.error("Delete address error:", error);
-      alert("An error occurred while deleting the address");
+      toast.error("An error occurred while deleting the address");
     }
   }
 

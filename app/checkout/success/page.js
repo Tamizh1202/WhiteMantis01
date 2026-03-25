@@ -1,6 +1,6 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import Image from "next/image";
 import one from "./1.png"; // Fallback image
@@ -8,15 +8,29 @@ import axiosClient from "@/lib/axios";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const id = searchParams.get("id") || searchParams.get("order_id") || searchParams.get("orderId");
   const type = searchParams.get("type") || "order"; // 'order' or 'subscription'
   const token = searchParams.get("token"); // Guest access token
 
+  const [isAllowed, setIsAllowed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
+  // Guard: only allow access when coming from checkout
   useEffect(() => {
+    const fromCheckout = sessionStorage.getItem("checkout_success");
+    if (!fromCheckout) {
+      router.replace("/");
+    } else {
+      sessionStorage.removeItem("checkout_success");
+      setIsAllowed(true);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (!isAllowed) return;
     if (!id) {
       setLoading(false);
       return;
@@ -50,7 +64,9 @@ function SuccessContent() {
     };
 
     fetchData();
-  }, [id, type, token]);
+  }, [id, type, token, isAllowed]);
+
+  if (!isAllowed) return null;
 
   if (loading) {
     return (

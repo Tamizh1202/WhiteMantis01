@@ -10,6 +10,8 @@ import NavbarMobile from "./_components/Navbar/NavbarMobile";
 import GlobalLoader from "./_components/GlobalLoader/GlobalLoader";
 import CouponModal from "./_components/CouponModal/CouponModal";
 import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
+import AuthToast from "./_components/AuthToast/AuthToast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -78,6 +80,9 @@ export default async function RootLayout({ children }) {
               zIndex: 9999,
             }}
           />
+          <Suspense fallback={null}>
+            <AuthToast />
+          </Suspense>
           <GlobalLoader />
           <Navbar categories={categories} />
           <NavbarMobile categories={categories} />

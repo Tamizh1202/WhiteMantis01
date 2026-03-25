@@ -1,8 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./CommunityPopup.module.css";
 import Image from "next/image";
 import popupimage from "./popup.png";
+import axiosClient from "@/lib/axios";
+
+const isValidEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
 
 const CommunityPopup = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
@@ -10,12 +15,7 @@ const CommunityPopup = ({ isOpen, onClose }) => {
   const [subscribed, setSubscribed] = useState(false);
   const [error, setError] = useState("");
 
-  if (!isOpen) return null;
-  const isValidEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (subscribed) {
       const timer = setTimeout(() => {
         onClose();
@@ -23,6 +23,8 @@ const CommunityPopup = ({ isOpen, onClose }) => {
       return () => clearTimeout(timer);
     }
   }, [subscribed, onClose]);
+
+  if (!isOpen) return null;
 
   const handleSubscribe = async () => {
     if (!email) {
@@ -39,25 +41,13 @@ const CommunityPopup = ({ isOpen, onClose }) => {
     setError("");
 
     try {
-      const res = await fetch("/api/website/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          name: "",
-          source: "popup",
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        setSubscribed(true);
-      } else {
-        setError(data.message || "Subscription failed.");
-      }
+      const res = await axiosClient.post("/api/newsletters", { email });
+      setSubscribed(true);
     } catch (err) {
-      setError("Network error. Please try again.");
+      const errData = err?.response?.data;
+      setError(
+        errData?.message || errData?.error || errData?.errors?.[0]?.message || "Subscription failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }

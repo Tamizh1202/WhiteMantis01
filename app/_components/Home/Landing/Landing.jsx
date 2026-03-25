@@ -12,21 +12,17 @@ const Landing = () => {
 
         <div className={styles.Overlay}>
           <div className={styles.Marquee}>
-            <h2>
-              Origin-roasted. Dubai-made. Delivered to
-              you.
-            </h2>
+            <h2>FROM THE FARM – THROUGH US TO EVERYONE •</h2>
+            <h2>FROM THE FARM – THROUGH US TO EVERYONE •</h2>
           </div>
           <div className={styles.Content}>
             <div className={styles.BottomText}>
               <h4>WHITE MANTIS COFFEE ROASTERS</h4>
               <p>
-                Born in Dubai. Roasting since 2016. White
-                Mantis is an Emirati-owned specialty
-                roastery that sources rare beans direct
-                from origin, roasts with precision in Al
-                Quoz, and delivers coffee that's genuinely
-                worth drinking — every single morning.
+                Born in Dubai. Roasting since 2016. White Mantis is an
+                Emirati-owned specialty roastery that sources rare beans direct
+                from origin, roasts with precision in Al Quoz, and delivers
+                coffee that's genuinely worth drinking — every single morning.
               </p>
             </div>
             <div className={styles.RightBottomText}>
