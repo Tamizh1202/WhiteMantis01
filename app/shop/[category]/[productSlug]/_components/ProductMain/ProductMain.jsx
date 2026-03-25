@@ -157,7 +157,7 @@ const ProductMain = ({ product }) => {
         <div className={styles.Top} ref={topRef}>
           <div className={styles.left} ref={topLeftRef}>
             <div className={styles.LeftTop}>
-              <h1>{product?.name || "Product Name"}</h1>
+              <h1>{(product?.name || "Product Name").toUpperCase()}</h1>
               <h3>{product?.tagline}</h3>
             </div>
 

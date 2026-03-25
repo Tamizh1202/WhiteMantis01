@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Lato:wght@300;400;600;700;800&display=swap");
 
 :root {
-  --background: #ffffff;
+  --background: #FFFFFF;
   --foreground: #171717;
 
   --lexend: "Lexend";
@@ -21,11 +21,9 @@
   --fs-20: clamp(0.88rem, 0.38vi + 0.79rem, 1.25rem);
   --fs-60: clamp(1.75rem, 2.03vi + 1.32rem, 3.75rem);
   --fs-120: clamp(2.25rem, 5.32vi + 1.12rem, 7.5rem);
-  --sectionPadding: clamp(
-    70px,
-    calc(70px + (80 * ((100vw - 320px) / 1120))),
-    150px
-  );
+  --sectionPadding: clamp(70px,
+      calc(70px + (80 * ((100vw - 320px) / 1120))),
+      150px);
 
   --fs-16: clamp(0.75rem, calc(0.5rem + 0.417vw), 1rem);
 
@@ -102,7 +100,7 @@ input[type="checkbox"] {
   max-width: 18px;
   min-height: 18px;
   max-height: 18px;
-  border: 1.2px solid #6e736a !important;
+  border: 1.2px solid #6E736A !important;
   border-radius: 0px;
   background-color: #fff;
   cursor: pointer;
@@ -115,8 +113,8 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-  background-color: #6c7a5f;
-  border-color: #6c7a5f;
+  background-color: #6C7A5F;
+  border-color: #6C7A5F;
 }
 
 input[type="checkbox"]:checked::after {
@@ -126,7 +124,7 @@ input[type="checkbox"]:checked::after {
   left: 6px;
   width: 4px;
   height: 8px;
-  border: solid #ffffff;
+  border: solid #FFFFFF;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -140,7 +138,7 @@ input[type="radio"] {
   max-width: 18px;
   min-height: 18px;
   max-height: 18px;
-  border: 1.2px solid #6e736a;
+  border: 1.2px solid #6E736A;
   border-radius: 50%;
   background-color: #fff;
   cursor: pointer;
@@ -153,8 +151,8 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked {
-  border-color: #6c7a5f;
-  background-color: #ffffff;
+  border-color: #6C7A5F;
+  background-color: #FFFFFF;
 }
 
 input[type="radio"]:checked::after {
@@ -165,7 +163,7 @@ input[type="radio"]:checked::after {
   transform: translate(-50%, -50%);
   width: 10px;
   height: 10px;
-  background-color: #6c7a5f;
+  background-color: #6C7A5F;
   border-radius: 50%;
 }
 
@@ -179,9 +177,10 @@ input[type="radio"]:checked::after {
   width: 80px !important;
   height: 80px !important;
 }
+
 .WhatsAppFloat svg {
   border-radius: 50%;
-  border: 1px solid #6c7a5f;
+  border: 1px solid #6C7A5F;
 }
 
 .WhatsAppFloat:hover {
@@ -193,6 +192,7 @@ input[type="radio"]:checked::after {
     bottom: 0px;
     right: 0px;
   }
+
   .WhatsAppFloat svg {
     width: 60px !important;
     height: 60px !important;

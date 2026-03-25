@@ -20,7 +20,7 @@ const BannerSection = () => {
       <div className={styles.content}>
         <div className={styles.card}>
           <h3 className={styles.title}>
-            Sustainability & Traceability
+            SUSTAINABILITY & TRACEABILITY
           </h3>
           <p className={styles.text}>
             Selective hand-picking, small-lot processing, and transparent premiums support long-term soil health and producer livelihoods. Each bag is traceable to plot and process date, ensuring the clarity you taste is matched by clarity in sourcing.
