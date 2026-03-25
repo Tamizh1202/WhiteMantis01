@@ -1,8 +1,8 @@
 .Main {
   width: 100vw;
   min-height: 100vh;
-  background-color: #ffffff;
   padding-bottom: 200px;
+  overflow-y: hidden;
 }
 
 .EmptyGridState {
@@ -22,7 +22,6 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: #f4f5f1;
 }
 
 .EmptyBody {
@@ -33,32 +32,29 @@
 }
 
 .EmptyText {
-  font-family: var(--lexend);
-  font-size: 17px;
-  font-weight: 500;
-  color: #2F362A;
-  letter-spacing: 0.02em;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--heads-color);
 }
 
 .EmptySubText {
-  font-family: var(--lato);
-  font-size: 14px;
-  font-weight: 400;
-  color: #6E736A;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--body-color);
   line-height: 1.6;
 }
 
 .ShopNow {
   padding: 14px 42px;
-  border: 1px solid #6C7A5F;
-  color: #6C7A5F;
+  border: 1px solid var(--line-color);
+  color: var(--primary-color);
   font-family: var(--lato);
   cursor: pointer;
-  font-weight: 500;
+  font-weight: var(--lato-font-weight);
   transition: opacity 0.3s ease;
   text-transform: uppercase;
-  font-size: 15px;
-  background-color: #ffffff;
+  font-size: var(--lato-font-size);
+  background-color: var(--white-color);
 }
 
 .ShopNow:hover {
@@ -66,7 +62,7 @@
 }
 
 .HeroSection {
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
   position: relative;
   width: 100%;
   overflow-x: clip;
@@ -79,15 +75,14 @@
 }
 
 .HeroTitle {
-  color: #fff;
-  font-weight: 500;
-  font-family: var(--lexend);
+  color: var(--white-color);
+  font-weight: var(--lexend-heading-font-weight);
   text-align: left;
   text-transform: uppercase;
   width: 90%;
   padding-left: 70px;
   padding-top: 110px;
-  font-size: clamp(40px, 8vw, 60px);
+  font-size: var(--lexend-heading-1-font-size);
 }
 
 .EmblaViewport {
@@ -114,7 +109,7 @@
 }
 
 .HeroCard {
-  background: #ffffff;
+  background: var(--white-color);
   width: 82%;
   max-width: 1670px;
   display: flex;
@@ -157,8 +152,8 @@
   gap: 12px;
   align-items: center;
   font-family: var(--lato);
-  font-size: 14px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
 }
 
 .CategoryTag {
@@ -168,39 +163,39 @@
 .Divider {
   width: 1px;
   height: 12px;
-  background-color: #6e736a;
+  background-color: var(--body-color);
 }
 
 .HeroBlogTitle {
   font-family: var(--lexend);
-  font-size: 22px;
-  color: #2f362a;
+  font-size: var(--lexend-heading-2-font-size);
+  color: var(--heads-color);
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
 }
 
 .HeroExcerpt {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
   line-height: 1.6;
-  font-weight: 400;
+  font-weight: var(--lato-font-weight);
 }
 
 .DateText {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #6C7A5F;
+  font-size: var(--lato-font-size);
+  color: var(--primary-color);
 }
 
 .ReadMoreBtn {
   width: fit-content;
   padding: 10px 24px;
-  border: 1px solid #6e736a;
+  border: 1px solid var(--line-color);
   background: transparent;
   font-family: var(--lato);
-  font-size: 14px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 10px;
@@ -209,9 +204,9 @@
 }
 
 .ReadMoreBtn:hover {
-  background-color: #6c7a5f;
-  color: #ffffff;
-  border-color: #6c7a5f;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-color: var(--line-color);
 }
 
 .HeroDots {
@@ -231,7 +226,7 @@
 }
 
 .DotActive {
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
 }
 
 .GridSection {
@@ -255,7 +250,6 @@
   padding-top: 60px;
 }
 
-
 .SectionHeader {
   width: 100%;
   display: flex;
@@ -265,9 +259,9 @@
 
 .SectionTitle {
   font-family: var(--lexend);
-  font-size: 22px;
+  font-size: var(--lexend-heading-2-font-size);
   font-weight: 600;
-  color: #2f362a;
+  color: var(--heads-color);
   text-transform: uppercase;
 }
 
@@ -278,19 +272,19 @@
 
 .FilterBtn {
   padding: 8px 16px;
-  border: 1px solid #e2e4df;
-  background: #ffffff;
+  border: 1px solid var(--line-color);
+  background: var(--white-color);
   font-family: var(--lato);
-  font-size: 13px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .FilterBtnActive {
-  background-color: #6c7a5f;
-  color: #ffffff;
-  border-color: #6c7a5f;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-color: var(--line-color);
 }
 
 .BlogGrid {
@@ -322,8 +316,8 @@
 
 .CardTitle {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #2f362a;
+  font-size: var(--lato-font-size);
+  color: var(--heads-color);
   font-weight: 700;
   line-height: 100%;
 }
@@ -336,8 +330,8 @@
 
 .CardDate {
   font-family: var(--lato);
-  font-size: 14px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
 }
 
 .ViewMoreWrapper {
@@ -347,11 +341,11 @@
 
 .ViewMoreBtn {
   padding: 12px 48px;
-  border: 1px solid #6e736a;
+  border: 1px solid var(--line-color);
   background: transparent;
   font-family: var(--lato);
-  font-size: 15px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
   cursor: pointer;
 }
 
@@ -360,7 +354,6 @@
   flex-direction: column;
   gap: 120px;
 }
-
 
 /* Responsive */
 @media (max-width: 1024px) {
@@ -379,15 +372,15 @@
 
 @media (max-width: 640px) {
   .HeroTitle {
-    color: #fff;
-    font-weight: 500;
+    color: var(--white-color);
+    font-weight: var(--lexend-heading-font-weight);
     font-family: var(--lexend);
     text-align: left;
     text-transform: uppercase;
     width: 90%;
     padding-left: 0px;
     padding-top: 80px;
-    font-size: clamp(40px, 8vw, 60px);
+    font-size: var(--lexend-heading-1-font-size);
   }
 
   .HeroSection {
@@ -396,7 +389,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background-color: #6c7a5f;
+    background-color: var(--primary-color);
   }
 
   .HeroCard {
@@ -408,7 +401,7 @@
     width: 90%;
     box-sizing: border-box;
 
-    background: #ffffff;
+    background: var(--white-color);
     padding: 16px;
 
     left: 0;
@@ -446,7 +439,7 @@
   }
 
   .DotActive {
-    background-color: #6c7a5f;
+    background-color: var(--primary-color);
   }
 
   .EmblaSlide {
@@ -486,8 +479,8 @@
   }
 
   .CardContent h3 {
-    font-size: var(--lato);
+    font-family: var(--lato);
     font-weight: 700;
-    font-size: 15px;
+    font-size: var(--lato-font-size);
   }
 }

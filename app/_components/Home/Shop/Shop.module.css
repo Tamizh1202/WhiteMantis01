@@ -63,6 +63,7 @@
   justify-content: left;
   flex-direction: column;
   gap: clamp(15px, calc(15px + (15 * ((100vw - 320px) / 1120))), 30px);
+  height: 30%;
 }
 .OneTopTop {
   display: flex;
@@ -117,6 +118,7 @@
   display: flex;
   justify-content: left;
   overflow: hidden;
+  height: 70%;
 }
 .OneBottom img {
   width: 100%;
