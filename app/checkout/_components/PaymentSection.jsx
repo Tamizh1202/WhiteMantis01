@@ -2,6 +2,7 @@
 import { useState } from "react";
 import styles from "../page.module.css";
 import { PaymentElement } from "@stripe/react-stripe-js";
+
 import { Lexend } from "next/font/google";
 
 // --- Policy Content (fill in your own text) ---

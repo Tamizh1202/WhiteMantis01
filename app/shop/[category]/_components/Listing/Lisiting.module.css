@@ -449,14 +449,14 @@
 
 .SortDropdown {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + -2px);
   right: 0;
   width: 100%;
   background-color: #ffffff;
   border: 1px solid #6e736a;
   display: flex;
   flex-direction: column;
-  z-index: 10;
+  z-index: 90;
 }
 
 .SortDropdown p {
