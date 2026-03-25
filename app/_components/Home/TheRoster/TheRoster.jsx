@@ -32,8 +32,8 @@ const TheRoster = () => {
               First access to new roasts and seasonal
               releases before they go live. Brewing
               guides written by our team. Exclusive
-              subscriber-only deals. This is for people
-              who take coffee seriously — and want to
+              subscriber only deals. This is for people
+              who take coffee seriously and want to
               know more than just what's in the bag.
             </p>
           </div>

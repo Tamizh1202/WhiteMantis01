@@ -209,7 +209,7 @@ const StickyBar = ({ product }) => {
               </div>
             )}
 
-            <div className={styles.CountIncDec}>
+            <div className={`${styles.CountIncDec} ${isOutOfStock ? styles.Muted : ""}`}>
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 disabled={isOutOfStock}
@@ -220,10 +220,6 @@ const StickyBar = ({ product }) => {
               <button
                 onClick={() => setQty((q) => Math.min(5, q + 1))}
                 disabled={qty >= 5 || isOutOfStock}
-                style={{
-                  opacity: qty >= 5 || isOutOfStock ? 0.5 : 1,
-                  cursor: qty >= 5 || isOutOfStock ? "not-allowed" : "pointer",
-                }}
               >
                 +
               </button>
@@ -231,14 +227,13 @@ const StickyBar = ({ product }) => {
           </div>
 
           <div className={styles.Right}>
-            <p className={styles.type}>Purchase type :</p>
+            {!isOutOfStock && <p className={styles.type}>Purchase type :</p>}
 
             <div className={styles.Cta}>
-              {(selectedWeight?.hasVariantSub || product?.hasSimpleSub) && (
+              {!isOutOfStock && (selectedWeight?.hasVariantSub || product?.hasSimpleSub) && (
                 <button
-                  className={`${styles.SubscribeCta} ${isOutOfStock ? styles.DisabledCta : ""}`}
-                  onClick={() => !isOutOfStock && setShowSubscribe(true)}
-                  disabled={isOutOfStock}
+                  className={styles.SubscribeCta}
+                  onClick={() => setShowSubscribe(true)}
                 >
                   <span>Subscribe and Save 10–20% </span>
 
@@ -266,15 +261,18 @@ const StickyBar = ({ product }) => {
                 </button>
               )}
 
-              <button
-                className={`${styles.AddtoCartPriceCta} ${isOutOfStock ? styles.DisabledCta : ""}`}
-                onClick={handleBuyNow}
-                disabled={isOutOfStock}
-              >
-                {isOutOfStock
-                  ? "Out of Stock"
-                  : `Buy for AED ${simplePrice.toFixed(2)}`}
-              </button>
+              {isOutOfStock ? (
+                <button className={`${styles.AddtoCartPriceCta} ${styles.DisabledCta}`} disabled>
+                  Out of Stock
+                </button>
+              ) : (
+                <button
+                  className={styles.AddtoCartPriceCta}
+                  onClick={handleBuyNow}
+                >
+                  {`Buy for AED ${simplePrice.toFixed(2)}`}
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -19,7 +19,7 @@ const Community = () => {
             <div className={styles.TopRight}>
               <p>
                 White Mantis started because Dubai
-                deserved better specialty coffee — not
+                deserved better specialty coffee not
                 imported and relabelled, but sourced with
                 care, roasted with intention, and served
                 with full transparency from farm to cup. We
@@ -31,7 +31,7 @@ const Community = () => {
                 take the time to help their teams
                 understand what they're serving. This is
                 not a commodity business. We're building
-                something with a long view — a roastery
+                something with a long view a roastery
                 that represents Dubai on the world stage.
               </p>
               <Link href="/about-us">

@@ -97,10 +97,6 @@
   transition: border 0.3s ease;
 }
 
-.ImgContainer:hover {
-  border: 1px solid #2f362a;
-}
-
 .ImgContainer img {
   width: 100%;
   height: 100%;
@@ -111,7 +107,7 @@
 }
 
 .ImgContainer img:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .Remove {

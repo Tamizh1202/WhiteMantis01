@@ -53,11 +53,11 @@
 }
 .One:hover {
   cursor: pointer;
-  border: 1px solid #2f362a;
 }
 .One:hover img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
+
 .OneTop {
   display: flex;
   justify-content: left;
@@ -110,7 +110,7 @@
   font-size: 15px;
   font-weight: 400;
   width: 70%;
-  color: #6c7a5f;
+  color: #6e736a;
   font-family: var(--lato);
 }
 .OneBottom {

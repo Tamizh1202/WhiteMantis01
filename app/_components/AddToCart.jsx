@@ -58,7 +58,7 @@ const AddToCart = ({ product, onSuccess }) => {
         if (!loading) e.target.style.backgroundColor = "#6C7A5F";
       }}
     >
-      {loading ? "Adding..." : "Add to Bag"}
+      {loading ? "Adding..." : "Add to Cart"}
     </button>
   );
 };

@@ -20,7 +20,7 @@ const Subscribe = () => {
                 <p style={{ width: "100%" }}>
                   Set your coffee once and forget the reorder.
                   Choose your roast, your format, your
-                  schedule — and we'll send freshly roasted
+                  schedule and we'll send freshly roasted
                   coffee to your door on time, every time.
                   Subscribers get up to 20% off, early access
                   to limited roasts, and free delivery on 6 and

@@ -44,19 +44,31 @@
   font-size: 42px;
   font-family: var(--lexend);
   font-weight: 700;
-  color: #6c7a5f;
+  color: #2f362a;
 }
 .LeftTop h3 {
   font-size: 22px;
   font-family: var(--lexend);
   font-weight: 500;
-  color: #525252;
+  color: #6e736a;
 }
 .LeftBottom {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 30px;
+}
+.LeftBottom h4 {
+  font-size: 15px;
+  font-family: var(--lato);
+  font-weight: 700;
+  color: #2f362a;
+}
+.LeftBottom p {
+  font-size: 15px;
+  font-family: var(--lato);
+  font-weight: 400;
+  color: #6e736a;
 }
 .LeftBottomOne,
 .LeftBottomTwo,
@@ -65,34 +77,20 @@
   justify-content: left;
   flex-direction: column;
 }
-.LeftBottomOne h4,
-.LeftBottomTwo h4,
-.LeftBottomThree h4 {
-  font-size: 15px;
-  font-family: var(--lato);
-  font-weight: 700;
-  color: #3d3d3d;
-}
-.LeftBottomOne p,
-.LeftBottomTwo p,
-.LeftBottomThree p {
-  font-size: 15px;
-  font-family: var(--lato);
-  font-weight: 400;
-  color: #3d3d3d;
-}
+
 .Right {
   display: flex;
   justify-content: right;
   width: 33.3%;
   align-items: center;
+  text-align: right;
 }
 .Right p {
   font-size: 15px;
   font-family: var(--lato);
   font-weight: 400;
-  color: #3d3d3d;
-  text-align: center;
+  color: #6e736a;
+  text-align: right;
 }
 
 .Middle {
@@ -217,14 +215,15 @@
   font-size: 18px;
   font-family: var(--lexend);
   font-weight: 700;
-  color: #6c7a5f;
+  color: #2f362a;
   margin: 0 0 6px 0;
+  text-transform: uppercase;
 }
 .detailDesc {
   font-size: 15px;
   font-family: var(--lato);
   font-weight: 400;
-  color: #3d3d3d;
+  color: #6e736a;
   width: 60%;
   margin: 0;
 }
