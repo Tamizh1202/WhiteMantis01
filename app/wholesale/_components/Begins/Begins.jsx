@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { usePathname } from "next/navigation";
 import styles from "./Begins.module.css";
@@ -9,7 +9,6 @@ import one from "./1.png";
 import two from "./2.png";
 import three from "./3.png";
 
-// Memoize slides array to prevent recreation on every render
 const slides = [
   { id: 1, src: one, label: "Hambella Estate, Ethiopia" },
   { id: 2, src: two, label: "Santa Leticia Estate, El Salvador" },
@@ -20,27 +19,41 @@ const slides = [
 
 export default function Begins() {
   const pathname = usePathname();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     dragFree: true,
-    containScroll: "trimSnaps",
+    // Change "trimSnaps" to "" or keep it false
+    containScroll: false, 
   });
 
-  // Delay mount to ensure DOM is ready after navigation
-  React.useEffect(() => {
-    // Use requestAnimationFrame to delay until after React finishes reconciliation
-    const rafId = requestAnimationFrame(() => {
-      setMounted(true);
-    });
+  // Navigation logic
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
+  const onSelect = useCallback((emblaApi) => {
+    setPrevBtnDisabled(!emblaApi.canScrollPrev());
+    setNextBtnDisabled(!emblaApi.canScrollNext());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect(emblaApi);
+    emblaApi.on("reInit", onSelect);
+    emblaApi.on("select", onSelect);
+  }, [emblaApi, onSelect]);
+
+  useEffect(() => {
+    const rafId = requestAnimationFrame(() => setMounted(true));
     return () => {
       cancelAnimationFrame(rafId);
       setMounted(false);
     };
   }, [pathname]);
 
-  // Don't render carousel until after navigation completes
   if (!mounted) {
     return (
       <section className={styles.Main}>
@@ -58,14 +71,36 @@ export default function Begins() {
       <div className={styles.MainContainer}>
         <div className={styles.Top}>
           <h3>WHERE OUR COFFEE BEGINS</h3>
+          
+          {/* Navigation Buttons */}
+          <div className={styles.controls}>
+            <button 
+              className={styles.navButton} 
+              onClick={scrollPrev} 
+              disabled={prevBtnDisabled}
+              aria-label="Previous slide"
+            >
+              <svg width="47" height="47" viewBox="0 0 47 47" fill="none">
+                <circle cx="23.5" cy="23.5" r="23.5" fill="#6C7A5F"/>
+                <path d="M27 16L20 23.5L27 31" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+            <button 
+              className={styles.navButton} 
+              onClick={scrollNext} 
+              disabled={nextBtnDisabled}
+              aria-label="Next slide"
+            >
+              <svg width="47" height="47" viewBox="0 0 47 47" fill="none">
+                <circle cx="23.5" cy="23.5" r="23.5" fill="#6C7A5F"/>
+                <path d="M20 16L27 23.5L20 31" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <div
-          className={styles.viewport}
-          ref={emblaRef}
-          suppressHydrationWarning
-        >
-          <div className={styles.track} suppressHydrationWarning>
+        <div className={styles.viewport} ref={emblaRef}>
+          <div className={styles.track}>
             {slides.map((s) => (
               <div key={`wholesale-slide-${s.id}`} className={styles.cardWrap}>
                 <div className={styles.card}>

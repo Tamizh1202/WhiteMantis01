@@ -3,16 +3,25 @@
   justify-content: center;
   width: 100%;
   background-color: #ffffff;
-  padding: 0px clamp(0px, calc(0px + (0 * ((100vw - 320px) / 1120))), 0px) 0px
-    clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+  /* Simplified fluid left padding, keeping your specific range */
+  padding-left: clamp(24px, calc(1.5rem + 6.3vw), 125px);
+  padding-right: 0;
 }
 
 .MainContainer {
   display: flex;
   flex-direction: column;
-  gap: clamp(24px, calc(24px + (48 * ((100vw - 320px) / 1120))), 72px);
-
+  gap: clamp(24px, 5vw, 72px);
   width: 100%;
+}
+
+.Top {
+  display: flex;
+  justify-content: space-between; /* Pushes title left, buttons right */
+  align-items: center;
+  width: 100%;
+  /* Padding right added here to keep buttons from hitting the screen edge */
+  padding-right: clamp(24px, 5vw, 125px); 
 }
 
 .Top h3 {
@@ -24,6 +33,33 @@
   margin: 0;
 }
 
+/* --- Navigation Buttons --- */
+.controls {
+  display: flex;
+  gap: 12px;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  transition: opacity 0.3s ease;
+  display: flex; /* Centers the SVG inside the button */
+  align-items: center;
+}
+
+.navButton:disabled {
+  opacity: 0.2; /* Ghosted look when you can't scroll */
+  cursor: not-allowed;
+}
+
+.navButton:hover:not(:disabled) {
+  opacity: 0.7;
+}
+
+/* --- Carousel Structure --- */
 .viewport {
   overflow: hidden;
   width: 100%;
@@ -56,24 +92,34 @@
   color: #2f362a;
   margin: 0;
 }
+
+/* --- Mobile Responsive --- */
 @media (max-width: 640px) {
   .Main {
-    padding: 0px 24px 0px 24px;
+    padding: 0 24px;
+  }
+
+  .Top {
+    padding-right: 0;
   }
 
   .MainContainer {
     gap: 40px;
   }
+
   .track {
     gap: 16px;
   }
+
   .card {
     width: 354px;
     height: 313px;
   }
+
   .Top h3 {
     font-size: 20px;
   }
+
   .caption {
     font-size: 14px;
   }
