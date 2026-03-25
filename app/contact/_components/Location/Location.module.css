@@ -7,13 +7,12 @@
 }
 
 .title {
-  color: #2f362a;
+  color: var(--heads-color);
   font-size: var(--fs-22);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   font-family: var(--lexend);
-  margin: clamp(0px, calc(0px + (6 * ((100vw - 320px) / 1120))), 6px) 0
-    clamp(30px, calc(30px + (50 * ((100vw - 320px) / 1120))), 80px)
-    clamp(0px, calc(0px + (8 * ((100vw - 320px) / 1120))), 8px);
+  margin:
+    clamp(0px, calc(0px + (6 * ((100vw - 320px) / 1120))), 6px) 0 clamp(30px, calc(30px + (50 * ((100vw - 320px) / 1120))), 80px) clamp(0px, calc(0px + (8 * ((100vw - 320px) / 1120))), 8px);
 
   text-transform: uppercase;
 }
@@ -39,21 +38,22 @@
 
 .infoTitle {
   font-size: var(--fs-15);
-  color: #2f362a;
+  color: var(--heads-color);
   font-family: var(--lato);
-  font-weight: 700;
+  font-weight: var(--lato-bold-font-weight);
+  /* Assuming 700 is your bold variant */
   line-height: 1.2;
 }
 
 .directionsBtn {
   display: inline-block;
   text-decoration: none;
-  font-size: 15px;
+  font-size: var(--fs-15);
   padding: 7px 30px;
-  background: #6c7a5f;
-  color: #ffffff;
+  background: var(--primary-color);
+  color: var(--white-color);
   font-family: var(--lato);
-  font-weight: 400;
+  font-weight: var(--lato-font-weight);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
   letter-spacing: 0;
 }
@@ -68,15 +68,19 @@
   .sectionWrapper {
     padding: 0px 24px 0px 24px;
   }
+
   .title {
     margin-left: 4px;
   }
+
   .mapWrapper {
     height: 220px;
   }
+
   .infoTitle {
     font-size: 12px;
   }
+
   .directionsBtn {
     font-size: 11px;
     padding: 6px 10px;

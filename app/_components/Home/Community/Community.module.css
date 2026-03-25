@@ -4,7 +4,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   padding: 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px)
     0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
 }
@@ -28,8 +28,8 @@
 .TopLeft h3 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  color: #2f362a;
-  font-weight: 500;
+  color: var(--heads-color);
+  font-weight: var(--lexend-heading-font-weight);
   text-transform: uppercase;
 }
 .TopRight {
@@ -40,10 +40,10 @@
   width: 50%;
 }
 .TopRight p {
-  color: #6e736a;
+  color: var(--body-color);
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
+  font-size: var(--fs-15);
+  font-weight: var(--lato-font-weight);
 }
 .knowMore {
   width: fit-content;
@@ -55,9 +55,9 @@
   gap: 8px; 
 
   font-family: var(--lato);
-  font-weight: 400;
-  font-size: 15px;
-  color: #6e736a;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--body-color);
   text-decoration: underline;
   cursor: pointer;
   padding: 0;

@@ -44,16 +44,16 @@
 .LeftTop h3 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
-  font-weight: 500;
-  color: #2f362a;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
   text-transform: uppercase;
 }
 
 .LeftTop p {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #6e736a;
-  font-weight: 400;
+  font-size: var(--fs-15);
+  color: var(--body-color);
+  font-weight: var(--lato-font-weight);
 }
 
 .LeftBottom {
@@ -95,7 +95,7 @@
   width: 100%;
   height: 100%;
   aspect-ratio: 8/7;
-  background-color: #f8f8f8;
+  background-color: var(--white-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,17 +134,17 @@
 }
 
 .CardBottom h3 {
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-family: var(--lato);
-  color: #2f362a;
-  font-weight: 400;
+  color: var(--heads-color);
+  font-weight: var(--lato-font-weight);
 }
 
 .CardBottom p {
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-family: var(--lato);
-  color: #6e736a;
-  font-weight: 400;
+  color: var(--body-color);
+  font-weight: var(--lato-font-weight);
 }
 
 .Embla {
@@ -286,7 +286,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f8f8f8;
+    background-color: var(--white-color);
     overflow: visible;
     flex: 0 0 auto;
   }
@@ -309,7 +309,6 @@
     right: 0px;
     top: 0px;
     position: absolute;
-    /* Ensures it stays within the relative card container */
   }
 
   .LinkSvg svg {
@@ -318,25 +317,17 @@
   }
 }
 
-/* 2. Large Tablet / Laptop View (941px - 1440px) */
 @media (min-width: 941px) and (max-width: 1440px) {
-  /* 1. THE PARENT FIX: You must apply this to the div HOLDING the ProductImage */
   .EmblaSlide,
   .CarouselItem,
   .Right {
     min-width: 0 !important;
     overflow: hidden !important;
-    /* Forces the container to respect the screen edge */
   }
 
   .ProductImage {
-    /* 2. THE FLUID FIX: Stay at 400px, but shrink to fit the screen 100% */
     aspect-ratio: 8/7;
-    /* max-width: 400px !important; */
-    /* height: 350px !important; */
     width: auto;
-
-    /* 3. THE MATH FIX: Keeps 120px total padding INSIDE the 400px box */
     box-sizing: border-box !important;
     padding: 40px 60px !important;
 
@@ -345,16 +336,13 @@
     justify-content: center !important;
     background-color: #f8f8f8;
 
-    /* 4. THE SHADOW FIX: Use 'hidden' if it's still overflowing, or 'visible' if it fits */
     overflow: visible;
     flex: 0 1 auto !important;
-    /* Changed '0 0' to '0 1' to ALLOW shrinking */
     position: relative;
     margin: 0 auto;
   }
 
   .ProductImage img {
-    /* 5. THE IMAGE SAFETY: Never let the bag push the box wider */
     max-width: 100% !important;
     max-height: 100% !important;
     width: auto !important;

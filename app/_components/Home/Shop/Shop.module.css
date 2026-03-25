@@ -4,7 +4,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   padding: 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px)
     0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
 }
@@ -13,7 +13,6 @@
   justify-content: left;
   flex-direction: column;
   gap: clamp(30px, calc(30px + (45 * ((100vw - 320px) / 1120))), 75px);
-
   width: 100%;
   height: 100%;
 }
@@ -24,8 +23,8 @@
 .Top h3 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  color: #2f362a;
-  font-weight: 500;
+  color: var(--heads-color);
+  font-weight: var(--lexend-heading-font-weight);
   text-transform: uppercase;
 }
 .Botttom {
@@ -48,7 +47,7 @@
     clamp(17px, calc(17px + (15 * ((100vw - 320px) / 1120))), 32px)
     clamp(17px, calc(17px + (9 * ((100vw - 320px) / 1120))), 26px);
 
-  border: 1px solid #2f362a4d;
+  border: 1px solid var(--line-color);
   transition: all 0.2s ease-in-out;
 }
 .One:hover {
@@ -74,8 +73,8 @@
 .OneTopTop h4 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  color: #6c7a5f;
-  font-weight: 500;
+  color: var(--primary-color);
+  font-weight: var(--lexend-heading-font-weight);
   white-space: nowrap;
   text-transform: uppercase;
 }
@@ -99,19 +98,19 @@
   align-items: center;
 }
 .arrowextra h5 {
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-family: var(--lato);
-  color: #6e736a;
-  font-weight: 400;
+  color: var(--body-color);
+  font-weight: var(--lato-font-weight);
   text-decoration: underline;
   cursor: pointer;
 }
 
 .OneTopBottom p {
-  font-size: 15px;
-  font-weight: 400;
+  font-size: var(--fs-15);
+  font-weight: var(--lato-font-weight);
   width: 70%;
-  color: #6e736a;
+  color: var(--body-color);
   font-family: var(--lato);
 }
 .OneBottom {

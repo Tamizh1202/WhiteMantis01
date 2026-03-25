@@ -22,16 +22,16 @@
 
 .LeftContainer h4 {
   font-family: var(--lexend);
-  font-size: 22px;
-  font-weight: 500;
-  color: #ffffff;
+  font-size: var(--fs-22);
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--white-color);
   text-transform: uppercase;
 }
 
 .LeftContainer p {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #ffffff;
+  font-size: var(--fs-15);
+  color: var(--white-color);
   max-width: 460px;
 }
 
@@ -63,15 +63,15 @@
 
 .Header h3 {
   font-family: var(--lexend);
-  font-size: 22px;
-  font-weight: 500;
-  color: #2f362a;
+  font-size: var(--fs-22);
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
 }
 
 .Header p {
   font-family: var(--lato);
-  font-size: 14px;
-  color: #6e736a;
+  font-size: var(--fs-14);
+  color: var(--body-color);
 }
 
 .Fields {
@@ -82,27 +82,27 @@
 
 .errorMessage {
   font-family: var(--lato);
-  font-size: 13px;
-  font-weight: 400;
-  color: #d32f2f;
+  font-size: var(--fs-13);
+  font-weight: var(--lato-font-weight);
+  color: var(--red-color);
   padding: 8px 12px;
-  background-color: #ffebee;
-  border-left: 3px solid #d32f2f;
+  background-color: var(--white-color);
+  border-left: 3px solid var(--red-color);
   border-radius: 2px;
 }
 
 .Fields input {
   width: 100%;
   height: 44px;
-  border: 1px solid #d3d7d1;
+  border: 1px solid var(--line-color);
   padding: 12px 14px;
   font-family: var(--lato);
-  font-size: 14px;
-  color: #2f362a;
+  font-size: var(--fs-14);
+  color: var(--heads-color);
 }
 
 .Fields input::placeholder {
-  color: #9a9f9b;
+  color: var(--body-color);
 }
 
 .PhoneRow {
@@ -125,8 +125,8 @@
 
 .FlagBox span {
   font-family: var(--lato);
-  font-size: 14px;
-  color: #2f362a;
+  font-size: var(--fs-14);
+  color: var(--heads-color);
 }
 
 .SelectWrapper {
@@ -143,14 +143,14 @@
   user-select: none;
   padding: 12px 14px;
   font-family: var(--lato);
-  font-size: 14px;
-  color: #9a9f9b;
-  border: 1px solid #d3d7d1;
-  background-color: #ffffff;
+  font-size: var(--fs-14);
+  color: var(--body-color);
+  border: 1px solid var(--line-color);
+  background-color: var(--white-color);
 }
 
 .CustomSelectTrigger.hasValue {
-  color: #2f362a;
+  color: var(--body-color);
 }
 
 .CustomOptionsList {
@@ -158,8 +158,8 @@
   top: 100%;
   left: 0;
   width: 100%;
-  background: #ffffff;
-  border: 1px solid #d3d7d1;
+  background: var(--white-color);
+  border: 1px solid var(--line-color);
   border-top: none;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
   z-index: 1000;
@@ -170,14 +170,14 @@
 .OptionItem {
   padding: 10px 14px;
   cursor: pointer;
-  font-size: 14px;
-  color: #2f362a;
+  font-size: var(--fs-14);
+  color: var(--heads-color);
   transition: background 0.2s;
-  background: #ffffff;
+  background: var(--white-color);
 }
 
 .OptionItem:hover {
-  background-color: #f8f9f7;
+  background-color: var(--white-color);
 }
 
 .DropArrow {
@@ -187,7 +187,8 @@
   transform: translateY(-50%);
   transition: transform 0.25s ease;
   pointer-events: none;
-  z-index: 1001; /* Ensure it stays above the custom select trigger but below the options if they overlap */
+  z-index: 1001;
+  /* Ensure it stays above the custom select trigger but below the options if they overlap */
 }
 
 .Rotate {
@@ -196,13 +197,13 @@
 
 .PrimaryBtn {
   height: 44px;
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
   border: none;
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-weight: 500;
-  color: #ffffff;
-  cursor: pointer;
+  color: var(--white-color);
+  cursor: pointer
   margin-top: 6px;
 }
 

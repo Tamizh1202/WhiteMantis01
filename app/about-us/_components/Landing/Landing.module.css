@@ -67,17 +67,16 @@
 
 .BottomText h4 {
   font-size: var(--fs-22);
-  color: #ffffff;
-  font-weight: 500;
+  color: var(--white-color);
+  font-weight: var(--lexend-heading-font-weight);
   font-family: var(--lexend);
   text-transform: uppercase;
 }
-
 .BottomText p {
   width: 40%;
   font-size: var(--fs-15);
-  color: #ffffff;
-  font-weight: 400;
+  color: var(--white-color);
+  font-weight: var(--lato-font-weight);
   font-family: var(--lato);
 }
 .Content {
@@ -101,14 +100,14 @@
   cursor: pointer;
 }
 .Explore h4 {
-  color: #ffffff;
-  font-weight: 500;
+  color: var(--white-color);
+  font-weight: var(--lexend-heading-font-weight);
   font-size: var(--fs-22);
   font-family: var(--lexend);
   text-transform: uppercase;
 }
 @media (max-width: 640px) {
-  .Marquee h2 {
+  /* .Marquee h2 {
     font-size: 64px;
   }
   .Explore h4 {
@@ -117,7 +116,7 @@
   .BottomText p {
     width: 70%;
     font-size: 14px;
-  }
+  } */
   .Content {
     padding-left: 24px;
   }
