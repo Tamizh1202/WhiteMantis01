@@ -58,6 +58,7 @@
   transition: opacity 0.3s ease;
   text-transform: uppercase;
   font-size: 15px;
+  background-color: #ffffff;
 }
 
 .ShopNow:hover {
@@ -265,6 +266,7 @@
 .SectionTitle {
   font-family: var(--lexend);
   font-size: 22px;
+  font-weight: 600;
   color: #2f362a;
   text-transform: uppercase;
 }
