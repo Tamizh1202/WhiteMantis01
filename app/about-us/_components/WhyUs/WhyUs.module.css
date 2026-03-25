@@ -4,11 +4,11 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px)
-    0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+  padding: 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px) 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
 
-  background-color: #ffffff;
+  background-color: var(--white-color);
 }
+
 .MainContainer {
   display: flex;
   justify-content: left;
@@ -16,22 +16,26 @@
   width: 100%;
   gap: clamp(30px, calc(30px + (45 * ((100vw - 320px) / 1120))), 75px);
 }
+
 .Top {
   display: flex;
   justify-content: left;
 }
+
 .Top h3 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  font-weight: 500;
-  color: #2f362a;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
   text-transform: uppercase;
 }
+
 .Bottom {
   display: flex;
   justify-content: left;
   flex-direction: row;
 }
+
 .Card {
   display: flex;
   justify-content: left;
@@ -43,12 +47,14 @@
   max-height: 410px;
   height: 100%;
   padding: 6px 6px 63px 6px;
-  border: 1px solid #52525299;
+  border: 1px solid var(--line-color);
 }
+
 .ImageContainer {
   display: flex;
   justify-content: left;
 }
+
 .ImageContainer img {
   width: 100%;
   height: 100%;
@@ -57,6 +63,7 @@
   max-width: 405px;
   max-height: 195px;
 }
+
 .TextContainer {
   display: flex;
   justify-content: left;
@@ -67,64 +74,77 @@
 }
 
 .TextContainer h3 {
-  font-size: 22px;
+  font-size: var(--fs-22);
   font-family: var(--lexend);
-  font-weight: 500;
-  color: #6e736a;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--body-color);
   text-transform: uppercase;
 }
+
 .TextContainer p {
-  font-size: 15px;
+  font-size: var(--fs-15);
   font-family: var(--lato);
-  font-weight: 400;
-  color: #6e736a;
+  font-weight: var(--lato-font-weight);
+  color: var(--body-color);
   line-height: 100%;
 }
+
 @media (max-width: 640px) {
   .Main {
     padding: 0px 24px 0px 24px;
   }
+
   .MainContainer {
     gap: 30px;
   }
-  .Top h3 {
+
+  /* .Top h3 {
     font-size: 20px;
-  }
+  } */
+
   .Bottom {
     flex-direction: column;
     gap: 30px;
   }
+
   .Card {
     min-height: 375px;
     width: 100%;
     height: 100%;
     gap: 30px;
   }
+
   .TextContainer {
     padding-left: 0px;
     gap: 15px;
     width: 100%;
   }
+
   .TextContainer h3 {
-    font-size: 20px;
-    color: #6e736a;
+    font-size: var(--fs-20);
+    color: var(--body-color);
   }
+
   .TextContainer p {
-    font-size: 14px;
+    font-size: var(--fs-14);
   }
 }
+
 @media (min-width: 641px) and (max-width: 920px) {
   .TextContainer {
     padding-left: 0px;
   }
+
   .TextContainer h3 {
-    font-size: 18px;
-    color: #6e736a;
-  }
+  font-size: var(--fs-18);
+  color: var(--body-color);
+}
+
   .Main {
     padding-left: 40px;
     padding-right: 40px;
   }
+
   .ImageContainer img {
     width: 100%;
     height: 100%;
@@ -132,18 +152,22 @@
     min-height: 120px;
   }
 }
+
 @media (min-width: 921px) and (max-width: 1440px) {
   .TextContainer {
     padding-left: 0px;
   }
+
   .TextContainer h3 {
-    font-size: 18px;
-    color: #6e736a;
-  }
+  font-size: var(--fs-18);
+  color: var(--body-color);
+}
+
   .Main {
     padding-left: 40px;
     padding-right: 40px;
   }
+
   .ImageContainer img {
     width: 100%;
     height: 100%;

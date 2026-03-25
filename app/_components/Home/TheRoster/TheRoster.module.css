@@ -4,7 +4,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   padding: 0px clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px)
     0px clamp(70px, calc(70px + (55 * ((100vw - 320px) / 1120))), 125px);
 }
@@ -33,15 +33,16 @@
 .LeftTop h3 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
-  color: #2f362a;
-  font-weight: 500;
+  color: var(--heads-color);
+  font-weight: var(--lexend-heading-font-weight);
   text-transform: uppercase;
 }
+
 .LeftTop p {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #6e736a;
-  font-weight: 400;
+  font-size: var(--fs-15);
+  color: var(--body-color);
+  font-weight: var(--lato-font-weight);
 }
 
 .LeftBottom {
@@ -50,12 +51,12 @@
 }
 .JoinBtn {
   padding: 13px 25px;
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
   border: none;
   font-family: var(--lato);
-  font-weight: 400;
-  font-size: 15px;
-  color: #ffffff;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--white-color);
   cursor: pointer;
 }
 .Right {
@@ -96,21 +97,21 @@
   .Left {
     gap: 30px;
   }
-  .Left h3 {
+  /* .Left h3 {
     font-size: 20px;
   }
   .Left p {
     font-size: 15px;
-  }
+  } */
   .active {
     width: 266px;
   }
   .inactive {
     width: 40px;
   }
-  .JoinBtn {
+  /* .JoinBtn {
     font-size: 14px;
-  }
+  } */
   .Right {
     width: 100%;
   }
