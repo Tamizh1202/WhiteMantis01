@@ -39,6 +39,8 @@ export default function ShippingAddressSection({
   const [addressToDelete, setAddressToDelete] = useState(null);
   const [addressToEdit, setAddressToEdit] = useState(null);
   const menuRef = useRef(null);
+  const emirateRef = useRef(null);
+  const [isEmirateOpen, setIsEmirateOpen] = useState(false);
 
   const emptyAddressForm = {
     addressFirstName: "",
@@ -73,6 +75,16 @@ export default function ShippingAddressSection({
         setOpenMenuId(null);
       }
     }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emirateRef.current && !emirateRef.current.contains(event.target)) {
+        setIsEmirateOpen(false);
+      }
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -476,23 +488,48 @@ export default function ShippingAddressSection({
                     </span>
                   )}
                 </div>
-                <select
-                  className={styles.Select}
+                <div
+                  className={styles.SelectContainer}
+                  ref={emirateRef}
                   style={{ flex: 1 }}
-                  value={shippingForm.emirates || "dubai"}
-                  onChange={(e) =>
-                    setShippingForm({
-                      ...shippingForm,
-                      emirates: e.target.value,
-                    })
-                  }
                 >
-                  {UAE_STATES.map((s) => (
-                    <option key={s.value} value={s.value}>
-                      {s.label}
-                    </option>
-                  ))}
-                </select>
+                  <div
+                    className={styles.CustomSelectTrigger}
+                    onClick={() => setIsEmirateOpen(!isEmirateOpen)}
+                  >
+                    <span style={{ textTransform: "capitalize" }}>
+                      {UAE_STATES.find(
+                        (s) => s.value === (shippingForm.emirates || "dubai"),
+                      )?.label || "Select Emirate"}
+                    </span>
+                    <span
+                      className={`${styles.Arrow} ${isEmirateOpen ? styles.Rotate : ""}`}
+                    >
+                      ▼
+                    </span>
+                  </div>
+
+                  {isEmirateOpen && (
+                    <div className={styles.CustomOptionsList}>
+                      {UAE_STATES.map((opt) => (
+                        <div
+                          key={opt.value}
+                          className={styles.OptionItem}
+                          onClick={() => {
+                            setShippingForm({
+                              ...shippingForm,
+                              emirates: opt.value,
+                            });
+                            setIsEmirateOpen(false);
+                            clearError("shippingEmirates"); // If there was an error
+                          }}
+                        >
+                          {opt.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
