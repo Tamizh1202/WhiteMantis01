@@ -4,8 +4,9 @@
   align-items: center;
   width: 100%;
   height: 100svh;
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
 }
+
 .MainContainer {
   display: flex;
   justify-content: left;
@@ -13,36 +14,39 @@
   width: 100%;
   height: 100%;
 }
+
 .Left {
   display: flex;
   justify-content: left;
   width: 40%;
   background: url("./1.png") no-repeat center / cover;
 }
+
 .Right {
   display: flex;
   justify-content: end;
-  padding-left: clamp(
-    24px,
-    calc(24px + (103 * ((100vw - 320px) / 1120))),
-    127px
-  );
+  padding-left: clamp(24px,
+      calc(24px + (103 * ((100vw - 320px) / 1120))),
+      127px);
 
   flex-direction: column;
   padding-bottom: 98px;
   gap: 32px;
 }
+
 .RightTop {
   display: flex;
   justify-content: left;
   max-width: 425px;
 }
+
 .RightTop p {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #ffffff;
+  font-size: var(--fs-15);
+  font-weight: var(--lato-font-weight);
+  color: var(--white-color);
 }
+
 .RightBottom {
   display: flex;
   justify-content: left;
@@ -51,6 +55,7 @@
   cursor: pointer;
   text-decoration: none;
 }
+
 .RightBottom h4 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
@@ -90,6 +95,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-33.333%);
   }
@@ -99,15 +105,18 @@
   .Main {
     height: 100%;
   }
+
   .MainContainer {
     flex-direction: column;
     gap: 72px;
   }
+
   .Left {
     width: 100%;
     height: auto;
     min-height: 400px;
   }
+
   .Right {
     width: 100%;
     padding-left: 24px;
@@ -115,12 +124,15 @@
     padding-bottom: 50px;
     gap: 15px;
   }
+
   .RightTop {
     max-width: 100%;
   }
+
   .RightBottom h4 {
     font-size: 20px;
   }
+
   .RightTop p {
     font-size: 14px;
     width: 100%;

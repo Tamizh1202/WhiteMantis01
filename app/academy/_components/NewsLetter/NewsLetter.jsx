@@ -80,7 +80,7 @@ const NewsLetter = () => {
             <button className={styles.subscribeBtn} type="submit" disabled={loading}>{loading ? '...' : 'Subscribe'}</button>
           </div>
         </form>
-        {message ? (<div className={styles.message} style={{ color: message.type === 'success' ? 'green' : '#c0392b' }}>{message.text}</div>) : null}
+        {message ? (<div className={styles.message} style={{ color: message.type === "success" ? "var(--green-color)" : "var(--red-color)" }}>{message.text}</div>) : null}
       </div>
     </div>
   );

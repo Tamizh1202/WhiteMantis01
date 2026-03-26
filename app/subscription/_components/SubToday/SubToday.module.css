@@ -4,20 +4,17 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
 
   /* padding-top: 150px; */
-  padding-left: clamp(
-    24px,
-    calc(24px + (101 * ((100vw - 320px) / 1120))),
-    125px
-  );
-  padding-right: clamp(
-    24px,
-    calc(24px + (101 * ((100vw - 320px) / 1120))),
-    125px
-  );
+  padding-left: clamp(24px,
+      calc(24px + (101 * ((100vw - 320px) / 1120))),
+      125px);
+  padding-right: clamp(24px,
+      calc(24px + (101 * ((100vw - 320px) / 1120))),
+      125px);
 }
+
 .MainContainer {
   display: flex;
   justify-content: left;
@@ -25,9 +22,9 @@
   height: 100%;
   flex-direction: row;
   gap: clamp(60px, calc(60px + (137 * ((100vw - 320px) / 1120))), 197px);
-
   align-items: center;
 }
+
 .left {
   display: flex;
   justify-content: left;
@@ -35,19 +32,22 @@
   gap: 15px;
   max-width: 302px;
 }
+
 .left h3 {
   font-family: var(--lexend);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   font-size: var(--fs-22);
-  color: #2f362a;
+  color: var(--heads-color);
   text-transform: uppercase;
 }
+
 .left p {
   font-family: var(--lato);
-  font-weight: 400;
-  font-size: 15px;
-  color: #6e736a;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--body-color);
 }
+
 .right {
   display: flex;
   justify-content: left;
@@ -55,6 +55,7 @@
   flex-direction: row;
   gap: 60px;
 }
+
 .Card {
   display: flex;
   justify-content: left;
@@ -62,9 +63,10 @@
   max-width: 350px;
   flex-direction: column;
   gap: 30px;
-  border: 1px solid #2f362a4d;
+  border: 1px solid var(--heads-color);
   position: relative;
 }
+
 .CardImageContainer {
   display: flex;
   justify-content: left;
@@ -77,6 +79,7 @@
   left: 0;
   align-items: last baseline;
 }
+
 .CardTwoImageContainer {
   display: flex;
   justify-content: left;
@@ -89,6 +92,7 @@
   left: 0;
   align-items: last baseline;
 }
+
 .CardThreeImageContainer {
   display: flex;
   justify-content: left;
@@ -101,6 +105,7 @@
   left: 0;
   align-items: last baseline;
 }
+
 .CardImage img {
   width: 100%;
   height: 100%;
@@ -109,6 +114,7 @@
   object-fit: contain;
   transition: transform 0.3s ease-in-out;
 }
+
 .CardImagetwo img {
   width: 100%;
   height: 100%;
@@ -117,6 +123,7 @@
   object-fit: contain;
   transition: transform 0.3s ease-in-out;
 }
+
 .CardImageThree img {
   width: 100%;
   height: 100%;
@@ -125,40 +132,44 @@
   object-fit: contain;
   transition: transform 0.3s ease-in-out;
 }
+
 .DealBadge {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 1px;
 }
+
 .DealBadge h4 {
   font-family: var(--lato);
-  font-weight: 400;
-  font-size: 15px;
-  color: #525252;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--body-color);
   margin: 0;
 }
+
 .DealBadge h5 {
   font-family: var(--lato);
-  font-weight: 400;
-  font-size: 15px;
-  color: #525252;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--body-color);
   margin: 0;
 }
 
 .DealBadge h2 {
   font-family: var(--lexend);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   font-size: var(--fs-22);
-  color: #ba4848;
+  color: var(--red-color);
   margin: 0;
 }
+
 .CardContent {
   display: flex;
   justify-content: left;
   flex-direction: column;
   padding-top: 154px;
-  border: 1px solid #2f362a4d;
+  border: 1px solid var(--heads-color);
 }
 
 .Card:hover .CardImage img,
@@ -173,14 +184,16 @@
   justify-content: left;
   flex-direction: column;
   padding-top: 154px;
-  border: 1px solid #2f362a4d;
+  border: 1px solid var(--heads-color);
 }
+
 .CardContentTop {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 20px;
 }
+
 .CardContentTopTop {
   display: flex;
   justify-content: left;
@@ -189,88 +202,100 @@
   padding-left: 36px;
   padding-right: 40px;
 }
+
 .CardContentTopTop h3 {
   font-family: var(--lexend);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   font-size: var(--fs-22);
-  color: #2f362a;
+  color: var(--heads-color);
   white-space: nowrap;
   text-transform: uppercase;
 }
+
 .CardContentTopTop p {
   font-family: var(--lato);
-  font-weight: 400;
-
-  font-size: 15px;
-  color: #6e736a;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--body-color);
 }
+
 .CardContentTopBottom {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 20px;
   padding: 26px 23px 26px 24px;
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
 }
+
 .heading h4 {
   font-family: var(--lato);
-  font-weight: 700;
-  font-size: 15px;
-  color: #ffffff;
+  font-weight: var(--lato-bold-font-weight);
+  font-size: var(--fs-15);
+  color: var(--white-color);
   margin: 0;
 }
+
 .benefits {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 5px;
 }
+
 .benefitItem {
   display: flex;
   justify-content: left;
   flex-direction: row;
   gap: 11px;
 }
+
 .benefitItem p {
   font-family: var(--lato);
-  font-weight: 400;
-  font-size: 15px;
-  color: #ffffff;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--white-color);
   margin: 0;
   white-space: nowrap;
 }
+
 .line {
   width: 100%;
   height: 1px;
-  background-color: #ffffff33;
+  background-color: var(--white-color);
 }
+
 .CardContentBottom button {
-  background: #2f362a;
-  color: #ffffff;
+  background: var(--heads-color);
+  color: var(--white-color);
   border: none;
   padding: 13.5px 30px;
 
   width: 100%;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: var(--fs-15);
+  font-weight: var(--lato-bold-font-weight);
   font-family: var(--lato);
   cursor: pointer;
 }
+
 @media (max-width: 640px) {
   .MainContainer {
     flex-direction: column;
     gap: 60px;
     align-items: baseline;
   }
+
   .right {
     flex-direction: column;
     gap: 60px;
   }
+
   .main {
     padding-left: 24px;
     padding-right: 24px;
     padding-top: 0px;
   }
+
   .CardImage img {
     width: 100%;
     height: 100%;
@@ -278,6 +303,7 @@
     max-height: 230px;
     object-fit: contain;
   }
+
   .CardImagetwo img {
     width: 100%;
     height: 100%;
@@ -299,41 +325,51 @@
     top: -30px;
     left: 0;
   }
+
   .CardTwoImageContainer {
     position: absolute;
     top: -40px;
     left: 0;
   }
+
   .CardThreeImageContainer {
     position: absolute;
     top: -30px;
     left: 0;
   }
+
   .CardThreeContent {
     padding-top: 100px;
   }
+
   .left {
     justify-content: left;
     align-items: baseline;
   }
-  .left h3 {
+
+  /* .left h3 {
     font-size: 20px;
   }
+
   .left p {
     font-size: 15px;
-  }
+  } */
+
   .benefitItem p {
     font-size: 14px;
     white-space: normal;
   }
+
   .CardContentTopTop {
     padding-left: 20px;
     padding-right: 20px;
   }
+
   .CardContentTopBottom {
     padding: 20px 15px 20px 15px;
   }
 }
+
 @media (max-width: 1440px) and (min-width: 641px) {
   .right {
     display: grid;
@@ -341,34 +377,41 @@
     row-gap: 60px;
     column-gap: 10px;
   }
+
   .main {
     padding-left: 30px;
     padding-right: 30px;
   }
+
   .Card {
     max-width: 100%;
   }
+
   .MainContainer {
     flex-direction: column;
     gap: 180px;
     align-items: baseline;
   }
+
   .CardImageContainer {
     position: absolute;
     top: -10px;
     left: 0;
   }
+
   .CardTwoImageContainer {
     position: absolute;
     top: -20px;
     left: 0;
   }
+
   .CardThreeImageContainer {
     position: absolute;
     top: -40px;
     left: 0;
   }
 }
+
 @media (min-width: 1441px) and (max-width: 1890px) {
   .right {
     display: grid;
@@ -380,27 +423,32 @@
   .Card {
     max-width: 100%;
   }
+
   .MainContainer {
     flex-direction: column;
     gap: 180px;
     align-items: baseline;
   }
+
   .CardImageContainer {
     position: absolute;
     top: -40px;
     left: 0;
   }
+
   .CardTwoImageContainer {
     position: absolute;
     top: -40px;
     left: 0;
   }
+
   .CardThreeImageContainer {
     position: absolute;
     top: -40px;
     left: 0;
   }
 }
+
 @media (min-width: 641px) and (max-width: 810px) {
   .Card {
     max-width: 340px;

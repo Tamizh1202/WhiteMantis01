@@ -22,6 +22,7 @@
   flex: 0 0 60svh;
   position: relative;
 }
+
 .TopImage {
   width: 100%;
   height: 100%;
@@ -41,6 +42,7 @@
   will-change: opacity, transform;
   opacity: 0;
 }
+
 .layerTop {
   z-index: 2;
 }
@@ -50,19 +52,19 @@
   flex-direction: column;
   flex: 1;
   justify-content: center;
-  padding: clamp(28px, calc(28px + (34 * ((100vw - 320px) / 1120))), 62px)
-    clamp(31px, calc(31px + (94 * ((100vw - 320px) / 1120))), 125px);
+  padding: clamp(28px, calc(28px + (34 * ((100vw - 320px) / 1120))), 62px) clamp(31px, calc(31px + (94 * ((100vw - 320px) / 1120))), 125px);
 
   gap: clamp(20px, calc(20px + (20 * ((100vw - 320px) / 1120))), 40px);
 
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
   box-sizing: border-box;
 }
+
 .BottomTop h3 {
   font-family: var(--lexend);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   font-size: var(--fs-22);
-  color: #ffffff;
+  color: var(--white-color);
   margin: 0 0 0px 0;
   letter-spacing: 0.6px;
 }
@@ -78,7 +80,6 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 360px));
   gap: clamp(70px, calc(70px + (5 * ((100vw - 320px) / 1120))), 75px);
-
   align-items: start;
   position: relative;
 }
@@ -93,18 +94,20 @@
     transform 0.25s linear;
   box-sizing: border-box;
 }
+
 .stepBox h3 {
   font-family: var(--lexend);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   font-size: var(--fs-22);
-  color: #ffffff;
+  color: var(--white-color);
   margin: 0;
 }
+
 .stepBox p {
   font-family: var(--lato);
-  font-weight: 400;
-  font-size: 15px;
-  color: #ffffff;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--fs-15);
+  color: var(--white-color);
   line-height: 1.35;
   margin: 0;
   opacity: 0.95;
@@ -152,7 +155,7 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--white-color);
   border: none;
   z-index: 3;
   display: flex;
@@ -170,18 +173,21 @@
   .BottomSection {
     padding: 28px 31px 78px 31px;
   }
-  .BottomTop h3,
+
+  /* .BottomTop h3,
   .stepBox h3 {
     font-size: 20px;
   }
+
   .stepBox p {
     font-size: 14px;
-  }
+  } */
 
   .BottomBottomWrapper {
     flex-direction: column;
     position: relative;
   }
+
   .main {
     padding-left: 24px;
     padding-right: 24px;
@@ -235,25 +241,30 @@
     transform: translateX(-50%);
   }
 }
+
 @media (min-width: 641px) and (max-width: 1240px) {
   .BottomSection {
     padding: 28px 31px 78px 31px;
   }
+
   .main {
     overflow: hidden;
   }
-  .BottomTop h3,
+
+  /* .BottomTop h3,
   .stepBox h3 {
     font-size: 20px;
   }
+
   .stepBox p {
     font-size: 14px;
-  }
+  } */
 
   .BottomBottomWrapper {
     flex-direction: column;
     position: relative;
   }
+
   .main {
     padding-left: 24px;
     padding-right: 24px;
