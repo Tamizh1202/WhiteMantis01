@@ -237,7 +237,7 @@ const UpComing = () => {
                   style={{
                     background: "transparent",
                     border: "none",
-                    color: "#6C7A5F",
+                    color: "var(--primary-color)",
                     cursor: "pointer",
                     padding: 0,
                     marginTop: 8,
@@ -288,17 +288,18 @@ const UpComing = () => {
                   textAlign: "center",
                   padding: 80,
                   fontFamily: "var(--lato)",
-                  fontWeight: "400",
+                  fontWeight: "var(--lato-font-weight)",
+                  color: "var(--heads-color)",
                 }}
               >
                 No Upcoming Courses available
                 <p
                   style={{
-                    color: "#6E736A",
-                    fontSize: "15px",
+                    color: "var(--body-color)",
+                    fontSize: "var(--lato-font-size)",
                     marginTop: "10px",
                     fontFamily: "var(--lato)",
-                    fontWeight: "400",
+                    fontWeight: "var(--lato-font-weight)",
                   }}
                 >
                   New coffee courses will be announced soon.
@@ -352,10 +353,10 @@ const UpComing = () => {
                 style={{
                   maxWidth: 450,
                   width: "100%",
-                  background: "#fff",
+                  background: "var(--white-color)",
                   padding: 20,
                   borderRadius: 8,
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+                  boxShadow: "0 10px 30px var(--line-color)",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -365,8 +366,8 @@ const UpComing = () => {
                     style={{
                       background: "transparent",
                       border: "none",
-                      color: "#333",
-                      fontSize: 24,
+                      color: "var(--heads-color)", // Mapping #333 to your dark heading color
+                      fontSize: "var(--fs-24)",
                       cursor: "pointer",
                     }}
                   >
@@ -385,9 +386,8 @@ const UpComing = () => {
                 {Array.from({ length: totalPages }).map((_, i) => (
                   <button
                     key={i}
-                    className={`${styles.PaginationDot} ${
-                      currentPage > i ? styles.activeDot : ""
-                    }`}
+                    className={`${styles.PaginationDot} ${currentPage > i ? styles.activeDot : ""
+                      }`}
                     onClick={() => setCurrentPage(i + 1)}
                     aria-label={`Go to page ${i + 1}`}
                   />
