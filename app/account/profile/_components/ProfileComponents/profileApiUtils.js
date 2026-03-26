@@ -14,7 +14,13 @@ export const updateProfileAPI = async (userId, payload) => {
       "updateProfileAPI error:",
       error.response?.data || error.message,
     );
-    return { success: false, error: error.message };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      error: backendMsg || error.message || "Failed to update profile",
+    };
   }
 };
 
@@ -32,7 +38,13 @@ export const removeProfileImageAPI = async (userId) => {
       "removeProfileImageAPI error:",
       error.response?.data || error.message,
     );
-    return { success: false, error: error.message };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      error: backendMsg || error.message || "Failed to remove profile picture",
+    };
   }
 };
 
@@ -63,7 +75,13 @@ export const saveAddressAPI = async (userId, addressPayload) => {
       "saveAddressAPI error:",
       error.response?.data || error.message,
     );
-    return { success: false, error: error.message };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      error: backendMsg || error.message || "Failed to save address",
+    };
   }
 };
 
@@ -91,10 +109,16 @@ export const updateAddressAPI = async (userId, addressPayload) => {
     return { success: false };
   } catch (error) {
     console.error(
-      "saveAddressAPI error:",
+      "updateAddressAPI error:",
       error.response?.data || error.message,
     );
-    return { success: false, error: error.message };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      error: backendMsg || error.message || "Failed to update address",
+    };
   }
 };
 
@@ -111,7 +135,13 @@ export const deleteAddressAPI = async (userId, addressId) => {
       "deleteAddressAPI error:",
       error.response?.data || error.message,
     );
-    return { success: false, error: error.message };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      error: backendMsg || error.message || "Failed to delete address",
+    };
   }
 };
 
@@ -131,9 +161,12 @@ export const confirmDeleteAccountAPI = async (userId) => {
       "confirmDeleteAccountAPI error:",
       error.response?.data || error.message,
     );
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
     return {
       success: false,
-      error: error.response?.data?.message || error.message,
+      error: backendMsg || error.message || "Failed to delete account",
     };
   }
 };
@@ -155,7 +188,13 @@ export const uploadProfileImageAPI = async ({ base64, filename }) => {
       "uploadProfileImageAPI error:",
       error.response?.data || error.message,
     );
-    return { success: false, error: error.message };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      error: backendMsg || error.message || "Failed to upload image",
+    };
   }
 };
 
@@ -175,8 +214,13 @@ export const changeEmailOtpAPI = async (email) => {
       "changeEmailOtpAPI error:",
       error.response?.data || error.message,
     );
-    const msg = error.response?.data?.message || error.message;
-    return { success: false, message: msg };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      message: backendMsg || error.message || "Failed to send OTP",
+    };
   }
 };
 
@@ -193,10 +237,15 @@ export const verifyChangeEmailOtpAPI = async (email, otp) => {
     return { success: false, message: data.message || "Failed to verify OTP" };
   } catch (error) {
     console.error(
-      "changeEmailOtpAPI error:",
+      "verifyChangeEmailOtpAPI error:",
       error.response?.data || error.message,
     );
-    const msg = error.response?.data?.message || error.message;
-    return { success: false, message: msg };
+    const resData = error?.response?.data;
+    const backendMsg =
+      resData?.message || resData?.error || resData?.errors?.[0]?.message;
+    return {
+      success: false,
+      message: backendMsg || error.message || "Failed to verify OTP",
+    };
   }
 };

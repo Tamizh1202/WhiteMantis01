@@ -269,11 +269,13 @@ const Footer = ({ categories }) => {
                             err?.response?.data,
                           );
                           setNewsletterError(true);
-                          const errData = err?.response?.data;
+                          const resData = err?.response?.data;
+                          const backendMsg =
+                            resData?.message ||
+                            resData?.error ||
+                            resData?.errors?.[0]?.message;
                           setNewsletterMsg(
-                            errData?.message ||
-                              errData?.error ||
-                              errData?.errors?.[0]?.message ||
+                            backendMsg ||
                               "You're already subscribed! We'll keep you in the loop.",
                           );
                         } finally {

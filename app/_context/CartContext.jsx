@@ -16,12 +16,22 @@ const CartContext = createContext(null);
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cartTotals, setCartTotals] = useState({ subtotal: 0, total: 0, discount: 0, totalItems: 0, beansDiscount: 0 });
+  const [cartTotals, setCartTotals] = useState({
+    subtotal: 0,
+    total: 0,
+    discount: 0,
+    totalItems: 0,
+    beansDiscount: 0,
+  });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
   const [isBeansApplied, setIsBeansApplied] = useState(false);
   const [beansBalance, setBeansBalance] = useState(0);
-  const [coinConfig, setCoinConfig] = useState({ pointsEarn: 5, pointsToAed: 10, maxPointsPerOrder: 0 });
+  const [coinConfig, setCoinConfig] = useState({
+    pointsEarn: 5,
+    pointsToAed: 10,
+    maxPointsPerOrder: 0,
+  });
   const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   const { data: session, status } = useSession();
@@ -41,18 +51,22 @@ export function CartProvider({ children }) {
 
       console.log("Coupon Data:", data);
 
-      const coupon = data.coupon || (data.docs?.[0]);
+      const coupon = data.coupon || data.docs?.[0];
 
       if (coupon && (data.success || !data.message)) {
         // Validation: Minimum Amount
         const minAmount = Number(coupon.minimumAmount || 0);
         if (minAmount > 0 && cartTotals.subtotal < minAmount) {
-          return { ok: false, message: `Minimum amount of AED ${minAmount} required` };
+          return {
+            ok: false,
+            message: `Minimum amount of AED ${minAmount} required`,
+          };
         }
 
         let discountVal = 0;
         if (coupon.discountType === "percentage") {
-          discountVal = cartTotals.subtotal * (Number(coupon.discountAmount) / 100);
+          discountVal =
+            cartTotals.subtotal * (Number(coupon.discountAmount) / 100);
         } else {
           discountVal = Number(coupon.discountAmount);
         }
@@ -61,28 +75,34 @@ export function CartProvider({ children }) {
           code: coupon.code,
           discount: discountVal,
           type: coupon.discountType,
-          amount: coupon.discountAmount
+          amount: coupon.discountAmount,
         });
 
-        setCartTotals(prev => ({
+        setCartTotals((prev) => ({
           ...prev,
           discount: discountVal,
-          total: prev.subtotal - discountVal
+          total: prev.subtotal - discountVal,
         }));
         return { ok: true, message: "Coupon applied!" };
       }
       return { ok: false, message: data.message || "Invalid coupon code" };
     } catch (e) {
-      return { ok: false, message: e.response?.data?.message || e.message };
+      const resData = e?.response?.data;
+      const backendMsg =
+        resData?.message || resData?.error || resData?.errors?.[0]?.message;
+      return {
+        ok: false,
+        message: backendMsg || e.message || "Failed to apply coupon",
+      };
     }
   };
 
   const removeCoupon = () => {
     if (appliedCoupon) {
-      setCartTotals(prev => ({
+      setCartTotals((prev) => ({
         ...prev,
         discount: 0,
-        total: prev.subtotal
+        total: prev.subtotal,
       }));
       setAppliedCoupon(null);
     }
@@ -94,10 +114,10 @@ export function CartProvider({ children }) {
     try {
       const [balanceRes, configRes] = await Promise.all([
         axiosClient.get("/api/user-wt-coins"),
-        axiosClient.get("/api/globals/wt-coins")
+        axiosClient.get("/api/globals/wt-coins"),
       ]);
 
-      console.log(balanceRes)
+      console.log(balanceRes);
 
       if (balanceRes.data.docs?.[0]) {
         setBeansBalance(balanceRes?.data?.docs?.[0]?.totalBalance || 0);
@@ -107,7 +127,7 @@ export function CartProvider({ children }) {
         setCoinConfig({
           pointsEarn: configRes.data.pointsEarn || 5,
           pointsToAed: configRes.data.pointsToAed || 10,
-          maxPointsPerOrder: configRes.data.maxPointsPerOrder || 0
+          maxPointsPerOrder: configRes.data.maxPointsPerOrder || 0,
         });
       }
     } catch (error) {
@@ -129,12 +149,27 @@ export function CartProvider({ children }) {
       coinsDiscount = Math.min(maxPossibleDiscount, balanceInAed);
     }
 
-    setCartTotals(prev => ({
+    setCartTotals((prev) => ({
       ...prev,
       beansDiscount: coinsDiscount,
-      total: Math.max(0, prev.subtotal - (prev.discount || 0) + (prev.shipping || 0) + (prev.tax || 0) - coinsDiscount)
+      total: Math.max(
+        0,
+        prev.subtotal -
+          (prev.discount || 0) +
+          (prev.shipping || 0) +
+          (prev.tax || 0) -
+          coinsDiscount,
+      ),
     }));
-  }, [isBeansApplied, cartTotals.subtotal, cartTotals.discount, cartTotals.shipping, cartTotals.tax, beansBalance, coinConfig]);
+  }, [
+    isBeansApplied,
+    cartTotals.subtotal,
+    cartTotals.discount,
+    cartTotals.shipping,
+    cartTotals.tax,
+    beansBalance,
+    coinConfig,
+  ]);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -146,7 +181,7 @@ export function CartProvider({ children }) {
   /** Apply a cart API response (items, subtotal, totalItems) to state */
   const applyCartResponse = (data) => {
     setItems(data.items || []);
-    setCartTotals(prev => ({
+    setCartTotals((prev) => ({
       ...prev,
       subtotal: data.subtotal || 0,
       totalItems: data.totalItems || 0,
@@ -157,7 +192,7 @@ export function CartProvider({ children }) {
   const applyGuestCart = () => {
     const cart = getCart();
     setItems(cart.items || []);
-    setCartTotals(prev => ({
+    setCartTotals((prev) => ({
       ...prev,
       subtotal: cart.subtotal || 0,
       discount: 0,
@@ -197,7 +232,9 @@ export function CartProvider({ children }) {
         applyCartResponse(data);
         // Show toast with the item that was just added/updated
         const added = (data.items || []).find(
-          (i) => String(i.product) === String(product) && (i.vId || "") === (vId || "")
+          (i) =>
+            String(i.product) === String(product) &&
+            (i.vId || "") === (vId || ""),
         );
         if (added) {
           addToCartToast({ ...added, quantity }, openCart);
@@ -205,7 +242,8 @@ export function CartProvider({ children }) {
       } catch (e) {
         console.error("Error adding to cart:", e);
         const resData = e?.response?.data;
-        const backendMsg = resData?.message || resData?.error || resData?.errors?.[0]?.message;
+        const backendMsg =
+          resData?.message || resData?.error || resData?.errors?.[0]?.message;
         toast.error(backendMsg || e?.message || "Failed to add item to cart");
       }
     } else {
@@ -215,7 +253,9 @@ export function CartProvider({ children }) {
         applyGuestCart();
         // Show toast with the item from the refreshed guest cart
         const added = (cart.items || []).find(
-          (i) => String(i.product) === String(product) && (i.vId || null) === (vId || null)
+          (i) =>
+            String(i.product) === String(product) &&
+            (i.vId || null) === (vId || null),
         );
         if (added) {
           addToCartToast({ ...added, quantity }, openCart);
@@ -223,7 +263,8 @@ export function CartProvider({ children }) {
       } catch (e) {
         console.error("Error adding to cart:", e);
         const resData = e?.response?.data;
-        const backendMsg = resData?.message || resData?.error || resData?.errors?.[0]?.message;
+        const backendMsg =
+          resData?.message || resData?.error || resData?.errors?.[0]?.message;
         toast.error(backendMsg || e?.message || "Failed to add item to cart");
       }
     }
@@ -264,7 +305,8 @@ export function CartProvider({ children }) {
       } catch (e) {
         console.error("Error updating cart quantity:", e);
         const resData = e?.response?.data;
-        const backendMsg = resData?.message || resData?.error || resData?.errors?.[0]?.message;
+        const backendMsg =
+          resData?.message || resData?.error || resData?.errors?.[0]?.message;
         const message = backendMsg || e?.message || "Failed to update quantity";
         return { ok: false, message };
       }
@@ -272,19 +314,22 @@ export function CartProvider({ children }) {
       // For guest: resolve new quantity from action or direct value
       const cart = getCart();
       const existing = cart.items?.find(
-        (i) => String(i.product) === String(product) && (i.vId || null) === (vId || null)
+        (i) =>
+          String(i.product) === String(product) &&
+          (i.vId || null) === (vId || null),
       );
       if (existing) {
         let newQty = existing.quantity;
         if (action === "increment") newQty = Math.min(5, existing.quantity + 1);
-        else if (action === "decrement") newQty = Math.max(1, existing.quantity - 1);
-        else if (typeof quantity === "number") newQty = Math.min(5, Math.max(1, quantity));
+        else if (action === "decrement")
+          newQty = Math.max(1, existing.quantity - 1);
+        else if (typeof quantity === "number")
+          newQty = Math.min(5, Math.max(1, quantity));
         updateItemQuantity(product, vId, newQty);
       }
       applyGuestCart();
     }
   };
-
 
   return (
     <CartContext.Provider

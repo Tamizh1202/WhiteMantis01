@@ -121,7 +121,7 @@ export default function ShippingAddressSection({
         setAddressToDelete(null);
       } else {
         // Rollback if failed (optional, but good practice if addresses were re-fetched)
-        toast.error(result.message || "Failed to delete address");
+        toast.error(result.error || "Failed to delete address");
       }
     } catch (error) {
       console.error("Delete address error:", error);
@@ -165,7 +165,7 @@ export default function ShippingAddressSection({
         setAddressToEdit(null);
         setAddressForm(emptyAddressForm);
       } else {
-        setAddressGeneralError(result.message || "Failed to save address");
+        setAddressGeneralError(result.error || "Failed to save address");
       }
     } catch (error) {
       console.error("Save address error:", error);
@@ -496,7 +496,9 @@ export default function ShippingAddressSection({
               </div>
 
               <div>
-                <div className={`${styles.PhoneWrapper} ${validationErrors.shippingPhone ? styles.InputError : ""}`}>
+                <div
+                  className={`${styles.PhoneWrapper} ${validationErrors.shippingPhone ? styles.InputError : ""}`}
+                >
                   <span className={styles.PhonePrefix}>+971</span>
                   <input
                     className={styles.PhoneInput}
@@ -511,7 +513,10 @@ export default function ShippingAddressSection({
                     onBlur={() => {
                       const e = validateUAEPhone(shippingForm.phone);
                       if (e)
-                        setValidationErrors((p) => ({ ...p, shippingPhone: e }));
+                        setValidationErrors((p) => ({
+                          ...p,
+                          shippingPhone: e,
+                        }));
                     }}
                   />
                 </div>
@@ -546,7 +551,7 @@ export default function ShippingAddressSection({
       {delivery === "pickup" && (
         <div className={styles.PickupList}>
           <p>Pickup Locations Near You</p>
-          <div className={styles.PickupCard}  >
+          <div className={styles.PickupCard}>
             <input
               type="radio"
               style={{ accentColor: "#6c7a5f" }}

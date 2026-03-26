@@ -390,8 +390,16 @@ export default function SubscriptionDetailPage({ params }) {
                     toast.error("Failed to cancel subscription.");
                   }
                 } catch (err) {
-                  const msg = err?.response?.data?.message || err?.message || "Failed to cancel subscription.";
-                  toast.error(msg);
+                  const resData = err?.response?.data;
+                  const backendMsg =
+                    resData?.message ||
+                    resData?.error ||
+                    resData?.errors?.[0]?.message;
+                  toast.error(
+                    backendMsg ||
+                      err?.message ||
+                      "Failed to cancel subscription.",
+                  );
                 } finally {
                   setCancelling(false);
                 }

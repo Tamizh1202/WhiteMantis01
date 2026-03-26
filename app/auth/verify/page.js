@@ -111,7 +111,10 @@ export default function Otp() {
       router.refresh();
     } catch (e) {
       console.error("OTP verification error:", e);
-      setError(e.response?.data?.message || e.message || "Verification failed");
+      const resData = e?.response?.data;
+      const backendMsg =
+        resData?.message || resData?.error || resData?.errors?.[0]?.message;
+      setError(backendMsg || e.message || "Verification failed");
       setLoading(false);
     }
   }
@@ -128,23 +131,21 @@ export default function Otp() {
       // const signupRes = await axiosClient.post("api/otp/send-web", {
       //   email: userEmail,
       // });
-
       // const json = signupRes.data;
-
       // if (signupRes.status !== 200) {
       //   setError(json.error || "Unable to resend OTP");
       //   setResending(false);
       //   return;
       // }
-
       // setInfo("OTP sent again. Please check your email.");
       // setCountdown(RESEND_COOLDOWN);
       // setOtp(["", "", "", ""]);
       // inputsRef.current[0]?.focus();
-
-
     } catch (e) {
-      setError(e.message || "Failed to resend OTP");
+      const resData = e?.response?.data;
+      const backendMsg =
+        resData?.message || resData?.error || resData?.errors?.[0]?.message;
+      setError(backendMsg || e.message || "Failed to resend OTP");
     } finally {
       setResending(false);
     }
@@ -205,17 +206,9 @@ export default function Otp() {
                   </div>
                 </div>
 
-                {error && (
-                  <p className={styles.errorMessage}>
-                    {error}
-                  </p>
-                )}
+                {error && <p className={styles.errorMessage}>{error}</p>}
 
-                {info && (
-                  <p className={styles.infoMessage}>
-                    {info}
-                  </p>
-                )}
+                {info && <p className={styles.infoMessage}>{info}</p>}
 
                 <div className={styles.OtpInputs}>
                   {[0, 1, 2, 3].map((_, index) => (
@@ -245,11 +238,15 @@ export default function Otp() {
                 Didn't receive it? Check spam or{" "}
                 {countdown > 0 ? (
                   <span style={{ cursor: "not-allowed", opacity: 0.6 }}>
-                    Resend OTP ({String(Math.floor(countdown / 60)).padStart(2, "0")}:
+                    Resend OTP (
+                    {String(Math.floor(countdown / 60)).padStart(2, "0")}:
                     {String(countdown % 60).padStart(2, "0")})
                   </span>
                 ) : (
-                  <span onClick={resendOtp} style={{ cursor: resending ? "not-allowed" : "pointer" }}>
+                  <span
+                    onClick={resendOtp}
+                    style={{ cursor: resending ? "not-allowed" : "pointer" }}
+                  >
                     {resending ? "Resending..." : "Resend OTP"}
                   </span>
                 )}

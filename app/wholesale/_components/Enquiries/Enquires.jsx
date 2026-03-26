@@ -115,8 +115,11 @@ const Enquires = () => {
       }
     } catch (error) {
       console.error("Submission error:", error);
+      const resData = error?.response?.data;
+      const backendMsg =
+        resData?.message || resData?.error || resData?.errors?.[0]?.message;
       setResponseError(true);
-      setResponseMessage("Network error. Please try again.");
+      setResponseMessage(backendMsg || "Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -132,9 +135,10 @@ const Enquires = () => {
         <div className={styles.Right}>
           <div className={styles.RightTop}>
             <h3>Start the Conversation</h3>
-            <p>Tell us a little about your business and
-              what you're looking for. We'll follow up
-              within 24 hours.</p>
+            <p>
+              Tell us a little about your business and what you're looking for.
+              We'll follow up within 24 hours.
+            </p>
           </div>
 
           <div className={styles.RightBottom}>
@@ -207,8 +211,7 @@ const Enquires = () => {
 
                 <div className={styles.CheckboxBlock}>
                   <p>
-                    What best describes your business? (Select
-                    all that apply)
+                    What best describes your business? (Select all that apply)
                   </p>
 
                   <label>

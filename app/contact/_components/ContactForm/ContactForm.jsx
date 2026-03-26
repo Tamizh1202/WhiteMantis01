@@ -123,9 +123,12 @@ const ContactForm = () => {
         );
       }
     } catch (error) {
+      const resData = error?.response?.data;
+      const backendMsg =
+        resData?.message || resData?.error || resData?.errors?.[0]?.message;
       setResponseError(true);
       setResponseMessage(
-        error.response?.data?.message || "Network error. Please try again.",
+        backendMsg || error.message || "Network error. Please try again.",
       );
     } finally {
       setLoading(false);

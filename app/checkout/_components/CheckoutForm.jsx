@@ -226,10 +226,10 @@ export default function CheckoutForm({
             });
           } catch (saveErr) {
             console.error("Failed to save address:", saveErr);
-         }
+          }
         }
 
-        console.log(secret, "secret")
+        console.log(secret, "secret");
 
         if (checkoutMode === "subscription") {
           // Subscription Flow: Use redirect: 'if_required' and manual PATCH synchronization
@@ -302,8 +302,11 @@ export default function CheckoutForm({
       }
     } catch (e) {
       console.error(e);
-      toast.error(e.message || "An error occurred");
-      console.log(e.response.data);
+      const resData = e?.response?.data;
+      const backendMsg =
+        resData?.message || resData?.error || resData?.errors?.[0]?.message;
+      toast.error(backendMsg || e.message || "An error occurred");
+      console.log(e.response?.data);
       setIsProcessing(false);
     }
   };

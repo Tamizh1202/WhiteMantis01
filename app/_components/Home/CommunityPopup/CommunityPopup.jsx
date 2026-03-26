@@ -45,8 +45,10 @@ const CommunityPopup = ({ isOpen, onClose }) => {
       setSubscribed(true);
     } catch (err) {
       const errData = err?.response?.data;
+      const backendMsg =
+        errData?.message || errData?.error || errData?.errors?.[0]?.message;
       setError(
-        errData?.message || errData?.error || errData?.errors?.[0]?.message || "Subscription failed. Please try again."
+        backendMsg || err?.message || "Subscription failed. Please try again.",
       );
     } finally {
       setLoading(false);

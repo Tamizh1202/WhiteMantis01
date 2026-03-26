@@ -24,7 +24,7 @@
   font-size: var(--fs-22);
   font-family: var(--lexend);
   font-weight: 500;
-  color: #525252;
+  color: var(--heads-color);
   text-transform: uppercase;
 }
 .Right {
@@ -36,7 +36,7 @@
   font-size: var(--fs-15);
   font-family: var(--lato);
   font-weight: 400;
-  color: #6e736a;
+  color: var(--body-color);
   line-height: 140%;
 }
 @media (max-width: 640px) {

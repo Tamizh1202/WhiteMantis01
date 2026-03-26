@@ -24,7 +24,6 @@ export default function CreateProfile() {
   const genderOptions = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
-    { label: "Prefer not to say", value: "other" },
   ];
 
   // --- Click Outside logic for Dropdown ---
@@ -42,7 +41,7 @@ export default function CreateProfile() {
     if (status === "unauthenticated") {
       router.push("/auth");
     }
-    setEmail(session?.user?.email);
+    setEmail(session?.user?.email || "");
     if (session?.user?.phone && !phone) {
       const formatted = session.user.phone.toString().replace(/[^0-9]/g, "");
       setPhone(formatted);

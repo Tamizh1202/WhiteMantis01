@@ -76,6 +76,7 @@ function CheckoutContent() {
     apartment: "",
     city: "",
     phone: "",
+    emirates: "dubai",
   });
 
   // ── Totals ──────────────────────────────────────────────────────────────────

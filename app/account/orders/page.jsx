@@ -127,8 +127,10 @@ export default function OrdersPage() {
         toast.success("Order cancelled successfully.");
       }
     } catch (error) {
-      const msg = error?.response?.data?.message || error?.message || "Failed to cancel order.";
-      toast.error(msg);
+      const resData = error?.response?.data;
+      const backendMsg =
+        resData?.message || resData?.error || resData?.errors?.[0]?.message;
+      toast.error(backendMsg || error?.message || "Failed to cancel order.");
     }
   };
 

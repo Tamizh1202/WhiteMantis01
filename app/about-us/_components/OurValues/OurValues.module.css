@@ -112,6 +112,23 @@
   flex-direction: column;
   gap: clamp(10px, calc(10px + (20 * ((100vw - 320px) / 1120))), 30px);
 }
+
+.ValuesContent h3,
+.VisionContent h3 {
+  font-size: var(--fs-22);
+  font-family: var(--lexend);
+  font-weight: 500;
+  color: var(--heads-color);
+  text-transform: uppercase;
+}
+
+.ValuesContent p,
+.VisionContent p {
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--body-color);
+}
+
 .VisionContent {
   opacity: 0;
 }
