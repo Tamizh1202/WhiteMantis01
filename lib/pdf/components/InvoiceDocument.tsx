@@ -7,20 +7,26 @@ interface InvoiceDocumentProps {
   data: InvoiceData;
 }
 
-// ─── Diamond SVG logo (PDF version) ──────────────────────────────────────────
+// ─── Triangle/Arrow SVG logo (PDF version) ────────────────────────────────────
 const DiamondLogo = () => (
   <Svg width="32" height="40" viewBox="0 0 32 40">
     <Polygon
-      points="16,2 30,20 16,38 2,20"
+      points="16,2 30,20 2,20"
       fill="none"
       stroke={C.primary}
       strokeWidth={2}
     />
     <Polygon
-      points="16,10 24,20 16,30 8,20"
+      points="16,10 24,20 8,20"
       fill="none"
       stroke={C.primary}
       strokeWidth={1.5}
+    />
+    <Polygon
+      points="15,20 17,20 17,36 15,36"
+      fill={C.primary}
+      stroke={C.primary}
+      strokeWidth={0}
     />
   </Svg>
 );
@@ -55,10 +61,12 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
           </View>
         </View>
 
-        {/* ── INFO GRID ── */}
+        {/* ── INFO GRID ──
+            [Recipient flex:1] [16pt gap] [Order Id 110pt] [Order Date 108pt]
+        */}
         <View style={styles.infoGrid}>
           {/* Recipient */}
-          <View style={styles.infoCol}>
+          <View style={{ flex: 1, flexDirection: "column", gap: 2 }}>
             <Text style={styles.label}>Recipient</Text>
             <Text style={styles.infoNameBold}>
               {data.billTo.first_name} {data.billTo.last_name}
@@ -67,28 +75,28 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
             <Text style={styles.infoText}>{data.billTo.phone || "N/A"}</Text>
           </View>
 
-          {/* Spacer */}
-          <View style={{ flex: 1 }} />
+          {/* Gap */}
+          <View style={{ width: 16 }} />
 
           {/* Order Id + Invoice no */}
-          <View style={styles.infoCol}>
+          <View style={{ ...styles.infoCol, width: 110 }}>
             <Text style={styles.label}>Order Id</Text>
             <Text style={styles.infoText}>
               #{data.metadata.orderNumber || data.metadata.subscriptionNumber}
             </Text>
-            <Text style={{ ...styles.label, marginTop: 12 }}>Invoice no.</Text>
+            <Text style={{ ...styles.label, marginTop: 10 }}>Invoice no.</Text>
             <Text style={styles.infoTextBold}>
               {data.metadata.invoiceNumber}
             </Text>
           </View>
 
           {/* Order Date + Next Billing */}
-          <View style={{ ...styles.infoCol, minWidth: 130 }}>
+          <View style={{ ...styles.infoCol, width: 108 }}>
             <Text style={styles.label}>Order Date</Text>
             <Text style={styles.infoText}>{data.metadata.invoiceDate}</Text>
             {isSubscription && data.metadata.nextBillingDate && (
               <>
-                <Text style={{ ...styles.label, marginTop: 12 }}>
+                <Text style={{ ...styles.label, marginTop: 10 }}>
                   Next Billing Date
                 </Text>
                 <Text style={styles.infoTextBold}>
@@ -99,7 +107,10 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
           </View>
         </View>
 
-        {/* ── ADDRESS GRID ── */}
+        {/* ── ADDRESS GRID ──
+            [Bill To flex:1] [16pt gap] [Issued By 218pt]
+            218pt = 110 + 108 → same right edge as info grid
+        */}
         <View style={styles.addressGrid}>
           {/* Bill To + Ship To */}
           <View style={styles.addressCol}>
@@ -122,7 +133,7 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
             </Text>
 
             {data.shipTo && (
-              <View style={{ marginTop: 18 }}>
+              <View style={{ marginTop: 14 }}>
                 <Text style={styles.label}>Ship to</Text>
                 <Text style={styles.addrBold}>
                   {data.shipTo.first_name} {data.shipTo.last_name}
@@ -139,10 +150,11 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
             )}
           </View>
 
+          {/* Gap — same 16pt as info grid */}
+          <View style={{ width: 16 }} />
+
           {/* Issued By */}
-          <View
-            style={{ ...styles.addressCol, marginLeft: "auto", minWidth: 240 }}
-          >
+          <View style={styles.addressIssuedCol}>
             <Text style={styles.label}>Issued By</Text>
             <Text style={styles.addrBold}>{data.company.name}</Text>
             <Text style={styles.addrText}>Email: {data.company.email}</Text>

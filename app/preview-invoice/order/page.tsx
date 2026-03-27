@@ -11,6 +11,7 @@ const dummyOrderData: InvoiceData = {
   metadata: {
     invoiceNumber: "INV-ORD-12345",
     invoiceDate: "14 Mar 2026",
+    nextBillingDate: "07 Oct 2026",
     orderNumber: "12345",
     paymentMethod: "Credit Card",
     transactionId: "ch_123456789",
@@ -31,6 +32,17 @@ const dummyOrderData: InvoiceData = {
   billTo: {
     first_name: "John",
     last_name: "Doe",
+    address_1: "123 Main St",
+    city: "Dubai",
+    state: "Dubai",
+    country: "UAE",
+    postcode: "00000",
+    email: "john@example.com",
+    phone: "+971 50 123 4567",
+  },
+  shipTo: {
+    first_name: "Kamles",
+    last_name: "NaamH",
     address_1: "123 Main St",
     city: "Dubai",
     state: "Dubai",
@@ -73,7 +85,7 @@ const dummyOrderData: InvoiceData = {
   currency: "AED",
   currencySymbol: "AED",
   terms: "White Mantis Coffee LLC — Dubai, UAE\nTerms & Condition",
-  type: "order",
+  type: "subscription",
 };
 
 export default function PreviewOrderPage() {

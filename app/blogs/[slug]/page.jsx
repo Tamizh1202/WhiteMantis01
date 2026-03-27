@@ -77,19 +77,13 @@ const BlogInternalPage = () => {
     );
   }
 
-  console.log("Blog Data:", blog);
-
   const imageUrl = formatImageUrl(blog.featuredImage);
 
   return (
     <main className={styles.Main}>
       <header className={styles.Header}>
         <h1 className={styles.Title}>{blog.title}</h1>
-<<<<<<< HEAD
-        <div className={styles.Date}>
-=======
         <div className={styles.HeaderDate}>
->>>>>>> dd104d0 (latest changes)
           {new Date(blog.createdAt).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",

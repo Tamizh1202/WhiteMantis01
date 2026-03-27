@@ -12,16 +12,24 @@ Font.register({
 
 // ─── Color tokens ────────────────────────────────────────────────────────────
 export const colors = {
-  primary: "#6A7156",
-  secondary: "#8a8d8e",
-  dark: "#3A3833",
+  primary: "#6C7A5F",
+  secondary: "#6E736A",
+  dark: "#2F362A",
   text: "#4B3827",
   border: "#e4e4e4",
   white: "#ffffff",
-  subtext: "#828282",
-  lightGrey: "#c9cbcc",
+  subtext: "#6E736A",
+  lightGrey: "#6E736A",
   bg: "#ffffff",
 };
+
+// ─── Column geometry (reference) ─────────────────────────────────────────────
+// Content width ≈ 504pt  (595 A4 − 56 paddingLeft − 33 paddingRight − 2 sidebar gap)
+// Left block  : flex:1   (~270pt, ~54%)
+// Spacer      : 16pt gap
+// Mid col     : 110pt    (~22%) → Order Id / Issued By left edge
+// Right col   : 108pt    (~21%) → Order Date / Next Billing
+// The table flex values are calibrated to the same breakpoints.
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 export const styles = StyleSheet.create({
@@ -32,7 +40,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 0,
     display: "flex",
     flexDirection: "column",
-    minHeight: "100%", // PDF pages are finite, but we use flex to push footer down
+    minHeight: "100%",
     fontSize: 10,
     color: colors.text,
     fontFamily: "Lato",
@@ -48,7 +56,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
 
-  // Header
+  // ── Header ──────────────────────────────────────────────────────────────────
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -83,20 +91,21 @@ export const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
 
-  // Info grid
+  // ── Info grid ────────────────────────────────────────────────────────────────
+  // [Recipient flex:1] [16pt gap] [Order Id 110pt] [Order Date 108pt]
   infoGrid: {
     flexDirection: "row",
-    marginBottom: 28,
+    marginBottom: 24,
   },
   infoCol: {
     flexDirection: "column",
-    gap: 3,
-    minWidth: 150,
+    gap: 2,
+    minWidth: 110,
   },
   label: {
-    fontSize: 10,
+    fontSize: 9,
     color: colors.secondary,
-    marginBottom: 2,
+    marginBottom: 1,
   },
   infoNameBold: {
     fontSize: 10,
@@ -113,15 +122,22 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  // Address grid
+  // ── Address grid ─────────────────────────────────────────────────────────────
+  // [Bill To flex:1] [16pt gap] [Issued By 218pt]
+  // 218pt = Order Id (110) + Order Date (108) — so right edges match
   addressGrid: {
     flexDirection: "row",
-    marginBottom: 36,
+    marginBottom: 28,
   },
   addressCol: {
-    flexDirection: "column",
-    gap: 3,
     flex: 1,
+    flexDirection: "column",
+    gap: 1,
+  },
+  addressIssuedCol: {
+    width: 218,
+    flexDirection: "column",
+    gap: 1,
   },
   addrBold: {
     fontSize: 10,
@@ -132,10 +148,12 @@ export const styles = StyleSheet.create({
   addrText: {
     fontSize: 10,
     color: colors.dark,
-    lineHeight: 1.6,
+    lineHeight: 1.3,
   },
 
-  // Table
+  // ── Table ────────────────────────────────────────────────────────────────────
+  // flex values mirror the column split above:
+  // Description flex:4 (~54%), Frequency flex:1.5, Qty flex:1, Unit Price flex:1.5, Amount flex:1.5
   table: {
     width: "100%",
     marginBottom: 20,
@@ -155,8 +173,8 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     borderBottomStyle: "solid",
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   th: {
     fontSize: 10,
@@ -168,7 +186,7 @@ export const styles = StyleSheet.create({
     color: colors.dark,
   },
 
-  // Totals
+  // ── Totals ───────────────────────────────────────────────────────────────────
   totalsWrapper: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -214,7 +232,7 @@ export const styles = StyleSheet.create({
     color: colors.primary,
   },
 
-  // Footer
+  // ── Footer ───────────────────────────────────────────────────────────────────
   footer: {
     marginTop: "auto",
     paddingBottom: 30,

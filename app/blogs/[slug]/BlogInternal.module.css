@@ -28,7 +28,7 @@
   text-align: center;
   background-color: var(--primary-color);
   padding-top: 80px;
-  padding-bottom: 160px;
+  padding-bottom: 215px;
   display: flex;
   gap: 12px;
   flex-direction: column;
@@ -318,11 +318,11 @@
     /* Makes the text easier to read */
   }
 
-  /* If you want to make sure the RichText children (p, h2, etc.) also center */
+  /* If you want to make sure the RichText children (p, h2, etc.) also center
   .ContentWrapper div,
   .ContentWrapper p,
   .ContentWrapper h1,
-  .ContentWrapper h2 {}
+  .ContentWrapper h2 {} */
 
   /* 1. Section Container */
   .RelatedSection {
