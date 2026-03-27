@@ -101,6 +101,7 @@ const dummyDineInData: InvoiceData = {
   discount: 0,
   total: 141.75,
   currency: "AED",
+  couponDiscount: 23,
   currencySymbol: "AED",
   terms: "White Mantis Coffee LLC — Dubai, UAE\nTerms & Condition",
   type: "dineIn",

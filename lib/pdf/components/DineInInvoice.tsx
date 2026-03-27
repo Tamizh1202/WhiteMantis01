@@ -87,7 +87,7 @@ export const DineInInvoice: React.FC<InvoiceDocumentProps> = ({ data }) => {
                 <View style={styles.table}>
                     <View style={{ ...styles.tableRow, ...styles.tableHead }}>
                         <Text style={{ ...styles.th, flex: 2 }}>Description</Text>
-                        <Text style={{ ...styles.th, flex: 3, textAlign: "center" }}>Customization</Text>
+                        <Text style={{ ...styles.th, flex: 3, textAlign: "center" }}>Customization / Add Ons</Text>
                         <Text style={{ ...styles.th, flex: 0.8, textAlign: "center" }}>Qty</Text>
                         <Text style={{ ...styles.th, flex: 2, textAlign: "right" }}>Unit Price</Text>
                         <Text style={{ ...styles.th, flex: 2, textAlign: "right" }}>Amount</Text>

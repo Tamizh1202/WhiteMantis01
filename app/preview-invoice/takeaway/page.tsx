@@ -68,7 +68,7 @@ const dummyTakeAwayData: InvoiceData = {
             total: 65,
             tax: 0,
             sku: "DINE-002",
-            customization: "No onions",
+            customization: "No onions (+AED)",
         },
 
     ],
