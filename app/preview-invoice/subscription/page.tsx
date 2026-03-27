@@ -9,12 +9,12 @@ const PDFPreview = dynamic(() => import("../_components/PDFPreview"), {
 
 const dummySubscriptionData: InvoiceData = {
   metadata: {
-    invoiceNumber: "INV-SUB-98765",
+    invoiceNumber: "INV-98765",
     invoiceDate: "January 1, 2020",
-    subscriptionNumber: "SUB-98765",
+    subscriptionNumber: "98765",
     paymentMethod: "Credit Card",
     transactionId: "sub_123456789",
-    nextBillingDate: "14 Apr 2026",
+    nextBillingDate: "April 14 2026",
   },
   company: {
     name: "White Mantis",
@@ -57,6 +57,7 @@ const dummySubscriptionData: InvoiceData = {
     {
       id: 1,
       name: "Monthly Roasters Choice",
+      weight: "500g",
       quantity: 1,
       price: 250,
       subtotal: 250,
@@ -81,7 +82,8 @@ const dummySubscriptionData: InvoiceData = {
 export default function PreviewSubscriptionPage() {
   return (
     <main>
-      <PDFPreview data={dummySubscriptionData} />
+      {/* Ensure 'type' is one of the 4 strings we defined: "subscription", "order", etc. */}
+      <PDFPreview data={dummySubscriptionData} type="subscription" />
     </main>
   );
 }

@@ -9,9 +9,8 @@ const PDFPreview = dynamic(() => import("../_components/PDFPreview"), {
 
 const dummyOrderData: InvoiceData = {
   metadata: {
-    invoiceNumber: "INV-ORD-12345",
+    invoiceNumber: "INV-12345",
     invoiceDate: "14 Mar 2026",
-    nextBillingDate: "07 Oct 2026",
     orderNumber: "12345",
     paymentMethod: "Credit Card",
     transactionId: "ch_123456789",
@@ -19,8 +18,8 @@ const dummyOrderData: InvoiceData = {
   company: {
     name: "White Mantis",
     logo: "/logo.png",
-    address: "Shop 12, Al Wasl Road, Jumeirah 1",
-    city: "Dubai",
+    address: "Shop 12, Al Wasl Road,",
+    city: "Jumeirah Dubai",
     state: "Dubai",
     postcode: "UAE — P.O. Box 73401",
     country: "UAE",
@@ -55,6 +54,8 @@ const dummyOrderData: InvoiceData = {
     {
       id: 1,
       name: "Premium Coffee Beans",
+      weight: "500g",    // Added here
+
       quantity: 2,
       price: 75,
       subtotal: 150,
@@ -65,6 +66,8 @@ const dummyOrderData: InvoiceData = {
     {
       id: 2,
       name: "Espresso Blend",
+      weight: "1kg",
+
       quantity: 1,
       price: 80,
       subtotal: 80,
@@ -91,7 +94,7 @@ const dummyOrderData: InvoiceData = {
 export default function PreviewOrderPage() {
   return (
     <main>
-      <PDFPreview data={dummyOrderData} />
+      <PDFPreview data={dummyOrderData} type="order" />
     </main>
   );
 }

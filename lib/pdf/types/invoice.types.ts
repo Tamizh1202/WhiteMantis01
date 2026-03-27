@@ -20,10 +20,13 @@ export interface InvoiceLineItem {
   quantity: number;
   price: number;
   subtotal: number;
+
   total: number;
   tax: number;
   sku?: string;
   frequency?: string;
+  weight?: string;
+  customization?: string;
 }
 
 export interface InvoiceMetadata {
@@ -35,6 +38,9 @@ export interface InvoiceMetadata {
   paymentMethod?: string;
   transactionId?: string;
   nextBillingDate?: string;
+  tableNumber?: string;
+  serverName?: string;
+  pickup?: string;
 }
 
 export interface CompanyInfo {
@@ -72,6 +78,8 @@ export interface InvoiceData {
   notes?: string;
   terms?: string;
   type?: InvoiceType;
+  CouponDiscount?: number;
+  BeansDiscount?: number;
 }
 
-export type InvoiceType = "order" | "subscription";
+export type InvoiceType = "order" | "subscription" | "subOneTime" | "takeAway" | "dineIn";
