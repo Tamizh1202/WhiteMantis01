@@ -1,16 +1,17 @@
 "use client";
 import styles from "./page.module.css";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, Suspense } from "react";
 import Image from "next/image";
 import Logo from "./logo.png";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axiosClient from "@/lib/axios";
 
 const RESEND_COOLDOWN = 60;
 
-export default function Otp() {
+function Otp() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const inputsRef = useRef([]);
 
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -102,10 +103,14 @@ export default function Otp() {
       }
 
       // Redirect based on whether it's a new user
+      const redirectParam = searchParams.get("redirect") || "/";
+
       if (verifyData.isNewUser) {
-        router.push("/auth/create-profile");
+        router.push(
+          `/auth/create-profile?redirect=${encodeURIComponent(redirectParam)}`,
+        );
       } else {
-        router.push("/");
+        router.push(redirectParam);
       }
 
       router.refresh();
@@ -256,5 +261,13 @@ export default function Otp() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OtpPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Otp />
+    </Suspense>
   );
 }

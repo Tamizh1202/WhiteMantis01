@@ -201,9 +201,10 @@ const ContactForm = () => {
                   </div>
 
                   {enquiryOpen && (
-                    <div className={testStyles.CustomOptionsList}>
+                    <div className={testStyles.CustomOptionsList} data-prevent-lenis>
                       {enquiryOptions.map((option) => (
                         <div
+                          data-prevent-lenis
                           key={option.value}
                           className={testStyles.OptionItem}
                           onClick={() => {
@@ -238,7 +239,7 @@ const ContactForm = () => {
               {responseMessage && (
                 <div
                   style={{
-                    color: responseError ? "crimson" : "#197B5B",
+                    color: responseError ? "crimson" : "var(--green-color, #197B5B)",
                     marginTop: 12,
                   }}
                 >

@@ -1,49 +1,65 @@
 "use client";
+import Link from "next/link";
+import { useSearchParams, usePathname } from "next/navigation";
 import styles from "../page.module.css";
 import { validateEmail } from "@/utils/validatorFunctions";
 
 export default function ContactSection({
-    email,
-    setEmail,
-    status,
-    session,
-    validationErrors,
-    clearError,
-    setValidationErrors,
+  email,
+  setEmail,
+  status,
+  session,
+  validationErrors,
+  clearError,
+  setValidationErrors,
 }) {
-    return (
-        <div className={styles.Two}>
-            <div className={styles.TwoOne}>
-                <h3>CONTACT</h3>
-                {status !== "authenticated" && <p>Sign In</p>}
-            </div>
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-            <div className={styles.TwoTwo}>
-                <div>
-                    <input
-                        className={`${styles.Input} ${validationErrors.email ? styles.InputError : ""}`}
-                        placeholder="Email address"
-                        value={email}
-                        onChange={(e) => {
-                            setEmail(e.target.value);
-                            clearError("email");
-                        }}
-                        onBlur={() => {
-                            const error = validateEmail(email);
-                            if (error) setValidationErrors((prev) => ({ ...prev, email: error }));
-                        }}
-                        readOnly={!!session?.user?.email}
-                    />
-                    {validationErrors.email && (
-                        <span className={styles.ErrorMessage}>{validationErrors.email}</span>
-                    )}
-                </div>
+  const redirectUrl = encodeURIComponent(
+    `${pathname}${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
+  );
 
-                <label className={styles.CheckBox}>
-                    <input type="checkbox" />
-                    <p>Email me with news and offers.</p>
-                </label>
-            </div>
+  return (
+    <div className={styles.Two}>
+      <div className={styles.TwoOne}>
+        <h3>CONTACT</h3>
+        {status !== "authenticated" && (
+          <Link href={`/auth?redirect=${redirectUrl}`}>
+            <p>Sign In</p>
+          </Link>
+        )}
+      </div>
+
+      <div className={styles.TwoTwo}>
+        <div>
+          <input
+            className={`${styles.Input} ${validationErrors.email ? styles.InputError : ""}`}
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              clearError("email");
+            }}
+            onBlur={() => {
+              const error = validateEmail(email);
+              if (error)
+                setValidationErrors((prev) => ({ ...prev, email: error }));
+            }}
+            readOnly={!!session?.user?.email}
+          />
+          {validationErrors.email && (
+            <span className={styles.ErrorMessage}>
+              {validationErrors.email}
+            </span>
+          )}
         </div>
-    );
+
+        <label className={styles.CheckBox}>
+          <input type="checkbox" />
+          <p>Email me with news and offers.</p>
+        </label>
+      </div>
+    </div>
+  );
 }

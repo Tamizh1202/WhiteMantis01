@@ -1,32 +1,38 @@
 .main {
   display: flex;
+  /* Change this from center to flex-start */
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   padding: 160px 125px;
+  box-sizing: border-box;
 }
 
 .MainConatiner {
   display: flex;
-  justify-content: left;
   flex-direction: column;
   width: 100%;
-  gap: 49px;
+  /* This ensures the Heading stays left while you can 
+     center other specific items if needed */
+  align-items: stretch;
+  gap: 75px;
 }
 
 .TopHeading {
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .TopHeading h3 {
   font-family: var(--lexend);
   font-style: normal;
-  font-weight: 500;
-  font-size: 22px;
-  color: #2F362A;
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-2-font-size);
+  color: var(--heads-color);
+  margin: 0;
 }
 
 .WorkShopContainer {
@@ -56,6 +62,7 @@
 }
 
 @media (min-width: 1200px) {
+
   .WorkShopContainerTop,
   .WorkShopContainerBottom {
     gap: 160px;
@@ -115,17 +122,17 @@
 .WorkShopTimeLineRight p {
   font-family: var(--lato);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--lato-font-weight);
   white-space: nowrap;
-  font-size: 15px;
-  color: #525252;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
 }
 
 .line {
   width: 100%;
   height: 1px;
   opacity: 12%;
-  background-color: #000000;
+  background-color: var(--heads-color);
 }
 
 .WorkShopCardBottom {
@@ -152,9 +159,9 @@
 
 .WorkShopCardBottomTop h2 {
   font-family: var(--lexend);
-  font-weight: 500;
-  font-size: 22px;
-  color: #525252;
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-2-font-size);
+  color: var(--body-color);
   text-transform: uppercase;
   margin: 0;
   flex: 1;
@@ -168,11 +175,11 @@
 
 .Button {
   padding: 12px 21px;
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
   cursor: pointer;
-  color: #ffffff;
+  color: var(--white-color);
   font-family: var(--lato);
-  font-size: 15px;
+  font-size: var(--lato-font-size);
   border: none;
   white-space: nowrap;
   display: -webkit-box;
@@ -185,9 +192,9 @@
 .WorkShopCardBottom p {
   font-family: var(--lato);
   font-style: normal;
-  font-weight: 400;
-  font-size: 15px;
-  color: #525252;
+  font-weight: var(--lato-font-weight);
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
 }
 
 .PaginationContainer {
@@ -209,7 +216,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #d9d9d9;
+  background-color: var(--line-color);
   border: none;
   padding: 0;
   cursor: pointer;
@@ -217,7 +224,7 @@
 }
 
 .activeDot {
-  background-color: #6c7a5f;
+  background-color: var(--primary-color);
   transform: scale(1.2);
 }
 
@@ -230,19 +237,20 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  color: #6c7a5f;
+  color: var(--primary-color);
   font-family: var(--lato);
-  font-weight: 500;
-  font-size: 15px;
+  font-weight: var(--lexend-heading-font-weight);
+  /* Using 500 weight variable */
+  font-size: var(--lato-font-size);
 }
 
 .NoWorkShopButton {
   padding: 13.5px 33.5px;
   margin-top: 20px;
-  color: #6c7a5f;
+  color: var(--primary-color);
   font-family: var(--lato);
-  font-size: 15px;
-  border: 1px solid #6c7a5f;
+  font-size: var(--lato-font-size);
+  border: 1px solid var(--primary-color);
   cursor: pointer;
   background-color: transparent;
 }
@@ -268,14 +276,16 @@
     width: 100%;
     box-sizing: border-box;
   }
+
   .WorkShopCardBottom {
     display: flex;
     flex-direction: column;
     gap: 11px;
   }
+
   .Left,
-  .RightTop > div,
-  .RightBottom > div,
+  .RightTop>div,
+  .RightBottom>div,
   .imageWrapper {
     flex: 0 0 85%;
     /* Don't grow, DON'T SHRINK, stay 85% width */
@@ -311,10 +321,10 @@
 
   .WorkShopCardBottomTop h2 {
     font-family: var(--lexend);
-    font-weight: 500;
-    font-size: 18px;
-    /* Slightly smaller to fit better on small screens */
-    color: #525252;
+    font-weight: var(--lexend-heading-font-weight);
+    font-size: var(--lexend-heading-2-font-size);
+    /* Or a custom mobile size if you prefer */
+    color: var(--body-color);
     text-transform: uppercase;
     margin: 0;
 
@@ -332,11 +342,11 @@
   .Button {
     padding: 10px 16px;
     /* Slightly tighter padding for mobile */
-    background-color: #6c7a5f;
+    background-color: var(--primary-color);
     cursor: pointer;
-    color: #ffffff;
+    color: var(--white-color);
     font-family: var(--lato);
-    font-size: 14px;
+    font-size: var(--lato-font-size);
     border: none;
 
     /* 3. Forces the button to stay its original size and not shrink */

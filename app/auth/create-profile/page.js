@@ -4,12 +4,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Logo from "./logo.png";
 import flag from "./2.png";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import axiosClient from "@/lib/axios";
+import { Suspense } from "react";
 
-export default function CreateProfile() {
+function CreateProfileContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session, status } = useSession();
   const [email, setEmail] = useState(session?.user?.email || "");
   const [firstName, setFirstName] = useState("");
@@ -78,7 +80,8 @@ export default function CreateProfile() {
         throw new Error(json.message || "Profile update failed");
       }
 
-      router.push("/");
+      const redirectParam = searchParams.get("redirect") || "/";
+      router.push(redirectParam);
       router.refresh();
     } catch (e) {
       setError(e.message || "Something went wrong");
@@ -216,5 +219,13 @@ export default function CreateProfile() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CreateProfile() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateProfileContent />
+    </Suspense>
   );
 }

@@ -21,8 +21,8 @@
 .Top h3 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  font-weight: 500;
-  color: #2f362a;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
   text-transform: uppercase;
 }
 .Bottom {
@@ -48,7 +48,7 @@
 .line4 {
   width: 1px;
   height: 100%;
-  background-color: #52525299;
+  background-color: var(--line-color);
 }
 .Content {
   display: flex;
@@ -65,14 +65,15 @@
 .Text h4 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  font-weight: 500;
-  color: #525252;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
 }
+
 .Text h3 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
-  font-weight: 500;
-  color: #525252;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
 }
 .ImageContainer img {
   width: 100%;
@@ -84,7 +85,7 @@
   .Main {
     padding: 0px 24px 0px 24px;
   }
-  .MainConatiner{
+  .MainConatiner {
     gap: 38.5px;
   }
   .Bottom {
@@ -94,36 +95,33 @@
   .One, .two, .three, .four {
     gap: 18px;
     flex-direction: column-reverse;
-   
   }
-  .Content{
+  .Content {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
   }
-  .line1 , .line2, .line3, .line4{
+  .line1, .line2, .line3, .line4 {
     width: 100%;
     height: 1px;
-    background-color:#6C7A5FB2;
+    background-color: var(--primary-color);
   }
-  .Top h3 {
-    font-size: 20px;
+  /* .Top h3 {
+    font-size: var(--fs-20);
   }
-  .Text h3{
-    font-size: 14px;
+  .Text h3 {
+    font-size: var(--fs-14);
   }
-  .Text h4{
-    font-size: 14px;
-  }
-  .Text{
+  .Text h4 {
+    font-size: var(--fs-14);
+  } */
+  .Text {
     justify-content: flex-end;
-     /* width: 100%; */
   }
-  .ImageContainer{
+  .ImageContainer {
     align-items: flex-end;
-    /* width: 100%; */
   }
-  .ImageContainer img{
+  .ImageContainer img {
     width: 100%;
     height: 100%;
     max-width: 164px;
@@ -153,7 +151,7 @@
   .line1 , .line2, .line3, .line4{
     width: 100%;
     height: 1px;
-    background-color:#6C7A5FB2;
+    background-color: var(--primary-color);
   }
   
   .Text{

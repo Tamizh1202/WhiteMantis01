@@ -30,7 +30,9 @@ function AuthPageContent() {
         const fromParam = searchParams.get("from");
         const isFromGoogle =
           fromParam === "google" ||
-          (!fromParam && window.location.href.includes("callbackUrl") && session?.isGoogleLogin);
+          (!fromParam &&
+            window.location.href.includes("callbackUrl") &&
+            session?.isGoogleLogin);
         // const isFromApple = fromParam === "apple";
         const isFromApple = false;
 
@@ -44,11 +46,11 @@ function AuthPageContent() {
             res = await axiosClient.post("/api/website/google-auth", {
               googleToken: session.googleIdToken,
             });
-          // } else {
-          //   const applePayload = { appleToken: session.appleIdToken };
-          //   if (session.user?.firstName) applePayload.firstName = session.user.firstName;
-          //   if (session.user?.lastName) applePayload.lastName = session.user.lastName;
-          //   res = await axiosClient.post("/api/website/apple-auth", applePayload);
+            // } else {
+            //   const applePayload = { appleToken: session.appleIdToken };
+            //   if (session.user?.firstName) applePayload.firstName = session.user.firstName;
+            //   if (session.user?.lastName) applePayload.lastName = session.user.lastName;
+            //   res = await axiosClient.post("/api/website/apple-auth", applePayload);
           }
 
           if (!res.data.success) {
@@ -74,10 +76,11 @@ function AuthPageContent() {
             });
           }
 
+          const redirectParam = searchParams.get("redirect") || "/";
           if (res.data.isNewUser) {
-            window.location.href = "/auth/create-profile";
+            window.location.href = `/auth/create-profile?redirect=${encodeURIComponent(redirectParam)}`;
           } else {
-            window.location.href = "/";
+            window.location.href = redirectParam;
           }
         } catch (e) {
           setError(
@@ -125,7 +128,11 @@ function AuthPageContent() {
       }
 
       if (signupJson.success === true) {
-        router.push("/auth/verify");
+        const redirectParam = searchParams.get("redirect");
+        const verifyUrl = redirectParam
+          ? `/auth/verify?redirect=${encodeURIComponent(redirectParam)}`
+          : "/auth/verify";
+        router.push(verifyUrl);
       }
     } catch (e) {
       setError(e.response.data.message || "Something went wrong");
@@ -135,8 +142,12 @@ function AuthPageContent() {
   }
 
   function handleGoogleSignIn() {
+    const redirectParam = searchParams.get("redirect");
+    const callbackUrl = redirectParam
+      ? `/auth?from=google&redirect=${encodeURIComponent(redirectParam)}`
+      : "/auth?from=google";
     signIn("google", {
-      callbackUrl: "/auth?from=google",
+      callbackUrl,
     });
   }
 

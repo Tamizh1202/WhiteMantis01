@@ -1,11 +1,14 @@
 .main {
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
+  /* Corrected 'left' to 'flex-start' */
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   padding: 0px 125px 250px 125px;
+  box-sizing: border-box;
+  /* Added to keep padding within 100% width */
 }
 
 .MainContainer {
@@ -62,17 +65,17 @@
 
 .CatName h3 {
   font-family: var(--lexend);
-  font-size: 22px;
-  font-weight: 500;
-  color: #2f362a;
+  font-size: var(--lexend-heading-2-font-size);
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
   text-transform: uppercase;
 }
 
 .CatCount p {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 500;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--body-color);
 }
 
 .RightTopRight {
@@ -84,9 +87,9 @@
 
 .SortBy p {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #2f362a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--heads-color);
 }
 
 .SortOptions {
@@ -96,16 +99,17 @@
   gap: 8px;
   flex-direction: row;
   padding: 18px 20px;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   cursor: pointer;
-  border: 1px solid #6e736a;
+  border: 1px solid var(--body-color);
 }
 
 .SortOptions p {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 500;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lexend-heading-font-weight);
+  /* Using the 500 weight variable */
+  color: var(--body-color);
 }
 
 .RightBottom {
@@ -149,7 +153,7 @@
   width: 100%;
   max-width: 401px;
   aspect-ratio: 401 / 350;
-  background-color: #f8f8f8;
+  background-color: var(--background-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,23 +236,24 @@
 
 .ProductPrice h4 {
   font-family: var(--lexend);
-  font-size: 15px;
-  font-weight: 400;
-  color: #2f362a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--heads-color);
 }
 
 .ProductPrice p {
   font-family: var(--lato);
   font-size: 11px;
-  font-weight: 400;
-  color: #ba0e0e;
+  /* Keeping specific size as it's much smaller than standard */
+  font-weight: var(--lato-font-weight);
+  color: var(--error-color);
   text-decoration: line-through;
 }
 
 .Line {
   width: 100%;
   height: 0.5px;
-  background-color: #2f362a4d;
+  background-color: var(--heads-color);
 }
 
 .ProductName {
@@ -260,9 +265,9 @@
 
 .ProductName h3 {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #2f362a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--heads-color);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -274,9 +279,9 @@
 
 .ProductName p {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--body-color);
 }
 
 .ProductActions {
@@ -301,13 +306,13 @@
   align-items: center;
   padding: 12px 20px;
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   cursor: pointer;
-  font-weight: 500;
-  font-size: 15px;
-  color: #464646;
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
   font-family: var(--lato);
-  border: 0.75px solid #6c7a5f;
+  border: 0.75px solid var(--primary-color);
 }
 
 .LoadMore {
@@ -321,12 +326,12 @@
   justify-content: center;
   align-items: center;
   padding: 13px 46.5px;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   cursor: pointer;
-  font-weight: 500;
-  border: 1px solid #2f362a;
-  font-size: 15px;
-  color: #2f362a;
+  font-weight: var(--lexend-heading-font-weight);
+  border: 1px solid var(--heads-color);
+  font-size: var(--lato-font-size);
+  color: var(--heads-color);
   font-family: var(--lato);
 }
 
@@ -339,11 +344,11 @@
 
 .One {
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
-  border: 1px solid #2f362a4d;
+  border: 1px solid var(--heads-color);
 }
 
 .leftCatName {
@@ -353,16 +358,19 @@
 
 .leftCatName h5 {
   font-family: var(--lato);
-  font-size: 18px;
-  font-weight: 500;
-  color: #6e736a;
+  font-size: var(--lexend-heading-2-font-size);
+  /* Mapping 18px to your heading-2 variable */
+  font-weight: var(--lexend-heading-font-weight);
+  /* Using the 500 weight variable */
+  color: var(--body-color);
 }
 
 .FilterBox {
-  border: 1px solid #2f362a4d;
+  border: 1px solid var(--heads-color);
   padding: 20px;
   min-width: 250px;
 }
+
 
 .FilterHeader {
   display: flex;
@@ -373,16 +381,16 @@
 
 .FilterHeader h5 {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 500;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--body-color);
 }
 
 .FilterHeader span {
-  font-size: 15px;
+  font-size: var(--lato-font-size);
   font-family: var(--lato);
-  font-weight: 500;
-  color: #6e736a;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--body-color);
 }
 
 .FilterOptions {
@@ -397,8 +405,8 @@
   align-items: center;
   gap: 10px;
   font-family: var(--lato);
-  font-size: 15px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
 }
 
 .PriceBox {
@@ -417,12 +425,12 @@
 .PriceInputs input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #6e736a;
+  border: 1px solid var(--body-color);
 }
 
 .PriceInputs p {
   font-size: 12px;
-  color: #6e736a;
+  color: var(--body-color);
   margin-top: 4px;
 }
 
@@ -449,26 +457,26 @@
 
 .SortDropdown {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + -2px);
   right: 0;
   width: 100%;
-  background-color: #ffffff;
-  border: 1px solid #6e736a;
+  background-color: var(--white-color);
+  border: 1px solid var(--body-color);
   display: flex;
   flex-direction: column;
-  z-index: 10;
+  z-index: 90;
 }
 
 .SortDropdown p {
   padding: 14px 31px;
   font-family: var(--lato);
-  font-size: 15px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
   cursor: pointer;
 }
 
 .SortDropdown p:hover {
-  background-color: #f5f5f5;
+  background-color: var(--background-color);
 }
 
 .MobileFilterOverlay {
@@ -485,7 +493,7 @@
   height: 100vh;
   width: 85%;
   max-width: 340px;
-  background: #fff;
+  background: var(--white-color);
   padding: 20px;
   overflow-y: auto;
   z-index: 60;
@@ -501,8 +509,8 @@
 
 .MobileFilterHeader p {
   font-family: var(--lato);
-  font-size: 18px;
-  font-weight: 500;
+  font-size: var(--lexend-heading-2-font-size);
+  font-weight: var(--lexend-heading-font-weight);
 }
 
 .MobileFilterHeader span {
@@ -539,7 +547,7 @@
   left: 0;
   width: 70vw;
   height: 100vh;
-  background: #ffffff;
+  background: var(--white-color);
   z-index: 1000;
   overflow-y: auto;
   padding: 100px 16px 20px 16px;
@@ -601,19 +609,23 @@
     line-height: 1.4;
     height: 2.8em;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* The magic number of lines */
+    -webkit-line-clamp: 2;
+    /* The magic number of lines */
     line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden; /* Hides the extra text */
+    overflow: hidden;
+    /* Hides the extra text */
     text-overflow: ellipsis;
   }
 
   .ProductName p {
     font-size: 14px;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* The magic number of lines */
+    -webkit-line-clamp: 2;
+    /* The magic number of lines */
     -webkit-box-orient: vertical;
-    overflow: hidden; /* Hides the extra text */
+    overflow: hidden;
+    /* Hides the extra text */
     text-overflow: ellipsis;
   }
 
@@ -654,12 +666,12 @@
     align-items: center;
     background-color: transparent;
     cursor: pointer;
-    border: 1px solid #6e736a;
+    border: 1px solid var(--body-color);
     padding: 11.5px 10px;
-    color: #6e736a;
-    font-size: 15px;
+    color: var(--body-color);
+    font-size: var(--lato-font-size);
     max-width: 169px;
-    font-weight: 400;
+    font-weight: var(--lato-font-weight);
     font-family: var(--lato);
     width: 100%;
     gap: 5px;
@@ -676,7 +688,7 @@
     position: sticky;
     top: 73px;
     z-index: 30;
-    background: #ffffff;
+    background: var(--white-color);
     padding-bottom: 10px;
   }
 
@@ -688,7 +700,7 @@
     align-items: baseline;
     justify-content: left;
 
-    background: #ffffff;
+    background: var(--white-color);
     padding-bottom: 10px;
   }
 
@@ -769,7 +781,7 @@
     width: 100%;
   }
 
-  .DesktopActions > * {
+  .DesktopActions>* {
     flex: 1;
     /* Each button takes exactly 50% width */
     border-radius: 0;
@@ -786,9 +798,9 @@
     align-items: center;
     background-color: transparent;
     cursor: pointer;
-    border: 1px solid #6e736a;
+    border: 1px solid var(--body-color);
     padding: 11.5px 10px;
-    color: #6e736a;
+    color: var(--body-color);
     font-size: 14px;
     max-width: 169px;
     width: 100%;
@@ -806,19 +818,17 @@
     position: sticky;
     top: 73px;
     z-index: 30;
-    background: #ffffff;
+    background: var(--white-color);
     padding-bottom: 10px;
   }
 
   .RightTopRight {
     display: flex;
     z-index: 30;
-
     width: 100%;
     align-items: baseline;
-    justify-content: left;
-
-    background: #ffffff;
+    justify-content: flex-start;
+    background: var(--white-color);
   }
 
   .RightTopLeft {
@@ -883,7 +893,7 @@
     width: 100%;
   }
 
-  .DesktopActions > * {
+  .DesktopActions>* {
     flex: 1;
     /* Each button takes exactly 50% width */
     border-radius: 0;
@@ -936,7 +946,7 @@
     width: 100%;
   }
 
-  .DesktopActions > * {
+  .DesktopActions>* {
     flex: 1;
     /* Each button takes exactly 50% width */
     border-radius: 0;
@@ -963,7 +973,7 @@
 }
 
 .Popup {
-  background: #fff;
+  background: var(--white-color);
   width: 560px;
   padding: 28px;
   position: relative;
@@ -976,7 +986,7 @@
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  color: #6e736a;
+  color: var(--body-color);
   transition: transform 0.25s ease;
 }
 
@@ -993,8 +1003,8 @@
   border: none;
 
   font-size: 20px;
-  font-weight: 400;
-  color: #6e736a;
+  font-weight: var(--lato-font-weight);
+  color: var(--body-color);
 
   cursor: pointer;
 }
@@ -1011,7 +1021,7 @@
 } */
 
 .PopupClose:hover {
-  color: #2f362a;
+  color: var(--heads-color);
 }
 
 @keyframes popupScale {
@@ -1029,16 +1039,16 @@
 .Popup h3 {
   font-family: var(--lexend);
   font-size: 20px;
-  font-weight: 500;
-  color: #2f362a;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
   margin-bottom: 40px;
 }
 
-.Popup > p {
+.Popup>p {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #2f362a;
-  font-weight: 400;
+  font-size: var(--lato-font-size);
+  color: var(--heads-color);
+  font-weight: var(--lato-font-weight);
   margin-bottom: 12px;
 }
 
@@ -1049,22 +1059,22 @@
 .SubscriptionSection h4 {
   font-family: var(--lato);
   font-size: 14px;
-  font-weight: 500;
-  color: #2f362a;
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--heads-color);
   margin-bottom: 12px;
 }
 
 .PopupPrice {
-  font-size: 15px;
+  font-size: var(--lato-font-size);
   font-family: var(--lato);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   margin-bottom: 16px;
-  color: #2f362a;
+  color: var(--heads-color);
 }
 
 .Discount {
   font-size: 13px;
-  color: #6c7a5f;
+  color: var(--primary-color);
   margin-top: 4px;
 }
 
@@ -1080,8 +1090,8 @@
   border: none;
 
   font-family: var(--lato);
-  font-size: 14px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
 
   cursor: pointer;
 }
@@ -1089,13 +1099,14 @@
 .PopupConfirm {
   width: 100%;
   padding: 14px;
-  background: #6c7a5f;
-  color: #ffffff;
+  background: var(--primary-color);
+  color: var(--white-color);
   border: none;
 
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 500;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lexend-heading-font-weight);
+  /* Using your 500 weight variable */
 
   cursor: pointer;
 }
@@ -1112,18 +1123,18 @@
   align-items: center;
 
   padding: 14px 16px;
-  border: 1px solid #d6d6d6;
-  background: #ffffff;
+  border: 1px solid var(--line-color);
+  background: var(--white-color);
 
-  font-size: 14px;
+  font-size: var(--lato-font-size);
   font-family: var(--lato);
-  color: #2f362a;
+  color: var(--heads-color);
 
   cursor: pointer;
 }
 
 .FrequencyBtn:hover {
-  border-color: #6c7a5f;
+  border-color: var(--primary-color);
 }
 
 .ActiveFrequency {
@@ -1132,12 +1143,12 @@
   align-items: center;
 
   padding: 14px 16px;
-  border: 1.5px solid #6c7a5f;
-  background: #ffffff;
+  border: 1.5px solid var(--primary-color);
+  background: var(--white-color);
 
-  font-size: 14px;
+  font-size: var(--lato-font-size);
   font-family: var(--lato);
-  color: #2f362a;
+  color: var(--heads-color);
 }
 
 .FrequencyBtn::after,
@@ -1146,29 +1157,25 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 1.5px solid #6e736a;
-  background: #ffffff;
+  border: 1.5px solid var(--body-color);
+  background: var(--white-color);
 }
 
-/* .ActiveFrequency::after {
-  border-color: #6c7a5f;
-  background: #ffffff;
-} */
 .ActiveFrequency::after {
-  border-color: #6c7a5f;
-  background: radial-gradient(circle, #6c7a5f 0 3px, transparent 4px);
+  border-color: var(--primary-color);
+  background: radial-gradient(circle, var(--primary-color) 0 3px, transparent 4px);
 }
 
 .LowStockBadge {
   position: absolute;
   top: 15px;
   left: 0;
-  background-color: #6c7a5f;
-  color: #ffffff;
+  background-color: var(--primary-color);
+  color: var(--white-color);
   padding: 10px 20px;
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
   z-index: 10;
 }
 
@@ -1180,12 +1187,12 @@
 .OutOfStockBtn {
   width: 100%;
   padding: 10px 24px;
-  background-color: #6e736a;
-  color: #ffffff;
+  background-color: var(--body-color);
+  color: var(--white-color);
   border: none;
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 500;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lexend-heading-font-weight);
   text-align: center;
   cursor: not-allowed;
   display: flex;

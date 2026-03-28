@@ -4,8 +4,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: #6c7a5fe5;
-  margin-top: 160px;
+  background-color: var(--primary-color);
   margin-top: 160px;
 }
 .MainContainer {
@@ -56,23 +55,24 @@
 }
 .RightTopButton p {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #ffffff;
+  font-size: var(--fs-15);
+  font-weight: var(--lato-font-weight);
+  color: var(--white-color);
   text-decoration: underline;
 }
 
 .RightTopContent h3 {
   font-size: var(--fs-22);
-  color: #ffffff;
+  color: var(--white-color);
   font-family: var(--lexend);
-  font-weight: 500;
+  font-weight: var(--lexend-heading-font-weight);
   text-transform: uppercase;
 }
+
 .RightTopContent p {
-  font-size: 15px;
-  font-weight: 400;
-  color: #ffffff;
+  font-size: var(--fs-15);
+  font-weight: var(--lato-font-weight);
+  color: var(--white-color);
   width: 70%;
   font-family: var(--lato);
 }
@@ -96,13 +96,13 @@
   .Right {
     width: 70%;
   }
-  .RightTop h3,
+  /* .RightTop h3,
   .RightTopButton h4 {
     font-size: 20px;
   }
   .RightTop p {
     font-size: 15px;
-  }
+  } */
   .Left img {
     object-fit: cover;
     width: 100%;

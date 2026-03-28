@@ -4,8 +4,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: #6C7A5F;
-
+    background-color: var(--primary-color);
 }
 
 .MainConatiner {
@@ -37,16 +36,16 @@
 
 .LeftConatinerTop h3 {
     font-family: var(--lexend);
-    font-weight: 600;
-    font-size: 60px;
-    color: #FFFFFF;
+    font-weight: var(--lexend-heading-font-weight);
+    font-size: var(--lexend-heading-1-font-size);
+    color: var(--white-color);
     text-transform: uppercase;
 }
 
 .line {
     width: 85%;
     height: 1px;
-    background-color: #FFFFFF;
+    background-color: var(--white-color);
 }
 
 .LeftConatinerBottom {
@@ -69,7 +68,7 @@
     display: flex;
     justify-content: center;
     align-items: start;
-    background-color: #FFFFFF;
+    background-color: var(--white-color);
     padding: 33.5px 34px;
     border: none;
     max-width: 466px;
@@ -78,16 +77,14 @@
     position: absolute;
     top: 74%;
     left: 38%;
-
 }
 
 .MiddleConatinerTop p {
     font-family: var(--lato);
-    font-weight: 500;
-    font-size: 15px;
-    color: #6C7A5F;
+    font-weight: var(--lato-bold-font-weight);
+    font-size: var(--lato-font-size);
+    color: var(--primary-color);
     text-align: justify;
-
 }
 
 .MiddleConatinerBottom {
@@ -100,9 +97,9 @@
 
 .MiddleConatinerBottomLeft h5 {
     font-family: var(--lexend);
-    font-weight: 600;
-    font-size: 22px;
-    color: #6C7A5F;
+    font-weight: var(--lexend-heading-font-weight);
+    font-size: var(--lexend-heading-2-font-size);
+    color: var(--primary-color);
     text-transform: uppercase;
     text-align: left;
 }
@@ -111,8 +108,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff;
-    border: 1px solid #6C7A5F;
+    background-color: var(--white-color);
+    border: 1px solid var(--primary-color);
     padding: 8px 9px;
     cursor: pointer;
 }
@@ -148,12 +145,14 @@
 
 @media (max-width: 768px) {
     .main {
-        padding: 0; /* Removed large padding to allow 50/50 split */
+        padding: 0;
+        /* Removed large padding to allow 50/50 split */
         width: 100%;
-        height: 100vh; /* Lock the whole view to the screen height */
+        height: 100vh;
+        /* Lock the whole view to the screen height */
         display: flex;
         flex-direction: column;
-        background-color: #6C7A5F;
+        background-color: var(--primary-color);
         overflow: hidden;
     }
 
@@ -161,8 +160,10 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 100%; /* Fill the main container */
-        position: relative; /* Anchor for the middle container */
+        height: 100%;
+        /* Fill the main container */
+        position: relative;
+        /* Anchor for the middle container */
     }
 
     /* Top Half (Green Image/Background) */
@@ -170,8 +171,10 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 50%; /* Force 50% height */
-        justify-content: flex-end; /* Pushes the image/content to the bottom of the top half */
+        height: 50%;
+        /* Force 50% height */
+        justify-content: flex-end;
+        /* Pushes the image/content to the bottom of the top half */
     }
 
     .LeftConatinerBottom {
@@ -191,32 +194,37 @@
     .RightConatiner {
         display: flex;
         width: 100%;
-        height: 50%; /* Force 50% height */
+        height: 50%;
+        /* Force 50% height */
     }
 
     .RightConatiner img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Ensures the image fills its 50% section perfectly */
+        object-fit: cover;
+        /* Ensures the image fills its 50% section perfectly */
     }
 
     /* Middle Container - The Floating Box */
     .MiddleConatiner {
         /* Switch back to absolute to float exactly in the center of the split */
         position: absolute !important;
-        top: 50% !important; 
+        top: 50% !important;
         left: 50% !important;
-        transform: translate(-50%, -50%) !important; /* Perfect centering */
-        
+        transform: translate(-50%, -50%) !important;
+        /* Perfect centering */
+
         width: 85% !important;
         max-width: none !important;
         z-index: 10;
         margin: 0 !important;
         box-sizing: border-box;
-        padding: 20px !important; /* Tighter padding for mobile */
+        padding: 20px !important;
+        /* Tighter padding for mobile */
     }
 
     .LeftConatinerTop {
-        display: none; /* Hide the empty top div to save space on 50/50 split */
+        display: none;
+        /* Hide the empty top div to save space on 50/50 split */
     }
 }

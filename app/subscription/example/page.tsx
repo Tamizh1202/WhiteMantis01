@@ -168,7 +168,7 @@ export default function SubscriptionsPage() {
                         marginBottom: 20,
                         borderRadius: 8,
                         backgroundColor: message.type === "success" ? "#d4edda" : "#f8d7da",
-                        color: message.type === "success" ? "#155724" : "#721c24",
+                        color: message.type === "success" ? "var(--success-color)" : "var(--error-color)",
                         border: `1px solid ${message.type === "success" ? "#c3e6cb" : "#f5c6cb"}`,
                     }}
                 >
@@ -180,41 +180,44 @@ export default function SubscriptionsPage() {
                 <div
                     key={subscription.id}
                     style={{
-                        border: "1px solid #ddd",
+                        border: "1px solid var(--line-color)",
                         borderRadius: 12,
                         padding: 24,
                         marginBottom: 24,
-                        backgroundColor: "#fff",
+                        backgroundColor: "var(--white-color)",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}
                 >
                     {/* Header */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
                         <div>
-                            <h2 style={{ margin: 0, fontSize: 24 }}>Subscription #{subscription.id}</h2>
+                            <h2 style={{ margin: 0, fontSize: "var(--fs-24)", color: "var(--heads-color)", fontFamily: "var(--lexend)" }}>
+                                Subscription #{subscription.id}
+                            </h2>
                             <div style={{ display: "flex", gap: 12, marginTop: 8, alignItems: "center" }}>
                                 <span
                                     style={{
                                         padding: "4px 12px",
                                         borderRadius: 20,
-                                        fontSize: 14,
-                                        fontWeight: 600,
+                                        fontSize: "var(--fs-14)",
+                                        fontWeight: "var(--lexend-heading-font-weight)",
                                         backgroundColor: getStatusColor(subscription.status) + "20",
                                         color: getStatusColor(subscription.status),
+                                        fontFamily: "var(--lato)"
                                     }}
                                 >
                                     {subscription.status.toUpperCase()}
                                 </span>
-                                <span style={{ fontSize: 14, color: "#666" }}>
+                                <span style={{ fontSize: "var(--fs-14)", color: "var(--body-color)", fontFamily: "var(--lato)" }}>
                                     Started: {formatDate(subscription.start_date_gmt)}
                                 </span>
                             </div>
                         </div>
                         <div style={{ textAlign: "right" }}>
-                            <div style={{ fontSize: 32, fontWeight: 700, color: "#333" }}>
+                            <div style={{ fontSize: "var(--fs-32, 32px)", fontWeight: "var(--lexend-heading-font-weight, 700)", color: "var(--heads-color)", fontFamily: "var(--lexend)" }}>
                                 {subscription.currency} {Number(subscription.total).toFixed(2)}
                             </div>
-                            <div style={{ fontSize: 14, color: "#666" }}>
+                            <div style={{ fontSize: "var(--fs-14)", color: "var(--body-color)", fontFamily: "var(--lato)" }}>
                                 Every {subscription.billing_interval} {subscription.billing_period}
                                 {subscription.billing_interval !== "1" ? "s" : ""}
                             </div>
