@@ -2,13 +2,13 @@
 import { useState } from "react";
 import styles from "../page.module.css";
 import { PaymentElement } from "@stripe/react-stripe-js";
-
+import { useEffect } from "react";
 import { Lexend } from "next/font/google";
 
 // --- Policy Content (fill in your own text) ---
 const POLICIES = {
     refund: {
-        title: "Cancellation & Refund Policy",
+        title: "CANCELLATION & REFUND POLICY",
         content: (
             <>
                 <p>White Mantis Roastery aims to provide high-quality products and reliable service. This policy outlines the terms related to order cancellations, refunds, and product issues.</p>
@@ -16,7 +16,7 @@ const POLICIES = {
                 {/* FIXED: Changed style string to object */}
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>1. Order Cancellation</b>
+                <b>1. ORDER CANCELLATION</b>
                 <p>Customers may request cancellation of an order before the order has been processed or dispatched.</p>
                 <p>Due to the nature of roasted coffee products, orders that have already been roasted, prepared, packed, or shipped may not be eligible for cancellation.</p>
                 <p>To request cancellation, please contact us as soon as possible:</p>
@@ -25,7 +25,7 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>2. Refund Eligibility</b>
+                <b>2. REFUND ELIGIBILITY</b>
                 <p>Refunds may be issued under the following circumstances:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>The order was cancelled before processing</li>
@@ -36,7 +36,7 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>3. Non-Refundable Items</b>
+                <b>3. NON-REFUNDABLE ITEMS</b>
                 <p>The following items are generally not eligible for refunds:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>Opened or used coffee products</li>
@@ -46,13 +46,13 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>4. Refund Processing</b>
+                <b>4. REFUND PROCESSING</b>
                 <p>Approved refunds will be processed through the original payment method used during checkout.</p>
                 <p>Processing time may vary depending on the payment provider or banking institution.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>5. Incorrect or Damaged Orders</b>
+                <b>5. INCORRECT OR DAMAGED ORDERS</b>
                 <p>If you receive an incorrect or damaged product, please contact us with:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>Your order number</li>
@@ -64,13 +64,13 @@ const POLICIES = {
         ),
     },
     contact: {
-        title: "Contact",
+        title: "CONTACT",
         content: (
             <>
-                <div data-lenis-prevent style={{ fontFamily: "var(--Lexend)", overscrollBehavior: "contain" }}>
+                <div data-lenis-prevent style={{ overscrollBehavior: "contain" }}>
                     <p style={{ fontSize: "15px", lineHeight: "1.8", color: "#444", marginBottom: "30px" }}>
                         For orders, subscriptions, wholesale enquiries, or anything else — our team is based in Dubai and typically responds within a few hours.
-                        <span style={{ display: "block", marginTop: "10px", fontWeight: "600", color: "#1a1a1a" }}>
+                        <span style={{ display: "block", marginTop: "10px", fontWeight: "BOLD", color: "#1a1a1a" }}>
                             WhatsApp is the fastest way to reach us.
                         </span>
                     </p>
@@ -80,15 +80,14 @@ const POLICIES = {
                         <div>
                             <span style={{
                                 display: "block",
-                                fontFamily: "var(--Lexend)",
-                                fontSize: "14px",
-                                fontWeight: 500,
+
+                                fontSize: "15px",
+                                fontWeight: "bold",
                                 color: "#000000",
-                                marginBottom: "4px"
                             }}>
                                 Call us
                             </span>
-                            <a href="tel:+9710589535337" style={{ fontSize: "16px", color: "#1a1a1a", textDecoration: "none", fontWeight: 500 }}>
+                            <a href="tel:+9710589535337" style={{ fontSize: "15px", color: "#1a1a1a", textDecoration: "none", fontWeight: 500 }}>
                                 +971 - 05 8953 5337
                             </a>
                         </div>
@@ -97,15 +96,14 @@ const POLICIES = {
                         <div>
                             <span style={{
                                 display: "block",
-                                fontFamily: "var(--Lexend)",
-                                fontSize: "14px",
-                                fontWeight: 500,
+                                fontSize: "15px",
+                                fontWeight: "bold",
                                 color: "#000000",
-                                marginBottom: "4px"
+
                             }}>
                                 Email
                             </span>
-                            <a href="mailto:hello@whitemantis.ae" style={{ fontSize: "16px", color: "#1a1a1a", textDecoration: "none", fontWeight: 500 }}>
+                            <a href="mailto:hello@whitemantis.ae" style={{ fontSize: "15px", color: "#1a1a1a", textDecoration: "none", fontWeight: 500 }}>
                                 hello@whitemantis.ae
                             </a>
                         </div>
@@ -114,15 +112,14 @@ const POLICIES = {
                         <div>
                             <span style={{
                                 display: "block",
-                                fontFamily: "var(--Lexend)",
-                                fontSize: "14px",
-                                fontWeight: 500,
+                                fontSize: "15px",
+                                fontWeight: "bold",
                                 color: "#000000",
-                                marginBottom: "4px"
+
                             }}>
                                 Visit
                             </span>
-                            <address style={{ fontSize: "16px", fontStyle: "normal", color: "#1a1a1a", lineHeight: "1.5", fontWeight: 500 }}>
+                            <address style={{ fontSize: "15px", fontStyle: "normal", color: "#1a1a1a", lineHeight: "1.5" }}>
                                 Warehouse 2-26,<br />
                                 26th Street Al Quoz Industrial Area 4<br />
                                 Dubai, UAE
@@ -134,10 +131,10 @@ const POLICIES = {
         )
     },
     privacy: {
-        title: "Privacy Policy",
+        title: "PRIVACY POLICY",
         content: (
             <>
-                <p style={{ marginBottom: "15px" }}>Welcome to White Mantis Roastery.</p>
+                <b style={{ marginBottom: "15px" }}>Welcome to White Mantis Roastery.</b>
                 <p style={{ marginBottom: "15px" }}>This Privacy Policy is intended to help you understand how we use and protect the personal information you share with us, what data we collect, why we collect it, and what we do with it. Protecting your personal information is important to us, and we respect your privacy.</p>
                 <p style={{ marginBottom: "15px", paddingLeft: "15px", borderLeft: "2px solid #eee" }}>Information collected through our website does not include credit/debit card details, and such details will not be stored, sold, shared, rented, or leased to any third parties.</p>
                 <p style={{ marginBottom: "15px" }}>WHITE MANTIS ROASTERY LLC complies with the privacy laws and regulations of the United Arab Emirates.</p>
@@ -147,7 +144,7 @@ const POLICIES = {
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "25px 0" }} />
 
                 <b style={{ display: "block", marginBottom: "15px" }}>1. WHAT INFORMATION WE COLLECT</b>
-                <p style={{ fontWeight: "600", marginBottom: "10px" }}>Personal Information</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px" }}>Personal Information</b>
                 <p style={{ marginBottom: "10px" }}>The personal information we collect may include:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>Name</li>
@@ -162,7 +159,7 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "25px 0" }} />
 
-                <p style={{ fontWeight: "600", marginBottom: "10px" }}>Non-Personal Information</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px" }}>Non-Personal Information</b>
                 <p style={{ marginBottom: "10px" }}>When you visit our website, White Mantis Roastery and service providers working with us may collect Non-Personal Identification Information (Non-PII).</p>
                 <p style={{ marginBottom: "10px" }}>This may include:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
@@ -203,7 +200,7 @@ const POLICIES = {
 
                 <b style={{ display: "block", marginBottom: "15px" }}>2. CONSENT</b>
                 <p style={{ marginBottom: "15px" }}>By using our website, you consent to the collection and use of your information as outlined in this Privacy Policy.</p>
-                <p style={{ fontWeight: "600", marginBottom: "10px" }}>Withdrawing Consent</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px" }}>Withdrawing Consent</b>
                 <p style={{ marginBottom: "10px" }}>If you no longer wish to receive communications or allow continued use of your information, you may withdraw consent at any time by contacting us at:</p>
                 <p style={{ marginBottom: "15px" }}>
                     Email: support@whitemantis.ae<br />
@@ -232,7 +229,7 @@ const POLICIES = {
 
                 <b style={{ display: "block", marginBottom: "15px" }}>5. THIRD-PARTY SERVICES</b>
                 <p style={{ marginBottom: "10px" }}>Third-party service providers used by our website may include: Payment gateways, Delivery services, Website hosting providers, and Analytics tools. These providers only collect and use information to the extent necessary to perform their services. Each provider has its own privacy policy regarding the information required to process transactions. Once you leave our website or are redirected to a third-party website, this Privacy Policy no longer applies.</p>
-                <p style={{ fontWeight: "600", marginBottom: "10px", marginTop: "15px" }}>External Links</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px", marginTop: "15px" }}>External Links</b>
                 <p style={{ marginBottom: "15px" }}>Our website may contain links to other websites. White Mantis Roastery is not responsible for the content or privacy practices of external websites. We recommend reviewing their privacy policies before providing personal information.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "25px 0" }} />
@@ -243,14 +240,14 @@ const POLICIES = {
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "25px 0" }} />
 
                 <b style={{ display: "block", marginBottom: "15px" }}>7. COOKIES</b>
-                <p style={{ fontWeight: "600", marginBottom: "10px" }}>What is a Cookie?</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px" }}>What is a Cookie?</b>
                 <p style={{ marginBottom: "15px" }}>A cookie is a small file placed on your device or browser that allows a website to recognize your device and track usage activity. Cookies help websites improve functionality and user experience.</p>
-                <p style={{ fontWeight: "600", marginBottom: "10px" }}>Cookies on Our Website</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px" }}>Cookies on Our Website</b>
                 <p style={{ marginBottom: "15px" }}>Our website may use cookies to: Store user preferences, Maintain shopping cart information, Analyze website performance, and Improve user experience.</p>
-                <p style={{ fontWeight: "600", marginBottom: "10px" }}>Rejecting or Deleting Cookies</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px" }}>Rejecting or Deleting Cookies</b>
                 <p style={{ marginBottom: "15px" }}>If you do not want cookies to be stored on your device, you can disable them through your browser settings. You may also visit: http://www.aboutcookies.org for detailed information on managing cookies across different browsers.</p>
 
-                <p style={{ fontWeight: "600", marginBottom: "10px", marginTop: "15px" }}>Examples of Cookies Used</p>
+                <b style={{ fontWeight: "600", marginBottom: "10px", marginTop: "15px" }}>Examples of Cookies Used</b>
                 <p style={{ marginBottom: "10px" }}><strong>Analytical / Performance Cookies:</strong> These cookies collect anonymous data on how visitors use the website, helping us improve performance and user experience. Example tools may include: Google Analytics.</p>
                 <p style={{ marginBottom: "15px" }}><strong>Functional / Shopping Cookies:</strong> Used by e-commerce systems to store: Cart information, Session details, and User preferences. These cookies help ensure the website operates properly.</p>
 
@@ -278,47 +275,47 @@ const POLICIES = {
         ),
     },
     shipping: {
-        title: "Shipping",
+        title: "SHIPPING",
         content: (
             <>
                 <p>White Mantis Roastery provides delivery services for products ordered through our website.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>1. Delivery Areas</b>
+                <b>1. DELIVERY AREAS</b>
                 <p>Delivery services are primarily available within the United Arab Emirates. Delivery availability may vary depending on location.</p>
                 <p>Certain areas may have additional delivery time requirements.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>2. Order Processing</b>
+                <b>2. ORDER PROCESSING</b>
                 <p>Orders are typically processed within 1–3 business days, depending on product availability and roasting schedules.</p>
                 <p>Orders placed on weekends or public holidays may be processed on the next business day.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>3. Delivery Time</b>
+                <b>3. DELIVERY TIME</b>
                 <p>Typical delivery time within the UAE ranges from 1 to 5 business days.</p>
                 <p>Please note that delays may occur during peak periods, public holidays, or unforeseen logistical circumstances.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>4. Delivery Charges</b>
+                <b>4. DELIVERY CHARGES</b>
                 <p>Delivery fees are displayed during checkout. Promotions or minimum order values may occasionally include free delivery offers.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>5. Delivery Responsibility</b>
+                <b>5. DELIVERY RESPONSIBILITY</b>
                 <p>Customers are responsible for providing accurate details. White Mantis Roastery is not responsible for issues caused by incorrect or incomplete addresses.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>6. Failed Deliveries</b>
+                <b>6. FAILED DELIVERIES</b>
                 <p>If a delivery attempt fails because the customer is unavailable, additional charges may apply for re-delivery.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>Contact Information</b>
+                <b>CONTACT INFORMATION</b>
                 <p>
                     WHITE MANTIS ROASTERY LLC<br />
                     Dubai, United Arab Emirates<br />
@@ -329,14 +326,14 @@ const POLICIES = {
         ),
     },
     terms: {
-        title: "Terms of Service",
+        title: "TERMS OF SERVICE",
         content: (
             <>
                 <p>Welcome to the website of White Mantis Roastery. By accessing or using this website, you agree to comply with the following Terms and Conditions. If you do not agree, please discontinue use.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>1. Company Information</b>
+                <b>1. COMPANY INFORMATION</b>
                 <p>
                     WHITE MANTIS ROASTERY LLC<br />
                     Dubai, United Arab Emirates<br />
@@ -347,12 +344,12 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>2. Website Use</b>
+                <b>2. WEBSITE USE</b>
                 <p>Users agree to use this website responsibly and only for lawful purposes. Unauthorized activities including hacking or misuse are strictly prohibited.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>3. Product Information</b>
+                <b>3. PRODUCT INFORMATION</b>
                 <p>We aim for accuracy in descriptions and pricing, but minor variations may occur. White Mantis Roastery reserves the right to:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>Modify product descriptions or prices</li>
@@ -362,7 +359,7 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>4. Orders and Acceptance</b>
+                <b>4. ORDERS AND ACCEPTANCE</b>
                 <p>Orders are confirmed only after payment is successfully processed. We reserve the right to decline orders due to:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>Payment authorization failure</li>
@@ -372,23 +369,23 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>5. Pricing and Payment</b>
+                <b>5. PRICING AND PAYMENT</b>
                 <p>All prices are in United Arab Emirates Dirhams (AED). Payments are processed through secure third-party gateways. We do not store credit or debit card information.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>6. Intellectual Property</b>
+                <b>6. INTELLECTUAL PROPERTY</b>
                 <p>All content including text, graphics, and logos are the property of White Mantis Roastery LLC. Content may not be reproduced without prior written permission.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>7. Governing Law</b>
+                <b>7. GOVERNING LAW</b>
                 <p>These Terms and Conditions are governed by the laws and regulations of the United Arab Emirates and the Emirate of Dubai.</p>
             </>
         ),
     },
     cancellations: {
-        title: "Cancellations",
+        title: "CANCELLATIONS",
         content: (
             <>
                 <p>White Mantis Roastery aims to provide high-quality products and reliable service. This policy outlines the terms related to order cancellations, refunds, and product issues.</p>
@@ -396,7 +393,7 @@ const POLICIES = {
                 {/* FIXED: Changed style string to object */}
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>1. Order Cancellation</b>
+                <b>1. ORDER CANCELLATION</b>
                 <p>Customers may request cancellation of an order before the order has been processed or dispatched.</p>
                 <p>Due to the nature of roasted coffee products, orders that have already been roasted, prepared, packed, or shipped may not be eligible for cancellation.</p>
                 <p>To request cancellation, please contact us as soon as possible:</p>
@@ -405,7 +402,7 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>2. Refund Eligibility</b>
+                <b>2. REFUND ELIGIBILITY</b>
                 <p>Refunds may be issued under the following circumstances:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>The order was cancelled before processing</li>
@@ -416,7 +413,7 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>3. Non-Refundable Items</b>
+                <b>3. NON-REFUNDABLE ITEMS</b>
                 <p>The following items are generally not eligible for refunds:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>Opened or used coffee products</li>
@@ -426,13 +423,13 @@ const POLICIES = {
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>4. Refund Processing</b>
+                <b>4. REFUND PROCESSING</b>
                 <p>Approved refunds will be processed through the original payment method used during checkout.</p>
                 <p>Processing time may vary depending on the payment provider or banking institution.</p>
 
                 <hr style={{ border: 0, borderTop: "1px solid #eee", margin: "20px 0" }} />
 
-                <b>5. Incorrect or Damaged Orders</b>
+                <b>5. INCORRECT OR DAMAGED ORDERS</b>
                 <p>If you receive an incorrect or damaged product, please contact us with:</p>
                 <ul style={{ paddingLeft: "20px", marginBottom: "15px" }}>
                     <li style={{ marginBottom: "5px" }}>Your order number</li>
@@ -448,7 +445,12 @@ const POLICIES = {
 // --- Modal Component ---
 function PolicyModal({ policy, onClose }) {
     if (!policy) return null;
-
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, []);
     return (
         <>
             {/* Backdrop */}
@@ -470,7 +472,6 @@ function PolicyModal({ policy, onClose }) {
                     left: "50%",
                     transform: "translate(-50%, -50%)",
                     backgroundColor: "#faf9f6",
-                    borderRadius: "12px",
                     padding: "32px",
                     width: "min(520px, 90vw)",
                     maxHeight: "75vh",
