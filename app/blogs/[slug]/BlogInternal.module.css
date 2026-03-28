@@ -9,14 +9,14 @@
 
 .ShopNow {
   padding: 12px 32px;
-  background-color: #2f362a;
-  color: #ffffff;
+  background-color: var(--heads-color);
+  color: var(--white-color);
   border: none;
   font-family: var(--lexend);
   cursor: pointer;
   transition: opacity 0.3s ease;
   text-transform: uppercase;
-  font-size: 13px;
+  font-size: var(--lato-font-size);
   letter-spacing: 1px;
 }
 
@@ -40,9 +40,19 @@
 
 .Header h1 {
   font-family: var(--lexend);
-  font-weight: 500;
-  font-size: 60px;
-  color: #ffffff;
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-1-font-size);
+  color: var(--white-color);
+}
+
+.HeaderDate {
+  font-family: var(--lexend);
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-2-font-size);
+  color: var(--white-color);
+  /* Make it white like the title */
+  text-transform: uppercase;
+  display: block;
 }
 
 .HeaderDate {
@@ -57,10 +67,9 @@
 
 .Title {
   font-family: var(--lexend);
-  font-weight: 500;
-  font-size: clamp(2.5rem, 5vw, 3.75rem);
-  /* Responsive font size */
-  color: #ffffff;
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-1-font-size);
+  color: var(--white-color);
 
   line-height: 1.2;
   max-width: 65%;
@@ -71,9 +80,9 @@
 .Date {
   /* Font & Typography */
   font-family: "Lexend", var(--lexend), sans-serif;
-  font-weight: 500;
-  font-size: 22px;
-  color: #ffffff;
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-2-font-size);
+  color: var(--white-color);
   text-transform: uppercase;
   font-style: normal;
 }
@@ -118,21 +127,21 @@
 
 .RelatedSection h2 {
   font-family: var(--lexend);
-  font-weight: 500;
-  font-size: 22px;
-  color: #2f362a;
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-2-font-size);
+  color: var(--heads-color);
 }
 
 .SectionTitle {
-  color: #2f362a;
+  color: var(--heads-color);
 }
 
 .SectionTitle h2 {
-  font-size: 22px;
-  font-weight: 500;
+  font-size: var(--lexend-heading-2-font-size);
+  font-weight: var(--lexend-heading-font-weight);
   font-family: var(--lexend);
   text-align: left;
-  color: #2f362a;
+  color: var(--heads-color);
 }
 
 .BlogGrid {
@@ -158,20 +167,20 @@
 .ReadMoreBtn {
   width: fit-content;
   padding: 10px 24px;
-  border: 1px solid #6e736a;
+  border: 1px solid var(--line-color);
   background: transparent;
   font-family: var(--lato);
   font-weight: 500;
-  font-size: 15px;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  color: var(--body-color);
   cursor: pointer;
   transition: all 0.1s ease;
 }
 
 .ReadMoreBtn:hover {
-  background-color: #6c7a5f;
-  color: #ffffff;
-  border-color: #6c7a5f;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-color: var(--line-color);
 }
 
 .CardFooter {
@@ -186,8 +195,8 @@
 }
 
 .DateText {
-  color: #6e736a;
-  font-size: 15px;
+  color: var(--body-color);
+  font-size: var(--lato-font-size);
   font-family: var(--lato);
   font-weight: 700;
 }
@@ -195,9 +204,9 @@
 .ReadMoreBtn {
   /* No margin-left needed now because space-between handles it */
   padding: 8px 20px;
-  border: 1px solid #6c7a5f;
-  color: #6c7a5f;
-  font-size: 14px;
+  border: 1px solid var(--line-color);
+  color: var(--primary-color);
+  font-size: var(--lato-font-size);
   text-decoration: none;
 }
 
@@ -205,16 +214,15 @@
   padding-top: 20px;
   font-family: var(--lato);
   font-weight: 700;
-  font-size: 15px;
-  color: #2f362a;
+  font-size: var(--lato-font-size);
+  color: var(--heads-color);
 }
 
 .ReadMoreBtn {
-  color: #51624d;
-  font-weight: 700;
+  color: var(--primary-color);
+  font-weight: var(--lato-font-weight);
   text-decoration: none;
-  font-size: 0.9rem;
-  text-transform: uppercase;
+  font-size: var(--lato-font-size);
   letter-spacing: 0.05em;
   display: inline-block;
   margin-top: 1rem;
@@ -225,15 +233,15 @@
 }
 
 .Separator {
-  border: 0.5px solid #2f362a4d;
+  border: 0.5px solid var(--line-color);
   margin: 8px 0;
 }
 
 .minute {
   font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
-  color: #6e736a;
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--body-color);
   margin-top: 10px;
 }
 
@@ -250,9 +258,9 @@
   }
 
   .Header h1 {
-    font-size: var(--lexend);
-    font-weight: 500;
-    font-size: 32px;
+    font-family: var(--lexend);
+    font-weight: var(--lexend-heading-font-weight);
+    font-size: var(--lexend-heading-1-font-size);
   }
 
   /* .Date{
@@ -263,9 +271,9 @@
   .Date {
     /* Font & Typography */
     font-family: "Lexend", var(--lexend), sans-serif;
-    font-weight: 500;
+    font-weight: var(--lexend-heading-font-weight);
     font-size: 20px;
-    color: #ffffff;
+    color: var(--white-color);
     text-transform: uppercase;
     font-style: normal;
     display: block;
@@ -283,7 +291,7 @@
 
     /* 3. Aspect Ratio Control (Prevents Cropping) */
     /* Instead of a fixed height (like 300px), use aspect-ratio.
-     This ensures that as the width gets smaller, the height follows, 
+     This ensures that as the width gets smaller, the height follows,
      keeping the image's original composition. */
     height: auto;
     aspect-ratio: 16 / 9;
@@ -320,7 +328,7 @@
     /* Makes the text easier to read */
   }
 
-  /* If you want to make sure the RichText children (p, h2, etc.) also center */
+  /* If you want to make sure the RichText children (p, h2, etc.) also center
   .ContentWrapper div,
   .ContentWrapper p,
   .ContentWrapper h1,
@@ -329,7 +337,7 @@
   /* 1. Section Container */
   .RelatedSection {
     padding: 40px 20px;
-    background-color: #fff;
+    background-color: var(--white-color);
     margin-top: 0px;
     display: flex;
     flex-direction: column;
@@ -339,8 +347,8 @@
   .SectionTitle {
     font-family: var(--lexend);
     font-size: 20px;
-    color: #2f362a;
-    font-weight: 500;
+    color: var(--heads-color);
+    font-weight: var(--lexend-heading-font-weight);
     text-transform: uppercase;
     text-align: left;
     letter-spacing: 1px;
@@ -413,15 +421,15 @@
   /* 4. Text Styling */
   .CardTitle h3 {
     font-size: 18px;
-    font-weight: 500;
-    color: #2f362a;
+    font-weight: var(--lexend-heading-font-weight);
+    color: var(--heads-color);
     text-align: left;
     font-family: var(--lexend);
     margin: 0;
   }
 
   .CardMeta {
-    font-size: 14px;
+    font-size: var(--lato-font-size);
     color: #777;
     margin-bottom: 16px;
     border-top: 1px solid #eee;
@@ -438,7 +446,7 @@
   }
 
   .CardDate {
-    font-size: 14px;
+    font-size: var(--lato-font-size);
     color: #777;
     font-weight: 500;
   }
@@ -446,10 +454,10 @@
   .ReadMoreBtn {
     margin-left: auto;
     padding: 8px 20px;
-    border: 1px solid #6c7a5f;
+    border: 1px solid var(--line-color);
     background: transparent;
-    color: #6c7a5f;
-    font-size: 14px;
+    color: var(--primary-color);
+    font-size: var(--lato-font-size);
     text-decoration: none;
     transition: all 0.3s ease;
     display: inline-block;

@@ -71,6 +71,9 @@ span,
 li,
 a {
   font-family: var(--lato);
+  font-size: var(--lato-font-size);
+  font-weight: var(--lato-font-weight);
+  color: var(--body-color);
 }
 
 .TopPaddingForMobile {
