@@ -169,7 +169,8 @@ export const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center", // This centers items vertically
+    display: "flex",
   },
   tableHead: {
     borderBottomWidth: 2,

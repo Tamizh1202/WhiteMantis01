@@ -95,7 +95,7 @@ export const TakeAwayInvoice: React.FC<InvoiceDocumentProps> = ({ data }) => {
                 <View style={styles.table}>
                     <View style={{ ...styles.tableRow, ...styles.tableHead }}>
                         <Text style={{ ...styles.th, flex: 2 }}>Description</Text>
-                        <Text style={{ ...styles.th, flex: 3, textAlign: "center" }}>Customization</Text>
+                        <Text style={{ ...styles.th, flex: 3, textAlign: "center" }}>Customization / Add Ons</Text>
                         <Text style={{ ...styles.th, flex: 0.8, textAlign: "center" }}>Qty</Text>
                         <Text style={{ ...styles.th, flex: 2, textAlign: "right" }}>Unit Price</Text>
                         <Text style={{ ...styles.th, flex: 2, textAlign: "right" }}>Amount</Text>
@@ -105,7 +105,7 @@ export const TakeAwayInvoice: React.FC<InvoiceDocumentProps> = ({ data }) => {
                         <View key={item.id} style={{ ...styles.tableRow, ...styles.tableBodyRow, alignItems: "flex-start" }}>
                             <View style={{ ...styles.td, flex: 2, flexDirection: "column" }}>
                                 <Text>{item.name}</Text>
-                                
+
                             </View>
 
                             <Text style={{ ...styles.td, flex: 3, textAlign: "center" }}>

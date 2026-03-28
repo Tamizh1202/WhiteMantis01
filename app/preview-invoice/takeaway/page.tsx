@@ -56,7 +56,7 @@ const dummyTakeAwayData: InvoiceData = {
             total: 70,
             tax: 0,
             sku: "DINE-001",
-            customization: "Extra shot, Oat milk",
+            customization: "Extra shot (+3 AED),\nOat milk(+5 AED)",
         },
         {
             id: 2,
@@ -68,7 +68,7 @@ const dummyTakeAwayData: InvoiceData = {
             total: 65,
             tax: 0,
             sku: "DINE-002",
-            customization: "No onions (+AED)",
+            customization: "No onions, \n Extra Spicy (+2 AED)",
         },
 
     ],
