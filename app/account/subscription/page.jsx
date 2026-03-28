@@ -27,7 +27,6 @@ export default function SubscriptionPage() {
         const response = await axiosClient.get(
           `${BASE_URL}/api/web-subscription?where[user][equals]=${session.user.id}&where[paymentStatus][equals]=completed&depth=3`,
         );
-
         const data = response.data;
         console.log(data);
         if (data?.docs && response.status === 200) {
@@ -336,9 +335,15 @@ export default function SubscriptionPage() {
 
                     <div>
                       <p>
-                        {sub.subsStatus === "inactive"
-                          ? "Cancelled"
-                          : sub.subsStatus}{" "}
+                        {(() => {
+                          const status =
+                            sub.subsStatus === "inactive"
+                              ? "cancelled"
+                              : sub.subsStatus;
+                          return (
+                            status.charAt(0).toUpperCase() + status.slice(1)
+                          );
+                        })()}{" "}
                         Subscription
                       </p>
                       <p>on {formatDate(sub.updatedAt)}</p>
@@ -378,7 +383,9 @@ export default function SubscriptionPage() {
                         <Image
                           src={
                             sub.items?.[0]?.product?.productImage?.url
-                              ? `https://whitemantis-app.vercel.app${sub.items?.[0]?.product?.productImage?.url}`
+                              ? formatImageUrl(
+                                  sub.items?.[0]?.product?.productImage?.url,
+                                )
                               : "https://placehold.co/100x100"
                           }
                           alt="product image"
@@ -435,7 +442,9 @@ export default function SubscriptionPage() {
                       <Image
                         src={
                           sub.items?.[0]?.product?.productImage?.url
-                            ? `https://whitemantis-app.vercel.app${sub.items?.[0]?.product?.productImage?.url}`
+                            ? formatImageUrl(
+                                sub.items?.[0]?.product?.productImage?.url,
+                              )
                             : "https://placehold.co/100x100"
                         }
                         alt="product image"

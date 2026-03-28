@@ -148,7 +148,7 @@ export default function BillingAddressSection({
           />
 
           {/* City / Emirates */}
-          <div className={styles.Row}>
+          <div className={styles.Row} data-lenis-prevent>
             <div style={{ flex: 1 }}>
               <input
                 className={`${styles.Input} ${validationErrors.billingCity ? styles.InputError : ""}`}

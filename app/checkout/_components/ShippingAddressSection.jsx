@@ -353,7 +353,7 @@ export default function ShippingAddressSection({
 
           {/* Inline Form (unauthenticated OR authenticated with NO addresses) */}
           {showInlineForm && (
-            <>
+            <div data-lenis-prevent>
               <input
                 className={styles.Input}
                 value="United Arab Emirates"
@@ -579,7 +579,7 @@ export default function ShippingAddressSection({
                   <p>Save this for next time.</p>
                 </label>
               )}
-            </>
+            </div>
           )}
         </>
       )}

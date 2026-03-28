@@ -134,6 +134,7 @@ const AddressFormPopup = ({
                 <div
                   className={styles.CustomOptionsList}
                   style={{ left: 0, width: "100%", top: "100%" }}
+                  data-lenis-prevent
                 >
                   {UAE_STATES.map((opt) => (
                     <div

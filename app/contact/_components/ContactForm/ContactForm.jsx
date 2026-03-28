@@ -201,10 +201,9 @@ const ContactForm = () => {
                   </div>
 
                   {enquiryOpen && (
-                    <div className={testStyles.CustomOptionsList} data-prevent-lenis>
+                    <div className={testStyles.CustomOptionsList} data-lenis-prevent>
                       {enquiryOptions.map((option) => (
                         <div
-                          data-prevent-lenis
                           key={option.value}
                           className={testStyles.OptionItem}
                           onClick={() => {

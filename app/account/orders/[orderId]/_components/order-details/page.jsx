@@ -7,6 +7,8 @@ export default function OrderDetails({ order }) {
 
   if (!order) return null;
 
+  console.log("order", order);
+
   const subtotal = Number(order?.financials?.subtotal) || 0;
   const discount = Number(order?.financials?.couponDiscount || 0) + Number(order?.financials?.wtCoinsDiscount || 0);
   const shipping = Number(order?.financials?.shippingCharge) || 0;

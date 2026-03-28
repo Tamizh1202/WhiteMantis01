@@ -334,7 +334,7 @@ export default function SubscriptionDetailPage({ params }) {
                       }}
                       className={styles.ViewLink}
                     >
-                      Download PDF
+                      Download Invoice
                     </button>
                   </div>
                 </div>

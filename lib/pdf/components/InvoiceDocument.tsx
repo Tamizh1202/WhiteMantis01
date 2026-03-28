@@ -1,5 +1,17 @@
 import React from "react";
-import { Document, Page, Link, Text, View, Svg, Path, G, Defs, ClipPath, Rect } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Link,
+  Text,
+  View,
+  Svg,
+  Path,
+  G,
+  Defs,
+  ClipPath,
+  Rect,
+} from "@react-pdf/renderer";
 import { InvoiceData } from "../types/invoice.types";
 import { styles, colors as C } from "./InvoiceStyles";
 
@@ -93,12 +105,18 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
 
           {/* Order Date Column - Pushed to the far right */}
           <View style={styles.infoColLast}>
-            <Text style={{ ...styles.label, textAlign: "right" }}>Order Date</Text>
-            <Text style={{ ...styles.infoText, textAlign: "right" }}>{data.metadata.invoiceDate}</Text>
+            <Text style={{ ...styles.label, textAlign: "right" }}>
+              Order Date
+            </Text>
+            <Text style={{ ...styles.infoText, textAlign: "right" }}>
+              {data.metadata.invoiceDate}
+            </Text>
 
             {isSubscription && data.metadata.nextBillingDate && (
               <>
-                <Text style={{ ...styles.label, marginTop: 10, textAlign: "right" }}>
+                <Text
+                  style={{ ...styles.label, marginTop: 10, textAlign: "right" }}
+                >
                   Next Billing Date
                 </Text>
                 <Text style={{ ...styles.infoTextBold, textAlign: "right" }}>
@@ -281,7 +299,7 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
                 White Mantis Coffee LLC — Dubai, UAE
               </Text>
               <Link
-                src="http://localhost:3000/terms-and-conditions"
+                src={`${process.env.NEXT_PUBLIC_FRONTEND_URL || "https://whitemantis.ae"}/terms-and-conditions`}
                 style={styles.terms}
               >
                 <Text>Terms and Conditions</Text>

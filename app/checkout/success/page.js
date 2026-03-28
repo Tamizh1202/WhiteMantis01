@@ -5,11 +5,15 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import one from "./1.png"; // Fallback image
 import axiosClient from "@/lib/axios";
+import { downloadInvoice } from "@/lib/pdf/utils/downloadInvoiceClient";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const id = searchParams.get("id") || searchParams.get("order_id") || searchParams.get("orderId");
+  const id =
+    searchParams.get("id") ||
+    searchParams.get("order_id") ||
+    searchParams.get("orderId");
   const type = searchParams.get("type") || "order"; // 'order' or 'subscription'
   const token = searchParams.get("token"); // Guest access token
 
@@ -38,9 +42,10 @@ function SuccessContent() {
 
     const fetchData = async () => {
       try {
-        let endpoint = type === 'subscription'
-          ? `/api/web-subscription/${id}`
-          : `/api/web-orders/${id}`;
+        let endpoint =
+          type === "subscription"
+            ? `/api/web-subscription/${id}`
+            : `/api/web-orders/${id}`;
 
         const params = {};
         if (token) {
@@ -56,7 +61,11 @@ function SuccessContent() {
           setError("Failed to fetch details");
         }
       } catch (err) {
-        setError(err.response?.data?.message || err.message || "An error occurred while loading details");
+        setError(
+          err.response?.data?.message ||
+            err.message ||
+            "An error occurred while loading details",
+        );
         console.error(err);
       } finally {
         setLoading(false);
@@ -71,12 +80,12 @@ function SuccessContent() {
   if (loading) {
     return (
       <div className={styles.Main}>
-        <div style={{ textAlign: "center", padding: "50px" }}>Loading details...</div>
+        <div style={{ textAlign: "center", padding: "50px" }}>
+          Loading details...
+        </div>
       </div>
     );
   }
-
-
 
   if (error || !data) {
     return (
@@ -90,9 +99,10 @@ function SuccessContent() {
 
   // Map Data based on type
   // Handle cases where the API might return the document directly or wrapped
-  const order = type === 'subscription' ? (data.subscription || data) : (data.order || data);
+  const order =
+    type === "subscription" ? data.subscription || data : data.order || data;
 
-  console.log(order)
+  console.log(order);
 
   const formatAddress = (addr) => {
     if (!addr) return "N/A";
@@ -105,7 +115,7 @@ function SuccessContent() {
       addr.city,
       addr.emirates || addr.state,
       addr.addressCountry || addr.country,
-      addr.postcode
+      addr.postcode,
     ].filter(Boolean);
     return parts.join(", ");
   };
@@ -120,34 +130,56 @@ function SuccessContent() {
     return order.payment_method_title || "Credit Card";
   };
 
-
   // Both orders and subscriptions use line_items (WC) or products (Payload)
   const rawItems = order.line_items || order.products || order.items || [];
-  console.log(rawItems)
-  const items = rawItems.map(item => ({
+  console.log(rawItems);
+  const items = rawItems.map((item) => ({
     id: item.id || item.productId,
-    name: item.product?.name || item.product?.productTitle || item.productName || "Product",
+    name:
+      item.product?.name ||
+      item.product?.productTitle ||
+      item.productName ||
+      "Product",
     quantity: item.quantity,
     price: item.total || item.product?.salePrice || item.price,
-    image: item.image?.src || item.product?.productImages?.[0]?.image?.url || null,
-    tagline: item.product?.tagline || ''
+    image:
+      item.image?.src || item.product?.productImages?.[0]?.image?.url || null,
+    tagline: item.product?.tagline || "",
   }));
 
   const orderInfo = {
     orderId: order.id || order.orderId || order._id,
     paymentMethod: getPaymentMethod(),
-    billingAddress: formatAddress(order.billing || order.billingAddress || order.billing_address),
-    shippingAddress: formatAddress(order.shipping || order.shippingAddress || order.shipping_address),
+    billingAddress: formatAddress(
+      order.billing || order.billingAddress || order.billing_address,
+    ),
+    shippingAddress: formatAddress(
+      order.shipping || order.shippingAddress || order.shipping_address,
+    ),
     email: order.email || order.billing?.email || "N/A",
   };
 
-  const totalVal = parseFloat(order.financials?.total || order?.financials?.totalAmount || 0);
-  const taxVal = parseFloat(order.financials?.taxAmount || order.tax || order.taxes || 0);
-  const taxPercentage = parseFloat(order.financials?.taxPercentage || order.taxPercentage || 0);
-  const shippingVal = parseFloat(order.financials?.shippingCharge || order.shippingTotal || 0);
-  const couponDiscount = parseFloat(order.financials?.couponDiscount || order.couponDiscount || 0);
-  const coinsDiscount = parseFloat(order.financials?.wtCoinsDiscount || order.wtCoinsDiscount || 0);
-  const subtotal = parseFloat(order.financials?.subtotal || order.subtotal || 0);
+  const totalVal = parseFloat(
+    order.financials?.total || order?.financials?.totalAmount || 0,
+  );
+  const taxVal = parseFloat(
+    order.financials?.taxAmount || order.tax || order.taxes || 0,
+  );
+  const taxPercentage = parseFloat(
+    order.financials?.taxPercentage || order.taxPercentage || 0,
+  );
+  const shippingVal = parseFloat(
+    order.financials?.shippingCharge || order.shippingTotal || 0,
+  );
+  const couponDiscount = parseFloat(
+    order.financials?.couponDiscount || order.couponDiscount || 0,
+  );
+  const coinsDiscount = parseFloat(
+    order.financials?.wtCoinsDiscount || order.wtCoinsDiscount || 0,
+  );
+  const subtotal = parseFloat(
+    order.financials?.subtotal || order.subtotal || 0,
+  );
 
   const totals = {
     subtotal: subtotal,
@@ -156,7 +188,7 @@ function SuccessContent() {
     total: totalVal,
     taxPercentage: taxPercentage,
     couponDiscount: couponDiscount,
-    coinsDiscount: coinsDiscount
+    coinsDiscount: coinsDiscount,
   };
 
   const calcSubtotal = totals.subtotal.toFixed(2);
@@ -261,36 +293,34 @@ function SuccessContent() {
                 </div>
               </div>
 
-              {(type === 'subscription' && (order.next_payment_date || order.nextPaymentDate)) && (
-                <div className={styles.Three}>
-                  <div className={styles.ThreeTop}>
-                    <p>Next Payment Date</p>
+              {type === "subscription" &&
+                (order.next_payment_date || order.nextPaymentDate) && (
+                  <div className={styles.Three}>
+                    <div className={styles.ThreeTop}>
+                      <p>Next Payment Date</p>
+                    </div>
+                    <div className={styles.ContactEmail}>
+                      <p>
+                        {new Date(
+                          order.next_payment_date || order.nextPaymentDate,
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </p>
+                    </div>
                   </div>
-                  <div className={styles.ContactEmail}>
-                    <p>{new Date(order.next_payment_date || order.nextPaymentDate).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}</p>
-                  </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
 
-          <div className={styles.LeftBottom} style={{ display: 'flex', gap: '15px' }}>
-            <a href="/shop" style={{ textDecoration: 'none' }}>
+          <div
+            className={styles.LeftBottom}
+            style={{ display: "flex", gap: "15px" }}
+          >
+            <a href="/shop" style={{ textDecoration: "none" }}>
               <button className={styles.cont}>Continue Shopping</button>
-            </a>
-            <a
-              href={`/api/website/invoice/${type}/${orderInfo.orderId}${token ? `?token=${token}` : ''}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'none' }}
-            >
-              <button className={styles.cont} style={{ backgroundColor: '#fff', color: '#428B54', border: '1px solid #428B54' }}>
-                Download Invoice
-              </button>
             </a>
           </div>
         </div>
@@ -312,11 +342,13 @@ function SuccessContent() {
                     alt={item.name}
                     width={80}
                     height={80}
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: "cover" }}
                   />
                 </div>
                 <div className={styles.ProdNameAndweight}>
-                  <h4>{(item.name)} {item.tagline}</h4>
+                  <h4>
+                    {item.name} {item.tagline}
+                  </h4>
                 </div>
                 <div className={styles.ProdQnty}>
                   <p>x{item.quantity}</p>
