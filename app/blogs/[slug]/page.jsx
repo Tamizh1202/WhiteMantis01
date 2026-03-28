@@ -77,8 +77,6 @@ const BlogInternalPage = () => {
     );
   }
 
-  console.log("Blog Data:", blog);
-
   const imageUrl = formatImageUrl(blog.featuredImage);
 
   return (

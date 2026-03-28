@@ -43,6 +43,7 @@ const ProfileComponents = ({ initialData }) => {
     profileImage: userData.profileImage || null,
   });
   const [originalEmail, setOriginalEmail] = useState(userData.email || "");
+  const [tempEmail, setTempEmail] = useState(userData.email || "");
 
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState({});
@@ -147,6 +148,13 @@ const ProfileComponents = ({ initialData }) => {
             ? iData.email
             : originalEmail,
       );
+      setTempEmail(
+        sUser?.email !== undefined
+          ? sUser.email
+          : iData.email !== undefined
+            ? iData.email
+            : originalEmail,
+      );
       if (Array.isArray(iData.addresses)) {
         setAddresses(iData.addresses);
       }
@@ -163,6 +171,13 @@ const ProfileComponents = ({ initialData }) => {
       setEditMode(true);
       return;
     }
+
+    if (field === "email") {
+      if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
+      setTempEmail(value);
+      return;
+    }
+
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
@@ -211,7 +226,9 @@ const ProfileComponents = ({ initialData }) => {
         },
       });
       skipSyncRef.current = true;
+      // originalEmail is re-synced to the current verified email
       setOriginalEmail(profile.email);
+      setTempEmail(profile.email);
       setEditMode(false);
       toast.success(result.data?.message || "Profile updated successfully!");
     } else {
@@ -223,13 +240,14 @@ const ProfileComponents = ({ initialData }) => {
 
   const handleCancelEdit = () => {
     setEditMode(false);
+    setTempEmail(originalEmail);
     setErrors({});
   };
 
   // ── Email verify handler ─────────────────────────────────────────────────────
-  // Reads the *currently edited* email from profile state and sends an OTP there.
+  // Reads the *currently edited* email from tempEmail state and sends an OTP there.
   const handleVerifyEmail = async () => {
-    const emailToVerify = profile.email?.trim();
+    const emailToVerify = tempEmail?.trim();
     if (!emailToVerify) return;
 
     const emailErr = validateEmail(emailToVerify);
@@ -258,9 +276,12 @@ const ProfileComponents = ({ initialData }) => {
       toast.error("Please enter the complete 4-digit code.");
       return;
     }
-    const newEmail = profile.email?.trim();
+    const newEmail = tempEmail?.trim();
     const result = await verifyChangeEmailOtpAPI(newEmail, otpString);
     if (result.success) {
+      // Update local profile email state (verified)
+      setProfile((prev) => ({ ...prev, email: newEmail }));
+
       // Update the Next-Auth session to reflect the new email immediately
       await update({
         user: {
@@ -272,6 +293,7 @@ const ProfileComponents = ({ initialData }) => {
       popOTP(false);
       setOtp(["", "", "", ""]);
       setOriginalEmail(newEmail);
+      setTempEmail(newEmail);
       toast.success(result.message || "Email updated successfully!");
     } else {
       toast.error(result.message || "Invalid OTP. Please try again.");
@@ -531,7 +553,7 @@ const ProfileComponents = ({ initialData }) => {
           <div className={styles.Bottom}>
             {/* 2. Personal info + OTP popup */}
             <PersonalInfoForm
-              profile={profile}
+              profile={{ ...profile, email: tempEmail }}
               editMode={editMode}
               errors={errors}
               isGuestUser={isGuestUser}
@@ -543,7 +565,7 @@ const ProfileComponents = ({ initialData }) => {
               showOtpPopup={showOTP}
               otpNode={
                 <OtpVerificationPopup
-                  email={profile.email}
+                  email={tempEmail}
                   countdown={countdown}
                   otp={otp}
                   inputRefs={inputRefs}

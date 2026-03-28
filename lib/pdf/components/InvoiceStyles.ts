@@ -12,16 +12,22 @@ Font.register({
 
 // ─── Color tokens ────────────────────────────────────────────────────────────
 export const colors = {
-  primary: "#6A7156",
-  secondary: "#8a8d8e",
-  dark: "#3A3833",
-  text: "#4B3827",
+  primary: "#6C7A5F",
+  dark: "#000000",
   border: "#e4e4e4",
   white: "#ffffff",
-  subtext: "#828282",
-  lightGrey: "#c9cbcc",
-  bg: "#ffffff",
 };
+
+// ─── Column geometry ──────────────────────────────────────────────────────────
+// A4 content width ≈ 506pt (595 − 56 paddingLeft − 33 paddingRight)
+// Target: right block starts at ~60% ≈ 304pt from left → right block = ~202pt
+// infoCol (Order Id)   = 100pt
+// infoColLast (Order Date) = 102pt
+// addressIssuedCol = 202pt (same combined width)
+//
+// Table target (from screenshot):
+// Description ~37%, Frequency ~13%, Qty ~8%, Unit Price ~22%, Amount ~20%
+// → flex: 4, 1.4, 0.8, 2, 2
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 export const styles = StyleSheet.create({
@@ -32,9 +38,9 @@ export const styles = StyleSheet.create({
     paddingBottom: 0,
     display: "flex",
     flexDirection: "column",
-    minHeight: "100%", // PDF pages are finite, but we use flex to push footer down
+    minHeight: "100%",
     fontSize: 10,
-    color: colors.text,
+    color: colors.dark,
     fontFamily: "Lato",
     backgroundColor: colors.white,
   },
@@ -48,7 +54,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
 
-  // Header
+  // ── Header ──────────────────────────────────────────────────────────────────
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -62,46 +68,57 @@ export const styles = StyleSheet.create({
   invoiceTitle: {
     fontSize: 26,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.primary,
     lineHeight: 1.1,
   },
   invoiceDate: {
     fontSize: 12,
-    color: colors.dark,
+    color: colors.primary,
     marginTop: 4,
   },
   logoArea: {
     flexDirection: "column",
-    alignItems: "flex-end",
-    gap: 4,
+    alignItems: "center",       // Vertically centers logo with text
+    justifyContent: "flex-end",  // Pushes the whole group to the right
   },
   brandName: {
-    fontSize: 9,
-    letterSpacing: 2,
-    color: colors.primary,
+    fontSize: 12,
     fontWeight: "bold",
+    color: colors.primary,
+    letterSpacing: 1,
     textTransform: "uppercase",
   },
+  logoWrapper: {
+    marginHorizontal: 6,        // Even spacing on both sides of the logo
+    marginTop: 2,               // Fine-tunes the logo to hit the text baseline
+  },
 
-  // Info grid
+  // ── Info grid ────────────────────────────────────────────────────────────────
+  // [Recipient: flex:1] [Order Id: 100pt] [Order Date: 102pt]
   infoGrid: {
     flexDirection: "row",
-    marginBottom: 28,
+    marginBottom: 24,
   },
   infoCol: {
     flexDirection: "column",
-    gap: 3,
-    minWidth: 150,
+    gap: 2,
+    width: 80,
+  },
+  infoColLast: {
+    flexDirection: "column",
+    gap: 2,
+    width: 90,
   },
   label: {
-    fontSize: 10,
-    color: colors.secondary,
-    marginBottom: 2,
+    fontSize: 9,
+    color: colors.dark,
+    marginBottom: 1,
+    fontWeight: "bold",
   },
   infoNameBold: {
     fontSize: 10,
     color: colors.dark,
-    fontWeight: "bold",
+
   },
   infoText: {
     fontSize: 10,
@@ -110,39 +127,50 @@ export const styles = StyleSheet.create({
   infoTextBold: {
     fontSize: 10,
     color: colors.dark,
-    fontWeight: "bold",
+
   },
 
-  // Address grid
+  // ── Address grid ─────────────────────────────────────────────────────────────
+  // [Bill To: flex:1] [Issued By: 202pt]
+  // 202pt = infoCol(100) + infoColLast(102) → same left edge as Order Id
   addressGrid: {
     flexDirection: "row",
-    marginBottom: 36,
+    marginBottom: 28,
   },
   addressCol: {
-    flexDirection: "column",
-    gap: 3,
     flex: 1,
+    flexDirection: "column",
+    gap: 1,
+    maxWidth: 280,   // ← add this
+  },
+  addressIssuedCol: {
+    width: 170,
+    flexDirection: "column",
+    gap: 1,
+    marginLeft: "auto",   // ← add this
   },
   addrBold: {
     fontSize: 10,
     color: colors.dark,
-    fontWeight: "bold",
     marginBottom: 1,
+
   },
   addrText: {
     fontSize: 10,
     color: colors.dark,
-    lineHeight: 1.6,
+    lineHeight: 1.3,
   },
 
-  // Table
+  // ── Table ────────────────────────────────────────────────────────────────────
   table: {
     width: "100%",
     marginBottom: 20,
+    marginTop: 20,
   },
   tableRow: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center", // This centers items vertically
+    display: "flex",
   },
   tableHead: {
     borderBottomWidth: 2,
@@ -155,20 +183,20 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     borderBottomStyle: "solid",
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   th: {
     fontSize: 10,
     fontWeight: "bold",
-    color: colors.primary,
+    color: colors.dark,
   },
   td: {
     fontSize: 9,
     color: colors.dark,
   },
 
-  // Totals
+  // ── Totals ───────────────────────────────────────────────────────────────────
   totalsWrapper: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -211,10 +239,10 @@ export const styles = StyleSheet.create({
   totalValue: {
     fontSize: 11,
     fontWeight: "bold",
-    color: colors.primary,
+    color: colors.dark,
   },
 
-  // Footer
+  // ── Footer ───────────────────────────────────────────────────────────────────
   footer: {
     marginTop: "auto",
     paddingBottom: 30,
@@ -232,11 +260,11 @@ export const styles = StyleSheet.create({
   thankYou: {
     fontSize: 10,
     fontStyle: "italic",
-    color: colors.lightGrey,
+    color: colors.dark,
   },
   paidVia: {
     fontSize: 10,
-    color: colors.secondary,
+    color: colors.dark,
   },
   footerBottom: {
     flexDirection: "row",
@@ -245,18 +273,19 @@ export const styles = StyleSheet.create({
   },
   trn: {
     fontSize: 10,
-    color: colors.secondary,
+    color: colors.dark,
+    fontWeight: "normal", // This overrides the parent's bold setting
   },
   companyFooter: {
     fontSize: 10,
     fontStyle: "italic",
-    color: colors.secondary,
+    color: colors.dark,
     textAlign: "right",
     marginBottom: 3,
   },
   terms: {
     fontSize: 10,
-    color: colors.secondary,
+    color: colors.dark,
     textDecoration: "underline",
   },
 });

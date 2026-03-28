@@ -55,6 +55,16 @@
   display: block;
 }
 
+.HeaderDate {
+  font-family: var(--lexend);
+  font-weight: var(--lexend-heading-font-weight);
+  font-size: var(--lexend-heading-2-font-size);
+  color: var(--white-color);
+  /* Make it white like the title */
+  text-transform: uppercase;
+  display: block;
+}
+
 .Title {
   font-family: var(--lexend);
   font-weight: var(--lexend-heading-font-weight);
@@ -318,7 +328,7 @@
     /* Makes the text easier to read */
   }
 
-  /* If you want to make sure the RichText children (p, h2, etc.) also center */
+  /* If you want to make sure the RichText children (p, h2, etc.) also center
   .ContentWrapper div,
   .ContentWrapper p,
   .ContentWrapper h1,

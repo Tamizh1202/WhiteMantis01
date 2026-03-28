@@ -1257,3 +1257,16 @@
   font-size: 12px;
   color: #227336;
 }
+
+.CheckoutCouponError {
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-family: var(--lato);
+}
+
+.CouponInputGroup button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}

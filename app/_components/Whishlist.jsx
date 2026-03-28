@@ -1,18 +1,22 @@
-'use client';
+"use client";
 import React, { useState } from "react";
-import { useWishlist } from '../_context/WishlistContext';
+import { useWishlist } from "../_context/WishlistContext";
 import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const Wishlist = ({ product }) => {
   const { items = [], toggle } = useWishlist();
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
 
   // Check if product is already in wishlist
-  const isInWishlist = product ? items.some((it) => {
-    const itemProductId = it.product?.value?.id || it.product?.id || it.product;
-    return String(itemProductId) === String(product.id);
-  }) : false;
+  const isInWishlist = product
+    ? items.some((it) => {
+        const itemProductId =
+          it.product?.value?.id || it.product?.id || it.product;
+        return String(itemProductId) === String(product.id);
+      })
+    : false;
 
   const handleToggle = async (e) => {
     e?.preventDefault();
@@ -22,12 +26,13 @@ const Wishlist = ({ product }) => {
 
     // Check if product prop is provided
     if (!product) {
-      console.error('Product prop is required for Wishlist component');
+      console.error("Product prop is required for Wishlist component");
       return;
     }
 
     // Prevent guests from calling the wishlist API
     if (status !== "authenticated") {
+      toast.error("Login to add to wishlist");
       return "Login to add to wishlist";
     }
 
@@ -35,7 +40,7 @@ const Wishlist = ({ product }) => {
     try {
       await toggle(product.id);
     } catch (err) {
-      console.error('Wishlist toggle error', err);
+      console.error("Wishlist toggle error", err);
     } finally {
       setLoading(false);
     }
@@ -55,7 +60,7 @@ const Wishlist = ({ product }) => {
         background: "none",
         border: "none",
         padding: 0,
-        display: "block"
+        display: "block",
       }}
     >
       <svg

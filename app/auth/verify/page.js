@@ -133,19 +133,19 @@ function Otp() {
     setResending(true);
 
     try {
-      // const signupRes = await axiosClient.post("api/otp/send-web", {
-      //   email: userEmail,
-      // });
-      // const json = signupRes.data;
-      // if (signupRes.status !== 200) {
-      //   setError(json.error || "Unable to resend OTP");
-      //   setResending(false);
-      //   return;
-      // }
-      // setInfo("OTP sent again. Please check your email.");
-      // setCountdown(RESEND_COOLDOWN);
-      // setOtp(["", "", "", ""]);
-      // inputsRef.current[0]?.focus();
+      const signupRes = await axiosClient.post("api/otp/send-web", {
+        email: userEmail,
+      });
+      const json = signupRes.data;
+      if (signupRes.status !== 200 || !json.success) {
+        setError(json.message || "Unable to resend OTP");
+        setResending(false);
+        return;
+      }
+      setInfo("OTP sent again. Please check your email.");
+      setCountdown(RESEND_COOLDOWN);
+      setOtp(["", "", "", ""]);
+      inputsRef.current[0]?.focus();
     } catch (e) {
       const resData = e?.response?.data;
       const backendMsg =

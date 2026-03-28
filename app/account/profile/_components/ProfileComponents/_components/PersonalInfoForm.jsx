@@ -194,7 +194,7 @@ const PersonalInfoForm = ({
       )}
 
       {errors.lastName && <p className={styles.ErrorText}>{errors.lastName}</p>}
-
+      {errors.email && <p className={styles.ErrorText}>{errors.email}</p>}
       {emailError && <p className={styles.ErrorText}>{emailError}</p>}
 
       {errors.phone && <p className={styles.ErrorText}>{errors.phone}</p>}

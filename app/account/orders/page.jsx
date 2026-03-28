@@ -7,7 +7,7 @@ import axiosClient from "@/lib/axios";
 import CancelOrderPopup from "./_components/CancelOrderPopup/CancelOrderPopup";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
+import FilterOrdersPopup from "./_components/FilterPopup/FilterOrdersPopup";
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,7 @@ export default function OrdersPage() {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
-
+  const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
   useEffect(() => {
     if (status === "authenticated" && session?.user?.id) {
       fetchOrders(1);
@@ -155,7 +155,7 @@ export default function OrdersPage() {
                     className={styles.searchInput}
                   />
                 </div>
-                <div className={styles.Filter}>
+                <div className={styles.Filter} onClick={() => setIsFilterPopupOpen(true)} style={{ cursor: "pointer" }}>
                   <svg
                     width="15"
                     height="15"
@@ -229,6 +229,15 @@ export default function OrdersPage() {
           orderId={selectedOrderId}
           onClose={() => setIsCancelPopupOpen(false)}
           onConfirm={handleConfirmCancel}
+        />
+      )}
+      {isFilterPopupOpen && (
+        <FilterOrdersPopup
+          onClose={() => setIsFilterPopupOpen(false)}
+          onApply={(filters) => {
+            console.log("Applied filters:", filters);
+            // wire up your filter logic here
+          }}
         />
       )}
     </div>

@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import styles from "../page.module.css";
 import placeholderImage from "../1.png";
 import { formatImageUrl } from "@/lib/imageUtils";
@@ -23,7 +24,19 @@ export default function OrderSummary({
     appliedCoupon,
     coinConfig,
   } = useCart();
+  const { status } = useSession();
   const [couponInput, setCouponInput] = useState("");
+  const [couponError, setCouponError] = useState("");
+
+  const handleApplyCoupon = async () => {
+    setCouponError("");
+    const res = await applyCoupon(couponInput);
+    if (!res.ok) {
+      setCouponError(res.message);
+    } else {
+      setCouponInput("");
+    }
+  };
 
   return (
     <div className={styles.Right}>
@@ -111,26 +124,28 @@ export default function OrderSummary({
       <div className={styles.CouponSection}>
         <div className={styles.CouponHeader}>
           <h3>COUPONS AND REWARDS</h3>
-          {checkoutMode !== "subscription" && !appliedCoupon && (
-            <div className={styles.ViewAll} onClick={openCouponModal}>
-              <span>View all coupons</span>
-              <svg
-                width="6"
-                height="10"
-                viewBox="0 0 6 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1 9L5 5L1 1"
-                  stroke="#6E736A"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          )}
+          {checkoutMode !== "subscription" &&
+            !appliedCoupon &&
+            status === "authenticated" && (
+              <div className={styles.ViewAll} onClick={openCouponModal}>
+                <span>View all coupons</span>
+                <svg
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 9L5 5L1 1"
+                    stroke="#6E736A"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            )}
         </div>
 
         {checkoutMode !== "subscription" &&
@@ -142,7 +157,12 @@ export default function OrderSummary({
                 value={couponInput}
                 onChange={(e) => setCouponInput(e.target.value)}
               />
-              <button onClick={() => applyCoupon(couponInput)}>Apply</button>
+              <button
+                onClick={handleApplyCoupon}
+                disabled={status !== "authenticated"}
+              >
+                Apply
+              </button>
             </div>
           ) : (
             <div className={styles.AppliedCouponGroup}>
@@ -189,7 +209,7 @@ export default function OrderSummary({
               type="checkbox"
               checked={isBeansApplied}
               onChange={toggleBeans}
-              disabled={beansBalance <= 0}
+              disabled={beansBalance <= 0 || status !== "authenticated"}
             />
             <span className={styles.Checkmark}></span>
             <div className={styles.RewardsInfo}>
@@ -199,23 +219,46 @@ export default function OrderSummary({
               </p>
             </div>
           </label>
-          {beansBalance > 0 && (() => {
-            const pointsToAed = coinConfig?.pointsToAed || 10;
-            const beansToUse = Math.min(
-              Math.floor(cartTotals.subtotal * 0.2 * pointsToAed),
-              beansBalance
-            );
-            const savingAed = (beansToUse / pointsToAed).toFixed(2);
-            return (
-              <p className={styles.PotentialSavings}>
-                <span>{beansToUse} Beans will be used · Save AED {savingAed}</span>
-              </p>
-            );
-          })()}
+          {status === "authenticated" ? (
+            // Check if balance exists and logic should run
+            beansBalance > 0 &&
+            (() => {
+              const pointsToAed = coinConfig?.pointsToAed || 10;
+              const beansToUse = Math.min(
+                Math.floor(cartTotals.subtotal * 0.2 * pointsToAed),
+                beansBalance,
+              );
+              const savingAed = (beansToUse / pointsToAed).toFixed(2);
+
+              return (
+                <p className={styles.PotentialSavings}>
+                  <span>
+                    {beansToUse} Beans will be used · Save AED {savingAed}
+                  </span>
+                </p>
+              );
+            })() // Execute the function immediately
+          ) : (
+            <span
+              style={{
+                color: "var(--red-color)",
+                fontSize: "12px",
+                fontFamily: "var(--lato)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              Login to use beans
+            </span>
+          )}
         </div>
       </div>
 
       <div className={styles.RightThree}>
+        {couponError && (
+          <p className={styles.CheckoutCouponError}>{couponError}</p>
+        )}
         <div className={styles.Subtotal}>
           <p>Subtotal</p>
           <h5>AED {cartTotals.subtotal.toFixed(2)}</h5>
@@ -261,11 +304,17 @@ export default function OrderSummary({
         </div>
 
         <div className={styles.EarningBadge}>
-          <p>
-            You're earning{" "}
-            {Math.floor(cartTotals.total * (coinConfig.pointsEarn / 100))} WM
-            Beans on this order
-          </p>
+          {status === "authenticated" ? (
+            <p>
+              You're earning{" "}
+              {Math.floor(cartTotals.total * (coinConfig.pointsEarn / 100))} WM
+              Beans on this order
+            </p>
+          ) : (
+            <p style={{ color: "var(--red-color)" }}>
+              Login to earn beans on this order
+            </p>
+          )}
         </div>
       </div>
     </div>

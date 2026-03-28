@@ -561,9 +561,9 @@
   justify-content: center;
 }
 
-.FilterOptions input[type="checkbox"] {
+/* .FilterOptions input[type="checkbox"] {
   /* Inherit global styles */
-}
+
 
 .MobileFilterOverlay {
   position: fixed;

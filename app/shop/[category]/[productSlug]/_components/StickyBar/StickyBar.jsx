@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 const StickyBar = ({ product }) => {
   const router = useRouter();
-  const { addToCart, refresh } = useCart();
+  const { addToCart, refresh, items } = useCart();
   const { setSelectedImage, selectedVariant, setSelectedVariant } =
     useProductImage();
   const popupRef = useRef(null);
@@ -29,6 +29,7 @@ const StickyBar = ({ product }) => {
   );
 
   const [qty, setQty] = useState(1);
+  const [qtyError, setQtyError] = useState("");
   const [showSubscribe, setShowSubscribe] = useState(false);
   const [showWeightMenu, setShowWeightMenu] = useState(false);
   const [selectedFrequency, setSelectedFrequency] = useState(null);
@@ -113,7 +114,6 @@ const StickyBar = ({ product }) => {
     return `Every ${freq.duration} ${freq.interval}${freq.duration > 1 ? "s" : ""}`;
   };
 
-
   // Determine current stock status
   const isOutOfStock = product?.hasVariantOptions
     ? !selectedWeight?.variantInStock
@@ -123,13 +123,20 @@ const StickyBar = ({ product }) => {
     ? selectedWeight?.variantStockQuantity
     : product?.stockQuantity;
 
+  const currentCartQty =
+    items?.find(
+      (item) =>
+        item.product === product.id &&
+        (!product.hasVariantOptions || item.vId === selectedWeight?.id),
+    )?.quantity || 0;
+
   const isLowStock = !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
 
   // Determine current price based on product type and selection
   const simplePrice = product?.hasVariantOptions
     ? selectedWeight?.variantSalePrice ||
-    selectedWeight?.variantRegularPrice ||
-    0
+      selectedWeight?.variantRegularPrice ||
+      0
     : product?.salePrice || product?.regularPrice || 0;
 
   const subscriptionOptions = {
@@ -192,6 +199,8 @@ const StickyBar = ({ product }) => {
                               onClick={() => {
                                 setSelectedWeight(v);
                                 setShowWeightMenu(false);
+                                setQty(1);
+                                setQtyError("");
                               }}
                             >
                               {v.variantName}g
@@ -209,20 +218,47 @@ const StickyBar = ({ product }) => {
               </div>
             )}
 
-            <div className={`${styles.CountIncDec} ${isOutOfStock ? styles.Muted : ""}`}>
-              <button
-                onClick={() => setQty((q) => Math.max(1, q - 1))}
-                disabled={isOutOfStock}
+            <div className={styles.CounterWrapper}>
+              <div
+                className={`${styles.CountIncDec} ${isOutOfStock ? styles.Muted : ""}`}
               >
-                −
-              </button>
-              <span>{String(qty).padStart(2, "0")}</span>
-              <button
-                onClick={() => setQty((q) => Math.min(5, q + 1))}
-                disabled={qty >= 5 || isOutOfStock}
-              >
-                +
-              </button>
+                <button
+                  onClick={() => {
+                    setQty((q) => Math.max(1, q - 1));
+                    setQtyError("");
+                  }}
+                  disabled={isOutOfStock || qty <= 1}
+                >
+                  −
+                </button>
+                <span>{String(qty).padStart(2, "0")}</span>
+                <button
+                  onClick={() => {
+                    const maxAllowed = Math.min(
+                      5 - currentCartQty,
+                      stockQuantity - currentCartQty,
+                    );
+                    if (qty < maxAllowed) {
+                      setQty((q) => q + 1);
+                      setQtyError("");
+                    } else {
+                      if (qty + currentCartQty >= 5) {
+                        setQtyError("Limit of 5 items per order reached");
+                      } else if (qty + currentCartQty >= stockQuantity) {
+                        setQtyError("Stock limit reached");
+                      }
+                    }
+                  }}
+                  disabled={
+                    qty + currentCartQty >= 5 ||
+                    qty + currentCartQty >= stockQuantity ||
+                    isOutOfStock
+                  }
+                >
+                  +
+                </button>
+              </div>
+              {qtyError && <p className={styles.QtyError}>{qtyError}</p>}
             </div>
           </div>
 
@@ -230,39 +266,43 @@ const StickyBar = ({ product }) => {
             {!isOutOfStock && <p className={styles.type}>Purchase type :</p>}
 
             <div className={styles.Cta}>
-              {!isOutOfStock && (selectedWeight?.hasVariantSub || product?.hasSimpleSub) && (
-                <button
-                  className={styles.SubscribeCta}
-                  onClick={() => setShowSubscribe(true)}
-                >
-                  <span>Subscribe and Save 10–20% </span>
-
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+              {!isOutOfStock &&
+                (selectedWeight?.hasVariantSub || product?.hasSimpleSub) && (
+                  <button
+                    className={styles.SubscribeCta}
+                    onClick={() => setShowSubscribe(true)}
                   >
-                    <rect
+                    <span>Subscribe and Save 10–20% </span>
+
+                    <svg
                       width="18"
                       height="18"
-                      rx="9"
-                      transform="matrix(-1 0 0 1 18 0)"
-                      fill="#6C7A5F"
-                    />
-                    <path
-                      d="M8 6L11 9L8 12"
-                      stroke="white"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              )}
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        width="18"
+                        height="18"
+                        rx="9"
+                        transform="matrix(-1 0 0 1 18 0)"
+                        fill="#6C7A5F"
+                      />
+                      <path
+                        d="M8 6L11 9L8 12"
+                        stroke="white"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                )}
 
               {isOutOfStock ? (
-                <button className={`${styles.AddtoCartPriceCta} ${styles.DisabledCta}`} disabled>
+                <button
+                  className={`${styles.AddtoCartPriceCta} ${styles.DisabledCta}`}
+                  disabled
+                >
                   Out of Stock
                 </button>
               ) : (
@@ -327,10 +367,11 @@ const StickyBar = ({ product }) => {
                       return (
                         <button
                           key={v.id}
-                          className={`${selectedSubWeight === v.variantName
+                          className={`${
+                            selectedSubWeight === v.variantName
                               ? styles.ActiveFrequency
                               : styles.FrequencyBtn
-                            } ${vOutOfStock ? styles.OutOfStockMenuItem : ""} ${vLowStock ? styles.LowStockMenuItem : ""}`}
+                          } ${vOutOfStock ? styles.OutOfStockMenuItem : ""} ${vLowStock ? styles.LowStockMenuItem : ""}`}
                           onClick={() => {
                             setSelectedWeight(v);
                             setSelectedSubWeight(v.variantName);
@@ -368,9 +409,9 @@ const StickyBar = ({ product }) => {
                 {(() => {
                   const basePrice = product.hasVariantOptions
                     ? Number(
-                      selectedWeight?.variantSalePrice ||
-                      selectedWeight?.variantRegularPrice,
-                    )
+                        selectedWeight?.variantSalePrice ||
+                          selectedWeight?.variantRegularPrice,
+                      )
                     : Number(product.salePrice || product.regularPrice);
 
                   const discount = product.hasVariantOptions

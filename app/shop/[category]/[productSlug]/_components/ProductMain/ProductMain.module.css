@@ -85,7 +85,7 @@
   align-items: center;
   text-align: right;
 }
-.Right p {
+.Right{
   font-size: 15px;
   font-family: var(--lato);
   font-weight: 400;

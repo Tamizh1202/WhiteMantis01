@@ -8,7 +8,7 @@
   --lato: "Lato";
 
   --nav-font: var(--lexend);
-  --nav-color: #fff9ef;
+  --nav-color: #FFF9EF;
   --nav-gap: 36px;
   --fs-120: clamp(4rem, 3.54vi + 3.25rem, 7.5rem);
   --fs-15: clamp(14px, calc(13px + 0.104vw), 15px);
@@ -27,15 +27,15 @@
 
   --fs-16: clamp(0.75rem, calc(0.5rem + 0.417vw), 1rem);
 
-  /* PROJECT COLORS  */
+  /* PROJECT COLORS  */
 
-  --heads-color: #2f362a;
-  --body-color: #6e736a;
+  --heads-color: #2F362A;
+  --body-color: #6E736A;
   --line-color: #2f362a30;
-  --white-color: #ffffff;
-  --primary-color: #6c7a5f;
-  --red-color: #e54842;
-  --green-color: #428b54;
+  --white-color: #FFFFFF;
+  --primary-color: #6C7A5F;
+  --red-color: #E54842;
+  --green-color: #428B54;
 
   --lexend-heading-1-font-size: clamp(2rem, 1.125rem + 2.1875vw, 3.75rem);
   --lexend-heading-2-font-size: clamp(1.25rem, 1.1875rem + 0.1563vw, 1.375rem);
