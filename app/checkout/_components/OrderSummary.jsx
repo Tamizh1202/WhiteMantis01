@@ -34,7 +34,13 @@ export default function OrderSummary({
       </div>
 
       {/* Item List */}
-      <div className={styles.RightTwo}>
+      <div
+        className={styles.RightTwo}
+        data-lenis-prevent
+        style={{
+          overflowY: "auto",
+        }}
+      >
         {product.map((item, idx) => {
           const isSubscription = checkoutMode === "subscription";
           return (
