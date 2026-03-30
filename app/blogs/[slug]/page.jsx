@@ -1,68 +1,78 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import axiosClient from "@/lib/axios";
+import { notFound } from "next/navigation";
 import { formatImageUrl } from "@/lib/imageUtils";
 import RichText from "../_components/RichText/RichText";
 import styles from "./BlogInternal.module.css";
+import RelatedBlogsClient from "./RelatedBlogsClient";
 
-const BlogInternalPage = () => {
-  const { slug } = useParams();
-  const [blog, setBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  if (!slug) return { title: "Blog Not Found | WhiteMantis" };
 
-  // Scroller State
-  const [activeIndex, setActiveIndex] = useState(0);
-  const scrollRef = useRef(null);
-
-  useEffect(() => {
-    const fetchBlog = async () => {
-      if (!slug) return;
-      setLoading(true);
-      try {
-        const response = await axiosClient.get(
-          `/api/blogs?where[slug][equals]=${slug}`,
-        );
-
-        if (response.data.docs && response.data.docs.length > 0) {
-          setBlog(response.data.docs[0]);
-        } else {
-          console.error("Blog not found");
-        }
-      } catch (error) {
-        console.error("Error fetching blog:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBlog();
-  }, [slug]);
-
-  // Handle Scroll for Mobile Dots
-  const handleScroll = () => {
-    if (scrollRef.current && window.innerWidth <= 640) {
-      const width = scrollRef.current.offsetWidth;
-      const index = Math.round(scrollRef.current.scrollLeft / width);
-      setActiveIndex(index);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className={styles.LoaderWrapper}>
-        <Image
-          src="/White-mantis-green-loader.gif"
-          alt="Loading blog"
-          width={100}
-          height={100}
-          unoptimized
-        />
-      </div>
+  try {
+    const serverUrl =
+      process.env.PAYLOAD_PUBLIC_SERVER_URL ||
+      process.env.NEXT_PUBLIC_SERVER_URL ||
+      "https://endpoint.whitemantis.ae";
+    const response = await fetch(
+      `${serverUrl}/api/blogs?where[slug][equals]=${slug}`,
+      {
+        method: "GET",
+        next: { revalidate: 60 },
+      },
     );
+
+    if (response.ok) {
+      const json = await response.json();
+      const blog = json.docs?.[0] || null;
+
+      if (blog) {
+        const imageUrl = blog.featuredImage
+          ? formatImageUrl(blog.featuredImage)
+          : "";
+        return {
+          title: blog.meta?.title || blog.title || "WhiteMantis Blog",
+          description: blog.meta?.description || blog.excerpt || "",
+          openGraph: {
+            title: blog.meta?.title || blog.title || "WhiteMantis Blog",
+            description: blog.meta?.description || blog.excerpt || "",
+            images: imageUrl ? [imageUrl] : [],
+          },
+        };
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching blog meta:", err);
   }
+  return { title: "WhiteMantis Blog" };
+}
+
+async function getBlog(slug) {
+  try {
+    const serverUrl =
+      process.env.PAYLOAD_PUBLIC_SERVER_URL ||
+      process.env.NEXT_PUBLIC_SERVER_URL ||
+      "https://endpoint.whitemantis.ae";
+    const res = await fetch(
+      `${serverUrl}/api/blogs?where[slug][equals]=${slug}`,
+      {
+        method: "GET",
+        next: { revalidate: 60 },
+      },
+    );
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.docs?.[0] || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+export default async function BlogInternalPage({ params }) {
+  const { slug } = await params;
+  const blog = await getBlog(slug);
 
   if (!blog) {
     return (
@@ -103,65 +113,12 @@ const BlogInternalPage = () => {
       </div>
 
       <article className={styles.ContentWrapper}>
-        {/* Rendering the Lexical JSON content from Payload */}
         <RichText content={blog.content} />
       </article>
 
       {blog.relatedBlogs && blog.relatedBlogs.length > 0 && (
-        <section className={styles.RelatedSection}>
-          <h2 className={styles.SectionTitle}>Explore More Blogs</h2>
-
-          <div
-            className={styles.BlogGrid}
-            ref={scrollRef}
-            onScroll={handleScroll}
-          >
-            {blog.relatedBlogs.map((relatedBlog) => (
-              <RelatedBlogCard key={relatedBlog.id} blog={relatedBlog} />
-            ))}
-          </div>
-        </section>
+        <RelatedBlogsClient relatedBlogs={blog.relatedBlogs} />
       )}
     </main>
   );
-};
-
-const RelatedBlogCard = ({ blog }) => {
-  const imageUrl = formatImageUrl(blog.featuredImage);
-
-  return (
-    <div className={styles.BlogCard}>
-      <div className={styles.CardImageWrapper}>
-        <Image
-          src={imageUrl}
-          alt={blog.featuredImage?.alt || blog.title}
-          fill
-          style={{ objectFit: "cover" }}
-        />
-      </div>
-      <div className={styles.CardContent}>
-        <div className={styles.underline}>
-          <h3 className={styles.CardTitle}>{blog.title}</h3>
-        </div>
-        <div className={styles.minute}>
-          <span>Process Mastery | {blog.readTime || 5} Minutes</span>
-        </div>
-        <hr className={styles.Separator} />
-        <div className={styles.CardFooter}>
-          <span className={styles.DateText}>
-            {new Date(blog.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </span>
-          <Link href={`/blogs/${blog.slug}`} className={styles.ReadMoreBtn}>
-            Read more
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default BlogInternalPage;
+}

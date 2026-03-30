@@ -10,6 +10,76 @@ import StickyBar from "./_components/StickyBar/StickyBar";
 import BannerSection from "./_components/BannerSection/BannerSection";
 import { ProductImageProvider } from "./_context/ProductImageContext";
 
+import { formatImageUrl } from "@/lib/imageUtils";
+
+export async function generateMetadata({ params }) {
+  const { category, productSlug } = await params;
+  const selectedCategory = category?.trim().toLowerCase();
+  const selectedSlug = productSlug?.trim().toLowerCase();
+
+  if (!selectedSlug) {
+    return {
+      title: "Product Not Found | WhiteMantis",
+    };
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[and][0][slug][equals]=${selectedSlug}&where[and][1][_status][equals]=published&where[and][2][categories.slug][equals]=${selectedCategory}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        next: { revalidate: 60 },
+      },
+    );
+
+    if (response.ok) {
+      const json = await response.json();
+      const product = json.docs?.[0] || null;
+
+      if (product?.meta) {
+        let imageUrl = "";
+        if (
+          product.meta.image &&
+          typeof product.meta.image === "object" &&
+          product.meta.image.url
+        ) {
+          imageUrl = formatImageUrl(product.meta.image);
+        } else if (
+          product.productImage &&
+          typeof product.productImage === "object" &&
+          product.productImage.url
+        ) {
+          imageUrl = formatImageUrl(product.productImage);
+        } else if (
+          product.variants?.[0]?.variantImage &&
+          typeof product.variants[0].variantImage === "object"
+        ) {
+          imageUrl = formatImageUrl(product.variants[0].variantImage);
+        }
+
+        return {
+          title: product.meta.title || product.name || "WhiteMantis",
+          description: product.meta.description || product.description || "",
+          openGraph: {
+            title: product.meta.title || product.name || "WhiteMantis",
+            description: product.meta.description || product.description || "",
+            images: imageUrl ? [imageUrl] : [],
+          },
+        };
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching product meta:", err);
+  }
+
+  return {
+    title: "WhiteMantis Product",
+  };
+}
+
 export default async function ProductDetailPage({ params }) {
   const { category, productSlug } = await params;
 

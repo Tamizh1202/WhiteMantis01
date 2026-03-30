@@ -251,6 +251,10 @@
     gap: 12px;
   }
 
+  .Main{
+    padding-top: 74px;
+  }
+
   .Title {
     /* Adjusting title size for mobile so it fits the taller header better */
     font-size: 28px;
@@ -295,10 +299,14 @@
      keeping the image's original composition. */
     height: auto;
     aspect-ratio: 16 / 9;
-
     position: relative;
     overflow: hidden;
     z-index: 10;
+  }
+
+  .FeaturedImageWrapper img{
+        margin-top: 40px;
+
   }
 
   .SlidingImage {
