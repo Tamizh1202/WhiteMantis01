@@ -4,7 +4,7 @@ import React, { useLayoutEffect, useRef } from "react";
 import styles from "./Steps.module.css";
 import TopImage1 from "./1.png";
 import TopImage2 from "./2.png";
-import TopImage3 from "./3.png";
+import TopImage3 from "./33.jpg";
 import TopImage4 from "./4.png";
 
 import gsap from "gsap";

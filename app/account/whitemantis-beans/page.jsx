@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import axiosClient from "@/lib/axios";
 import styles from './page.module.css';
+import { useRouter } from "next/navigation";
 
 const QUESTIONS = [{
     question: " What are White Mantis Beans and how do they work?",
@@ -33,7 +34,7 @@ const WhiteMantisBeans = () => {
     const [allTransactions, setAllTransactions] = useState([]);
     const [visibleCount, setVisibleCount] = useState(10);
     const [totalBalance, setTotalBalance] = useState(0);
-
+    const router = useRouter();
     useEffect(() => {
         const fetchBeans = async () => {
             if (session?.user?.id) {
@@ -122,65 +123,80 @@ const WhiteMantisBeans = () => {
                         <div className={styles.heading}>
                             <h1>Transaction History</h1>
                         </div>
-                        <div className={styles.grid}>
-                            <div className={styles.gridss}>
+                        {displayData.length === 0 ? (
+                            <div className={styles.zeroState}>
 
-                                <div className={styles.tableHeading}>
-                                    <div>Details</div>
-                                    <div>Transaction Type</div>
-                                    <div>Transaction Date</div>
-                                    <div>Expiry Date</div>
-                                    <div>Coins</div>
-                                </div>
+                                <p style={{ color: 'black', }}>No White Mantis Beans yet</p>
 
-                                {displayData.map((item, index) => {
-                                    const { datePart: txDate, timePart: txTime } = formatDateParts(item.transaction_date);
-                                    const { datePart: expDate, timePart: expTime } = formatDateParts(item.expiry_date);
-                                    return (
-                                        <div key={index} className={styles.tableContent}>
-                                            <div className={styles.itemDetail}>
-                                                {item.details.split(':').map((part, i) => (
-                                                    <div key={i}>
-                                                        {i === 0 ? part + ':' : part.trim()}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className={styles.itemDate}
-                                                style={{ color: item.coins.includes('+') ? '#428B54' : '#E54842' }}>
-                                                {item.transaction_type}
-                                            </div>
-                                            <div className={styles.itemDate}>
-                                                <div>{txDate}</div>
-                                                <div>{txTime}</div>
-                                            </div>
-                                            <div className={styles.itemDate}>
+                                <p>Start earning beans when you shop, subscribe, or join academy workshops.</p>
+
+                                <button className={styles.zeroStateButton}
+                                    onClick={() => router.push("/shop")}>
+                                    Explore Coffee
+                                </button>
+                            </div>
+                        ) : (
+                            <div className={styles.grid}>
+                                <div className={styles.gridss}>
+
+                                    <div className={styles.tableHeading}>
+                                        <div>Details</div>
+                                        <div>Transaction Type</div>
+                                        <div>Transaction Date</div>
+                                        <div>Expiry Date</div>
+                                        <div>Coins</div>
+                                    </div>
+
+                                    {displayData.map((item, index) => {
+                                        const { datePart: txDate, timePart: txTime } = formatDateParts(item.transaction_date);
+                                        const { datePart: expDate, timePart: expTime } = formatDateParts(item.expiry_date);
+                                        return (
+                                            <div key={index} className={styles.tableContent}>
+                                                <div className={styles.itemDetail}>
+                                                    {item.details.split(':').map((part, i) => (
+                                                        <div key={i}>
+                                                            {i === 0 ? part + ':' : part.trim()}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className={styles.itemDate}
+                                                    style={{ color: item.coins.includes('+') ? '#428B54' : '#E54842' }}>
+                                                    {item.transaction_type}
+                                                </div>
                                                 <div className={styles.itemDate}>
-                                                    {item.expiry_date ? (
-                                                        <>
-                                                            <div>{expDate}</div>
-                                                            <div>{expTime}</div>
-                                                        </>
-                                                    ) : (
-                                                        <div>-</div>
-                                                    )}
+                                                    <div>{txDate}</div>
+                                                    <div>{txTime}</div>
+                                                </div>
+                                                <div className={styles.itemDate}>
+                                                    <div className={styles.itemDate}>
+                                                        {item.expiry_date ? (
+                                                            <>
+                                                                <div>{expDate}</div>
+                                                                <div>{expTime}</div>
+                                                            </>
+                                                        ) : (
+                                                            <div>-</div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className={styles.itemDate} style={{
+                                                    textAlign: 'center',
+                                                    color: item.coins.includes('+') ? '#428B54' : '#E54842'
+                                                }}>
+                                                    {item.coins}
                                                 </div>
                                             </div>
-                                            <div className={styles.itemDate} style={{
-                                                textAlign: 'center',
-                                                color: item.coins.includes('+') ? '#428B54' : '#E54842'
-                                            }}>
-                                                {item.coins}
-                                            </div>
+                                        );
+                                    })}
+                                    {hasMore && (
+                                        <div className={styles.more}>
+                                            <a onClick={loadMore} style={{ cursor: 'pointer' }}>View More</a>
                                         </div>
-                                    );
-                                })}
-                                {hasMore && (
-                                    <div className={styles.more}>
-                                        <a onClick={loadMore} style={{ cursor: 'pointer' }}>View More</a>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        )}
+
 
                     </div>
                     <div className={styles.mobileOnly}>

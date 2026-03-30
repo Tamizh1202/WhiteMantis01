@@ -254,6 +254,44 @@ heading .olive .heading {
   display: none;
 }
 
+.zeroState {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  gap:8px
+}
+
+.zeroState p {
+  font-family: var(--lato);
+  font-size: 15px;
+  font-weight: 400;
+  width: 40%;
+  
+}
+
+.zeroStateButton {
+  /* Reset defaults */
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+  margin-top: 14px;
+
+
+  background-color: #ffffff;
+  color: #6C7A5F;
+  padding: 14px 34px;
+  border: 1px solid #6C7A5F;
+
+  text-align: center;
+}
+
+@media (min-width: 1201px) and (max-width: 1599px) {
+  .head {
+    padding-right: 200px;
+  }
+}
+
 @media (min-width: 550px) and (max-width: 1200px) {
   .head {
     padding-right: 80px;

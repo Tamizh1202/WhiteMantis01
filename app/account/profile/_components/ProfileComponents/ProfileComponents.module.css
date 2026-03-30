@@ -649,7 +649,7 @@
 
 .DeletePopupActions button,
 .PopupActionsDeleteAddress button {
-  padding: 13px 55px;
+  padding: 13px 48px;
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 500;

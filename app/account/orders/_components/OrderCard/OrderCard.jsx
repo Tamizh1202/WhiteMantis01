@@ -67,7 +67,7 @@ const OrderCard = ({ order, handleCancelButton }) => {
                 }
                 alt={item.name || item.product?.name || "Product"}
                 width={80}
-                height={80}
+                height={80} 
                 className={styles.orderItemImg}
               />
               <div className={styles.orderItemInfo}>
