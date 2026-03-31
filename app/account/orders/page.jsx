@@ -57,6 +57,8 @@ export default function OrdersPage() {
         "select[refundedAmount]": "true",
         "select[deliveryOption]": "true",
         "select[origin]": "true",
+        "select[isPickupReady]": "true",
+        "select[pickedUpDate]":"true"
       };
 
       const query = new URLSearchParams(queryParams);

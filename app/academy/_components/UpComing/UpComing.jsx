@@ -279,7 +279,7 @@ const UpComing = () => {
           <div className={styles.WorkShopContainer}>
             {loading ? (
               <div style={{ width: "100%", textAlign: "center", padding: 40 }}>
-                Loading workshops…
+                Loading courses…
               </div>
             ) : posts.length === 0 ? (
               <div
@@ -401,7 +401,7 @@ const UpComing = () => {
                   setCurrentPage((v) => Math.min(totalPages, v + 1))
                 }
                 className={styles.ViewMoreButton}
-                aria-label="View more workshops"
+                aria-label="View more courses"
               >
                 <span>View more</span>
                 <svg

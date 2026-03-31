@@ -24,7 +24,7 @@ const Landing = () => {
             <div className={styles.MiddleConatinerTop}>
               <p>
                 Learn directly from the people who source, roast, and brew it
-                every day. Our workshops run from beginner tasting sessions to
+                every day. Our academy runs from beginner tasting sessions to
                 professional barista training — small groups, hands-on, inside
                 our Al Quoz roastery.
               </p>
@@ -39,7 +39,7 @@ const Landing = () => {
               style={{ cursor: "pointer" }}
             >
               <div className={styles.MiddleConatinerBottomLeft}>
-                <h5>Explore Workshops</h5>
+                <h5>Explore Academy</h5>
               </div>
               <div className={styles.MiddleConatinerBottomRight}>
                 <svg

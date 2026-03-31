@@ -246,6 +246,7 @@
 }
 
 @media (max-width: 768px) {
+  
   .Header {
     padding: 0px 20px 80px 20px;
     gap: 12px;
@@ -284,6 +285,7 @@
   }
 
   .FeaturedImageWrapper {
+    margin-top: 10px;;
     /* 1. Pull it up */
     margin: -120px auto 2rem;
 

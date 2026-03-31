@@ -18,7 +18,7 @@ const Crafting = ({ product }) => {
 
   const getVideoUrl = (filter) => {
     const normalized = filter.toLowerCase();
-    if (normalized === "espresso") return "/videos/crafting/espresso-video.mp4";
+    if (normalized === "espresso") return "/videos/crafting/capsule.mp4";
     if (normalized === "filter" || normalized === "milk")
       return "/videos/crafting/filter.mp4";
     return null;
