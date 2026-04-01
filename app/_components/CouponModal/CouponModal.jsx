@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./CouponModal.module.css";
 import { useCart } from "../../_context/CartContext";
 import Image from "next/image";
+import coupanZero from "./coupanZero.png"
 import axiosClient from "@/lib/axios";
 
 const CouponModal = () => {
@@ -127,8 +128,8 @@ const CouponModal = () => {
                                                         <p>{coupon.description || `Valid until ${new Date(coupon.expiryDate).toLocaleDateString()}`}</p>
                                                     </div>
                                                 </div>
-                                                <div 
-                                                    className={`${styles.cardRight} ${!eligible ? styles.disabledBtn : ""}`} 
+                                                <div
+                                                    className={`${styles.cardRight} ${!eligible ? styles.disabledBtn : ""}`}
                                                     onClick={() => eligible && handleApply(coupon.code, coupon)}
                                                 >
                                                     <h5>{eligible ? "Apply now" : "Not applicable"}</h5>
@@ -141,7 +142,16 @@ const CouponModal = () => {
                                     );
                                 })
                             ) : (
-                                <p className={styles.noCoupons}>No offers available right now.</p>
+                                <div className={styles.zeroState}>
+                                    <Image
+                                        src={coupanZero}
+                                        alt="No products"
+                                        width={120}
+                                        height={75}
+                                    />
+                                    <p style={{color:"black",marginTop:"10px",marginBottom:"7px",}}>No Offers available</p>
+                                    <p>Enter a coupon code above to apply a discount.</p>
+                                </div>
                             )}
                         </div>
                     </div>

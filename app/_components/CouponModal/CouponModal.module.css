@@ -113,7 +113,7 @@
 
 .offersSection h4 {
     font-family: var(--lato);
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 400;
     color: #2f362a;
     margin-bottom: 20px;
@@ -224,7 +224,11 @@
     color: #6e736a;
     padding: 20px;
 }
-
+.zeroState{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 @media (max-width: 640px) {
     .modal {
         width: 95%;

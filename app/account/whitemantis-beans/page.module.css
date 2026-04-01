@@ -21,7 +21,7 @@
 .main1 {
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 50px;
 }
 
 .olive {
@@ -105,7 +105,7 @@ heading .olive .heading {
 .box {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .heading h1 {
@@ -259,7 +259,7 @@ heading .olive .heading {
   flex-direction: column;
   text-align: center;
   align-items: center;
-  gap:8px
+  gap: 8px
 }
 
 .zeroState p {
@@ -267,7 +267,7 @@ heading .olive .heading {
   font-size: 15px;
   font-weight: 400;
   width: 40%;
-  
+
 }
 
 .zeroStateButton {
@@ -275,7 +275,7 @@ heading .olive .heading {
   all: unset;
   display: inline-block;
   cursor: pointer;
-  margin-top: 14px;
+  margin-top: 10px;
 
 
   background-color: #ffffff;
@@ -303,9 +303,12 @@ heading .olive .heading {
     display: none;
   }
 
-  .box {
-    display: none !important;
-    /* Force hide the desktop table */
+  .zeroState {
+    gap: 8px;
+  }
+
+  .zeroState p {
+    width: 80%
   }
 
   .mobileOnly {

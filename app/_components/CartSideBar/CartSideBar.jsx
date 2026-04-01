@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { formatImageUrl } from "@/lib/imageUtils";
-
+import cartZero from "./cartZero.png"
 const CartSideBar = () => {
   const {
     isCartOpen,
@@ -128,6 +128,12 @@ const CartSideBar = () => {
                   <div className={styles.TopOneBottom}>
                     {isCartEmpty ? (
                       <div className={styles.EmptyState}>
+                        <Image
+                          src={cartZero}
+                          alt="No products"
+                          width={145}
+                          height={160}
+                        />
                         <h4>Your Cart is empty</h4>
                         <p>Explore our curated coffee collections.</p>
                         <button
