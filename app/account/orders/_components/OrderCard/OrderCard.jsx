@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./OrderCard.module.css";
@@ -16,6 +17,16 @@ const OrderCard = ({ order, handleCancelButton }) => {
   const visibleItems = items.slice(0, 2);
   const remainingCount = Math.max(0, items.length - 2);
 
+  const [rating, setRating] = useState(0); // The "saved" value
+  const [hover, setHover] = useState(0);   // The "visual" feedback
+
+  // Added: Function to handle the click and save the rating
+  const handleRating = (score) => {
+    setRating(score);
+    console.log(`Order ${order.id} rated: ${score}/5`);
+    // If you have a backend API, call it here: e.g., updateOrderRating(order.id, score)
+  };
+
   return (
     <div className={styles.orderCard}>
       <div className={styles.orderTop}>
@@ -31,12 +42,15 @@ const OrderCard = ({ order, handleCancelButton }) => {
             <p className={styles.orderDateSub}>{config.date}</p>
             {config.refundedAmount && (
               <p className={styles.orderDateSub}>
-                <span className={styles.orderRefundAmountHeading}>
-                  Refund Credited:{" "}
-                </span>
                 <span className={styles.orderDateSub}>
                   {config.refundedAmount}
                 </span>
+              </p>
+            )}
+            {config.reason && (
+              <p className={styles.orderDateSub}>
+                <span className={styles.orderReasonHeading}>Reason: </span>
+                <span>{config.reason}</span>
               </p>
             )}
           </div>
@@ -51,7 +65,6 @@ const OrderCard = ({ order, handleCancelButton }) => {
           </p>
         </div>
       </div>
-
       <div
         className={`${styles.orderMiddle} ${config.noBottom ? styles.orderMiddleNoBottom : ""}`}
       >
@@ -67,7 +80,7 @@ const OrderCard = ({ order, handleCancelButton }) => {
                 }
                 alt={item.name || item.product?.name || "Product"}
                 width={80}
-                height={80} 
+                height={80}
                 className={styles.orderItemImg}
               />
               <div className={styles.orderItemInfo}>
@@ -79,16 +92,16 @@ const OrderCard = ({ order, handleCancelButton }) => {
                   {item.product?.variants?.find(
                     (v) => v.id === item.variantID,
                   ) && (
-                    <>
-                      {
-                        item.product.variants.find(
-                          (v) => v.id === item.variantID,
-                        ).variantName
-                      }
-                      g &nbsp; &nbsp;<span className={styles.Separator}>|</span>
-                      &nbsp;&nbsp;
-                    </>
-                  )}
+                      <>
+                        {
+                          item.product.variants.find(
+                            (v) => v.id === item.variantID,
+                          ).variantName
+                        }
+                        g &nbsp; &nbsp;<span className={styles.Separator}>|</span>
+                        &nbsp;&nbsp;
+                      </>
+                    )}
                   Qty: {item.quantity || "0"}
                 </p>
               </div>
@@ -129,6 +142,46 @@ const OrderCard = ({ order, handleCancelButton }) => {
       {config.bottomText && (
         <div className={styles.orderBottom}>
           <p>{config.bottomText}</p>
+        </div>
+      )}
+
+      {/* Logic for Rating Display */}
+      {config.rating && (
+        <div className={styles.fiveStar}>
+          <p>Rate this order</p>
+          <div className={styles.stars}>
+            {[1, 2, 3, 4, 5].map((starNumber) => {
+              const isActive = starNumber <= (hover || rating);
+
+              return (
+                <button
+                  key={starNumber}
+                  className={styles.starButton}
+                  onClick={() => handleRating(starNumber)}
+                  onMouseEnter={() => setHover(starNumber)}
+                  onMouseLeave={() => setHover(0)}
+                  type="button"
+                >
+                  <svg
+                    width="20"   /* Increased slightly for visual padding */
+                    height="20"
+                    viewBox="-1 -1 20 20" /* Moves the "window" to capture the stroke */
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <polygon
+                      points="9,0.5 11.5,6.5 18,7.2 13.2,11.5 14.7,17.5 9,14.2 3.3,17.5 4.8,11.5 0,7.2 6.5,6.5"
+                      fill={isActive ? "white" : "transparent"}
+                      stroke="white"
+                      strokeWidth="1.2" /* A slightly thicker stroke looks better on small stars */
+                      strokeLinejoin="round"
+                      style={{ transition: "fill 0.2s ease" }}
+                    />
+                  </svg>
+                </button>
+              );
+            })}
+          </div>
         </div>
       )}
 

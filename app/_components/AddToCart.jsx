@@ -64,3 +64,4 @@ const AddToCart = ({ product, onSuccess }) => {
 };
 
 export default AddToCart;
+

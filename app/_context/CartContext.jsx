@@ -63,7 +63,6 @@ export function CartProvider({ children }) {
           type: coupon.discountType,
           amount: coupon.discountAmount
         });
-
         setCartTotals(prev => ({
           ...prev,
           discount: discountVal,
@@ -317,7 +316,6 @@ export function CartProvider({ children }) {
     </CartContext.Provider>
   );
 }
-
 export function useCart() {
   return useContext(CartContext);
 }

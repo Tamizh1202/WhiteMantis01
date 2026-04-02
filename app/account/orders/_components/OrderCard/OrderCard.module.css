@@ -160,6 +160,48 @@
   display: none;
 }
 
+.fiveStar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  /* Keeps text and stars aligned */
+  padding: 15px 30px;
+  background-color: var(--primary-color);
+  
+  /* Optional: makes it look cleaner */
+}
+
+.stars {
+  display: flex;
+  gap: 5px;
+  /* Adds space between stars */
+}
+
+.starButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  transition: transform 0.1s ease;
+}
+
+/* Subtle "pop" effect when hovering */
+.starButton:hover {
+  transform: scale(1.2);
+}
+
+.fiveStar p {
+  font-family: var(--lato);
+  font-weight: 700;
+  text-transform: capitalize;
+  color: white;
+  margin: 0;
+}
+
 @media (max-width: 640px) {
   .orderTopRight {
     display: none;
@@ -173,7 +215,7 @@
     align-items: flex-end;
   }
 
-  .cancelContainer{
+  .cancelContainer {
     padding-right: 30px;
   }
 
