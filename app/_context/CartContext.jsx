@@ -362,7 +362,6 @@ export function CartProvider({ children }) {
     </CartContext.Provider>
   );
 }
-
 export function useCart() {
   return useContext(CartContext);
 }

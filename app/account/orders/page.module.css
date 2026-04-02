@@ -84,9 +84,9 @@
     width: 100%;
   }
 
-  .Top h1 {
+  /* .Top h1 {
     display: none;
-  }
+  } */
 
   .searchWrapper {
     max-width: 542px;
@@ -112,7 +112,8 @@
     max-width: 450px;
   }
   .Top {
-    flex-direction: column;
+    flex-direction: row;
+    align-self: flex-start;
   }
   .searchInput {
     max-width: 400px;
