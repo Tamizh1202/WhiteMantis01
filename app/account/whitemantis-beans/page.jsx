@@ -4,7 +4,8 @@ import { useSession } from "next-auth/react";
 import axiosClient from "@/lib/axios";
 import styles from './page.module.css';
 import { useRouter } from "next/navigation";
-
+import Image from 'next/image';
+import beansZero from "./beansZero.png"
 const QUESTIONS = [{
     question: " What are White Mantis Beans and how do they work?",
     answer: "White Mantis Coins are reward points you earn on orders, subscriptions, and workshop bookings, on every purchase, you earn WM Coins worth 10% of the order value (e.g. AED 1,000 = 100 coins) and can be used for discounts on eligible purchases."
@@ -125,7 +126,12 @@ const WhiteMantisBeans = () => {
                         </div>
                         {displayData.length === 0 ? (
                             <div className={styles.zeroState}>
-
+                                <Image
+                                    src={beansZero}
+                                    alt="No products"
+                                    width={100}
+                                    height={150}
+                                />
                                 <p style={{ color: 'black', }}>No White Mantis Beans yet</p>
 
                                 <p>Start earning beans when you shop, subscribe, or join academy workshops.</p>

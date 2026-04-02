@@ -4,6 +4,7 @@ import { useWishlist } from "../../../../_context/WishlistContext";
 import AddToCart from "@/app/_components/AddToCart";
 import styles from "./WhislistComponents.module.css";
 import Image from "next/image";
+import zeroWish from "./zeroWish.png"
 import BuyNowPopup from "@/app/shop/[category]/_components/Listing/_components/BuyNowPopup/BuyNowPopup";
 import SubscriptionPopup from "@/app/shop/[category]/_components/Listing/_components/SubscriptionPopup";
 import { useRef } from "react";
@@ -269,6 +270,12 @@ const WhislistComponents = () => {
 
         {wishlistData.length === 0 ? (
           <div className={styles.EmptyState}>
+            <Image
+                src={zeroWish}
+                alt="No products"
+                width={140}
+                height={140}
+            />
             <p className={styles.EmptyText}>Your wish list is empty.</p>
             <p className={styles.EmptySubText}>
               Explore more and shortlist some items.

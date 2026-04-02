@@ -29,7 +29,9 @@ const FilterSidebar = ({
               onClick={() => toggleMenu(item.id)}
             >
               <h5 style={{ fontSize: "14px", color: "#6e736a" }}>
-                {item.name}
+                {item.name}{" "}
+                {getSelectedCountForParent(item) > 0 &&
+                  `(${getSelectedCountForParent(item)})`}
               </h5>
               {openMenus[item.id] ? (
                 <span style={{ fontSize: "12px" }}>
@@ -92,6 +94,31 @@ const FilterSidebar = ({
     });
   }
 
+  // Helper to get all sub-category IDs for a parent (level 1 or 2)
+  const getSelectedCountForParent = (item) => {
+    let count = 0;
+    const stack = [item];
+
+    while (stack.length > 0) {
+      const current = stack.pop();
+
+      // Check if current item itself is selected
+      if (selectedSubCatIds.includes(current.id)) {
+        count++;
+      }
+
+      // Add children to stack if they exist
+      if (current.level2 && Array.isArray(current.level2)) {
+        stack.push(...current.level2);
+      }
+      if (current.level3 && Array.isArray(current.level3)) {
+        stack.push(...current.level3);
+      }
+    }
+
+    return count;
+  };
+
   return (
     <div
       className={styles.LeftBottom}
@@ -100,6 +127,7 @@ const FilterSidebar = ({
       {subCategoriesData?.level1?.map((item) => {
         const children = [...(item.level2 || []), ...(item.level3 || [])];
         const itemId = item.id;
+        const selectedCount = getSelectedCountForParent(item);
 
         return (
           <div key={item.id} className={styles.FilterBox}>
@@ -107,7 +135,9 @@ const FilterSidebar = ({
               className={styles.FilterHeader}
               onClick={() => toggleMenu(item.id)}
             >
-              <h5>{item.name}</h5>
+              <h5>
+                {item.name} {selectedCount > 0 && `(${selectedCount})`}
+              </h5>
               {openMenus[item.id] ? (
                 <span>
                   <svg

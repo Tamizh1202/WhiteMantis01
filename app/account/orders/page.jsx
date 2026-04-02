@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import orderZero from "./orderZero.png"
 import styles from "./page.module.css";
 import { useSession } from "next-auth/react";
 import OrderCard from "./_components/OrderCard/OrderCard";
@@ -58,7 +60,7 @@ export default function OrdersPage() {
         "select[deliveryOption]": "true",
         "select[origin]": "true",
         "select[isPickupReady]": "true",
-        "select[pickedUpDate]":"true"
+        "select[pickedUpDate]": "true"
       };
 
       const query = new URLSearchParams(queryParams);
@@ -214,7 +216,13 @@ export default function OrdersPage() {
             )}
           </>
         ) : (
-          <div className={styles.EmptyOrdersState}>
+          <div className={styles.EmptyOrdersState} style={{marginTop:"10px"}}>
+            <Image
+              src={orderZero}
+              alt="No products"
+              width={140}
+              height={160}
+            />
             <h4>No Orders yet</h4>
             <p>Explore our curated coffee collections.</p>
             <button

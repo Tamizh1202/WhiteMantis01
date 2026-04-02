@@ -14,7 +14,8 @@
 import React from "react";
 import styles from "../ProfileComponents.module.css";
 import AddressCard from "./AddressCard";
-
+import Image from "next/image";
+import AddressZero from "./AddressZero.png"
 const AddressSection = ({ addresses, onAddNew, onEdit, onDeleteRequest }) => {
   // Defensive check to ensure addresses is always an array
   const addressList = Array.isArray(addresses) ? addresses : [];
@@ -86,7 +87,19 @@ const AddressSection = ({ addresses, onAddNew, onEdit, onDeleteRequest }) => {
           </div>
         )
       ) : (
-        <div className={styles.NoAddressCard}>No Saved Addresses</div>
+        <div className={styles.NoAddressCard}>
+          <Image
+            src={AddressZero}
+            alt="No products"
+            width={200}
+            height={135}
+          />
+          <div className={styles.NoAddressP}>
+            <p style={{color:"black",marginTop:"20px"}}>No Saved Addresses yet</p>
+            <p>Add a delivery address to make checkout faster.</p>
+          </div>
+
+        </div>
       )}
     </div>
   );

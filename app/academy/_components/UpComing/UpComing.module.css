@@ -255,6 +255,20 @@
   background-color: transparent;
 }
 
+.zeroPage {
+  width: 100%;
+  text-align: center;
+  padding: 80px;
+  fontFamily: var(--lato);
+  fontWeight: var(--lato-font-weight);
+  color: var(--heads-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+}
+
 @media (max-width: 768px) {
   .PaginationContainer {
     flex-direction: column-reverse;

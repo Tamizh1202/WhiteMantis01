@@ -815,6 +815,21 @@
   cursor: pointer;
 }
 
+.NoAddressCard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+.NoAddressP{
+  display: flex;
+  flex-direction: column;
+  gap:8px;
+  align-items: center;
+}
+.NoAddressP p{
+  color: var(--primary-color);
+}
 /* ── Responsive ───────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .main {

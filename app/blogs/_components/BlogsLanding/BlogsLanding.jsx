@@ -4,6 +4,7 @@ import styles from "../../Blogs.module.css";
 import axiosClient from "@/lib/axios";
 import { formatImageUrl } from "@/lib/imageUtils";
 import Image from "next/image";
+import blogZero from "./blogZero.png"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -160,15 +161,13 @@ const BlogsLanding = () => {
             </>
           ) : (
             <div className={styles.EmptyGridState}>
-              <div className={styles.EmptyIcon}>
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="28" cy="28" r="27" stroke="#6C7A5F" strokeWidth="1.5"/>
-                  <path d="M28 16C22 16 17 21 17 27C17 33 22 38 28 38C34 38 39 33 39 27" stroke="#6C7A5F" strokeWidth="1.5" strokeLinecap="round"/>
-                  <path d="M28 16C28 16 33 20.5 33 27C33 31.5 30.5 35 28 37" stroke="#6C7A5F" strokeWidth="1.5" strokeLinecap="round"/>
-                  <path d="M39 22C39 22 41 21 42 22.5C43 24 41.5 26 39 27" stroke="#6C7A5F" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </div>
               <div className={styles.EmptyBody}>
+                <Image
+                src={blogZero}
+                alt="No products"
+                width={260}
+                height={185}
+            />
                 <p className={styles.EmptyText}>Brewing stories soon</p>
                 <p className={styles.EmptySubText}>
                   Our latest coffee guides and stories will appear here.

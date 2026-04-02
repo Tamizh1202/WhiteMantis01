@@ -293,7 +293,11 @@
   color: #6e736a;
   padding: 20px;
 }
-
+.zeroState{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 @media (max-width: 640px) {
   .modal {
     width: 95%;

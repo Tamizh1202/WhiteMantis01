@@ -190,6 +190,11 @@ const Lisiting = () => {
     setVisibleCount((prev) => prev + ITEMS_PER_LOAD);
   };
 
+  const resetFilters = () => {
+    setSelectedSubCatIds([]);
+    setVisibleCount(ITEMS_PER_LOAD);
+  };
+
   // Helper to get display data from WebProducts schema
   const getDisplayData = (product) => {
     let price = product.regularPrice;
@@ -341,6 +346,7 @@ const Lisiting = () => {
           sortOpen={sortOpen}
           setSortOpen={setSortOpen}
           setIsMobileFiltersOpen={setIsMobileFiltersOpen}
+          resetFilters={resetFilters}
           styles={styles}
         />
 

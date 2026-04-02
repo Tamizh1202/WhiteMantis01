@@ -4,7 +4,7 @@ import Image from "next/image";
 import AddToCart from "@/app/_components/AddToCart";
 import Wishlist from "@/app/_components/Whishlist";
 import BuyNowPopup from "./BuyNowPopup/BuyNowPopup";
-
+import prodZero from "./BuyNowPopup/prodZero.png";
 const ProductGrid = ({
   filteredProducts,
   visibleCount,
@@ -18,6 +18,7 @@ const ProductGrid = ({
   sortOpen,
   setSortOpen,
   setIsMobileFiltersOpen,
+  resetFilters,
   styles,
 }) => {
   return (
@@ -100,131 +101,142 @@ const ProductGrid = ({
           </div>
         </div>
       </div>
-
       <div className={styles.RightBottom}>
-        <div className={styles.ProductsGrid}>
-          {filteredProducts.slice(0, visibleCount).map((product) => {
-            const displayData = getDisplayData(product);
-
-            // Format product data for AddToCart (Functionality)
-            const cartProduct = {
-              productId: product.id,
-              variationId: product.hasVariantOptions
-                ? product.variants?.[0]?.id
-                : null,
-              quantity: 1,
-            };
-
-            /* --------- SEO SLUG + ID --------- */
-            const productUrl = `/shop/${categorySlug}/${product.slug}`;
-
-            const isOutOfStock = product.hasVariantOptions
-              ? !product.variants?.some((v) => v.variantInStock)
-              : product.inStock === false;
-
-            const stockQuantity = product.hasVariantOptions
-              ? product.variants?.[0]?.variantStockQuantity
-              : product.stockQuantity;
-
-            const isLowStock =
-              !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
-
-            return (
-              <div
-                className={styles.ProductCard}
-                key={product.id}
-              >
-                <div className={styles.ProductTop}>
-                  {isLowStock && (
-                    <div className={styles.LowStockBadge}>Only few left</div>
-                  )}
-                  <div className={styles.WishlistIcon}>
-                    <Wishlist product={product} />
-                  </div>
-                  <Link href={productUrl} className={`${styles.ProductImage} ${isOutOfStock ? styles.Muted : ""}`}>
-                    {displayData.image ? (
-                      <Image
-                        src={displayData.image}
-                        alt={product.name}
-                        width={300}
-                        height={300}
-                      />
-                    ) : (
-                      <div className={styles.NoImage}>No Image</div>
-                    )}
-                  </Link>
-                </div>
-
-                <div className={styles.ProductBottom}>
-                  <Link
-                    href={productUrl}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <div className={styles.ProductInfo}>
-                      <div className={styles.ProductPrice}>
-                        <h4>AED {displayData.price}</h4>
-                        {displayData.sale_price &&
-                          displayData.sale_price !==
-                            displayData.regular_price && (
-                            <p className={styles.OldPrice}>
-                              AED {displayData.regular_price}
-                            </p>
-                          )}
-                      </div>
-                      <div className={styles.Line}></div>
-                      <div className={styles.ProductName}>
-                        <h3>{`${product.name} ${product.tagline || ""}`}</h3>
-                        <p>{product.tastingNotes}</p>
-                      </div>
-                    </div>
-                  </Link>
-                  <div className={styles.ProductActions}>
-                    {isOutOfStock ? (
-                      <div className={styles.OutOfStockRow}>
-                        <button className={styles.OutOfStockBtn} disabled>
-                          Out of Stock
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <div className={styles.DesktopActions}>
-                          <AddToCart product={cartProduct} />
-                          {/* Subscribe button with popup functionality - only show if subscription product exists */}
-                          {(product.hasSimpleSub ||
-                            (product.hasVariantOptions &&
-                              product.variants?.some(
-                                (v) => v.hasVariantSub,
-                              ))) && (
-                            <button
-                              className={styles.Subscribe}
-                              onClick={() => handleOpenSubscribePopup(product)}
-                            >
-                              Subscribe
-                            </button>
-                          )}
-                        </div>
-                        <div className={styles.MobileActions}>
-                          <BuyNowPopup
-                            product={product}
-                            getDisplayData={getDisplayData}
-                            handleOpenSubscribePopup={handleOpenSubscribePopup}
-                          />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {visibleCount < filteredProducts.length && (
-          <div className={styles.LoadMore}>
-            <button className={styles.LoadMoreCta} onClick={handleLoadMore}>
-              Load More
+        {filteredProducts.length === 0 ? (
+          /* --- ZERO STATE OUTSIDE GRID --- */
+          <div className={styles.NoProducts}>
+            <Image src={prodZero} alt="No products" width={140} height={150} />
+            <div className={styles.NoProductsP}>
+              <p style={{ color: "black" }}>Nothing brewing here</p>
+              <p>Refine or clear filters to explore available selections.</p>
+            </div>
+            <button className={styles.zeroButton} onClick={resetFilters}>
+              Reset Filters
             </button>
           </div>
+        ) : (
+          /* --- REGULAR CONTENT --- */
+          <>
+            <div className={styles.ProductsGrid}>
+              {filteredProducts.slice(0, visibleCount).map((product) => {
+                const displayData = getDisplayData(product);
+                const cartProduct = {
+                  productId: product.id,
+                  variationId: product.hasVariantOptions
+                    ? product.variants?.[0]?.id
+                    : null,
+                  quantity: 1,
+                };
+                const productUrl = `/shop/${categorySlug}/${product.slug}`;
+                const isOutOfStock = product.hasVariantOptions
+                  ? !product.variants?.some((v) => v.variantInStock)
+                  : product.inStock === false;
+                const stockQuantity = product.hasVariantOptions
+                  ? product.variants?.[0]?.variantStockQuantity
+                  : product.stockQuantity;
+                const isLowStock =
+                  !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
+                return (
+                  <div className={styles.ProductCard} key={product.id}>
+                    <div className={styles.ProductTop}>
+                      {isLowStock && (
+                        <div className={styles.LowStockBadge}>
+                          Only few left
+                        </div>
+                      )}
+                      <div className={styles.WishlistIcon}>
+                        <Wishlist product={product} />
+                      </div>
+                      <Link
+                        href={productUrl}
+                        className={`${styles.ProductImage} ${isOutOfStock ? styles.Muted : ""}`}
+                      >
+                        {displayData.image ? (
+                          <Image
+                            src={displayData.image}
+                            alt={product.name}
+                            width={300}
+                            height={300}
+                          />
+                        ) : (
+                          <div className={styles.NoImage}>No Image</div>
+                        )}
+                      </Link>
+                    </div>
+                    <div className={styles.ProductBottom}>
+                      <Link
+                        href={productUrl}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <div className={styles.ProductInfo}>
+                          <div className={styles.ProductPrice}>
+                            <h4>AED {displayData.price}</h4>
+                            {displayData.sale_price &&
+                              displayData.sale_price !==
+                                displayData.regular_price && (
+                                <p className={styles.OldPrice}>
+                                  AED {displayData.regular_price}
+                                </p>
+                              )}
+                          </div>
+                          <div className={styles.Line}></div>
+                          <div className={styles.ProductName}>
+                            <h3>{`${product.name} ${product.tagline || ""}`}</h3>
+                            <p>{product.tastingNotes}</p>
+                          </div>
+                        </div>
+                      </Link>
+                      <div className={styles.ProductActions}>
+                        {isOutOfStock ? (
+                          <div className={styles.OutOfStockRow}>
+                            <button className={styles.OutOfStockBtn} disabled>
+                              Out of Stock
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <div className={styles.DesktopActions}>
+                              <AddToCart product={cartProduct} />
+                              {(product.hasSimpleSub ||
+                                (product.hasVariantOptions &&
+                                  product.variants?.some(
+                                    (v) => v.hasVariantSub,
+                                  ))) && (
+                                <button
+                                  className={styles.Subscribe}
+                                  onClick={() =>
+                                    handleOpenSubscribePopup(product)
+                                  }
+                                >
+                                  Subscribe
+                                </button>
+                              )}
+                            </div>
+                            <div className={styles.MobileActions}>
+                              <BuyNowPopup
+                                product={product}
+                                getDisplayData={getDisplayData}
+                                handleOpenSubscribePopup={
+                                  handleOpenSubscribePopup
+                                }
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {visibleCount < filteredProducts.length && (
+              <div className={styles.LoadMore}>
+                <button className={styles.LoadMoreCta} onClick={handleLoadMore}>
+                  Load More
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

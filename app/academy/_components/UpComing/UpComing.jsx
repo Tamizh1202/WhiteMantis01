@@ -4,7 +4,8 @@ import styles from "./UpComing.module.css";
 import one from "./1.png";
 import axiosClient from "@/lib/axios";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
+import upcomingZero from "./upcomingZero.png"
 const UpComing = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -282,17 +283,15 @@ const UpComing = () => {
                 Loading courses…
               </div>
             ) : posts.length === 0 ? (
-              <div
-                style={{
-                  width: "100%",
-                  textAlign: "center",
-                  padding: 80,
-                  fontFamily: "var(--lato)",
-                  fontWeight: "var(--lato-font-weight)",
-                  color: "var(--heads-color)",
-                }}
-              >
-                No Upcoming Courses available
+              <div className={styles.zeroPage}>
+                <Image
+                  src={upcomingZero}
+                  alt="No products"
+                  width={190}
+                  height={150}
+                />
+                <p style={{marginTop:"20px"}}> No Upcoming Courses available </p>
+                
                 <p
                   style={{
                     color: "var(--body-color)",
