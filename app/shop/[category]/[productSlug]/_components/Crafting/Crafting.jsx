@@ -7,13 +7,28 @@ import image from "./1.png";
 const BACKEND_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 const Crafting = ({ product, brewingGuide }) => {
-
-  console.log("brewingGuide", brewingGuide);
   const specsRef = useRef(null);
   const [syncedHeight, setSyncedHeight] = useState(0);
 
-  // Use dynamic brewingGuide from category if available, otherwise fallback to product.brewGuide
-  const tabs = brewingGuide?.tabs || [];
+  // Use dynamic brewingGuide from category and filter by product.brewGuide selection
+  const allTabs = brewingGuide?.tabs || [];
+
+  // Normalize allowed tab names from product selection (could be array or legacy object)
+  const productBrewGuide = product?.brewGuide || [];
+  const allowedTabNames = Array.isArray(productBrewGuide)
+    ? productBrewGuide
+    : Object.keys(productBrewGuide || {}).filter(
+        (key) => productBrewGuide[key] === true,
+      );
+
+  // Filter tabs by name (case-insensitive and trimmed)
+  const tabs = allTabs.filter((tab) => {
+    const tabName = tab.tabName?.trim().toLowerCase();
+    return allowedTabNames.some(
+      (name) =>
+        typeof name === "string" && name.trim().toLowerCase() === tabName,
+    );
+  });
 
   // Initialize active tab with the first tab name
   const [activeTabName, setActiveTabName] = useState(tabs[0]?.tabName || null);

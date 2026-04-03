@@ -168,7 +168,7 @@ export default async function ProductDetailPage({ params }) {
 
   // ---------- RENDER ----------
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <ProductImageProvider>
         {/* <TopNavigation /> */}
         <ProductMain product={product} />
