@@ -341,8 +341,6 @@
     color: var(--body-color);
     text-transform: uppercase;
     margin: 0;
-
-    /* 2. This is the secret to keeping the button on the right */
     flex: 1;
     min-width: 0;
     /* Prevents long text from overflowing the container */

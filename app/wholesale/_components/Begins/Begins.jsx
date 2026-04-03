@@ -26,8 +26,7 @@ export default function Begins() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     dragFree: true,
-    // Change "trimSnaps" to "" or keep it false
-    containScroll: false, 
+    containScroll: "keepSnaps",  // ← was false, this stops it at the last slide
   });
 
   // Navigation logic
@@ -36,7 +35,10 @@ export default function Begins() {
 
   const onSelect = useCallback((emblaApi) => {
     setPrevBtnDisabled(!emblaApi.canScrollPrev());
-    setNextBtnDisabled(!emblaApi.canScrollNext());
+    const snapList = emblaApi.scrollSnapList();
+    const lastSnap = snapList[snapList.length - 1];
+    const currentSnap = snapList[emblaApi.selectedScrollSnap()];
+    setNextBtnDisabled(currentSnap >= lastSnap);
   }, []);
 
   useEffect(() => {
@@ -44,6 +46,7 @@ export default function Begins() {
     onSelect(emblaApi);
     emblaApi.on("reInit", onSelect);
     emblaApi.on("select", onSelect);
+    emblaApi.on("settle", onSelect);   // ← this is the fix, fires after drag settles
   }, [emblaApi, onSelect]);
 
   useEffect(() => {
@@ -71,29 +74,29 @@ export default function Begins() {
       <div className={styles.MainContainer}>
         <div className={styles.Top}>
           <h3>WHERE OUR COFFEE BEGINS</h3>
-          
+
           {/* Navigation Buttons */}
           <div className={styles.controls}>
-            <button 
-              className={styles.navButton} 
-              onClick={scrollPrev} 
+            <button
+              className={styles.navButton}
+              onClick={scrollPrev}
               disabled={prevBtnDisabled}
               aria-label="Previous slide"
             >
               <svg width="47" height="47" viewBox="0 0 47 47" fill="none">
-                <circle cx="23.5" cy="23.5" r="23.5" fill="#6C7A5F"/>
-                <path d="M27 16L20 23.5L27 31" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="23.5" cy="23.5" r="23.5" fill="#6C7A5F" />
+                <path d="M27 16L20 23.5L27 31" stroke="white" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </button>
-            <button 
-              className={styles.navButton} 
-              onClick={scrollNext} 
+            <button
+              className={styles.navButton}
+              onClick={scrollNext}
               disabled={nextBtnDisabled}
               aria-label="Next slide"
             >
               <svg width="47" height="47" viewBox="0 0 47 47" fill="none">
-                <circle cx="23.5" cy="23.5" r="23.5" fill="#6C7A5F"/>
-                <path d="M20 16L27 23.5L20 31" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="23.5" cy="23.5" r="23.5" fill="#6C7A5F" />
+                <path d="M20 16L27 23.5L20 31" stroke="white" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </button>
           </div>
@@ -104,14 +107,7 @@ export default function Begins() {
             {slides.map((s) => (
               <div key={`wholesale-slide-${s.id}`} className={styles.cardWrap}>
                 <div className={styles.card}>
-                  <Image
-                    src={s.src}
-                    alt={s.label}
-                    fill
-                    sizes="(max-width: 1440px) 540px"
-                    style={{ objectFit: "cover" }}
-                    draggable={false}
-                  />
+                  <Image src={s.src} alt={s.label} fill sizes="(max-width: 1440px) 540px" style={{ objectFit: "cover" }} draggable={false} />
                 </div>
                 <p className={styles.caption}>{s.label}</p>
               </div>

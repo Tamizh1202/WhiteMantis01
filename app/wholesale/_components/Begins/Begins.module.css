@@ -17,11 +17,12 @@
 
 .Top {
   display: flex;
-  justify-content: space-between; /* Pushes title left, buttons right */
+  justify-content: space-between;
+  /* Pushes title left, buttons right */
   align-items: center;
   width: 100%;
   /* Padding right added here to keep buttons from hitting the screen edge */
-  padding-right: clamp(24px, 5vw, 125px); 
+  padding-right: clamp(24px, 5vw, 125px);
 }
 
 .Top h3 {
@@ -46,12 +47,14 @@
   cursor: pointer;
   outline: none;
   transition: opacity 0.3s ease;
-  display: flex; /* Centers the SVG inside the button */
+  display: flex;
+  /* Centers the SVG inside the button */
   align-items: center;
 }
 
 .navButton:disabled {
-  opacity: 0.2; /* Ghosted look when you can't scroll */
+  opacity: 0.2;
+  /* Ghosted look when you can't scroll */
   cursor: not-allowed;
 }
 
@@ -63,6 +66,8 @@
 .viewport {
   overflow: hidden;
   width: 100%;
+  padding-right: clamp(24px, 5vw, 125px);
+  box-sizing: border-box;
 }
 
 .track {
@@ -92,6 +97,8 @@
   color: #2f362a;
   margin: 0;
 }
+
+
 
 /* --- Mobile Responsive --- */
 @media (max-width: 640px) {
@@ -123,4 +130,15 @@
   .caption {
     font-size: 14px;
   }
+
+  .viewport {
+    padding-right: 24px;
+  }
+
+
+  .trackSpacer {
+    flex: 0 0 24x;
+    min-width: 24px;
+  }
+
 }

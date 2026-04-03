@@ -148,12 +148,9 @@
 .NavColumns {
   display: flex;
   flex-direction: row;
-  /* gap: clamp(32px, 5vw, 83px);   */
-
-  flex-wrap: wrap;
+  gap:20px;
   justify-content: space-between;
   width: 70%;
-
 }
 
 .LegalLinksMob {
@@ -294,7 +291,8 @@
 /* ── Explore Rewards button ── */
 .RewardsBtn {
   width: fit-content;
-  padding: 13px 45px;
+  width: 190px;
+  height: 45px;
   border: 1px solid #ffffff;
   background: transparent;
   font-family: var(--lato);
@@ -414,7 +412,6 @@
   text-decoration: underline;
   color: #ffffff;
 }
-
 
 /* ═══════════════════════════════════════════════════════
    MOBILE  (≤ 768px)

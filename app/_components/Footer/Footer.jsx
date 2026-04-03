@@ -202,9 +202,9 @@ const Footer = ({ categories }) => {
           )}
         </div>
         <div className={styles.LegalLinksMob}>
-          <Link href="/terms-and-conditions"><p>Terms and Conditions</p></Link>
-          <Link href="/privacy-policy"><p>Privacy Policy</p></Link>
-        </div>
+            <Link href="/terms-and-conditions"><p>Terms and Conditions</p></Link>
+            <Link href="/privacy-policy"><p>Privacy Policy</p></Link>
+          </div>
 
       </div>
 
