@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
 
   try {
     const response = await fetch(
-      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[and][0][slug][equals]=${selectedSlug}&where[and][1][_status][equals]=published&where[and][2][categories.slug][equals]=${selectedCategory}`,
+      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[and][0][slug][equals]=${selectedSlug}&where[and][1][_status][equals]=published&where[and][2][categories.slug][equals]=${selectedCategory}&depth=2`,
       {
         method: "GET",
         headers: {
@@ -94,7 +94,7 @@ export default async function ProductDetailPage({ params }) {
 
   try {
     const response = await fetch(
-      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[and][0][slug][equals]=${selectedSlug}&where[and][1][_status][equals]=published&where[and][2][categories.slug][equals]=${selectedCategory}`,
+      `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/web-products?where[and][0][slug][equals]=${selectedSlug}&where[and][1][_status][equals]=published&where[and][2][categories.slug][equals]=${selectedCategory}&depth=2`,
       {
         method: "GET",
         headers: {
@@ -111,15 +111,57 @@ export default async function ProductDetailPage({ params }) {
     const json = await response.json();
     product = json.docs?.[0] || null;
 
-    console.log("product", product);
-
     if (!product) {
-      console.warn(`Product not found for slug: ${slug}`);
+      console.warn(`Product not found for slug: ${selectedSlug}`);
       redirect("/shop");
     }
   } catch (err) {
     console.error("Error fetching product:", err);
     redirect("/shop");
+  }
+
+  // ---------- FETCH CATEGORY DATA ----------
+  let brewingGuide = null;
+
+  // Try to find brewingGuide in product categories if depth=2 worked
+  if (product?.categories && Array.isArray(product.categories)) {
+    const matchedCategory = product.categories.find(
+      (cat) =>
+        (typeof cat === "object" && cat.slug === selectedCategory) ||
+        (typeof cat === "object" && cat.slug === category),
+    );
+    if (matchedCategory?.brewingGuide) {
+      console.log("Found brewingGuide in product.categories");
+      brewingGuide = matchedCategory.brewingGuide;
+    }
+  }
+
+  if (!brewingGuide) {
+    const serverUrl =
+      process.env.PAYLOAD_PUBLIC_SERVER_URL ||
+      process.env.NEXT_PUBLIC_SERVER_URL;
+    try {
+      const categoryResponse = await fetch(
+        `${serverUrl}/api/web-categories?where[slug][equals]=${selectedCategory}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          next: { revalidate: 60 },
+        },
+      );
+
+      if (categoryResponse.ok) {
+        const categoryJson = await categoryResponse.json();
+        const categoryData = categoryJson.docs?.[0];
+        if (categoryData?.brewingGuide) {
+          brewingGuide = categoryData.brewingGuide;
+        }
+      }
+    } catch (err) {
+      // Fail silently
+    }
   }
 
   // ---------- FETCH GROUPED CHILD PRODUCTS ----------
@@ -131,7 +173,7 @@ export default async function ProductDetailPage({ params }) {
         {/* <TopNavigation /> */}
         <ProductMain product={product} />
         <VideoSection product={product} />
-        <Crafting product={product} />
+        <Crafting product={product} brewingGuide={brewingGuide} />
         <BannerSection />
         <Recommendation product={product.recommendedProducts} />
         <StickyBar product={product} />

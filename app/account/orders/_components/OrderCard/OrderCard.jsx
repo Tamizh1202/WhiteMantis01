@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from 'react';
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./OrderCard.module.css";
@@ -9,6 +9,9 @@ import {
   formatDate,
 } from "@/app/account/orders/_components/GetStatus";
 
+import axiosClient from "@/lib/axios";
+import toast from "react-hot-toast";
+
 const OrderCard = ({ order, handleCancelButton }) => {
   if (!order) return null;
 
@@ -17,14 +20,32 @@ const OrderCard = ({ order, handleCancelButton }) => {
   const visibleItems = items.slice(0, 2);
   const remainingCount = Math.max(0, items.length - 2);
 
-  const [rating, setRating] = useState(0); // The "saved" value
-  const [hover, setHover] = useState(0);   // The "visual" feedback
+  const [rating, setRating] = useState(order.orderRating || 0); // Initialize from order data
+  const [hover, setHover] = useState(0); // The "visual" feedback
 
-  // Added: Function to handle the click and save the rating
-  const handleRating = (score) => {
-    setRating(score);
-    console.log(`Order ${order.id} rated: ${score}/5`);
-    // If you have a backend API, call it here: e.g., updateOrderRating(order.id, score)
+  // Function to handle the click, toggle, and save the rating
+  const handleRating = async (score) => {
+    const newRating = rating === score ? 0 : score; // Toggle if same star clicked
+
+    // Optimistic update
+    setRating(newRating);
+
+    try {
+      await axiosClient.patch(`/api/web-orders/${order.id}`, {
+        orderRating: newRating,
+      });
+      console.log(`Order ${order.id} rating updated to: ${newRating}/5`);
+      if (newRating > 0) {
+        toast.success(`Order rated ${newRating} stars!`);
+      } else {
+        toast.success("Rating cleared.");
+      }
+    } catch (error) {
+      console.error("Error updating order rating:", error);
+      // Revert on error
+      setRating(order.orderRating || 0);
+      toast.error("Failed to update rating. Please try again.");
+    }
   };
 
   return (
@@ -92,16 +113,16 @@ const OrderCard = ({ order, handleCancelButton }) => {
                   {item.product?.variants?.find(
                     (v) => v.id === item.variantID,
                   ) && (
-                      <>
-                        {
-                          item.product.variants.find(
-                            (v) => v.id === item.variantID,
-                          ).variantName
-                        }
-                        g &nbsp; &nbsp;<span className={styles.Separator}>|</span>
-                        &nbsp;&nbsp;
-                      </>
-                    )}
+                    <>
+                      {
+                        item.product.variants.find(
+                          (v) => v.id === item.variantID,
+                        ).variantName
+                      }
+                      g &nbsp; &nbsp;<span className={styles.Separator}>|</span>
+                      &nbsp;&nbsp;
+                    </>
+                  )}
                   Qty: {item.quantity || "0"}
                 </p>
               </div>
@@ -163,7 +184,7 @@ const OrderCard = ({ order, handleCancelButton }) => {
                   type="button"
                 >
                   <svg
-                    width="20"   /* Increased slightly for visual padding */
+                    width="20" /* Increased slightly for visual padding */
                     height="20"
                     viewBox="-1 -1 20 20" /* Moves the "window" to capture the stroke */
                     fill="none"

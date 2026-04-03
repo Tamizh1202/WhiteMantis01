@@ -2,29 +2,34 @@
 import React, { useState, useRef, useLayoutEffect } from "react";
 import styles from "./Crafting.module.css";
 import Image from "next/image";
-import { CraftingComponentData } from "@/utils/PDPUtils";
 import image from "./1.png";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-const Crafting = ({ product }) => {
+const Crafting = ({ product, brewingGuide }) => {
+
+  console.log("brewingGuide", brewingGuide);
   const specsRef = useRef(null);
   const [syncedHeight, setSyncedHeight] = useState(0);
 
-  const craftingData = CraftingComponentData(product.brewGuide) || {};
-  const [active, setActive] = useState(Object.keys(craftingData)[0] || null);
+  // Use dynamic brewingGuide from category if available, otherwise fallback to product.brewGuide
+  const tabs = brewingGuide?.tabs || [];
 
-  const current = active ? craftingData[active] : null;
+  // Initialize active tab with the first tab name
+  const [activeTabName, setActiveTabName] = useState(tabs[0]?.tabName || null);
 
-  const getVideoUrl = (filter) => {
-    const normalized = filter.toLowerCase();
-    if (normalized === "espresso") return "/videos/crafting/capsule.mp4";
-    if (normalized === "filter" || normalized === "milk")
-      return "/videos/crafting/filter.mp4";
-    return null;
-  };
+  // Find the current active tab data
+  const currentTab =
+    tabs.find((tab) => tab.tabName === activeTabName) || tabs[0];
 
-  const VIDEO_URL = active ? getVideoUrl(active) : null;
+  // Set active tab name if not set and tabs available
+  if (!activeTabName && tabs.length > 0) {
+    setActiveTabName(tabs[0].tabName);
+  }
+
+  const VIDEO_URL = currentTab?.video?.url
+    ? `${BACKEND_URL}${currentTab.video.url}`
+    : null;
   const IMAGE_URL = image;
 
   useLayoutEffect(() => {
@@ -38,9 +43,9 @@ const Crafting = ({ product }) => {
     observer.observe(specsRef.current);
 
     return () => observer.disconnect();
-  }, [active]);
+  }, [activeTabName]);
 
-  if (!active || !current) return null;
+  if (tabs.length === 0) return null;
 
   return (
     <div className={styles.main}>
@@ -52,23 +57,23 @@ const Crafting = ({ product }) => {
 
           <div className={styles.LeftBottom}>
             <div className={styles.LeftBottomFilters}>
-              {Object.keys(craftingData).map((key, index) => (
-                <React.Fragment key={key}>
+              {tabs.map((tab, index) => (
+                <React.Fragment key={tab.id || index}>
                   <div
                     className={`${styles.FilterName} ${
-                      active === key
+                      activeTabName === tab.tabName
                         ? styles.activeFilter
                         : styles.inactiveFilter
                     }`}
-                    onClick={() => setActive(key)}
+                    onClick={() => setActiveTabName(tab.tabName)}
                   >
                     <h4
                       style={{ cursor: "pointer", textTransform: "capitalize" }}
                     >
-                      {key}
+                      {tab.tabName}
                     </h4>
                   </div>
-                  {index < Object.keys(craftingData).length - 1 && (
+                  {index < tabs.length - 1 && (
                     <div className={styles.Line}></div>
                   )}
                 </React.Fragment>
@@ -93,7 +98,7 @@ const Crafting = ({ product }) => {
                 ) : (
                   <Image
                     src={IMAGE_URL}
-                    alt={active}
+                    alt={activeTabName}
                     width={500}
                     height={500}
                   />
@@ -101,9 +106,9 @@ const Crafting = ({ product }) => {
               </div>
 
               <div className={styles.LeftBottomFiltersDataInfo} ref={specsRef}>
-                {current.map((item, i) => (
-                  <div className={styles.one} key={i}>
-                    <h4>{item.title}</h4>
+                {currentTab?.parameters?.map((item, i) => (
+                  <div className={styles.one} key={item.id || i}>
+                    <h4>{item.label}</h4>
                     <p>{item.value}</p>
                   </div>
                 ))}
