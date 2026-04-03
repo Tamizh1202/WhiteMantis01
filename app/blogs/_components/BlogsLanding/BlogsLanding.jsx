@@ -166,7 +166,7 @@ const BlogsLanding = () => {
                 src={blogZero}
                 alt="No products"
                 width={260}
-                height={185}
+                height={160}
             />
                 <p className={styles.EmptyText}>Brewing stories soon</p>
                 <p className={styles.EmptySubText}>
