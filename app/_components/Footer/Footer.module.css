@@ -57,7 +57,7 @@
 }
 
 .Main a:hover {
-  opacity: 0.8;
+  text-decoration: underline;
 }
 
 
@@ -133,7 +133,7 @@
 }
 
 .ContactLabel {
-  font-weight: 600 !important;
+  font-weight: 600;
   margin-bottom: 4px;
   display: block;
 }
@@ -148,7 +148,7 @@
 .NavColumns {
   display: flex;
   flex-direction: row;
-  gap:20px;
+  gap: 20px;
   justify-content: space-between;
   width: 70%;
 }
@@ -162,6 +162,10 @@
   flex-direction: column;
   gap: clamp(12px, 1.5vw, 20px);
   min-width: 100px;
+}
+
+.NavCol p:hover {
+  text-decoration: underline;
 }
 
 /* Column headings: COMPANY, SHOP, etc. */
@@ -199,7 +203,7 @@
   /* 2. FLUID WIDTH: Takes 92% but never exceeds the screen */
   max-width: 100%;
   margin: 0 auto;
-  
+
   /* 3. SMART GAP: Scales with screen, capped at 150px */
   gap: clamp(20px, 8vw, 150px);
 
@@ -226,20 +230,16 @@
 ───────────────────────────────────────── */
 .MidHeading {
   font-family: var(--lexend);
-  /* Fluid Font Size for extra polish */
   font-size: clamp(16px, 1.5vw, 20px);
   font-weight: 600;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  margin: 0;
+  margin-bottom: 12px;
   line-height: 1.3;
-
-  /* Ensures long headings don't break the flex balance */
   word-wrap: break-word;
 }
 
-/* ── App store buttons ── */
 .AppButtons {
   display: flex;
   flex-direction: row;
@@ -253,39 +253,49 @@
   justify-content: center;
   gap: 10px;
   width: 190px;
-  height: 45px;
+  height: 48px;
   background: transparent;
   border: 1px solid #ffffff;
   color: #ffffff;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .AppBtn:hover {
-  opacity: 0.75;
+  background-color: #ffffff;
+  color: #6c7a5f;
+}
+
+.AppBtn:hover .AppIcon {
+  filter: invert(48%) sepia(11%) saturate(1031%) hue-rotate(52deg) brightness(93%) contrast(83%);
 }
 
 .AppIcon {
   flex-shrink: 0;
+  transition: filter 0.3s ease;
 }
 
 .AppBtnText {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  line-height: 1.2;
 }
 
 .AppBtnSub {
   font-family: var(--lato);
-  font-size: 15px;
-  color: #ffffff;
+  font-size: 11px;
+  /* Scaled down for standard app-button look */
+  color: inherit;
+  /* Inherits #6c7a5f on hover */
 }
 
 .AppBtnMain {
   font-family: var(--lato);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  color: #ffffff;
+  color: inherit;
+  /* Inherits #6c7a5f on hover */
 }
 
 /* ── Explore Rewards button ── */
@@ -312,15 +322,19 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 100%; /* Safety cap */
+  max-width: 100%;
+  /* Safety cap */
   box-sizing: border-box;
   align-items: stretch;
 }
 
 .NewsletterInput {
-  flex: 1; /* Shorthand for grow, shrink, and basis */
-  width: 0; /* THE TRICK: Forces flexbox to calculate width from 0 up */
-  min-width: 0; /* Allows shrinking below default browser size */
+  flex: 1;
+  /* Shorthand for grow, shrink, and basis */
+  width: 0;
+  /* THE TRICK: Forces flexbox to calculate width from 0 up */
+  min-width: 0;
+  /* Allows shrinking below default browser size */
   padding: 10px 12px;
   font-family: var(--lato);
   font-size: 15px;
@@ -345,11 +359,16 @@
   color: #6c7a5f;
   cursor: pointer;
   white-space: nowrap;
-  transition: opacity 0.2s ease;
+  /* Added background-color and color to transition for smoothness */
+  transition: background-color 0.3s ease, color 0.3s ease, opacity 0.2s ease;
 }
 
 .SubscribeBtn:hover {
-  opacity: 0.85;
+  background-color: #6c7a5f;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-left: none;
+  opacity: 1;
 }
 
 .NewsletterSuccess {
@@ -532,7 +551,6 @@
   }
 
   .LegalLinksMob a {
-    text-decoration: underline;
     color: inherit;
   }
 

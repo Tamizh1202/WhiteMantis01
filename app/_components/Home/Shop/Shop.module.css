@@ -189,7 +189,14 @@
     max-height: 288px;
   }
 }
-
+@media (min-width: 921px) and (max-width: 1800px) {
+  .Botttom {
+  display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+}
 @media (min-width: 641px) and (max-width: 920px) {
   .MainConatiner {
     gap: 30px;

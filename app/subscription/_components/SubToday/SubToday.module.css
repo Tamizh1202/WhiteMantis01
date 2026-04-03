@@ -63,7 +63,7 @@
   max-width: 350px;
   flex-direction: column;
   gap: 30px;
-  border: 1px solid var(--heads-color);
+  border: 1px solid var(--primary-color);
   position: relative;
 }
 
@@ -169,7 +169,7 @@
   justify-content: left;
   flex-direction: column;
   padding-top: 154px;
-  border: 1px solid var(--heads-color);
+  border: 1px solid var(--primary-color);
 }
 
 .Card:hover .CardImage img,
@@ -184,7 +184,7 @@
   justify-content: left;
   flex-direction: column;
   padding-top: 154px;
-  border: 1px solid var(--heads-color);
+  border: 1px solid var(--primary-color);
 }
 
 .CardContentTop {

@@ -6,6 +6,7 @@
   height: 100svh;
   background-color: #6c7a5f;
 }
+
 .MainContainer {
   display: flex;
   justify-content: left;
@@ -13,49 +14,73 @@
   width: 100%;
   height: 100%;
 }
+
 .Left {
   display: flex;
   justify-content: left;
   width: 50%;
   background: url("./1.png") no-repeat center / cover;
 }
+
 .Right {
   display: flex;
   justify-content: end;
-  padding-left: clamp(
-    24px,
-    calc(24px + (103 * ((100vw - 320px) / 1120))),
-    127px
-  );
+  padding-left: clamp(24px,
+      calc(24px + (103 * ((100vw - 320px) / 1120))),
+      127px);
 
   flex-direction: column;
   padding-bottom: 98px;
   gap: 12px;
 }
+
 .RightTop {
   display: flex;
   justify-content: left;
   max-width: 425px;
 }
+
 .RightTop p {
   font-family: var(--lato);
   font-size: 15px;
   font-weight: 400;
   color: #ffffff;
 }
+
 .RightBottom {
   display: flex;
-  justify-content: left;
-  flex-direction: row;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
   text-decoration: none;
+  cursor: pointer;
 }
+
 .RightBottom h4 {
   font-family: var(--lexend);
   font-size: var(--fs-22);
   font-weight: 500;
   color: #ffffff;
   text-transform: uppercase;
+  transition: text-decoration 0.3s ease;
+}
+
+/* 1. Target the path specifically */
+.RightBottom svg path {
+  transition: transform 0.3s ease-in-out;
+  /* 2. Set the transform origin to the center of the SVG */
+  transform-origin: center;
+}
+
+/* --- HOVER STATES --- */
+
+.RightBottom:hover h4 {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+/* 3. Rotate only the path, not the whole SVG */
+.RightBottom:hover svg path {
+  transform: rotate(45deg);
 }
 
 .MarqueeWrapper {
@@ -88,6 +113,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-33.333%);
   }
@@ -97,15 +123,18 @@
   .Main {
     height: 100%;
   }
+
   .MainContainer {
     flex-direction: column;
     gap: 72px;
   }
+
   .Left {
     width: 100%;
     height: auto;
     min-height: 400px;
   }
+
   .Right {
     width: 100%;
     padding-left: 24px;
@@ -113,12 +142,15 @@
     padding-bottom: 50px;
     gap: 15px;
   }
+
   .RightTop {
     max-width: 100%;
   }
+
   .RightBottom h4 {
     font-size: 20px;
   }
+
   .RightTop p {
     font-size: 14px;
     width: 100%;

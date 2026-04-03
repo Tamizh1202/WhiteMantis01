@@ -8,13 +8,16 @@ import {
   getStatusConfig,
   formatDate,
 } from "@/app/account/orders/_components/GetStatus";
-
+import { useRouter } from 'next/navigation';
 import axiosClient from "@/lib/axios";
 import toast from "react-hot-toast";
 
 const OrderCard = ({ order, handleCancelButton }) => {
   if (!order) return null;
-
+  const router = useRouter();
+  const handleNavigation = () => {
+    router.push(`/account/orders/${order.id}`);
+  };
   const config = getStatusConfig(order.deliveryStatus || order.status, order);
   const items = order.docs || order.items || order.line_items || [];
   const visibleItems = items.slice(0, 2);
@@ -113,16 +116,16 @@ const OrderCard = ({ order, handleCancelButton }) => {
                   {item.product?.variants?.find(
                     (v) => v.id === item.variantID,
                   ) && (
-                    <>
-                      {
-                        item.product.variants.find(
-                          (v) => v.id === item.variantID,
-                        ).variantName
-                      }
-                      g &nbsp; &nbsp;<span className={styles.Separator}>|</span>
-                      &nbsp;&nbsp;
-                    </>
-                  )}
+                      <>
+                        {
+                          item.product.variants.find(
+                            (v) => v.id === item.variantID,
+                          ).variantName
+                        }
+                        g &nbsp; &nbsp;<span className={styles.Separator}>|</span>
+                        &nbsp;&nbsp;
+                      </>
+                    )}
                   Qty: {item.quantity || "0"}
                 </p>
               </div>
@@ -131,12 +134,14 @@ const OrderCard = ({ order, handleCancelButton }) => {
         </div>
 
         <div className={styles.orderActions}>
-          <Link
-            href={`/account/orders/${order.id}`}
+          <p
             className={styles.orderDetailsLink}
+            onClick={handleNavigation}
+            role="button" // Accessibility: tells screen readers this acts like a button
+            style={{ cursor: 'pointer' }} // Ensures the pointer shows up
           >
             Order Details
-          </Link>
+          </p>
         </div>
       </div>
       <div

@@ -142,7 +142,38 @@
     /* Optional: if you want the 'focus' of the image to stay center */
     object-position: center;
 }
-
+@media (min-width: 1130px) and (max-width: 1400px) {
+.MiddleConatiner {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    background-color: var(--white-color);
+    padding: 33.5px 34px;
+    border: none;
+    max-width: 466px;
+    gap: 30px;
+    flex-direction: column;
+    position: absolute;
+    top: 74%;
+    left: 30%;
+}
+}
+@media (min-width: 769px) and (max-width: 1129px) {
+.MiddleConatiner {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    background-color: var(--white-color);
+    padding: 33.5px 34px;
+    border: none;
+    max-width: 466px;
+    gap: 30px;
+    flex-direction: column;
+    position: absolute;
+    top: 74%;
+    left: 22%;
+}
+}
 @media (max-width: 768px) {
     .main {
         padding: 0;

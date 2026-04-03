@@ -13,12 +13,12 @@
   justify-content: left;
   flex-direction: row;
   gap: clamp(32px, calc(32px + (148 * ((100vw - 320px) / 1120))), 180px);
-
   width: 100%;
   align-items: center;
   height: 100%;
 }
 
+/* ─── Image side — mirrors contact .LeftConatiner pattern ─── */
 .Left {
   display: flex;
   justify-content: left;
@@ -26,13 +26,19 @@
 }
 
 .Left img {
-  width: auto;
+  width: 100%;
+  /* ← was "auto", this is what contact uses */
   height: 100%;
   object-fit: cover;
-  /* max-width: 890px; */
+  max-width: 890px;
+  /* ← same cap as contact */
+  min-width: 890px;
+  /* ← same floor as contact */
   max-height: 800px;
+  display: block;
 }
 
+/* ─── Form side — untouched ─── */
 .Right {
   display: flex;
   justify-content: left;
@@ -54,13 +60,6 @@
   font-weight: 500;
   color: #2f362a;
   text-transform: uppercase;
-}
-
-.RightTop h3 {
-  font-family: var(--lexend);
-  font-size: var(--fs-22);
-  color: #2f362a;
-  font-weight: 500;
 }
 
 .RightTop p {
@@ -98,7 +97,6 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  /* border: 1px solid #2f362a; */
 }
 
 .FormGroup {
@@ -129,14 +127,12 @@
   color: #197b5b;
 }
 
-
 .ResponseMessage[data-error="true"] {
   color: crimson;
 }
 
 .Form textarea {
   border: none;
-  /* border-bottom: 1px solid #2f362a; */
   padding: 16px;
   font-family: var(--lato);
   font-size: 14px;
@@ -189,10 +185,6 @@
   color: #6e736a;
 }
 
-.CheckboxBlock input {
-  /* Inherit global styles */
-}
-
 .Textarea {
   resize: none;
   border: none;
@@ -233,7 +225,7 @@ textarea::placeholder {
 
   .RightBottom .Form {
     width: 100%;
-    max-width: 350px;
+    /* max-width: 350px; */
   }
 
   .Form input {
@@ -292,36 +284,66 @@ textarea::placeholder {
 
   .RightBottom .Form {
     width: 100%;
-    max-width: 420px;
+    /* max-width: 420px; */
   }
 }
 
 @media (min-width: 1025px) and (max-width: 1440px) {
+  .Main {
+    /* Ensure the parent is the one handling the side padding */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   .MainContainer {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
-    gap: 65px;
-    height: 750px;
+
+    /* Reduced gap to ensure both elements fit within 1025px */
+    gap: clamp(20px, 3vw, 40px);
+
+    min-height: 85vh;
+    width: 100%;
+    max-width: 1200px;
+    /* Limits the inner content width to keep it centered */
+    margin: 0 auto;
+    /* Centers the container if it's smaller than the screen */
+    overflow: visible;
   }
 
   .Left {
     flex: 1;
+    min-width: 0;
     display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+    /* Ensure the container itself has the height you want */
+    height: 100vh;
   }
 
   .Left img {
-    height: 100%;
     width: 100%;
-    max-width: 550px;
+    /* FIX: Set height to 100% so it stays at 70vh (from parent) */
+    height: 100%;
+
+    /* FIX: Remove aspect-ratio so the width can shrink without pulling the height down */
+    aspect-ratio: auto;
+
+    /* This ensures the image crops the sides instead of squishing */
     object-fit: cover;
-    object-position: center;
-    max-height: none;
+
+    display: block;
+    min-width: 0;
   }
 
   .Right {
+    /* FIX: Ensure the form has its own space and doesn't vanish */
     flex: 1;
+    min-width: 320px;
     max-width: 460px;
     display: flex;
     flex-direction: column;
