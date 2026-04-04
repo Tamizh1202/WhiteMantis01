@@ -92,7 +92,10 @@
   padding: 13px 47px;
   cursor: pointer;
 }
-
+.SubmitButton:hover {
+  background-color: #2f362a; /* Invert colors on hover */
+  color: #ffffff;
+}
 .Form {
   display: flex;
   flex-direction: column;
