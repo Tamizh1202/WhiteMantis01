@@ -138,7 +138,7 @@ const cardsData = [
     },
     title: ["The Roaster's Choice:", "Whole Beans"],
     description:
-      "Our full collection of single-origin and blended specialty coffee, delivered fresh after roasting.",
+      "Our complete collection of single-origin and signature blended specialty coffee, expertly delivered fresh after roasting.",
     benefits: [
       { icon: "discount", text: "Always 20% off regular price." },
       { icon: "gem", text: "Exclusive access to limited-edition beans." },
@@ -161,7 +161,7 @@ const cardsData = [
     },
     title: ["Drip Bag Essentials:", "Filter Coffee"],
     description:
-      "Pre-ground specialty coffee, perfectly measured and sealed in a single-serve drip filter for travel or convenience.",
+      "Our complete collection of single-origin and signature blended specialty coffee, expertly delivered fresh after roasting.",
     benefits: [
       { icon: "discount", text: "Always 20% off regular price." },
       { icon: "gem", text: "Exclusive access to limited-edition beans." },
