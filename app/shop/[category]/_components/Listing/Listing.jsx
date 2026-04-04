@@ -316,6 +316,7 @@ const Lisiting = () => {
         <div className={styles.LeftConatiner}>
           <div className={styles.LeftTop}>
             <p>Filter</p>
+            {/* <p>Clear All</p> */}
           </div>
           <FilterSidebar
             subCategoriesData={subCategoriesData}

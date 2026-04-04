@@ -30,22 +30,32 @@
     justify-content: left;
     flex-direction: column;
     gap: 10px;
-    padding-left: 124px;
-    width: 80%;
+    padding-left: 110px;
+    width: 70%;
+    padding-top: 190px;
 }
 
 .LeftConatinerTop h3 {
     font-family: var(--lexend);
     font-weight: var(--lexend-heading-font-weight);
-    font-size: var(--lexend-heading-1-font-size);
+    font-size: 60px;
     color: var(--white-color);
     text-transform: uppercase;
 }
 
+.LeftConatinerTop h2 {
+    font-family: var(--lexend);
+    font-weight: 500;
+    font-size: 22px;
+    text-transform: uppercase;
+    color: var(--white-color);
+}
+
 .line {
-    width: 85%;
+    width: 65%;
     height: 1px;
     background-color: var(--white-color);
+    opacity: 60%;
 }
 
 .LeftConatinerBottom {
@@ -67,7 +77,7 @@
 .MiddleConatiner {
     display: flex;
     justify-content: center;
-    align-items: start;
+    align-items: center;
     background-color: var(--white-color);
     padding: 33.5px 34px;
     border: none;
@@ -87,12 +97,15 @@
     text-align: justify;
 }
 
+/* --- THE TRIGGER SECTION --- */
 .MiddleConatinerBottom {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
     gap: 10px;
+    cursor: pointer;
+    /* Makes the whole row feel clickable */
 }
 
 .MiddleConatinerBottomLeft h5 {
@@ -102,6 +115,15 @@
     color: var(--primary-color);
     text-transform: uppercase;
     text-align: left;
+    margin: 0;
+    /* Preparation for smooth underline */
+    text-decoration: underline transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration 0.3s ease;
+}
+
+.MiddleConatinerBottom:hover .MiddleConatinerBottomLeft h5 {
+    text-decoration: underline var(--primary-color);
 }
 
 .MiddleConatinerBottomRight {
@@ -111,14 +133,23 @@
     background-color: var(--white-color);
     border: 1px solid var(--primary-color);
     padding: 8px 9px;
-    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .MiddleConatinerBottomRight svg {
-    width: 100%;
-    height: 100%;
-    max-width: 13px;
-    max-height: 13px;
+    width: 13px;
+    height: 13px;
+    transform: rotate(-45deg);
+    /* Your initial anticlockwise state */
+    transition: transform 0.3s ease;
+}
+
+.MiddleConatinerBottom:hover .MiddleConatinerBottomRight svg {
+    transform: rotate(0deg);
+}
+
+.MiddleConatinerBottom:hover .MiddleConatinerBottomRight {
+    background-color: #f9f9f9;
 }
 
 .RightConatiner {
@@ -138,53 +169,69 @@
     /* This is the secret: it 'crops' the image to fill the 
        space instead of squishing it */
     object-fit: cover;
-
     /* Optional: if you want the 'focus' of the image to stay center */
     object-position: center;
 }
+
 @media (min-width: 1130px) and (max-width: 1400px) {
-.MiddleConatiner {
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    background-color: var(--white-color);
-    padding: 33.5px 34px;
-    border: none;
-    max-width: 466px;
-    gap: 30px;
-    flex-direction: column;
-    position: absolute;
-    top: 74%;
-    left: 30%;
+    .MiddleConatiner {
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        background-color: var(--white-color);
+        padding: 33.5px 34px;
+        border: none;
+        max-width: 466px;
+        gap: 30px;
+        flex-direction: column;
+        position: absolute;
+        top: 74%;
+        left: 30%;
+    }
 }
-}
+
 @media (min-width: 769px) and (max-width: 1129px) {
-.MiddleConatiner {
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    background-color: var(--white-color);
-    padding: 33.5px 34px;
-    border: none;
-    max-width: 466px;
-    gap: 30px;
-    flex-direction: column;
-    position: absolute;
-    top: 74%;
-    left: 22%;
+    .LeftConatinerTop {
+        flex-direction: column;
+        justify-content: left;
+        gap: 10px;
+        width: 80%;
+        padding-top: 100px;
+        padding-left: 60px;
+        display: flex;
+    }
+
+    .MiddleConatiner {
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        background-color: var(--white-color);
+        padding: 33.5px 34px;
+        border: none;
+        max-width: 466px;
+        gap: 30px;
+        flex-direction: column;
+        position: absolute;
+        top: 74%;
+        left: 22%;
+    }
+
+    .LeftConatinerBottom img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 }
-}
+
 @media (max-width: 768px) {
     .main {
-        padding: 0;
-        /* Removed large padding to allow 50/50 split */
         width: 100%;
         height: 100vh;
-        /* Lock the whole view to the screen height */
         display: flex;
         flex-direction: column;
         background-color: var(--primary-color);
         overflow: hidden;
+        padding: 0;
     }
 
     .MainConatiner {
@@ -192,70 +239,94 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
-        /* Fill the main container */
         position: relative;
-        /* Anchor for the middle container */
     }
 
-    /* Top Half (Green Image/Background) */
+    /* --- TOP HALF (Typography + Bottom Image) --- */
     .LeftConatiner {
         display: flex;
         flex-direction: column;
         width: 100%;
         height: 50%;
-        /* Force 50% height */
-        justify-content: flex-end;
-        /* Pushes the image/content to the bottom of the top half */
+        /* Strictly 50% of screen */
+        background-color: var(--primary-color);
+        justify-content: space-between;
+        /* Space between text and bottom image */
+    }
+
+    .LeftConatinerTop {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 120px;
+        /* Enough padding from top of phone */
+        padding-left: 24px;
+        /* Tighter side padding for mobile */
+        width: 90%;
+        /* More width than desktop */
+    }
+
+    .LeftConatinerTop h3 {
+        font-size: 32px;
+        /* Scaled down from 60px */
+        line-height: 1.1;
+    }
+
+    .LeftConatinerTop h2 {
+        font-size: 16px;
+        /* Scaled down from 22px */
+    }
+
+    .line {
+        width: 60%;
+        /* Shorter line for mobile */
+        margin-top: 5px;
     }
 
     .LeftConatinerBottom {
-        display: flex;
         width: 100%;
-        height: auto;
+        height: 35%;
+        /* Image takes bottom portion of the top 50% */
+        display: flex;
+        align-items: flex-end;
     }
 
     .LeftConatinerBottom img {
         width: 100%;
-        height: auto;
-        max-height: 100%;
+        height: 100%;
         object-fit: cover;
     }
 
-    /* Bottom Half (Actual Image) */
+    /* --- BOTTOM HALF (Full Image) --- */
     .RightConatiner {
-        display: flex;
         width: 100%;
         height: 50%;
-        /* Force 50% height */
     }
 
     .RightConatiner img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        /* Ensures the image fills its 50% section perfectly */
     }
 
-    /* Middle Container - The Floating Box */
     .MiddleConatiner {
-        /* Switch back to absolute to float exactly in the center of the split */
-        position: absolute !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        /* Perfect centering */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
 
-        width: 85% !important;
-        max-width: none !important;
-        z-index: 8;
-        margin: 0 !important;
-        box-sizing: border-box;
-        padding: 20px !important;
-        /* Tighter padding for mobile */
+        width: 88%;
+        max-width: 400px;
+        padding: 24px;
+        gap: 20px;
+        /* Tighter gap */
+        z-index: 5;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
-    .LeftConatinerTop {
-        display: none;
-        /* Hide the empty top div to save space on 50/50 split */
+    .MiddleConatinerTop p {
+        font-size: 14px;
+        /* Slightly smaller for mobile readability */
+        line-height: 1.4;
     }
 }

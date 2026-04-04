@@ -4,13 +4,11 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: clamp(70px, calc(70px + (80 * ((100vw - 320px) / 1120))), 150px)
-    clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px)
-    clamp(70px, calc(70px + (80 * ((100vw - 320px) / 1120))), 150px)
-    clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
+  padding: clamp(70px, calc(70px + (80 * ((100vw - 320px) / 1120))), 150px) clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px) clamp(70px, calc(70px + (80 * ((100vw - 320px) / 1120))), 150px) clamp(24px, calc(24px + (101 * ((100vw - 320px) / 1120))), 125px);
 
   background-color: #ffffff;
 }
+
 .MainConatiner {
   display: flex;
   justify-content: left;
@@ -18,6 +16,7 @@
   width: 100%;
   gap: clamp(38px, calc(38px + (37 * ((100vw - 320px) / 1120))), 75px);
 }
+
 .Top h3 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
@@ -25,6 +24,7 @@
   color: var(--heads-color);
   text-transform: uppercase;
 }
+
 .Bottom {
   display: flex;
   justify-content: space-between;
@@ -32,6 +32,7 @@
 
   gap: clamp(30px, calc(30px + (40 * ((100vw - 320px) / 1120))), 70px);
 }
+
 .One,
 .two,
 .three,
@@ -42,6 +43,7 @@
 
   gap: clamp(18px, calc(18px + (2 * ((100vw - 320px) / 1120))), 20px);
 }
+
 .line1,
 .line2,
 .line3,
@@ -50,18 +52,21 @@
   height: 100%;
   background-color: var(--line-color);
 }
+
 .Content {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   gap: clamp(30px, calc(30px + (170 * ((100vw - 320px) / 1120))), 200px);
 }
+
 .Text {
   display: flex;
   justify-content: left;
   flex-direction: column;
   gap: 15px;
 }
+
 .Text h4 {
   font-size: var(--fs-22);
   font-family: var(--lexend);
@@ -75,37 +80,71 @@
   font-weight: var(--lexend-heading-font-weight);
   color: var(--heads-color);
 }
+
+.ImageContainer {
+  /* CRITICAL: This keeps the zoom INSIDE the box */
+  overflow: hidden;
+  width: fit-content;
+  /* or your desired container width */
+  max-width: 344px;
+  max-height: 344px;
+}
+
 .ImageContainer img {
   width: 100%;
   height: 100%;
   max-width: 344px;
   max-height: 344px;
+  object-fit: cover;
+  display: block;
+
+  /* Smooth transition for the zoom */
+  transition: transform 0.5s ease;
 }
+
+/* INTERACTIVE: The Zoom */
+.ImageContainer:hover img {
+  /* 1.1 = 10% zoom. Use 1.05 for a subtler effect. */
+  transform: scale(1.1);
+}
+
 @media (max-width: 640px) {
   .Main {
     padding: 0px 24px 0px 24px;
   }
+
   .MainConatiner {
     gap: 38.5px;
   }
+
   .Bottom {
     flex-direction: column;
     gap: 30px;
   }
-  .One, .two, .three, .four {
+
+  .One,
+  .two,
+  .three,
+  .four {
     gap: 18px;
     flex-direction: column-reverse;
   }
+
   .Content {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
   }
-  .line1, .line2, .line3, .line4 {
+
+  .line1,
+  .line2,
+  .line3,
+  .line4 {
     width: 100%;
     height: 1px;
     background-color: var(--primary-color);
   }
+
   /* .Top h3 {
     font-size: var(--fs-20);
   }
@@ -118,9 +157,11 @@
   .Text {
     justify-content: flex-end;
   }
+
   .ImageContainer {
     align-items: flex-end;
   }
+
   .ImageContainer img {
     width: 100%;
     height: 100%;
@@ -128,66 +169,83 @@
     max-height: 164px;
   }
 }
+
 @media (min-width: 641px) and (max-width: 1024px) {
 
-  .MainConatiner{
+  .MainConatiner {
     gap: 38.5px;
   }
+
   .Bottom {
     flex-direction: column;
     gap: 30px;
   }
-  .One, .two, .three, .four {
+
+  .One,
+  .two,
+  .three,
+  .four {
     gap: 18px;
     flex-direction: column-reverse;
-   
+
   }
-  .Content{
+
+  .Content {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
     gap: 0px;
   }
-  .line1 , .line2, .line3, .line4{
+
+  .line1,
+  .line2,
+  .line3,
+  .line4 {
     width: 100%;
     height: 1px;
     background-color: var(--primary-color);
   }
-  
-  .Text{
+
+  .Text {
     justify-content: flex-end;
-     width: 100%;
+    width: 100%;
   }
-  .ImageContainer{
+
+  .ImageContainer {
     align-items: flex-end;
     /* width: 100%; */
   }
-  .ImageContainer img{
+
+  .ImageContainer img {
     width: 100%;
     height: 100%;
     max-width: 164px;
     max-height: 164px;
   }
 }
+
 @media (min-width:1025px) and (max-width: 1400px) {
-    .ImageContainer img{
+  .ImageContainer img {
     /* width: 100%; */
     /* height: 100%; */
     width: 204px;
     height: 204px;
   }
-  .Bottom{
+
+  .Bottom {
     gap: 20px;
   }
 }
+
 @media (min-width:1401px) and (max-width: 1880px) {
-    .ImageContainer img{
+  .ImageContainer img {
     /* width: 100%; */
     /* height: 100%; */
     width: 260px;
     height: 260px;
   }
-  .Bottom{
+
+  .Bottom {
     gap: 50px;
   }
 }

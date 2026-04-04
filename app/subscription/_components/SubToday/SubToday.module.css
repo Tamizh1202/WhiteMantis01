@@ -278,7 +278,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 700px) {
   .MainContainer {
     flex-direction: column;
     gap: 60px;
@@ -370,7 +370,7 @@
   }
 }
 
-@media (max-width: 1440px) and (min-width: 641px) {
+@media (max-width: 1440px) and (min-width: 701px) {
   .right {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -384,7 +384,7 @@
   }
 
   .Card {
-    max-width: 100%;
+    /* max-width: 100%; */
   }
 
   .MainContainer {

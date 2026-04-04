@@ -13,15 +13,7 @@ const Landing = () => {
 
         <div className={styles.Right}>
           <div className={styles.RightTop}>
-            <p>
-              Set up your coffee once and never think
-              about it again. Pick your roast, pick your
-              format, pick your schedule — and we'll
-              send freshly roasted coffee to your door
-              every week, fortnight, or month. Pause or
-              cancel anytime. Free delivery on 6 and 12-
-              month plans.
-            </p>
+            <h1>Elevating Your Daily Coffee Experience</h1>
           </div>
 
           <div

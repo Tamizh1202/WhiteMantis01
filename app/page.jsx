@@ -77,8 +77,8 @@ export default async function Home() {
       <Subscribe />
       <div className="sectionPadding"></div>
       <Community />
-      <div className="sectionPadding"></div>
-      <Partnerships />
+      {/* <div className="sectionPadding"></div> */}
+      {/* <Partnerships /> */}
       <div className="sectionPadding"></div>
       <TheRoster />
       <div className="sectionPadding"></div>

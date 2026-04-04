@@ -5,55 +5,64 @@
   width: 100%;
   height: 100svh;
   background-color: var(--primary-color);
+  overflow: hidden;
+  /* Prevents accidental scrollbars */
 }
 
 .MainContainer {
   display: flex;
-  justify-content: left;
   flex-direction: row;
   width: 100%;
   height: 100%;
 }
 
 .Left {
-  display: flex;
-  justify-content: left;
-  width: 40%;
+  width: 50%;
+  max-width: 50%;
   background: url("./1.png") no-repeat center / cover;
 }
 
+/* --- RHS: FIXED 50% --- */
 .Right {
-  display: flex;
-  justify-content: end;
-  padding-left: clamp(24px,
-      calc(24px + (103 * ((100vw - 320px) / 1120))),
-      127px);
+  flex: 0 0 50%;
+  /* Strictly lock to 50% */
+  width: 50%;
+  max-width: 50%;
 
+  display: flex;
   flex-direction: column;
-  padding-bottom: 98px;
-  gap: 32px;
+  justify-content: center;
+  padding-left: 60px;
+  padding-bottom: 0;
+  gap: 26px;
+  box-sizing: border-box;
 }
 
 .RightTop {
   display: flex;
-  justify-content: left;
-  max-width: 425px;
+  justify-content: flex-start;
+  max-width: 90%;
 }
 
-.RightTop p {
-  font-family: var(--lato);
-  font-size: var(--fs-15);
-  font-weight: var(--lato-font-weight);
+.RightTop h1 {
+  font-family: var(--lexend);
+  font-size: 60px;
+  font-weight: 500;
   color: var(--white-color);
+  margin: 0;
+  text-transform: uppercase;
 }
 
 .RightBottom {
   display: flex;
-  justify-content: left;
-  flex-direction: row;
+  align-items: center;
+  /* Vertical alignment for text and icon */
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 20px;
   gap: 8px;
   cursor: pointer;
   text-decoration: none;
+  width: fit-content;
 }
 
 .RightBottom h4 {
@@ -61,8 +70,15 @@
   font-size: var(--fs-22);
   font-weight: 500;
   color: #ffffff;
-  cursor: pointer;
   text-transform: uppercase;
+  margin: 0;
+  transition: text-decoration 0.3s ease;
+}
+
+/* Hover effect to stay consistent with your other section */
+.RightBottom:hover h4 {
+  text-decoration: underline;
+  text-underline-offset: 6px;
 }
 
 .MarqueeWrapper {
@@ -101,40 +117,97 @@
   }
 }
 
+/* --- TABLET: 641px to 1024px --- */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .Main {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .Left {
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+
+  .Right {
+    flex: 0 0 55%;
+    max-width: 55%;
+    padding-left: 40px;
+    /* Reduced from 60px */
+    gap: 24px;
+  }
+
+  .RightTop h1 {
+    font-size: 42px;
+    /* Scaled down from 60px */
+    line-height: 1.2;
+  }
+
+  .Marquee span {
+    font-size: 80px;
+    /* Scale marquee for tablet */
+  }
+}
+
+/* --- MOBILE: 640px and below --- */
 @media (max-width: 640px) {
   .Main {
-    height: 100%;
+    height: auto;
+    min-height: 95vh;
+    overflow-y: auto;
+    display: block;
+    /* Stack naturally */
   }
 
   .MainContainer {
     flex-direction: column;
-    gap: 72px;
+    /* Stack Left on top of Right */
+    height: auto;
   }
 
   .Left {
     width: 100%;
-    height: auto;
-    min-height: 400px;
+    max-width: 100%;
+    height: 45vh;
+    /* Hero image takes top portion */
+    flex: 0 0 auto;
+    background-position: center;
   }
 
   .Right {
     width: 100%;
-    padding-left: 24px;
-    padding-right: 24px;
-    padding-bottom: 50px;
-    gap: 15px;
+    max-width: 100%;
+    flex: 0 0 auto;
+    padding: 100px 24px;
+    /* Mobile padding */
+    justify-content: flex-start;
+    gap: 20px;
   }
 
   .RightTop {
     max-width: 100%;
   }
 
-  .RightBottom h4 {
-    font-size: 20px;
+  .RightTop h1 {
+    font-size: 34px;
+    /* Big enough for impact, small enough for mobile */
+    line-height: 1.1;
   }
 
-  .RightTop p {
-    font-size: 14px;
-    width: 100%;
+  .RightBottom h4 {
+    font-size: 18px;
+    /* Scaled from 22px */
+  }
+
+  /* Adjust Marquee for Mobile */
+  .MarqueeWrapper {
+    top: 40%;
+    /* Move it down slightly so it doesn't cover the face/image */
+  }
+
+  .Marquee span {
+    font-size: 60px;
+    /* Much smaller text for mobile marquee */
+    padding-right: 20px;
   }
 }

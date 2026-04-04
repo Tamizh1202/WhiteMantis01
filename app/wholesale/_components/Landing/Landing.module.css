@@ -5,46 +5,44 @@
   width: 100%;
   height: 100svh;
   background-color: #6c7a5f;
+  overflow: hidden;
 }
 
 .MainContainer {
   display: flex;
-  justify-content: left;
   flex-direction: row;
   width: 100%;
   height: 100%;
 }
 
 .Left {
-  display: flex;
-  justify-content: left;
+  flex: 0 0 50%;
   width: 50%;
+  max-width: 50%;
+
   background: url("./1.png") no-repeat center / cover;
 }
 
 .Right {
   display: flex;
-  justify-content: end;
-  padding-left: clamp(24px,
-      calc(24px + (103 * ((100vw - 320px) / 1120))),
-      127px);
-
   flex-direction: column;
-  padding-bottom: 98px;
+  justify-content: center;
+  padding-left: 60px;
+  padding-bottom: 0;
   gap: 12px;
+  height: 100%;
 }
-
 .RightTop {
   display: flex;
   justify-content: left;
-  max-width: 425px;
 }
 
-.RightTop p {
-  font-family: var(--lato);
-  font-size: 15px;
-  font-weight: 400;
+.RightTop h1 {
+  font-family: var(--lexend);
+  font-size: 60px;
+  font-weight: 500;
   color: #ffffff;
+  text-transform: uppercase;
 }
 
 .RightBottom {
@@ -53,6 +51,9 @@
   gap: 12px;
   text-decoration: none;
   cursor: pointer;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 20px;
+  width: 50%;
 }
 
 .RightBottom h4 {
@@ -64,24 +65,10 @@
   transition: text-decoration 0.3s ease;
 }
 
-/* 1. Target the path specifically */
-.RightBottom svg path {
-  transition: transform 0.3s ease-in-out;
-  /* 2. Set the transform origin to the center of the SVG */
-  transform-origin: center;
-}
-
-/* --- HOVER STATES --- */
-
 .RightBottom:hover h4 {
   text-decoration: underline;
   text-underline-offset: 6px;
-}
-
-/* 3. Rotate only the path, not the whole SVG */
-.RightBottom:hover svg path {
-  transform: rotate(45deg);
-}
+} 
 
 .MarqueeWrapper {
   position: absolute;
@@ -118,41 +105,84 @@
     transform: translateX(-33.333%);
   }
 }
+@media (min-width: 641px) and (max-width: 1024px) {
+  .Main {
+    height: 100vh; /* Keep the full-screen feel */
+  }
+
+  .Left {
+    flex: 0 0 45%; 
+    max-width: 45%;
+  }
+
+  .Right {
+    flex: 0 0 55%;
+    max-width: 55%;
+    padding-left: 40px; /* Reduced from 60px */
+    padding-right: 20px;
+  }
+
+  .RightTop h1 {
+    /* Scale down the 60px headline */
+    font-size: 42px; 
+    line-height: 1.2;
+  }
+
+  .RightBottom {
+    width: 80%; /* Give the border-top more room than the 50% on desktop */
+  }
+}
 
 @media (max-width: 640px) {
   .Main {
-    height: 100%;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  
+    display: flex;
+    justify-content: flex-start; 
+    align-items: stretch;
   }
 
   .MainContainer {
     flex-direction: column;
-    gap: 72px;
+    gap: 0;
+    /* Ensure the container doesn't have inherited padding */
+    padding: 0; 
+    margin: 0;
   }
 
   .Left {
     width: 100%;
-    height: auto;
-    min-height: 400px;
+    flex: 0 0 auto;
+    height: 50vh;
+    max-width: 100%;
+    
+    /* Ensures the background image touches the absolute edges */
+    background-position: top center; 
+    margin-top: 0; 
   }
 
+  /* --- Keeping the rest of your perfect logic --- */
   .Right {
     width: 100%;
-    padding-left: 24px;
-    padding-right: 24px;
-    padding-bottom: 50px;
-    gap: 15px;
+    flex: 0 0 auto;
+    padding: 80px 24px;
+    justify-content: flex-start;
+    gap: 24px;
   }
 
-  .RightTop {
-    max-width: 100%;
+  .RightTop h1 {
+    font-size: 32px;
+    line-height: 1.1;
+  }
+
+  .RightBottom {
+    width: 100%;
+    padding-top: 16px;
   }
 
   .RightBottom h4 {
-    font-size: 20px;
-  }
-
-  .RightTop p {
-    font-size: 14px;
-    width: 100%;
+    font-size: 18px;
   }
 }

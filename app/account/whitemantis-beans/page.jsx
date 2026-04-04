@@ -6,19 +6,28 @@ import styles from './page.module.css';
 import { useRouter } from "next/navigation";
 import Image from 'next/image';
 import beansZero from "./beansZero.png"
-const QUESTIONS = [{
-    question: " What are White Mantis Beans and how do they work?",
-    answer: "White Mantis Coins are reward points you earn on orders, subscriptions, and workshop bookings, on every purchase, you earn WM Coins worth 10% of the order value (e.g. AED 1,000 = 100 coins) and can be used for discounts on eligible purchases."
-}, {
-    question: " What are White Mantis Beans and how do they work?",
-    answer: "White Mantis Coins are reward points you earn on orders, subscriptions, and workshop bookings, on every purchase, you earn WM Coins worth 10% of the order value (e.g. AED 1,000 = 100 coins) and can be used for discounts on eligible purchases."
-}, {
-    question: " What are White Mantis Beans and how do they work?",
-    answer: "White Mantis Coins are reward points you earn on orders, subscriptions, and workshop bookings, on every purchase, you earn WM Coins worth 10% of the order value (e.g. AED 1,000 = 100 coins) and can be used for discounts on eligible purchases."
-}, {
-    question: " What are White Mantis Beans and how do they work?",
-    answer: "White Mantis Coins are reward points you earn on orders, subscriptions, and workshop bookings, on every purchase, you earn WM Coins worth 10% of the order value (e.g. AED 1,000 = 100 coins) and can be used for discounts on eligible purchases."
-}]
+const QUESTIONS = [
+    {
+        question: "What are White Mantis Beans and how do I earn them?",
+        answer: "White Mantis Beans are reward points earned on every purchase, excluding workshop bookings. A percentage of your order value is credited to your account as Beans once your order is successfully completed."
+    },
+    {
+        question: "How and where can I redeem my Beans?",
+        answer: "You can redeem your Beans as 'real money' discounts during checkout. While they are valid for most products, they cannot be redeemed on Subscriptions or Workshops."
+    },
+    {
+        question: "Are there any limits on how many Beans I can use?",
+        answer: "Yes, you can redeem Beans up to a specific percentage of your total order value per purchase. This ensures balanced reward usage across all your orders."
+    },
+    {
+        question: "Can I combine Beans with other offers or convert them to cash?",
+        answer: "Beans can generally be used alongside other discounts unless stated otherwise. However, they cannot be transferred to other accounts or withdrawn as physical cash; they are strictly for eligible store discounts."
+    },
+    {
+        question: "Do my White Mantis Beans ever expire?",
+        answer: "Yes, Beans may have an expiry period. We recommend checking your account dashboard regularly to view your current balance and track validity details."
+    }
+];
 
 function formatDateParts(isoString) {
     if (!isoString) return { datePart: 'N/A', timePart: '' };
@@ -132,9 +141,13 @@ const WhiteMantisBeans = () => {
                                     width={100}
                                     height={150}
                                 />
-                                <p style={{ color: 'black', }}>No White Mantis Beans yet</p>
 
-                                <p>Start earning beans when you shop, subscribe, or join academy workshops.</p>
+
+                                <div className={styles.zeroStateP}>
+                                    <p style={{ color: 'black', }}>No White Mantis Beans yet</p>
+                                    <p>Start earning beans when you shop, subscribe, or join academy workshops.</p>
+                                </div>
+
 
                                 <button className={styles.zeroStateButton}
                                     onClick={() => router.push("/shop")}>
@@ -152,7 +165,6 @@ const WhiteMantisBeans = () => {
                                         <div>Expiry Date</div>
                                         <div>Coins</div>
                                     </div>
-
                                     {displayData.map((item, index) => {
                                         const { datePart: txDate, timePart: txTime } = formatDateParts(item.transaction_date);
                                         const { datePart: expDate, timePart: expTime } = formatDateParts(item.expiry_date);
@@ -202,8 +214,6 @@ const WhiteMantisBeans = () => {
                                 </div>
                             </div>
                         )}
-
-
                     </div>
                     <div className={styles.mobileOnly}>
                         <div className={styles.grid}>
@@ -263,15 +273,12 @@ const WhiteMantisBeans = () => {
                                             onClick={() => toggleQuestion(index)}
                                             style={{ cursor: "pointer" }}
                                         >
-
                                             <div className={styles.questionLeft}>
                                                 <span className={styles.number}>
                                                     {(index + 1).toString().padStart(2, "0")}
                                                 </span>
-
                                                 <h4>{item.question}</h4>
                                             </div>
-
                                             <span
                                                 className={styles.cross}
                                                 style={{
@@ -286,22 +293,17 @@ const WhiteMantisBeans = () => {
                                                     />
                                                 </svg>
                                             </span>
-
                                         </div>
-
                                         <div
                                             className={`${styles.answers} ${openIndex === index ? styles.answersOpen : ""
                                                 }`}
                                         >
                                             <p style={{ textAlign: "justify" }}>{item.answer}</p>
                                         </div>
-
                                     </div>
                                 ))}
                             </div>
-
                         </div>
-
                     </div>
                 </div>
             </div>

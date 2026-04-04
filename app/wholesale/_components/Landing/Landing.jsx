@@ -10,14 +10,7 @@ const Landing = () => {
 
         <div className={styles.Right}>
           <div className={styles.RightTop}>
-            <p>
-              We've been supplying cafés, restaurants,
-              hotels, and offices across Dubai for over a
-              decade. What we offer isn't just coffee —
-              it's a complete program: bean selection,
-              recipe development, barista training, and a
-              team that picks up the phone.
-            </p>
+            <h1>Where Great Coffee Meets Great Businesses</h1>
           </div>
 
           <Link href="#wholesaleEnquiry" className={styles.RightBottom}>

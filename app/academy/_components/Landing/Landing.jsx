@@ -12,9 +12,9 @@ const Landing = () => {
         <div className={styles.MainConatiner}>
           <div className={styles.LeftConatiner}>
             <div className={styles.LeftConatinerTop}>
-              {/* <h3>Art & Science of Coffee Mastery</h3>
+               <h3>Master the Art of Coffee</h3>
               <div className={styles.line}></div>
-              <p>The White Mantis Roster</p> */}
+              <h2>Knowledge, Craft, and Experience</h2> 
             </div>
             <div className={styles.LeftConatinerBottom}>
               <Image src={one} alt="workshop image one" />
