@@ -12,7 +12,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - 250px);
-  height: 100svh;           
+  height: 100svh;
   background-image: url('./1.jpg');
   background-position: center;
   background-size: cover;
@@ -27,9 +27,8 @@
   width: 100%;
   display: flex;
   justify-content: center;
- padding:
-  clamp(70px, calc(70px + (70 * ((100vw - 320px) / 1120))), 140px)
-  clamp(24px, calc(24px + (16 * ((100vw - 320px) / 1120))), 40px);
+  padding:
+    clamp(70px, calc(70px + (70 * ((100vw - 320px) / 1120))), 140px) clamp(24px, calc(24px + (16 * ((100vw - 320px) / 1120))), 40px);
 
 }
 
@@ -39,10 +38,9 @@
   max-width: 870px;
   background: #ffffff;
   padding:
-  clamp(30px, calc(30px + (70 * ((100vw - 320px) / 1120))), 100px)
-  clamp(30px, calc(30px + (70 * ((100vw - 320px) / 1120))), 100px);
+    clamp(30px, calc(30px + (70 * ((100vw - 320px) / 1120))), 100px) clamp(30px, calc(30px + (70 * ((100vw - 320px) / 1120))), 100px);
 
-  box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
   border-radius: 2px;
 }
 
@@ -53,7 +51,7 @@
   font-size: var(--fs-22);
   color: #2F362A;
   letter-spacing: 0.5px;
-  margin: 0 0 30px 0;
+  margin: 0 0 15px 0;
   text-transform: uppercase;
 }
 
@@ -67,7 +65,7 @@
 .row {
   display: flex;
   padding: 15px 15px 17px 15px;
-  align-items: stretch; 
+  align-items: stretch;
   border-bottom: 1px solid #6E736A80;
 }
 
@@ -76,12 +74,12 @@
   width: 56px;
   min-width: 56px;
   display: flex;
-  align-items: center;        
   justify-content: center;
   font-size: 15px;
-  color: #6E736A99;
+  color: #6E736A;
   font-weight: 400;
   font-family: var(--lato);
+  margin-top: 11px;
 }
 
 
@@ -92,9 +90,9 @@
 
 .top {
   display: flex;
-  align-items: center;  
+  align-items: center;
   justify-content: space-between;
-  min-height: 32px;    
+  min-height: 32px;
 }
 
 .question {
@@ -132,8 +130,8 @@
   overflow: hidden;
   opacity: 0;
   padding: 0;
-  transition: 
-    max-height 0.35s cubic-bezier(.2,.9,.2,1),
+  transition:
+    max-height 0.35s cubic-bezier(.2, .9, .2, 1),
     opacity 0.25s ease,
     padding 0.25s ease;
 }
@@ -154,54 +152,86 @@
   padding: 12px 0 18px 0;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 950px) {
   .card {
     width: 90%;
-    padding: 30px 21px 30px 21px;
+    padding: 40px 21px;
   }
-  .center{
+
+  .center {
     padding: 70px 24px;
   }
+
   .index {
     width: 38px;
     min-width: 38px;
     font-size: 14px;
+    align-items: flex-start;
+    margin-top: 7px;
   }
-  
+
   .bgWrap {
-    width: calc(100% - 40px); 
+    width: calc(100% - 40px);
   }
-  .qtext{
-    font-size:14px;
+
+  .qtext {
+    font-size: 14px;
   }
-  .answer p{
-    font-size:14px;
+
+  .answer p {
+    font-size: 14px;
   }
+
   .heading h3 {
-    font-size:20px;
-    margin-bottom: 30px;
+    font-size: 20px;
+    margin-bottom: 10px;
   }
-  .row{
+
+  .row {
     padding: 10px 10px;
   }
-  .iconBtn{
+
+  .iconBtn {
     width: 20px;
     height: 20px;
   }
-  .top{
+
+  .top {
     gap: 10px;
   }
 }
-@media (min-width: 801px) and (max-width: 1600px) {
+
+@media (min-width: 951px) and (max-width: 1600px) {
   .bgWrap {
-    width: calc(100% - 100px); 
-    
+    /* Reducing the side gap from 250px to 100px for medium screens */
+    width: calc(100% - 100px);
+    height: 100vh;
   }
-  .center{
+
+  .center {
+    /* Fixed padding for this range to prevent the card from feeling too "sunken" */
     padding-top: 80px;
     padding-bottom: 80px;
+    padding-left: 40px;
+    padding-right: 40px;
   }
+
   .card {
-    padding: 70px;
+    /* Tightening the internal padding for better content density on laptops */
+    padding: 45px;
+    max-width: 800px;
+    /* Slight reduction to keep the "Long-form" look */
+  }
+
+  /* Correcting the weight typos for this range */
+  .qtext,
+  .answer p {
+    font-weight: 400;
+  }
+
+  .heading h3 {
+    font-size: 20px;
+    /* Slightly smaller heading for 13-15 inch screens */
+    margin-bottom: 25px;
   }
 }

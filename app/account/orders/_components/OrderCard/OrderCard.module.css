@@ -120,9 +120,11 @@
   font-family: var(--lato);
   font-size: 15px;
   color: #2f362a;
-  text-decoration: underline;
   font-weight: 500;
   width: max-content;
+}
+.orderDetailsLink:hover{
+  text-decoration: underline;
 }
 
 .cancelContainer {
@@ -142,6 +144,12 @@
   border: 1px solid #6e736a;
   padding: 13.5px 38.5px;
   cursor: pointer;
+}
+
+.cancelBtn:hover {
+  /* Inverse: Background fills with the border color, text turns white */
+  background-color: #6e736a;
+  color: #ffffff;
 }
 
 .orderBottom {
@@ -168,7 +176,7 @@
   /* Keeps text and stars aligned */
   padding: 15px 30px;
   background-color: var(--primary-color);
-  
+
   /* Optional: makes it look cleaner */
 }
 

@@ -32,7 +32,8 @@
 
 .LeftTop {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
+  
 }
 
 .RightConatiner {
@@ -457,7 +458,7 @@
 
 .SortDropdown {
   position: absolute;
-  top: calc(100% + -2px);
+  top: calc(100% - 1px); /* Slight adjustment to overlap the border perfectly */
   right: 0;
   width: 100%;
   background-color: var(--white-color);
@@ -469,14 +470,19 @@
 
 .SortDropdown p {
   padding: 14px 31px;
+  margin: 0; /* Ensures no weird spacing between options */
   font-family: var(--lato);
   font-size: var(--lato-font-size);
   color: var(--body-color);
   cursor: pointer;
+  /* Smooth transition for the color swap */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* INTERACTIVE: The Inverse Flip */
 .SortDropdown p:hover {
-  background-color: var(--background-color);
+  background-color: var(--body-color);
+  color: var(--white-color);
 }
 
 .MobileFilterOverlay {

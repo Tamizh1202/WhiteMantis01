@@ -52,13 +52,16 @@
   cursor: pointer;
   font-weight: var(--lato-font-weight);
   transition: opacity 0.3s ease;
-  text-transform: uppercase;
+
   font-size: var(--lato-font-size);
   background-color: var(--white-color);
 }
 
 .ShopNow:hover {
-  opacity: 0.9;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-color: var(--primary-color);
+  opacity: 1;
 }
 
 .HeroSection {

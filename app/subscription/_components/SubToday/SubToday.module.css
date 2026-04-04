@@ -63,7 +63,7 @@
   max-width: 350px;
   flex-direction: column;
   gap: 30px;
-  border: 1px solid var(--heads-color);
+  border: 1px solid var(--primary-color);
   position: relative;
 }
 
@@ -169,7 +169,7 @@
   justify-content: left;
   flex-direction: column;
   padding-top: 154px;
-  border: 1px solid var(--heads-color);
+  border: 1px solid var(--primary-color);
 }
 
 .Card:hover .CardImage img,
@@ -184,7 +184,7 @@
   justify-content: left;
   flex-direction: column;
   padding-top: 154px;
-  border: 1px solid var(--heads-color);
+  border: 1px solid var(--primary-color);
 }
 
 .CardContentTop {
@@ -278,7 +278,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 700px) {
   .MainContainer {
     flex-direction: column;
     gap: 60px;
@@ -370,7 +370,7 @@
   }
 }
 
-@media (max-width: 1440px) and (min-width: 641px) {
+@media (max-width: 1440px) and (min-width: 701px) {
   .right {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -384,7 +384,7 @@
   }
 
   .Card {
-    max-width: 100%;
+    /* max-width: 100%; */
   }
 
   .MainContainer {

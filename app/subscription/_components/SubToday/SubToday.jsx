@@ -140,7 +140,7 @@ const cardsData = [
     description:
       "Our full collection of single-origin and blended specialty coffee, delivered fresh after roasting.",
     benefits: [
-      { icon: "discount", text: "Always 10% off regular price." },
+      { icon: "discount", text: "Always 20% off regular price." },
       { icon: "gem", text: "Exclusive access to limited-edition beans." },
       { icon: "truck", text: "Free shipping on all recurring orders." },
       { icon: "clock", text: "cancel at any time." },

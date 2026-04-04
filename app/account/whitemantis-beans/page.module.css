@@ -131,7 +131,7 @@ heading .olive .heading {
   grid-template-columns: repeat(4, 1fr) 0.3fr;
   align-items: center;
   padding: 16px 24px;
-  gap:10px;
+  gap: 10px;
 }
 
 .tableHeading {
@@ -185,7 +185,7 @@ heading .olive .heading {
   padding: 16px 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
 }
 
 /* QUESTION ROW */
@@ -256,6 +256,54 @@ heading .olive .heading {
   display: none;
 }
 
+.zeroState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px; /* Adds nice spacing between image, text, and button */
+  width: 100%;
+  text-align: center;
+}
+
+.zeroStateP {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:8px;
+  color: var(--primary-color);
+  
+}
+
+.zeroStateP p {
+  /* Removed display: flex here as it messes with standard text alignment */
+  width: 100%; 
+  max-width: 400px; /* Limits width so text doesn't stretch too far on desktop */
+  margin: 0 auto;
+  text-align: center;
+}
+
+.zeroStateButton {
+  background-color: var(--white);
+  border: 1px solid var(--primary-color);
+  padding: 14px 34px;
+  color: var(--primary-color);
+  cursor: pointer; 
+  font-family: var(--lato); 
+  font-size: 15px;
+  font-weight: 500;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.zeroStateButton:hover {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+
+
+
 @media (min-width: 550px) and (max-width: 1200px) {
   .head {
     padding-right: 80px;
@@ -268,10 +316,16 @@ heading .olive .heading {
   }
 
   .box {
-    display: none !important;
+    display: block;
     /* Force hide the desktop table */
   }
-
+  .zeroState{
+    gap:12px;
+    margin-top: 25px;
+  }
+  .zeroState p{
+    width: 80%;
+  }
   .mobileOnly {
     display: block;
     /* Show the mobile cards/list */
@@ -327,4 +381,5 @@ heading .olive .heading {
     font-size: 15px;
     color: #6e736a;
   }
+  
 }

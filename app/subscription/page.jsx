@@ -18,8 +18,8 @@ export default function Subscription() {
       <div className="sectionPadding"></div>
       <SubToday />
       <div className="sectionPadding"></div>
-      {/* <FaqSection />
-      <div className="sectionPadding"></div> */}
+      <FaqSection />
+      <div className="sectionPadding"></div>
     </>
   );
 }

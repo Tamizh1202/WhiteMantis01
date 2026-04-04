@@ -10,14 +10,7 @@ const Landing = () => {
 
         <div className={styles.Right}>
           <div className={styles.RightTop}>
-            <p>
-              We've been supplying cafés, restaurants,
-              hotels, and offices across Dubai for over a
-              decade. What we offer isn't just coffee —
-              it's a complete program: bean selection,
-              recipe development, barista training, and a
-              team that picks up the phone.
-            </p>
+            <h1>Where Great Coffee Meets Great Businesses</h1>
           </div>
 
           <Link href="#wholesaleEnquiry" className={styles.RightBottom}>
@@ -30,10 +23,12 @@ const Landing = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <rect x="0.5" y="0.5" width="29" height="29" stroke="white" />
-              <path
-                d="M21.0469 8.85938H19.0469V17.4494L9.45687 7.85938L8.04688 9.26937L17.6369 18.8594H9.04688V20.8594H21.0469V8.85938Z"
-                fill="white"
-              />
+              <g transform="rotate(-45 15 15)">
+                <path
+                  d="M21.0469 8.85938H19.0469V17.4494L9.45687 7.85938L8.04688 9.26937L17.6369 18.8594H9.04688V20.8594H21.0469V8.85938Z"
+                  fill="white"
+                />
+              </g>
             </svg>
           </Link>
         </div>

@@ -52,7 +52,11 @@
 
 .ImageContainer {
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
+  overflow: hidden;
+  max-width: 405px;
+  max-height: 195px;
+  width: 100%;
 }
 
 .ImageContainer img {
@@ -60,8 +64,13 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  max-width: 405px;
-  max-height: 195px;
+  display: block;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* INTERACTIVE: Zoom on Hover */
+.ImageContainer:hover img {
+  transform: scale(1.1);
 }
 
 .TextContainer {
@@ -136,9 +145,9 @@
   }
 
   .TextContainer h3 {
-  font-size: var(--fs-18);
-  color: var(--body-color);
-}
+    font-size: var(--fs-18);
+    color: var(--body-color);
+  }
 
   .Main {
     padding-left: 40px;
@@ -159,9 +168,9 @@
   }
 
   .TextContainer h3 {
-  font-size: var(--fs-18);
-  color: var(--body-color);
-}
+    font-size: var(--fs-18);
+    color: var(--body-color);
+  }
 
   .Main {
     padding-left: 40px;

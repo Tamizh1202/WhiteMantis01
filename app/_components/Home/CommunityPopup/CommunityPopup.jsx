@@ -82,9 +82,9 @@ const CommunityPopup = ({ isOpen, onClose }) => {
             </div>
           ) : (
             <>
-              <span className={styles.label}>
+              {/* <span className={styles.label}>
                 Specialty Coffee News in Your Inbox
-              </span>
+              </span> */}
 
               <h3>
                 THE WHITE MANTIS DISPATCH:

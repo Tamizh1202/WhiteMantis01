@@ -42,6 +42,7 @@
 .formBox select {
   color: #9aa08f;
 }
+
 /* nation wants to know  ^|^ */
 .row {
   display: flex;
@@ -86,12 +87,22 @@
 
 .btn {
   background-color: var(--white-color);
-  color: var(--heads-color);
+  color: #7a7a7a;
   padding: 13.5px 35px;
-  border: 1px solid var(--heads-color);
+  border: 1px solid;
   font-size: var(--fs-16);
   cursor: pointer;
 }
+
+.btn:hover {
+  /* Inverse: Background becomes grey, text becomes white */
+  background-color: #7a7a7a;
+  color: var(--white-color);
+
+  /* Optional: if you want the border to vanish or stay grey */
+  border-color: #7a7a7a;
+}
+
 .formBox select {
   appearance: none;
   background: transparent;
@@ -101,6 +112,7 @@
     border-color 0.25s ease,
     background-color 0.25s ease;
 }
+
 /* .formBox select:focus {
   background-color: #f7f8f5;
   border-bottom-color: #2f362a;
@@ -109,9 +121,11 @@
 .selectWrap {
   position: relative;
 }
+
 .selectWrap.open::after {
   transform: translateY(-50%) rotate(180deg);
 }
+
 .open::after {
   transform: translateY(-50%) rotate(180deg);
 }

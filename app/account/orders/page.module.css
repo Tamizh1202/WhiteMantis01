@@ -52,6 +52,13 @@
   width: 442px;
 }
 
+.Filter:hover {
+  background-color: #6e736a;
+}
+.Filter:hover svg path {
+  fill: #ffffff;
+}
+
 .searchInput {
   width: 100%;
   height: 45px;
