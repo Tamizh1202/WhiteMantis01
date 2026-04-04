@@ -1,29 +1,27 @@
 "use client";
-import React from 'react';
-import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import axiosClient from '@/lib/axios';
+import React from "react";
+import { useAuth } from "@/app/_context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function LogoutButtonClient() {
   const router = useRouter();
+  const { logout } = useAuth();
 
   async function handleLogout() {
     try {
-      localStorage.clear();
-      sessionStorage.clear();
+      await logout();
 
-      await axiosClient.get('/api/logout');
-      await signOut({ redirect: false });
-
-      // 4. Final Redirect
-      router.push('/');
+      // Final Redirect
+      router.push("/");
       router.refresh();
     } catch (e) {
-      console.error('Logout failed', e);
+      console.error("Logout failed", e);
     }
   }
 
   return (
-    <button onClick={handleLogout} style={{ marginLeft: 8 }}>Logout</button>
+    <button onClick={handleLogout} style={{ marginLeft: 8 }}>
+      Logout
+    </button>
   );
 }

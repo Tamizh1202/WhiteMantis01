@@ -28,7 +28,6 @@ function SuccessContent() {
     if (!fromCheckout) {
       router.replace("/");
     } else {
-      sessionStorage.removeItem("checkout_success");
       setIsAllowed(true);
     }
   }, [router]);

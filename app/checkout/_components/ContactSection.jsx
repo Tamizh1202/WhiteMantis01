@@ -7,6 +7,7 @@ import { validateEmail } from "@/utils/validatorFunctions";
 export default function ContactSection({
   email,
   setEmail,
+  setEmailUserTyped,
   status,
   session,
   validationErrors,
@@ -39,6 +40,7 @@ export default function ContactSection({
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
+              setEmailUserTyped(true);
               clearError("email");
             }}
             onBlur={() => {

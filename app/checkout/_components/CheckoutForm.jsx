@@ -56,8 +56,6 @@ export default function CheckoutForm({
   checkoutMode,
   subscriptionId,
   variationId,
-  email,
-  setEmail,
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -66,6 +64,13 @@ export default function CheckoutForm({
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+
+  // ── Email state lives HERE (inside Elements boundary) ───────────────────────
+  const [email, setEmail] = useState(session?.user?.email || "");
+  const [emailUserTyped, setEmailUserTyped] = useState(false);
+  useEffect(() => {
+    if (session?.user?.email && !emailUserTyped) setEmail(session.user.email);
+  }, [session?.user?.email, emailUserTyped]);
 
   // ── Helper: clear a single error field ─────────────────────────────────────
   const clearError = (key) =>
@@ -330,6 +335,7 @@ export default function CheckoutForm({
           <ContactSection
             email={email}
             setEmail={setEmail}
+            setEmailUserTyped={setEmailUserTyped}
             status={status}
             session={session}
             validationErrors={validationErrors}

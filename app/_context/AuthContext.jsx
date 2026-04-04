@@ -78,15 +78,24 @@ export function AuthProvider({ children }) {
   }
 
   async function logout() {
-    await fetch("/api/website/auth/logout", { method: "POST" });
+    // Hit the server-side logout route — clears all httpOnly cookies properly
     try {
-      // also sign out of NextAuth if user used social sign-in
+      await fetch("/api/logout", { method: "POST" });
+    } catch (e) {
+      console.error("Server logout error:", e);
+    }
+    // Also call NextAuth signOut to clear its client-side state
+    try {
       await nextAuthSignOut({ redirect: false });
     } catch (e) {}
-    // Cart system removed: clear any cart-related localStorage keys if present
+    // Clear any non-httpOnly cookies and storage
     try {
       if (typeof window !== "undefined") {
-        localStorage.removeItem("cart");
+        const Cookies = (await import("js-cookie")).default;
+        // Remove all js-cookie accessible cookies
+        Object.keys(Cookies.get()).forEach((name) => Cookies.remove(name, { path: "/" }));
+        localStorage.clear();
+        sessionStorage.clear();
       }
     } catch (e) {}
     setUser(null);

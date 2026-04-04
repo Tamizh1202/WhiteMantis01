@@ -56,8 +56,6 @@ function CheckoutContent() {
   const [openMenuId, setOpenMenuId] = useState(null);
   const [useShippingAsBilling, setUseShippingAsBilling] = useState(false);
 
-  const [email, setEmail] = useState("");
-
   // ── Form State ──────────────────────────────────────────────────────────────
   const [shippingForm, setShippingForm] = useState({
     firstName: "",
@@ -109,11 +107,6 @@ function CheckoutContent() {
       });
     }
   }, [contextCartTotals, checkoutMode]);
-
-  // ── Sync user email from session ───────────────────────────────────────────
-  useEffect(() => {
-    if (session?.user?.email) setEmail(session.user.email);
-  }, [session]);
 
   // ── Initial Data Fetch ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -334,6 +327,10 @@ function CheckoutContent() {
       currentShipping = rates[currentEmirate] || 50;
     }
 
+    if (checkoutMode === "subscription") {
+      currentShipping = 0;
+    }
+
     // Tax calculation (Default to 5% if API returns 0 or null)
     const activeTaxPercent =
       shippingTax.taxPercent > 0 ? shippingTax.taxPercent : 5;
@@ -384,7 +381,7 @@ function CheckoutContent() {
     mode: checkoutMode === "subscription" ? "subscription" : "payment",
     amount: stripeAmount, // Pass in fils
     currency: "aed",
-    setup_future_usage: "off_session",
+    ...(status === "authenticated" && { setup_future_usage: "off_session" }),
   };
 
   console.log("stripeOptions", stripeOptions);
@@ -393,7 +390,7 @@ function CheckoutContent() {
     <Elements
       stripe={stripePromise}
       options={stripeOptions}
-      key={`${session?.user?.id || "guest"}-${email}-${checkoutMode}`}
+      key={`${session?.user?.id || "guest"}-${checkoutMode}`}
     >
       <CheckoutForm
         session={session}
@@ -417,8 +414,6 @@ function CheckoutContent() {
         billingForm={billingForm}
         subscriptionId={subscriptionId}
         variationId={variationId}
-        email={email}
-        setEmail={setEmail}
       />
     </Elements>
   );

@@ -294,7 +294,9 @@ export default function OrderSummary({
             {cartTotals.shipping === 0
               ? delivery === "pickup"
                 ? "Free (Pickup)"
-                : "Calculated at next step"
+                : checkoutMode === "subscription"
+                  ? "Free"
+                  : "Calculated at next step"
               : `AED ${cartTotals.shipping.toFixed(2)}`}
           </h5>
         </div>

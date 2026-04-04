@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 const Logo = "/White-mantis-animated-logo.gif";
 import { useCart } from "../../_context/CartContext";
 import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import { useAuth } from "../../_context/AuthContext";
 // Removed duplicate useEffect import from here
 
 const NavbarMobile = ({ categories: initialCategories }) => {
@@ -56,17 +56,16 @@ const NavbarMobile = ({ categories: initialCategories }) => {
     }
   }, [initialCategories]);
 
+  const { logout } = useAuth();
+
   const handleLogout = async () => {
     try {
       setShowLogout(false);
-      await fetch("/api/website/auth/logout", {
-        method: "POST",
-      });
+      await logout();
+      window.location.href = "/";
     } catch (error) {
-      console.error("Logout API error:", error);
+      console.error("Logout error:", error);
     }
-
-    signOut({ callbackUrl: "/" });
   };
 
   return (

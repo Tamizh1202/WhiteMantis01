@@ -3,7 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useAuth } from "@/app/_context/AuthContext";
 
 import styles from "./Sidebar.module.css";
 
@@ -12,17 +13,14 @@ export default function Sidebar() {
   const [showLogout, setShowLogout] = React.useState(false);
   const { data: session } = useSession();
 
+  const { logout } = useAuth();
   const handleLogout = async () => {
     try {
-      // Call logout API to clear all cookies
-      await fetch("/api/website/auth/logout", {
-        method: "POST",
-      });
+      await logout();
+      window.location.href = "/";
     } catch (error) {
-      console.error("Logout API error:", error);
+      console.error("Logout error:", error);
     }
-    // Sign out with NextAuth
-    signOut({ callbackUrl: "/" });
   };
 
   return (
