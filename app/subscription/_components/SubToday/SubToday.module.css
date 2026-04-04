@@ -368,6 +368,10 @@
   .CardContentTopBottom {
     padding: 20px 15px 20px 15px;
   }
+  .Card {
+  max-width: 100%;
+  width: 100%;
+}
 }
 
 @media (max-width: 1440px) and (min-width: 701px) {
@@ -384,7 +388,7 @@
   }
 
   .Card {
-    /* max-width: 100%; */
+    max-width: 100%;
   }
 
   .MainContainer {
@@ -449,8 +453,8 @@
   }
 }
 
-@media (min-width: 641px) and (max-width: 810px) {
+/* @media (min-width: 641px) and (max-width: 810px) {
   .Card {
     max-width: 340px;
   }
-}
+} */
