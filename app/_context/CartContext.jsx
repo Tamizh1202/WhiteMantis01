@@ -262,10 +262,7 @@ export function CartProvider({ children }) {
         }
       } catch (e) {
         console.error("Error adding to cart:", e);
-        const resData = e?.response?.data;
-        const backendMsg =
-          resData?.message || resData?.error || resData?.errors?.[0]?.message;
-        toast.error(backendMsg || e?.message || "Failed to add item to cart");
+        toast.error(e.message || "Failed to add item to cart");
       }
     }
   };
@@ -312,22 +309,28 @@ export function CartProvider({ children }) {
       }
     } else {
       // For guest: resolve new quantity from action or direct value
-      const cart = getCart();
-      const existing = cart.items?.find(
-        (i) =>
-          String(i.product) === String(product) &&
-          (i.vId || null) === (vId || null),
-      );
-      if (existing) {
-        let newQty = existing.quantity;
-        if (action === "increment") newQty = Math.min(5, existing.quantity + 1);
-        else if (action === "decrement")
-          newQty = Math.max(1, existing.quantity - 1);
-        else if (typeof quantity === "number")
-          newQty = Math.min(5, Math.max(1, quantity));
-        updateItemQuantity(product, vId, newQty);
+      try {
+        const cart = getCart();
+        const existing = cart.items?.find(
+          (i) =>
+            String(i.product) === String(product) &&
+            (i.vId || null) === (vId || null),
+        );
+        if (existing) {
+          let newQty = existing.quantity;
+          if (action === "increment") newQty = existing.quantity + 1;
+          else if (action === "decrement")
+            newQty = Math.max(1, existing.quantity - 1);
+          else if (typeof quantity === "number") newQty = Math.max(1, quantity);
+
+          updateItemQuantity(product, vId, newQty);
+        }
+        applyGuestCart();
+        return { ok: true };
+      } catch (e) {
+        console.error("Error updating cart quantity:", e);
+        return { ok: false, message: e.message || "Failed to update quantity" };
       }
-      applyGuestCart();
     }
   };
 

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useCart } from "@/app/_context/CartContext";
 
-const AddToCart = ({ product, onSuccess }) => {
+const AddToCart = ({ product, quantity: propQuantity, onSuccess }) => {
   const { addToCart } = useCart();
   const [loading, setLoading] = useState(false);
 
@@ -20,11 +20,12 @@ const AddToCart = ({ product, onSuccess }) => {
 
     setLoading(true);
     try {
-      await addToCart(
-        product.productId,
-        product.quantity || 1,
-        product.variationId,
-      );
+      const productId = product.productId || product.id || product.product;
+      const variationId =
+        product.variationId || product.vId || product.variantId || "";
+      const finalQuantity = propQuantity || product.quantity || 1;
+
+      await addToCart(productId, finalQuantity, variationId);
       if (onSuccess) onSuccess();
     } catch (err) {
       console.error("Add to cart error", err);
@@ -64,4 +65,3 @@ const AddToCart = ({ product, onSuccess }) => {
 };
 
 export default AddToCart;
-

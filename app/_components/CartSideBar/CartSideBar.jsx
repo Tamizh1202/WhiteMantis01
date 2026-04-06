@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { formatImageUrl } from "@/lib/imageUtils";
-import cartZero from "./cartZero.png"
+import cartZero from "./cartZero.png";
 const CartSideBar = () => {
   const {
     isCartOpen,
@@ -36,20 +36,27 @@ const CartSideBar = () => {
   }, [isCartOpen]);
 
   const handleIncrease = async (product, vId, currentQty) => {
-    if (currentQty >= 5) return;
     const key = `${product}_${vId || ""}`;
     const result = await updateQuantity(product, vId, null, "increment");
     if (result && !result.ok) {
       setItemErrors((prev) => ({ ...prev, [key]: result.message }));
     } else {
-      setItemErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
+      setItemErrors((prev) => {
+        const n = { ...prev };
+        delete n[key];
+        return n;
+      });
     }
   };
 
   const handleDecrease = async (product, vId, currentQty) => {
     if (currentQty > 1) {
       const key = `${product}_${vId || ""}`;
-      setItemErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
+      setItemErrors((prev) => {
+        const n = { ...prev };
+        delete n[key];
+        return n;
+      });
       await updateQuantity(product, vId, null, "decrement");
     }
   };
@@ -103,7 +110,7 @@ const CartSideBar = () => {
             </div>
           ) : (
             <div className={styles.MainContainer}>
-              <div className={styles.Top} data-lenis-prevent >
+              <div className={styles.Top} data-lenis-prevent>
                 <div className={styles.TopOne}>
                   <div className={styles.TopOneTop}>
                     <div className={styles.TopOneLeft}>
@@ -202,7 +209,7 @@ const CartSideBar = () => {
                               {(() => {
                                 const key = `${item.product}_${item.vId || ""}`;
                                 const hasError = !!itemErrors[key];
-                                const increaseDisabled = item.quantity >= 5 || hasError;
+                                const increaseDisabled = hasError;
                                 return (
                                   <button
                                     className={styles.qtyBtn}
@@ -216,7 +223,9 @@ const CartSideBar = () => {
                                     disabled={increaseDisabled}
                                     style={{
                                       opacity: increaseDisabled ? 0.5 : 1,
-                                      cursor: increaseDisabled ? "not-allowed" : "pointer",
+                                      cursor: increaseDisabled
+                                        ? "not-allowed"
+                                        : "pointer",
                                     }}
                                   >
                                     +
@@ -225,15 +234,23 @@ const CartSideBar = () => {
                               })()}
                             </div>
 
-                            {itemErrors[`${item.product}_${item.vId || ""}`] && (
-                              <p style={{
-                                color: "#c0392b",
-                                fontSize: "11px",
-                                marginTop: "4px",
-                                fontFamily: "var(--lato)",
-                                lineHeight: "1.3",
-                              }}>
-                                {itemErrors[`${item.product}_${item.vId || ""}`]}
+                            {itemErrors[
+                              `${item.product}_${item.vId || ""}`
+                            ] && (
+                              <p
+                                style={{
+                                  color: "#c0392b",
+                                  fontSize: "11px",
+                                  marginTop: "4px",
+                                  fontFamily: "var(--lato)",
+                                  lineHeight: "1.3",
+                                }}
+                              >
+                                {
+                                  itemErrors[
+                                    `${item.product}_${item.vId || ""}`
+                                  ]
+                                }
                               </p>
                             )}
 

@@ -234,25 +234,18 @@ const StickyBar = ({ product }) => {
                 <span>{String(qty).padStart(2, "0")}</span>
                 <button
                   onClick={() => {
-                    const maxAllowed = Math.min(
-                      5 - currentCartQty,
-                      stockQuantity - currentCartQty,
-                    );
+                    const maxAllowed = stockQuantity - currentCartQty;
                     if (qty < maxAllowed) {
                       setQty((q) => q + 1);
                       setQtyError("");
                     } else {
-                      if (qty + currentCartQty >= 5) {
-                        setQtyError("Limit of 5 items per order reached");
-                      } else if (qty + currentCartQty >= stockQuantity) {
+                      if (qty + currentCartQty >= stockQuantity) {
                         setQtyError("Stock limit reached");
                       }
                     }
                   }}
                   disabled={
-                    qty + currentCartQty >= 5 ||
-                    qty + currentCartQty >= stockQuantity ||
-                    isOutOfStock
+                    qty + currentCartQty >= stockQuantity || isOutOfStock
                   }
                 >
                   +
