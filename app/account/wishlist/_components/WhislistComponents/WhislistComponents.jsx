@@ -4,12 +4,17 @@ import { useWishlist } from "../../../../_context/WishlistContext";
 import AddToCart from "@/app/_components/AddToCart";
 import styles from "./WhislistComponents.module.css";
 import Image from "next/image";
-import zeroWish from "./zeroWish.png"
+import zeroWish from "./zeroWish.png";
 import BuyNowPopup from "@/app/shop/[category]/_components/Listing/_components/BuyNowPopup/BuyNowPopup";
 import SubscriptionPopup from "@/app/shop/[category]/_components/Listing/_components/SubscriptionPopup";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { formatImageUrl } from "@/lib/imageUtils";
+import {
+  getSortedVariants,
+  getSmallestVariantDisplayData,
+} from "@/app/_utils/productVariants";
+import AddToCartPopup from "@/app/_components/AddToCartPopup/AddToCartPopup";
 
 const WhislistComponents = () => {
   const { items: wishlistData, loading, remove } = useWishlist();
@@ -39,6 +44,10 @@ const WhislistComponents = () => {
   const [selectedQuantity, setSelectedQuantity] = useState(2);
   const popupRef = useRef(null);
 
+  // Add to Cart Popup State
+  const [showCartPopup, setShowCartPopup] = useState(false);
+  const [productForCart, setProductForCart] = useState(null);
+
   // Initialize default selections when wishlist data loads
   useEffect(() => {
     if (wishlistData?.length > 0) {
@@ -46,8 +55,9 @@ const WhislistComponents = () => {
       wishlistData.forEach((item) => {
         const productDoc = item.product?.value;
         if (productDoc?.variants?.length > 0) {
-          // Set first variant as default
-          initialSelections[item.id] = productDoc.variants[0];
+          // Set smallest variant as default
+          const sorted = getSortedVariants(productDoc);
+          initialSelections[item.id] = sorted[0];
         }
       });
       setSelectedVariations(initialSelections);
@@ -79,32 +89,14 @@ const WhislistComponents = () => {
     router.push(`/shop/${category}/${slug}`);
   };
 
-  // Helper to get display data for BuyNowPopup
+  // Helper to get display data - Using shared utility
   const getDisplayData = (product) => {
-    let price = product.regularPrice;
-    let salePrice = product.salePrice;
-    let imageSrc = formatImageUrl(product.productImage);
-    let variationId = null;
+    return getSmallestVariantDisplayData(product);
+  };
 
-    if (product.hasVariantOptions && product.variants?.length > 0) {
-      const firstVariant = product.variants[0];
-      price = firstVariant.variantRegularPrice;
-      salePrice = firstVariant.variantSalePrice;
-      imageSrc = formatImageUrl(firstVariant.variantImage);
-      variationId = firstVariant.id;
-    }
-
-    return {
-      price: salePrice || price,
-      regular_price: price,
-      sale_price: salePrice,
-      image: imageSrc,
-      cartProduct: {
-        productId: product.id,
-        variationId: variationId,
-        quantity: 1,
-      },
-    };
+  const handleOpenCartPopup = (item) => {
+    setProductForCart(item);
+    setShowCartPopup(true);
   };
 
   const handleOpenSubscribePopup = (product) => {
@@ -270,12 +262,7 @@ const WhislistComponents = () => {
 
         {wishlistData.length === 0 ? (
           <div className={styles.EmptyState}>
-            <Image
-                src={zeroWish}
-                alt="No products"
-                width={140}
-                height={140}
-            />
+            <Image src={zeroWish} alt="No products" width={140} height={140} />
             <p className={styles.EmptyText}>Your wish list is empty.</p>
             <p className={styles.EmptySubText}>
               Explore more and shortlist some items.
@@ -418,13 +405,23 @@ const WhislistComponents = () => {
                         </div>
                       ) : (
                         <>
-                          <AddToCart
-                            product={{
-                              productId: productDoc.id,
-                              variationId: selectedVariation?.id || null,
-                              quantity: 1,
-                            }}
-                          />
+                          {productDoc.hasVariantOptions &&
+                          productDoc.variants?.length > 1 ? (
+                            <button
+                              className={styles.AddToCart}
+                              onClick={() => handleOpenCartPopup(productDoc)}
+                            >
+                              Add to Cart
+                            </button>
+                          ) : (
+                            <AddToCart
+                              product={{
+                                productId: productDoc.id,
+                                variationId: selectedVariation?.id || null,
+                                quantity: 1,
+                              }}
+                            />
+                          )}
                           {(productDoc.hasSimpleSub ||
                             (productDoc.hasVariantOptions &&
                               productDoc.variants?.some(
@@ -449,6 +446,24 @@ const WhislistComponents = () => {
                             Out of Stock
                           </button>
                         </div>
+                      ) : productDoc.hasVariantOptions &&
+                        productDoc.variants?.length > 1 ? (
+                        <button
+                          className={styles.AddToCart}
+                          onClick={() => handleOpenCartPopup(productDoc)}
+                          style={{
+                            width: "100%",
+                            backgroundColor: "#6C7A5F",
+                            color: "#ffffff",
+                            fontSize: "15px",
+                            fontWeight: 500,
+                            border: "none",
+                            padding: "12px 22px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Buy Now
+                        </button>
                       ) : (
                         <BuyNowPopup
                           product={productDoc}
@@ -476,6 +491,13 @@ const WhislistComponents = () => {
           getFrequencyLabel={getFrequencyLabel}
           popupRef={popupRef}
           styles={styles}
+        />
+
+        {/* Add to Cart Popup */}
+        <AddToCartPopup
+          showCartPopup={showCartPopup}
+          onClose={() => setShowCartPopup(false)}
+          selectedProduct={productForCart}
         />
       </div>
     </div>

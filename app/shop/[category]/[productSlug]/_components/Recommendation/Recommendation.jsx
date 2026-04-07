@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import BuyNowPopup from "@/app/shop/[category]/_components/Listing/_components/BuyNowPopup/BuyNowPopup";
 import SubscriptionPopup from "@/app/shop/[category]/_components/Listing/_components/SubscriptionPopup";
+import AddToCartPopup from "@/app/_components/AddToCartPopup/AddToCartPopup";
+import { getSmallestVariantDisplayData } from "@/app/_utils/productVariants";
 
 const Recommendation = ({ product }) => {
   const params = useParams();
@@ -21,6 +23,10 @@ const Recommendation = ({ product }) => {
   const [selectedFrequency, setSelectedFrequency] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(2);
   const popupRef = useRef(null);
+
+  // Add to Cart Popup State
+  const [showCartPopup, setShowCartPopup] = useState(false);
+  const [productForCart, setProductForCart] = useState(null);
 
   useEffect(() => {
     if (!showSubscribePopup) return;
@@ -39,32 +45,9 @@ const Recommendation = ({ product }) => {
     return null;
   }
 
-  // Helper to get display data - Replicated from Listing.jsx
+  // Helper to get display data - Using shared utility
   const getDisplayData = (product) => {
-    let price = product.regularPrice;
-    let salePrice = product.salePrice;
-    let imageSrc = formatImageUrl(product.productImage);
-    let variationId = null;
-
-    if (product.hasVariantOptions && product.variants?.length > 0) {
-      const firstVariant = product.variants[0];
-      price = firstVariant.variantRegularPrice;
-      salePrice = firstVariant.variantSalePrice;
-      imageSrc = formatImageUrl(firstVariant.variantImage);
-      variationId = firstVariant.id;
-    }
-
-    return {
-      price: salePrice || price,
-      regular_price: price,
-      sale_price: salePrice,
-      image: imageSrc,
-      cartProduct: {
-        productId: product.id,
-        variationId: variationId,
-        quantity: 1,
-      },
-    };
+    return getSmallestVariantDisplayData(product);
   };
 
   const handleOpenSubscribePopup = (p) => {
@@ -120,6 +103,11 @@ const Recommendation = ({ product }) => {
     return `Every ${freq.duration} ${freq.interval}${plural}`;
   };
 
+  const handleOpenCartPopup = (item) => {
+    setProductForCart(item);
+    setShowCartPopup(true);
+  };
+
   return (
     <>
       <div className={styles.main}>
@@ -153,10 +141,7 @@ const Recommendation = ({ product }) => {
                 const productUrl = `/shop/${category}/${item.slug}`;
 
                 return (
-                  <div
-                    className={styles.ProductCard}
-                    key={item.id}
-                  >
+                  <div className={styles.ProductCard} key={item.id}>
                     <div className={styles.ProductTop}>
                       {isLowStock && (
                         <div className={styles.LowStockBadge}>
@@ -166,7 +151,10 @@ const Recommendation = ({ product }) => {
                       <div className={styles.WishlistIcon}>
                         <Wishlist product={item} />
                       </div>
-                      <Link href={productUrl} className={`${styles.ProductImage} ${isOutOfStock ? styles.Muted : ""}`}>
+                      <Link
+                        href={productUrl}
+                        className={`${styles.ProductImage} ${isOutOfStock ? styles.Muted : ""}`}
+                      >
                         {displayData.image ? (
                           <Image
                             src={displayData.image}
@@ -214,7 +202,17 @@ const Recommendation = ({ product }) => {
                         ) : (
                           <>
                             <div className={styles.DesktopActions}>
-                              <AddToCart product={cartProduct} />
+                              {item.hasVariantOptions &&
+                              item.variants?.length > 1 ? (
+                                <button
+                                  className={styles.AddToCart}
+                                  onClick={() => handleOpenCartPopup(item)}
+                                >
+                                  Add to Cart
+                                </button>
+                              ) : (
+                                <AddToCart product={cartProduct} />
+                              )}
                               {(item.hasSimpleSub ||
                                 (item.hasVariantOptions &&
                                   item.variants?.some(
@@ -229,13 +227,33 @@ const Recommendation = ({ product }) => {
                               )}
                             </div>
                             <div className={styles.MobileActions}>
-                              <BuyNowPopup
-                                product={item}
-                                getDisplayData={getDisplayData}
-                                handleOpenSubscribePopup={
-                                  handleOpenSubscribePopup
-                                }
-                              />
+                              {item.hasVariantOptions &&
+                              item.variants?.length > 1 ? (
+                                <button
+                                  className={styles.AddToCart}
+                                  onClick={() => handleOpenCartPopup(item)}
+                                  style={{
+                                    width: "100%",
+                                    backgroundColor: "#6C7A5F",
+                                    color: "#ffffff",
+                                    fontSize: "15px",
+                                    fontWeight: 500,
+                                    border: "none",
+                                    padding: "12px 22px",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Buy Now
+                                </button>
+                              ) : (
+                                <BuyNowPopup
+                                  product={item}
+                                  getDisplayData={getDisplayData}
+                                  handleOpenSubscribePopup={
+                                    handleOpenSubscribePopup
+                                  }
+                                />
+                              )}
                             </div>
                           </>
                         )}
@@ -268,6 +286,13 @@ const Recommendation = ({ product }) => {
         getFrequencyLabel={getFrequencyLabel}
         popupRef={popupRef}
         styles={styles}
+      />
+
+      {/* Add to Cart Popup */}
+      <AddToCartPopup
+        showCartPopup={showCartPopup}
+        onClose={() => setShowCartPopup(false)}
+        selectedProduct={productForCart}
       />
     </>
   );

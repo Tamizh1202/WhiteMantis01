@@ -9,6 +9,11 @@ import { formatImageUrl } from "@/lib/imageUtils";
 import FilterSidebar from "./_components/FilterSidebar";
 import ProductGrid from "./_components/ProductGrid";
 import SubscriptionPopup from "./_components/SubscriptionPopup";
+import AddToCartPopup from "@/app/_components/AddToCartPopup/AddToCartPopup";
+import {
+  getSortedVariants,
+  getSmallestVariantDisplayData,
+} from "@/app/_utils/productVariants";
 
 const Lisiting = () => {
   const params = useParams();
@@ -35,6 +40,10 @@ const Lisiting = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedFrequency, setSelectedFrequency] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(null);
+
+  // Add to Cart Popup State
+  const [showCartPopup, setShowCartPopup] = useState(false);
+  const [productForCart, setProductForCart] = useState(null);
 
   // UI Ref for Mobile Filters
   const mobileFiltersRef = useRef(null);
@@ -192,31 +201,12 @@ const Lisiting = () => {
 
   // Helper to get display data from WebProducts schema
   const getDisplayData = (product) => {
-    let price = product.regularPrice;
-    let salePrice = product.salePrice;
-    let imageSrc = formatImageUrl(product.productImage);
-    let variationId = null;
+    return getSmallestVariantDisplayData(product);
+  };
 
-    // If variants exist, prioritize the first variant for listing view (or logic as needed)
-    if (product.hasVariantOptions && product.variants?.length > 0) {
-      const firstVariant = product.variants[0];
-      price = firstVariant.variantRegularPrice;
-      salePrice = firstVariant.variantSalePrice;
-      imageSrc = formatImageUrl(firstVariant.variantImage);
-      variationId = firstVariant.id;
-    }
-
-    return {
-      price: salePrice || price,
-      regular_price: price,
-      sale_price: salePrice,
-      image: imageSrc,
-      cartProduct: {
-        productId: product.id,
-        variationId: variationId,
-        quantity: 1,
-      },
-    };
+  const handleOpenCartPopup = (product) => {
+    setProductForCart(product);
+    setShowCartPopup(true);
   };
 
   // Subscription Handlers updated for WebProducts schema
@@ -342,6 +332,7 @@ const Lisiting = () => {
           sortOpen={sortOpen}
           setSortOpen={setSortOpen}
           setIsMobileFiltersOpen={setIsMobileFiltersOpen}
+          handleOpenCartPopup={handleOpenCartPopup}
           styles={styles}
         />
 
@@ -386,6 +377,13 @@ const Lisiting = () => {
           getFrequencyLabel={getFrequencyLabel}
           popupRef={popupRef}
           styles={styles}
+        />
+
+        {/* Add to Cart Popup */}
+        <AddToCartPopup
+          showCartPopup={showCartPopup}
+          onClose={() => setShowCartPopup(false)}
+          selectedProduct={productForCart}
         />
       </div>
     </div>

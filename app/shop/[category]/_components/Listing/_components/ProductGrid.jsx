@@ -19,6 +19,7 @@ const ProductGrid = ({
   setSortOpen,
   setIsMobileFiltersOpen,
   resetFilters,
+  handleOpenCartPopup,
   styles,
 }) => {
   return (
@@ -196,7 +197,36 @@ const ProductGrid = ({
                         ) : (
                           <>
                             <div className={styles.DesktopActions}>
-                              <AddToCart product={cartProduct} />
+                              {product.hasVariantOptions &&
+                              product.variants?.length > 1 ? (
+                                <button
+                                  className={styles.AddToCart}
+                                  onClick={() => handleOpenCartPopup(product)}
+                                  style={{
+                                    width: "100%",
+                                    boxSizing: "border-box", // <--- ADD THIS LINE
+                                    backgroundColor: "#6C7A5F",
+                                    color: "#ffffff",
+                                    fontSize: "15px",
+                                    fontWeight: 500,
+                                    border: "none",
+                                    padding: "12px 22px",
+                                    whiteSpace: "nowrap",
+                                    cursor: "pointer",
+                                    transition: "background-color 0.2s ease",
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.backgroundColor = "#5f6f57";
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = "#6C7A5F";
+                                  }}
+                                >
+                                  Add to Cart
+                                </button>
+                              ) : (
+                                <AddToCart product={cartProduct} />
+                              )}
                               {(product.hasSimpleSub ||
                                 (product.hasVariantOptions &&
                                   product.variants?.some(
@@ -213,13 +243,36 @@ const ProductGrid = ({
                               )}
                             </div>
                             <div className={styles.MobileActions}>
-                              <BuyNowPopup
-                                product={product}
-                                getDisplayData={getDisplayData}
-                                handleOpenSubscribePopup={
-                                  handleOpenSubscribePopup
-                                }
-                              />
+                              {product.hasVariantOptions &&
+                              product.variants?.length > 1 ? (
+                                <button
+                                  className={styles.AddToCart}
+                                  onClick={() => handleOpenCartPopup(product)}
+                                  style={{
+                                    width: "100%",
+                                    boxSizing: "border-box",
+                                    backgroundColor: "#6C7A5F",
+                                    color: "#ffffff",
+                                    fontSize: "15px",
+                                    fontWeight: 500,
+                                    border: "none",
+                                    padding: "12px 22px",
+                                    whiteSpace: "nowrap",
+                                    cursor: "pointer",
+                                    transition: "background-color 0.2s ease",
+                                  }}
+                                >
+                                  Buy Now
+                                </button>
+                              ) : (
+                                <BuyNowPopup
+                                  product={product}
+                                  getDisplayData={getDisplayData}
+                                  handleOpenSubscribePopup={
+                                    handleOpenSubscribePopup
+                                  }
+                                />
+                              )}
                             </div>
                           </>
                         )}
