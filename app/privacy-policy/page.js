@@ -115,7 +115,7 @@ const PrivacyPolicy = () => {
           <h3>Data Security</h3>
           <p>We use industry-standard technical and organizational security measures to protect your personal information from unauthorized access or disclosure.</p>
         </div>
-         <div className={styles.Content}>
+        <div className={styles.Content}>
           <h3>Data Retention</h3>
           <p>Personal data is retained only for as long as necessary to fulfill business, legal, or regulatory requirements.</p>
         </div>
@@ -137,7 +137,7 @@ const PrivacyPolicy = () => {
           <h3> Children’s Privacy</h3>
           <p>Our services are not intended for individuals under the age of 18, and we do not knowingly collect data from minors.</p>
         </div>
-         <div className={styles.Content}>
+        <div className={styles.Content}>
           <h3> Changes to This Privacy Policy</h3>
           <p>We may update this Privacy Policy from time to time. Continued use of our services indicates acceptance of the updated policy.</p>
         </div>
@@ -191,6 +191,57 @@ const PrivacyPolicy = () => {
           <h3>User Rights</h3>
           <ul>
             <li>Users can request account deletion and data removal by contacting us</li>
+          </ul>
+        </div>
+        <div className={styles.Content}>
+          <h3>Rewards & Loyalty Program</h3>
+
+          <p>This section explains how we collect and use data related to our in-app rewards programs.</p>
+
+        </div>
+
+        <div className={styles.Content}>
+          <h3>Stamp System (Cafe Orders)</h3>
+          <ul>
+            <li>We track stamps earned per eligible cafe beverage purchase</li>
+            <li>10 stamps = 1 free beverage reward</li>
+            <li>Stamps are linked to your account and are non-transferable</li>
+          </ul>
+        </div>
+
+        <div className={styles.Content}>
+          <h3>Points System (Store Purchases)</h3>
+          <ul>
+            <li>We track points earned on store product purchases</li>
+            <li>AED 10 spent = 1 point</li>
+            <li>Points may be redeemed for discounts or offers as announced</li>
+          </ul>
+        </div>
+
+        <div className={styles.Content}>
+          <h3>Referral Program</h3>
+          <ul>
+            <li>We collect and store your unique referral code</li>
+            <li>We track referral relationships to credit rewards when a referred friend completes their first order</li>
+            <li>Both referrer and friend earn 1 stamp upon successful referral</li>
+          </ul>
+        </div>
+
+        <div className={styles.Content}>
+          <h3>How This Data Is Used</h3>
+          <ul>
+            <li>To accurately credit and display your stamps, points and rewards</li>
+            <li>To process reward redemptions</li>
+            <li>To send notifications about reward milestones and expiry (with consent)</li>
+          </ul>
+        </div>
+
+        <div className={styles.Content}>
+          <h3>Program Rules</h3>
+          <ul>
+            <li>Rewards cannot be transferred between accounts</li>
+            <li>Cancelled or refunded orders do not qualify for stamps or points</li>
+            <li>White Mantis reserves the right to modify or terminate the program at any time with notice</li>
           </ul>
         </div>
       </div>
