@@ -257,15 +257,18 @@
 
     .MainCoantiner {
         flex-direction: column;
-        gap: 30px;
+        gap: 0px;
     }
 
     .LeftCoantiner {
+        width: 100%;       
         max-width: 100%;
-
-        background-size: cover;
-        padding-left: 0px;
-        height: 400px;
+        height: 50vh;      
+        
+        background-position: center center;        
+        padding-left: 20px;  
+        padding-right: 20px;
+        padding-bottom: 40px;
     }
 
     .LeftCoantiner p {

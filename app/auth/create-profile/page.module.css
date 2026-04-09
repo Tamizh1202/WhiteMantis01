@@ -88,7 +88,6 @@
   padding: 8px 12px;
   background-color: var(--white-color);
   border-left: 3px solid var(--red-color);
-  border-radius: 2px;
 }
 
 .Fields input {
@@ -103,6 +102,13 @@
 
 .Fields input::placeholder {
   color: var(--body-color);
+}
+
+.Fields input:focus {
+  outline: none;
+  background-color: var(--background);
+  border-radius: 0 !important;
+  border: 1px solid #6C7A5F;
 }
 
 .PhoneRow {
@@ -203,7 +209,7 @@
   font-size: var(--fs-15);
   font-weight: 500;
   color: var(--white-color);
-  cursor: pointer
+  cursor: pointer;
   margin-top: 6px;
 }
 

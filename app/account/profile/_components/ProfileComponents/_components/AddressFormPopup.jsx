@@ -281,6 +281,7 @@ const AddressFormPopup = ({
             style={{
               backgroundColor: "transparent",
               border: "1px solid #6C7A5F",
+              color: "var(--primary-color)"
             }}
             onClick={onCancel}
           >

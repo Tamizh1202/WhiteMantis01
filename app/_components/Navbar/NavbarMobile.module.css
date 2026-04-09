@@ -7,7 +7,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10000;
+  z-index: 90000;
   border-bottom: var(--line-color) 1px solid;
 }
 
@@ -21,7 +21,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 99999;
+  z-index: 999999;
 }
 
 .MenuWrapper {
@@ -30,7 +30,7 @@
   height: 100vh;
   width: 100vw;
   background: #fff;
-  z-index: 10;
+  z-index: 910;
   overflow-y: auto;
   transition: transform 0.3s ease-out;
 }
@@ -194,7 +194,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 200000;
+  z-index: 900000;
 
   display: flex;
   align-items: center;
@@ -207,7 +207,6 @@
   max-width: 320px;
 
   padding: 24px;
-  border-radius: 8px;
 
   text-align: center;
 }
@@ -249,7 +248,6 @@
   text-transform: uppercase;
 
   cursor: pointer;
-  border-radius: 4px;
 }
 
 .CancelBtn {

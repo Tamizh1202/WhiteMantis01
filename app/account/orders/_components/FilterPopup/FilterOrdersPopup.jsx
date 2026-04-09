@@ -19,8 +19,8 @@ export default function FilterOrdersPopup({
   };
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.popup}>
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
         <h2 className={styles.title}>FILTER ORDERS</h2>
         <div className={styles.body}>
           {/* Status Column */}

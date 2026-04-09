@@ -56,7 +56,7 @@ const DeleteAccountPopup = ({ accountStatus, onKeep, onConfirm }) => {
         <div className={styles.DeletePopupActions}>
           <button
             type="button"
-            style={{ backgroundColor: "white", border: "1px solid #6c7a5f" }}
+            style={{ backgroundColor: "white", border: "1px solid #6c7a5f", color: "#6c7a5f" }}
             onClick={onKeep}
           >
             Keep Account

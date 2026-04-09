@@ -3,11 +3,9 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-right: clamp(
-    24px,
-    calc(24px + (122 * ((100vw - 320px) / 1120))),
-    146px
-  );
+  padding-right: clamp(24px,
+      calc(24px + (122 * ((100vw - 320px) / 1120))),
+      146px);
 
   height: 100svh;
   overflow-y: auto;
@@ -30,45 +28,39 @@
   background: url("./1.png") no-repeat;
   flex-direction: column;
   gap: 4px;
-  padding-left: clamp(
-    24px,
-    calc(24px + (101 * ((100vw - 320px) / 1120))),
-    125px
-  );
+  padding-left: clamp(24px,
+      calc(24px + (101 * ((100vw - 320px) / 1120))),
+      125px);
 
   object-position: cover;
   object-position: center;
   height: 960px;
   background-size: cover;
   width: 62.5%;
-  max-width: clamp(
-    400px,
-    calc(400px + (800 * ((100vw - 320px) / 1120))),
-    1200px
-  );
+  max-width: clamp(400px,
+      calc(400px + (800 * ((100vw - 320px) / 1120))),
+      1200px);
 
   height: 100%;
-  padding-bottom: clamp(
-    40px,
-    calc(40px + (84 * ((100vw - 320px) / 1120))),
-    124px
-  );
+  padding-bottom: clamp(40px,
+      calc(40px + (84 * ((100vw - 320px) / 1120))),
+      124px);
 }
 
 .LeftCoantiner h4 {
-    font-family: var(--lexend);
-    font-size: var(--fs-22);
-    font-weight: var(--lexend-heading-font-weight);
-    color: var(--white-color);
-    text-transform: uppercase;
+  font-family: var(--lexend);
+  font-size: var(--fs-22);
+  font-weight: var(--lexend-heading-font-weight);
+  color: var(--white-color);
+  text-transform: uppercase;
 }
 
 .LeftCoantiner p {
-    font-family: var(--lato);
-    font-size: var(--fs-15);
-    font-weight: var(--lato-font-weight);
-    color: var(--white-color);
-    max-width: 455px;
+  font-family: var(--lato);
+  font-size: var(--fs-15);
+  font-weight: var(--lato-font-weight);
+  color: var(--white-color);
+  max-width: 455px;
 }
 
 .RightCoantiner {
@@ -92,17 +84,24 @@
   gap: 32px;
 }
 
+/* 1. Define the box size here */
 .RightTopOneTop {
+  width: 44px;
+  height: 48px;
   display: flex;
-  justify-content: left;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* Keeps things clean */
 }
 
+/* 2. The image just follows the box */
 .RightTopOneTop img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  max-width: 38px;
-  max-height: 38px;
+  object-fit: contain;
+  /* Use 'contain' for icons/logos so they don't crop */
+  display: block;
 }
 
 .RightTopOneBottom {
@@ -222,6 +221,7 @@
   padding: 16px 26px;
   cursor: pointer;
 }
+
 .OtpTextRow {
   display: flex;
   align-items: center;
@@ -241,6 +241,7 @@
   color: var(--heads-color);
   text-decoration: underline;
 }
+
 .OtpInputs {
   display: flex;
   gap: 12px;
@@ -304,11 +305,10 @@
   }
 
   .LeftCoantiner {
+    width: 100% ;
     max-width: 100%;
-
-    background-size: cover;
-    padding-left: 0px;
     height: 400px;
+    background-position: center;
   }
 
   .LeftCoantiner p {
@@ -369,7 +369,7 @@
 
   .OtpInputs {
     margin: 0px;
-    
+
   }
 
   .errorMessage,
@@ -381,7 +381,7 @@
 @media (min-width: 1025px) and (max-width: 1440px) {
   .LeftCoantiner {
     max-width: 600px;
-    height: 700px;
+    height: 100vh;
   }
 
   .RightCoantiner {
