@@ -252,19 +252,18 @@
 }
 
 .BlogCard:hover {
-  opacity: 0.7;
+  opacity: 0.95;
   transform: translateX(4px);
-  /* Subtle hover hint */
 }
+
 
 .CardImageWrapper {
   position: relative;
   width: 120px;
-  /* Balanced size for the wider sidebar */
-  height: 85px;
+  /* align-self: stretch; */
+  height: 115px;
   flex-shrink: 0;
   overflow: hidden;
-
 }
 
 .CardContent {
@@ -274,6 +273,13 @@
   flex: 1;
   min-width: 0;
   /* Critical for text truncation */
+}
+
+.CardFooter {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: space-between;
 }
 
 .ReadTime {
@@ -358,8 +364,6 @@
 ───────────────────────────────────────── */
 .ReadMoreBtn {
   width: fit-content;
-  padding: 10px 24px;
-  border: 1px solid var(--line-color);
   background: transparent;
   font-family: var(--lato);
   font-weight: 500;
@@ -371,15 +375,26 @@
 }
 
 .ReadMoreBtn:hover {
-  background-color: var(--primary-color);
-  color: var(--white-color);
-  border-color: var(--line-color);
+  text-decoration: underline;
+  
 }
 
+.ReadMoreBtn svg {
+  transform: rotate(-45deg);
+  transition: transform 0.3s ease;
+  margin-left: 2px;
+}
+.ReadMoreBtn:hover svg{
+   transform: rotate(-90deg);
+}
 .RelatedSectionMobile {
   display: none;
 }
-
+.minute{
+  font-size: 14px;
+  font-family: var(--lato);
+  font-weight: 500;
+}
 /* ═══════════════════════════════════════════════════════
    MOBILE  (≤ 768px)
    Stack everything vertically, image goes full width,
@@ -393,7 +408,7 @@
     min-height: unset;
   }
 
-  .Main{
+  .Main {
     padding-top: 74px;
   }
 
@@ -569,7 +584,7 @@
     font-family: var(--lato);
     font-size: var(--lato-font-size);
     color: var(--body-color);
-    margin-top: 60px;
+    margin-top: 0px;
   }
 
   .Breadcrumb::after {

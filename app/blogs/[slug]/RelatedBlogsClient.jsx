@@ -65,7 +65,18 @@ const RelatedBlogCard = ({ blog, styles }) => {
             })}
           </span>
           <Link href={`/blogs/${blog.slug}`} className={styles.ReadMoreBtn}>
-            Read more
+            Read more <svg
+                  width="9"
+                  height="9"
+                  viewBox="0 0 13 13"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13 1H11V9.59L1.41 0L0 1.41L9.59 11H1V13H13V1Z"
+                    fill="#6C7A5F"
+                  />
+                </svg>
           </Link>
         </div>
       </div>
