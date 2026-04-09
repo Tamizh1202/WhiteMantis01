@@ -169,7 +169,7 @@ function AuthPageContent() {
             </p>
           </div>
           <div className={styles.RightCoantiner}>
-            <div className={styles.RightTop}>
+            <form onSubmit={handleContinue} className={styles.RightTop}>
               <div className={styles.RightTopOne}>
                 <div className={styles.RightTopOneTop}>
                   <Image src={Logo} alt="White Mantis Logo" />
@@ -196,8 +196,8 @@ function AuthPageContent() {
               </div>
               <div className={styles.RightTopTwo}>
                 <button
+                  type="submit"
                   className={styles.ctacontinue}
-                  onClick={handleContinue}
                   disabled={loading || !email}
                 >
                   {loading ? "Processing..." : "Send Code"}
@@ -209,7 +209,7 @@ function AuthPageContent() {
                   </Link>
                 </p>
               </div>
-            </div>
+            </form>
             <div className={styles.RightBottom}>
               <div className={styles.RightBottomOne}>
                 <div className={styles.line}></div>

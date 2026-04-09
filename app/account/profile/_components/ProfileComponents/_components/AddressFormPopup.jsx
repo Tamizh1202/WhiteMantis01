@@ -38,9 +38,18 @@ const AddressFormPopup = ({
       ? "Update Address"
       : "Save Address";
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave();
+  };
+
   return (
     <div className={styles.PopupOverlay} onClick={onCancel}>
-      <div className={styles.Popup} onClick={(e) => e.stopPropagation()}>
+      <form
+        className={styles.Popup}
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
+      >
         <h3>{title}</h3>
 
         {/* First 11 + Last name */}
@@ -117,7 +126,7 @@ const AddressFormPopup = ({
               <div
                 className={styles.CustomSelectTrigger}
                 onClick={() => setIsEmirateOpen(!isEmirateOpen)}
-                style={{ padding: "19px 22px", }}
+                style={{ padding: "19px 22px" }}
               >
                 <span style={{ textTransform: "capitalize" }}>
                   {UAE_STATES.find((s) => s.value === addressForm.state)
@@ -218,6 +227,7 @@ const AddressFormPopup = ({
         >
           {ADDRESS_LABELS.map((label) => (
             <button
+              type="button"
               key={label}
               onClick={() => onLabelSelect(label)}
               style={{
@@ -267,6 +277,7 @@ const AddressFormPopup = ({
             </p>
           )}
           <button
+            type="button"
             style={{
               backgroundColor: "transparent",
               border: "1px solid #6C7A5F",
@@ -276,8 +287,8 @@ const AddressFormPopup = ({
             Cancel
           </button>
           <button
+            type="submit"
             className={styles.SaveBtn}
-            onClick={onSave}
             disabled={isSubmitting}
             style={{
               opacity: isSubmitting ? 0.6 : 1,
@@ -287,7 +298,7 @@ const AddressFormPopup = ({
             {saveLabel}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

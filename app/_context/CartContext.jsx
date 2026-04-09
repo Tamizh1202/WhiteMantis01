@@ -183,8 +183,8 @@ export function CartProvider({ children }) {
     setItems(data.items || []);
     setCartTotals((prev) => ({
       ...prev,
-      subtotal: data.subtotal || 0,
-      totalItems: data.totalItems || 0,
+      subtotal: Number(data.subtotal || 0),
+      totalItems: Number(data.totalItems || 0),
     }));
   };
 
@@ -194,9 +194,9 @@ export function CartProvider({ children }) {
     setItems(cart.items || []);
     setCartTotals((prev) => ({
       ...prev,
-      subtotal: cart.subtotal || 0,
+      subtotal: Number(cart.subtotal || 0),
       discount: 0,
-      totalItems: cart.totalItems || 0,
+      totalItems: Number(cart.totalItems || 0),
     }));
   };
 

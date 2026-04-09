@@ -12,9 +12,18 @@ import React from "react";
 import styles from "../ProfileComponents.module.css";
 
 const DeleteAccountPopup = ({ accountStatus, onKeep, onConfirm }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onConfirm();
+  };
+
   return (
     <div className={styles.DeletePopupOverlay} onClick={onKeep}>
-      <div className={styles.DeletePopup} onClick={(e) => e.stopPropagation()}>
+      <form
+        className={styles.DeletePopup}
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
+      >
         <h3>DELETE ACCOUNT</h3>
 
         {accountStatus ? (
@@ -34,21 +43,29 @@ const DeleteAccountPopup = ({ accountStatus, onKeep, onConfirm }) => {
           </>
         ) : (
           <p>
-            Are you sure you want to delete your account? Any upcoming orders will still be delivered.
+            Are you sure you want to delete your account? Any upcoming orders
+            will still be delivered.
           </p>
         )}
 
         <p style={{ color: "#d32f2f", fontWeight: "500", marginTop: "16px" }}>
-          Deleting your account will permanently erase your data, history, and saved settings.
+          Deleting your account will permanently erase your data, history, and
+          saved settings.
         </p>
 
         <div className={styles.DeletePopupActions}>
-          <button style={{ backgroundColor: "white", border: "1px solid #6c7a5f" }} onClick={onKeep}>Keep Account</button>
-          <button className={styles.DeleteDanger} onClick={onConfirm}>
+          <button
+            type="button"
+            style={{ backgroundColor: "white", border: "1px solid #6c7a5f" }}
+            onClick={onKeep}
+          >
+            Keep Account
+          </button>
+          <button type="submit" className={styles.DeleteDanger}>
             Delete Anyway
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

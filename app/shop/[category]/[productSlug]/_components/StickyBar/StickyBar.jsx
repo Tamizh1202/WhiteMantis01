@@ -303,7 +303,7 @@ const StickyBar = ({ product }) => {
                   className={styles.AddtoCartPriceCta}
                   onClick={handleBuyNow}
                 >
-                  {`Buy for AED ${simplePrice.toFixed(2)}`}
+                  {`Buy for AED ${Number(simplePrice).toFixed(2)}`}
                 </button>
               )}
             </div>

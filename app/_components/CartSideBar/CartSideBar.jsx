@@ -175,7 +175,7 @@ const CartSideBar = () => {
                                   ? `, ${item.variantName}g`
                                   : ""}
                               </h5>
-                              <h4>AED {(item.price || 0).toFixed(2)}</h4>
+                              <h4>AED {Number(item.price || 0).toFixed(2)}</h4>
                             </div>
                           </div>
 
@@ -370,7 +370,7 @@ const CartSideBar = () => {
                       <h5>Subtotal</h5>
                     </div>
                     <div className={styles.PriceDetailRight}>
-                      <h4>AED {(cartTotals?.total || 0).toFixed(2)}</h4>
+                      <h4>AED {Number(cartTotals?.total || 0).toFixed(2)}</h4>
                     </div>
                   </div>
                   <button

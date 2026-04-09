@@ -16,9 +16,18 @@ const OtpVerificationPopup = ({
 }) => {
   const [focusedIndex, setFocusedIndex] = useState(null);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onVerify();
+  };
+
   return (
     <div className={styles.styleOTP} onClick={onClose}>
-      <div className={styles.main1} onClick={(e) => e.stopPropagation()}>
+      <form
+        className={styles.main1}
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
+      >
         <div className={styles.main11}>
           {/* Header */}
           <div className={styles.div1}>
@@ -63,9 +72,9 @@ const OtpVerificationPopup = ({
         <div className={styles.div3}>
           <div className={styles.verify}>
             <button
+              type="submit"
               className={styles.buttons}
               style={{ cursor: "pointer", border: "none" }}
-              onClick={onVerify}
             >
               Verify
             </button>
@@ -93,7 +102,7 @@ const OtpVerificationPopup = ({
         </div>
 
         {/* Close × button */}
-        <button onClick={onClose} className={styles.closeButton}>
+        <button type="button" onClick={onClose} className={styles.closeButton}>
           <svg
             width="25"
             height="25"
@@ -120,7 +129,7 @@ const OtpVerificationPopup = ({
             </g>
           </svg>
         </button>
-      </div>
+      </form>
     </div>
   );
 };

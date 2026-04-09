@@ -51,8 +51,15 @@ const PersonalInfoForm = ({
     { label: "Female", value: "female" },
   ];
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (editMode) {
+      onSave();
+    }
+  };
+
   return (
-    <div className={styles.PersonalInfoSection}>
+    <form className={styles.PersonalInfoSection} onSubmit={handleSubmit}>
       {isGuestUser && (
         <p className={styles.GuestNote}>
           Please login to manage your profile details.
@@ -63,6 +70,7 @@ const PersonalInfoForm = ({
         <h4>PERSONAL INFORMATION</h4>
         {!editMode && (
           <button
+            type="button"
             style={{ textDecoration: "underline" }}
             onClick={() => onFieldChange("__editMode__", true)}
           >
@@ -201,15 +209,15 @@ const PersonalInfoForm = ({
 
       {editMode && !isGuestUser && (
         <div className={styles.ActionRow}>
-          <button className={styles.SaveBtn} onClick={onSave}>
+          <button type="submit" className={styles.SaveBtn}>
             Save Changes
           </button>
-          <button className={styles.CancelBtn} onClick={onCancel}>
+          <button type="button" className={styles.CancelBtn} onClick={onCancel}>
             Cancel
           </button>
         </div>
       )}
-    </div>
+    </form>
   );
 };
 

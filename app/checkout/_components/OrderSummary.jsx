@@ -177,7 +177,7 @@ export default function OrderSummary({
               </p>
               <div className={styles.AppliedRight}>
                 <div className={styles.SavingsBadge}>
-                  You saved AED {appliedCoupon.discount?.toFixed(0)}
+                  You saved AED {Number(appliedCoupon.discount || 0).toFixed(0)}
                 </div>
                 <button
                   className={styles.RemoveCouponBtn}
@@ -267,14 +267,14 @@ export default function OrderSummary({
         )}
         <div className={styles.Subtotal}>
           <p>Subtotal</p>
-          <h5>AED {cartTotals.subtotal.toFixed(2)}</h5>
+          <h5>AED {Number(cartTotals.subtotal || 0).toFixed(2)}</h5>
         </div>
 
         {cartTotals.discount > 0 && (
           <div className={styles.Subtotal}>
             <p>Discount</p>
             <h5 style={{ color: "green" }}>
-              - AED {cartTotals.discount.toFixed(2)}
+              - AED {Number(cartTotals.discount || 0).toFixed(2)}
             </h5>
           </div>
         )}
@@ -283,7 +283,7 @@ export default function OrderSummary({
           <div className={styles.Subtotal}>
             <p>Beans Discount</p>
             <h5 style={{ color: "green" }}>
-              - AED {cartTotals.beansDiscount.toFixed(2)}
+              - AED {Number(cartTotals.beansDiscount || 0).toFixed(2)}
             </h5>
           </div>
         )}
@@ -297,18 +297,18 @@ export default function OrderSummary({
                 : checkoutMode === "subscription"
                   ? "Free"
                   : "Calculated at next step"
-              : `AED ${cartTotals.shipping.toFixed(2)}`}
+              : `AED ${Number(cartTotals.shipping || 0).toFixed(2)}`}
           </h5>
         </div>
 
         <div className={styles.EstimatedTax}>
           <p>Estimated Taxes ({cartTotals.taxPercent || 0}%)</p>
-          <h5>AED {cartTotals.tax.toFixed(2)}</h5>
+          <h5>AED {Number(cartTotals.tax || 0).toFixed(2)}</h5>
         </div>
 
         <div className={styles.Total}>
           <p>Total</p>
-          <h5>AED {cartTotals.total.toFixed(2)}</h5>
+          <h5>AED {Number(cartTotals.total || 0).toFixed(2)}</h5>
         </div>
 
         <div className={styles.EarningBadge}>
