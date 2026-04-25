@@ -80,7 +80,17 @@
   text-decoration: underline;
   text-underline-offset: 6px;
 }
+.RightBottom svg path {
+    transform: rotate(-45deg);
+    /* Essential: ensures it rotates around the middle of the icon */
+    transform-origin: center; 
+    transition: transform 0.3s ease;
+}
 
+/* 2. When the parent container is hovered... */
+.RightBottom:hover svg path {
+    transform: rotate(0deg);
+}
 .MarqueeWrapper {
   position: absolute;
   top: 25%;

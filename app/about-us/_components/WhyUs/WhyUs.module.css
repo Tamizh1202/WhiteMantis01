@@ -14,7 +14,7 @@
   justify-content: left;
   flex-direction: column;
   width: 100%;
-  gap: clamp(30px, calc(30px + (45 * ((100vw - 320px) / 1120))), 75px);
+  gap: clamp(30px, calc(30px + (45 * ((100vw - 320px) / 1120))), 60px);
 }
 
 .Top {

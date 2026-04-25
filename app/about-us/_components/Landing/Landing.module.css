@@ -106,6 +106,35 @@
   font-family: var(--lexend);
   text-transform: uppercase;
 }
+/* Use :local if it's a module, or just ensure the nesting is correct */
+
+.Explore {
+    cursor: pointer;
+    display: flex; /* Helps align the text and icon nicely */
+    align-items: center;
+    gap: 10px;
+}
+
+/* 1. The Text Underline */
+.Explore:hover h4 {
+    text-decoration: underline;
+}
+
+/* 2. The Initial SVG State */
+.Explore svg path {
+    transform: rotate(-45deg);
+    /* Essential: ensures it rotates around the middle of the icon */
+    transform-origin: center; 
+    transition: transform 0.3s ease;
+}
+
+/* 2. When the parent container is hovered... */
+.Explore:hover svg path {
+    transform: rotate(0deg);
+}
+/* .Explore:hover .MiddleConatinerBottomRight {
+    background-color: #f9f9f9;
+} */
 @media (max-width: 640px) {
   /* .Marquee h2 {
     font-size: 64px;

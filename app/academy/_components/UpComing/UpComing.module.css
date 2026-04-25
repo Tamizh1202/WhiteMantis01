@@ -8,6 +8,7 @@
   background-color: var(--white-color);
   padding: 160px 125px;
   box-sizing: border-box;
+  padding-bottom: 10px;
 }
 
 .MainConatiner {
@@ -17,7 +18,7 @@
   /* This ensures the Heading stays left while you can 
      center other specific items if needed */
   align-items: stretch;
-  gap: 75px;
+  gap: 60px;
 }
 
 .TopHeading {
@@ -55,7 +56,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   max-width: 450px;
   flex: 1 1 calc(33.333% - 21.333px);
   min-width: 260px;
@@ -65,7 +66,7 @@
 
   .WorkShopContainerTop,
   .WorkShopContainerBottom {
-    gap: 160px;
+    gap: 75px 160px;
   }
 
   .WorkShopCard {
@@ -79,7 +80,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .WorkShopImage {
@@ -139,7 +140,7 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  gap: 28px;
+  gap: 10px;
   width: 100%;
   /* Ensure it spans the container */
   /* Add internal padding so content doesn't touch edges */
@@ -258,7 +259,7 @@
 .zeroPage {
   width: 100%;
   text-align: center;
-  padding: 80px;
+  padding: 60px;
   fontFamily: var(--lato);
   fontWeight: var(--lato-font-weight);
   color: var(--heads-color);

@@ -12,7 +12,7 @@
   font-weight: var(--lexend-heading-font-weight);
   font-family: var(--lexend);
   margin:
-    clamp(0px, calc(0px + (6 * ((100vw - 320px) / 1120))), 6px) 0 clamp(30px, calc(30px + (50 * ((100vw - 320px) / 1120))), 80px) clamp(0px, calc(0px + (8 * ((100vw - 320px) / 1120))), 8px);
+    clamp(0px, calc(0px + (6 * ((100vw - 320px) / 1120))), 6px) 0 clamp(30px, calc(30px + (50 * ((100vw - 320px) / 1120))), 60px) clamp(0px, calc(0px + (8 * ((100vw - 320px) / 1120))), 8px);
 
   text-transform: uppercase;
 }

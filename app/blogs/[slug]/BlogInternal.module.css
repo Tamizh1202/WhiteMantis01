@@ -376,7 +376,7 @@
 
 .ReadMoreBtn:hover {
   text-decoration: underline;
-  
+
 }
 
 .ReadMoreBtn svg {
@@ -384,17 +384,21 @@
   transition: transform 0.3s ease;
   margin-left: 2px;
 }
-.ReadMoreBtn:hover svg{
-   transform: rotate(-90deg);
+
+.ReadMoreBtn:hover svg {
+  transform: rotate(-90deg);
 }
+
 .RelatedSectionMobile {
   display: none;
 }
-.minute{
+
+.minute {
   font-size: 14px;
   font-family: var(--lato);
   font-weight: 500;
 }
+
 /* ═══════════════════════════════════════════════════════
    MOBILE  (≤ 768px)
    Stack everything vertically, image goes full width,
@@ -403,7 +407,7 @@
 @media (max-width: 768px) {
 
   .Header {
-    padding: 40px 20px 60px 20px;
+    padding: 40px 20px 40px 20px;
     gap: 12px;
     min-height: unset;
   }

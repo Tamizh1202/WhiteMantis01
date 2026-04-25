@@ -173,6 +173,11 @@
   overflow-y: auto;
 }
 
+.CustomOptionsList:hover {
+  background-color: #F1F2EF;
+  color: var(--heads-color);
+}
+
 .OptionItem {
   padding: 10px 14px;
   cursor: pointer;
@@ -183,7 +188,7 @@
 }
 
 .OptionItem:hover {
-  background-color: var(--white-color);
+  background-color: #F1F2EF;
 }
 
 .DropArrow {

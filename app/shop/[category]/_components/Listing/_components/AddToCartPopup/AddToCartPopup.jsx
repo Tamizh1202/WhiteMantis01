@@ -61,7 +61,7 @@ export default function AddToCartPopup({
           &#x2715;
         </button>
         <h2 className={styles.title}>{name}</h2>
-        <p className={styles.price}>AED {displayPrice}</p>
+        <p className={styles.price}>AEDssss {displayPrice}</p>
 
         <div className={styles.section}>
           <label className={styles.label}>Weight</label>

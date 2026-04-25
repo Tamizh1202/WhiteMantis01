@@ -37,6 +37,8 @@ const UpComing = () => {
         const res = await axiosClient.get(route);
         const data = res.data;
 
+        console.log(data);
+
         if (!cancelled && data) {
           const docs = Array.isArray(data.docs)
             ? data.docs

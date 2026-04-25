@@ -237,7 +237,7 @@ function Otp() {
                 className={styles.ctacontinue}
                 disabled={loading}
               >
-                {loading ? "Verifying..." : "CONFIRM CODE"}
+                {loading ? "Verifying..." : "Confirm Code"}
               </button>
               <p className={styles.ResendText}>
                 Didn't receive it? Check spam or{" "}

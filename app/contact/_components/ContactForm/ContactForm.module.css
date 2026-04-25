@@ -46,6 +46,14 @@
   gap: 50px;
 }
 
+.whatsappIcon {
+  transition: transform 0.2s ease;
+}
+
+.whatsappIcon:hover {
+  transform: scale(1.10);
+}
+
 @media (max-width: 640px) {
   .MainContainer {
     flex-direction: column;

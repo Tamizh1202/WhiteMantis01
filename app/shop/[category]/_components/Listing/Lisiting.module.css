@@ -6,7 +6,7 @@
   width: 100%;
   height: 100%;
   background-color: var(--white-color);
-  padding: 0px 125px 250px 125px;
+  padding: 0px 125px 150px 125px;
   box-sizing: border-box;
   /* Added to keep padding within 100% width */
 }
@@ -33,7 +33,7 @@
 .LeftTop {
   display: flex;
   justify-content: space-between;
-  
+
 }
 
 .RightConatiner {
@@ -117,14 +117,14 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 80px;
+  gap: 75px;
 }
 
 .ProductsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  row-gap: 121px;
-  column-gap: 41px;
+  row-gap: 75px;
+  column-gap: 40px;
 }
 
 .ProductCard {
@@ -165,8 +165,13 @@
   transition: border 0.3s ease;
 }
 
+.ProductImage img {
+  background-color: #f1f2ef4a;
+}
+
 .ProductImage img:hover {
   transform: scale(1.10);
+  /* background-color: #f1f2ef; */
 }
 
 .FilterBox .FilterBox {
@@ -254,7 +259,7 @@
 .Line {
   width: 100%;
   height: 0.5px;
-  background-color: var(--heads-color);
+  background-color: var(--primary-color);
 }
 
 .ProductName {
@@ -330,10 +335,16 @@
   background-color: var(--white-color);
   cursor: pointer;
   font-weight: var(--lexend-heading-font-weight);
-  border: 1px solid var(--heads-color);
+  border: 1px solid var(--primary-color);
   font-size: var(--lato-font-size);
-  color: var(--heads-color);
+  color: var(--primary-color);
   font-family: var(--lato);
+}
+
+.LoadMoreCta:hover {
+  background-color: var(--primary-color);
+  color: whitesmoke;
+  border: none
 }
 
 .LeftBottom {
@@ -458,7 +469,8 @@
 
 .SortDropdown {
   position: absolute;
-  top: calc(100% - 1px); /* Slight adjustment to overlap the border perfectly */
+  top: calc(100% - 1px);
+  /* Slight adjustment to overlap the border perfectly */
   right: 0;
   width: 100%;
   background-color: var(--white-color);
@@ -470,7 +482,8 @@
 
 .SortDropdown p {
   padding: 14px 31px;
-  margin: 0; /* Ensures no weird spacing between options */
+  margin: 0;
+  /* Ensures no weird spacing between options */
   font-family: var(--lato);
   font-size: var(--lato-font-size);
   color: var(--body-color);
@@ -481,8 +494,8 @@
 
 /* INTERACTIVE: The Inverse Flip */
 .SortDropdown p:hover {
-  background-color: var(--body-color);
-  color: var(--white-color);
+  background-color: #F1F2EF;
+  color: var(--heads-color);
 }
 
 .MobileFilterOverlay {
@@ -537,21 +550,23 @@
   display: none;
 }
 
-.NoProducts{
+.NoProducts {
   font-family: var(--lato);
   display: flex;
   flex-direction: column;
   gap: 14px;
   align-items: center;
 }
-.NoProductsP{
+
+.NoProductsP {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap:8px;
+  gap: 8px;
 }
-.zeroButton{
-  padding:14px 48px;
+
+.zeroButton {
+  padding: 14px 48px;
   color: var(--primary-color);
   border-radius: 0px;
   border: 1px solid var(--primary-color);
@@ -560,7 +575,8 @@
   font-weight: 500;
   cursor: pointer;
 }
-.zeroButton:hover{
+
+.zeroButton:hover {
   background-color: var(--primary-color);
   color: var(--white-color);
 }
@@ -629,7 +645,7 @@
   .ProductImage {
     aspect-ratio: 170 / 200;
     max-width: 170px;
-    padding: 20px;
+    /* padding: 20px; */
   }
 
   .ProductImage img {
@@ -732,7 +748,7 @@
 
     width: 100%;
     align-items: baseline;
-    justify-content: left;
+    justify-content: space-between;
 
     background: var(--white-color);
     padding-bottom: 10px;
@@ -996,66 +1012,267 @@
 }
 
 /* Subscription Popup Styles */
-.PopupOverlay {
+.overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
 }
 
-.Popup {
-  background: var(--white-color);
-  width: 560px;
-  padding: 28px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
   position: relative;
-  border-radius: 0px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 34px 40px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  animation: slideUp 0.25s ease;
 }
 
-.SortArrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: var(--body-color);
-  transition: transform 0.25s ease;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.SortArrowOpen {
-  transform: rotate(180deg);
-}
-
-.PopupClose {
+.closeBtn {
   position: absolute;
-  top: 18px;
-  right: 18px;
-
+  top: 16px;
+  right: 20px;
   background: none;
   border: none;
-
-  font-size: 20px;
-  font-weight: var(--lato-font-weight);
-  color: var(--body-color);
-
+  font-size: 18px;
+  color: #555;
   cursor: pointer;
+  line-height: 1;
+  padding: 4px 6px;
+  transition: color 0.15s ease;
 }
 
-/* .FilterOptions input[type="checkbox"]:checked {
-  background-color: #6c7a5f;
-  border-color: #6c7a5f;
-} */
+.closeBtn:hover {
+  color: #111;
+}
 
-/* .FilterOptions input[type="checkbox"]:checked::after {
-  content: "✓";
-  font-size: 10px;
-  color: #ffffff;
-} */
+.title {
+  font-size: 22px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0 0 25px;
+  font-family: var(--lexend);
+  /* line-height: 1.4; */
+  /* letter-spacing: 0.04em; */
+  padding-right: 32px;
+}
+
+/* ─── Row Layout ─── */
+
+.row {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 23px;
+}
+
+.fieldHalf {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.label {
+  display: block;
+  font-size: 15px;
+  color: #1a1a1a;
+  font-family: var(--lato);
+  font-weight: 400;
+}
+
+/* ─── Custom Dropdown ─── */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdownToggle {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid #c8c8c8;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  font-family: var(--lato);
+  font-size: 14px;
+}
+
+.dropdownToggle:hover {
+  border-color: #9aaa8a;
+}
+
+.dropdownToggleOpen {
+  border-color: #6b7c5e;
+}
+
+.dropdownTextPlaceholder {
+  color: #a0a0a0;
+}
+
+.dropdownTextSelected {
+  color: #6e736a;
+}
+
+.chevron {
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid #6e736a;
+  border-bottom: 1.5px solid #6e736a;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-top: -3px;
+}
+
+.chevronOpen {
+  transform: rotate(-135deg);
+  margin-top: 3px;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 0px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1.5px solid #c8c8c8;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dropdownItem {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: var(--lato);
+  color: #6e736a;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.dropdownItem:hover {
+  background: #f2f5ef;
+}
+
+.dropdownItemActive {
+  background: #f8faf6;
+  color: #6b7c5e;
+  font-weight: 600;
+}
+
+/* ─── Quantity Control ─── */
+
+.quantityControl {
+  display: flex;
+  width: 100%;
+  border: 1.5px solid #c8c8c8;
+  overflow: hidden;
+}
+
+.qtyBtn {
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border: none;
+  font-size: 18px;
+  color: #6e736a;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qtyBtn:hover {
+  background: #f2f5ef;
+}
+
+.qtyValue {
+  flex: 1;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #6e736a;
+  border-left: 1.5px solid #c8c8c8;
+  border-right: 1.5px solid #c8c8c8;
+  font-family: var(--lato);
+  font-weight: 400;
+}
+
+/* ─── Subscribe Button ─── */
+
+.subscribeBtn {
+  width: 100%;
+  padding: 18px;
+  background: #6b7c5e;
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--lato);
+  transition: background 0.18s ease, transform 0.1s ease;
+}
+
+.subscribeBtn:hover {
+  background: #5a6a4e;
+}
+
+.subscribeBtn:active {
+  transform: scale(0.99);
+}
 
 .PopupClose:hover {
   color: var(--heads-color);
+}
+
+@media (max-width: 640px) {
+  .overlay {
+    padding: 0 12px;
+  }
+  .dropdownToggle{
+    text-align: left;
+  }
+
 }
 
 @keyframes popupScale {

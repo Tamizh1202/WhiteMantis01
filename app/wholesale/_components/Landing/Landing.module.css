@@ -55,6 +55,21 @@
   padding-top: 20px;
   width: 50%;
 }
+.RightBottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none; /* Removes default link underline */
+}
+
+.RightBottom svg g {
+  transform: rotate(-45deg);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+.RightBottom:hover svg g {
+  transform: rotate(0deg);
+}
 
 .RightBottom h4 {
   font-family: var(--lexend);
@@ -62,13 +77,12 @@
   font-weight: 500;
   color: #ffffff;
   text-transform: uppercase;
-  transition: text-decoration 0.3s ease;
 }
 
 .RightBottom:hover h4 {
   text-decoration: underline;
   text-underline-offset: 6px;
-} 
+}
 
 .MarqueeWrapper {
   position: absolute;
@@ -162,7 +176,9 @@
     background-position: top center; 
     margin-top: 0; 
   }
-
+  .RightBottom svg g{
+    transform: none;
+  }
   /* --- Keeping the rest of your perfect logic --- */
   .Right {
     width: 100%;
