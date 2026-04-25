@@ -145,6 +145,7 @@
     max-width: 420px;
     border: 1px solid var(--primary-color);
     padding: 19px 20px;
+    color: var(--heads-color);
 }
 
 .inputemail:focus {

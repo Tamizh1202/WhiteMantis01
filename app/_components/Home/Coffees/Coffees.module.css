@@ -85,6 +85,20 @@
   gap: 24px;
 }
 
+.NameAndPriceContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.NameAndPriceContainer .price {
+  font-family: var(--lato);
+  font-size: var(--fs-15);
+  color: var(--heads-color);
+  font-weight: var(--lato-font-weight);
+}
+
 .Card:hover img {
   /* cursor: pointer; */
   /* border: 1px solid #2f362a; */
@@ -103,7 +117,7 @@
   transition: all 0.3s ease-in-out;
   cursor: pointer;
   padding: 50px 80px;
-  background-color: #F1F2EF4a;
+  background-color: #f1f2ef4a;
 }
 
 .ProductImage img {

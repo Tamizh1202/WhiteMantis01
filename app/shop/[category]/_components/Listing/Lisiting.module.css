@@ -378,9 +378,14 @@
 }
 
 .FilterBox {
-  border: 1px solid var(--heads-color);
+  border: 1px solid #C1C3C0;
   padding: 20px;
   min-width: 250px;
+  border-top: none;
+}
+
+.FilterBox:first-child {
+  border-top: 1px solid #C1C3C0;
 }
 
 

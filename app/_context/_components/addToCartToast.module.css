@@ -26,7 +26,6 @@
   max-width: 90vw;
   background: #ffffff;
   padding: 22px;
-  border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   /* transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1); */
   will-change: transform, opacity;
@@ -45,9 +44,9 @@
 
 .closeButton {
   position: absolute;
-  top: 12px;
+  top: 30px;
   right: 12px;
-  font-size: 22px;
+  font-size: 26px;
   background: none;
   border: none;
   cursor: pointer;
@@ -64,8 +63,7 @@
   font-size: 22px;
   font-weight: 500;
   font-family: var(--lexend);
-
-  margin-bottom: 14px;
+  margin-bottom: 24px;
   color: #2f362a;
   text-transform: uppercase;
 }
@@ -99,8 +97,9 @@
 
 .productName {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 400;
   color: #1a1a1a;
+  font-family: var(--lato);
   margin: 0;
   line-height: 1.4;
   word-wrap: break-word;
@@ -115,13 +114,13 @@
 
 .viewCartButton {
   width: 100%;
+  margin-top: 24px;
   background: var(--primary-color);
   color: #ffffff;
   padding: 14px;
   font-size: 14px;
   font-weight: 400;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
 
   transition:
@@ -130,7 +129,7 @@
 }
 
 .viewCartButton:hover {
-  background: #b05a2f;
+  background: var(--primary-color);
 }
 
 .viewCartButton:active {

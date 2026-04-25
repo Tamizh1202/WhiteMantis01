@@ -33,6 +33,8 @@ const Coffees = ({ category }) => {
           "productImage",
           "createdAt",
           "tastingNotes",
+          "regularPrice",
+          "salePrice",
         ];
         const productSelectQuery = productFields
           .map((f) => `select[${f}]=true`)
@@ -218,10 +220,18 @@ const Coffees = ({ category }) => {
                     </div>
 
                     <div className={styles.CardBottom}>
-                      <h3>
-                        {item.name} {item.tagline}
-                      </h3>
-                      <p>{item.tastingNotes || item.description}</p>
+                      <div className={styles.NameAndPriceContainer}>
+                        <h3>
+                          {item.name} {item.tagline}
+                        </h3>
+
+                        {(item.salePrice || item.regularPrice) && (
+                          <p className={styles.price}>
+                            AED {item.salePrice ? <span>{item.salePrice}</span> : <span>{item.regularPrice}</span>}
+                          </p>
+                        )}
+                      </div>
+                      <p>{item.tastingNotes}</p>
                     </div>
                   </div>
                 </div>
