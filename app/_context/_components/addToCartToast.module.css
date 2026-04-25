@@ -25,7 +25,7 @@
   width: 380px;
   max-width: 90vw;
   background: #ffffff;
-  padding:22px;
+  padding: 22px;
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   /* transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1); */
@@ -64,9 +64,9 @@
   font-size: 22px;
   font-weight: 500;
   font-family: var(--lexend);
-  
+
   margin-bottom: 14px;
-  color: #2F362A;
+  color: #2f362a;
   text-transform: uppercase;
 }
 
@@ -115,7 +115,7 @@
 
 .viewCartButton {
   width: 100%;
-  background: #6b7b5c;
+  background: var(--primary-color);
   color: #ffffff;
   padding: 14px;
   font-size: 14px;
@@ -130,7 +130,7 @@
 }
 
 .viewCartButton:hover {
-  background: #5a6a4b;
+  background: #b05a2f;
 }
 
 .viewCartButton:active {
