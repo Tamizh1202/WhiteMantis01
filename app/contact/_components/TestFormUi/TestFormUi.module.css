@@ -95,12 +95,9 @@
 }
 
 .btn:hover {
-  /* Inverse: Background becomes grey, text becomes white */
-  background-color: #7a7a7a;
+  background-color: var(--primary-color);
   color: var(--white-color);
-
-  /* Optional: if you want the border to vanish or stay grey */
-  border-color: #7a7a7a;
+  transition: all 0.2s ease-in-out;
 }
 
 .formBox select {

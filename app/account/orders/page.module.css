@@ -68,6 +68,12 @@
   color: #6e736a;
   font-weight: 500;
   border: 1px solid #2f362a4d;
+  border-radius: 0px;
+}
+
+.searchInput:focus {
+  outline: 1px solid var(--heads-color);
+  border-radius: 0px;
 }
 
 .searchInput::placeholder {

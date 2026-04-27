@@ -83,7 +83,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 30px;
+  gap: 50px;
 }
 
 /* .Field {
@@ -138,6 +138,12 @@
   position: relative;
   /* Essential for the dropdown list */
 }
+
+.Field:focus-within {
+  border: 1px solid var(--heads-color);
+}
+
+
 
 .PhonePrefix {
   font-family: var(--lato);
@@ -488,7 +494,7 @@
 .fixerTwo p {
   font-family: var(--lato);
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 600;
   color: #2f362a;
 }
 
@@ -618,12 +624,23 @@
 .Popup input,
 .Popup select {
   padding: 19px 22px;
-  border: 1px solid #2f362a4d;
+  border: 1px solid #6E736A;
   font-family: var(--lato);
-  color: #6e736a;
+  color: var(--heads-color);
   opacity: 0.9;
   font-size: 15px;
-  margin-bottom: -1px;
+  border-radius: 0px;
+}
+
+.Popup input:focus,
+.Popup select:focus {
+  border-radius: 0px;
+  outline: 1px solid var(--heads-color);
+  border: 1px solid var(--heads-color);
+}
+
+.Popup input::placeholder{
+  color: #C1C3C0;
 }
 
 .PopupActions {
@@ -667,11 +684,10 @@
   font-size: var(--fs-22);
   font-weight: 500;
   color: #2f362a;
-  margin: 0;
 }
 
 .PersonalInfoSection .AddressHeader {
-  margin-bottom: 2px;
+  margin-bottom: 24px;
 }
 
 .DeleteDanger,
