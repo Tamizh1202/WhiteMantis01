@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import orderZero from "./orderZero.png";
+import orderZero from "./No orders.gif";
 import styles from "./page.module.css";
 import { useSession } from "next-auth/react";
 import OrderCard from "./_components/OrderCard/OrderCard";
@@ -336,7 +336,7 @@ export default function OrdersPage() {
             className={styles.EmptyOrdersState}
             style={{ marginTop: "10px" }}
           >
-            <Image src={orderZero} alt="No products" width={140} height={160} />
+            <Image src={orderZero} alt="No products" width={160} height={210} unoptimized={true}/>
             {debouncedSearch ||
             (filters.status && filters.status !== "All") ||
             filters.time ? (

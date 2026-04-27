@@ -129,7 +129,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #2f362a4d;
+  border: 1px solid #6e736a;
   padding: 14px 16px;
   font-family: var(--lato);
   font-size: 14px;
@@ -169,7 +169,9 @@
 }
 
 
-
+/* .Field input:focus{
+  outline:none
+} */
 
 
 
@@ -679,7 +681,7 @@
 .Popup input:focus,
 .Popup select:focus {
   border-radius: 0px;
-  outline: 1px solid var(--heads-color);
+  outline: 0px solid var(--heads-color);
   border: 1px solid var(--heads-color);
 }
 

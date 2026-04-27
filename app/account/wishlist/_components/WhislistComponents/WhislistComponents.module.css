@@ -6,11 +6,9 @@
   height: 100%;
   padding-left: clamp(24px, calc(24px + (26 * ((100vw - 320px) / 1120))), 50px);
 
-  padding-bottom: clamp(
-    100px,
-    calc(100px + (199 * ((100vw - 320px) / 1120))),
-    100px
-  );
+  padding-bottom: clamp(100px,
+      calc(100px + (199 * ((100vw - 320px) / 1120))),
+      100px);
 
   background-color: #ffffff;
 }
@@ -208,9 +206,10 @@
   box-sizing: border-box;
 }
 
-.DesktopActions > * {
+.DesktopActions>* {
   flex: 1;
-  min-width: 0; /* CRITICAL: Allows flex children to shrink smaller than their content */
+  min-width: 0;
+  /* CRITICAL: Allows flex children to shrink smaller than their content */
 }
 
 .MobileActions {
@@ -255,6 +254,9 @@
   justify-content: center;
   gap: 10px;
   text-align: center;
+  position: relative;
+  /* Your desktop offset */
+  left: -180px;
 }
 
 .EmptyText {
@@ -353,6 +355,10 @@
     row-gap: 60px;
   }
 
+  .EmptyState {
+    left: 0px;
+  }
+
   .Main {
     padding-left: 32px;
     padding-right: 10px;
@@ -374,6 +380,7 @@
     column-gap: 30px;
     row-gap: 60px;
   }
+
 
   .Main {
     padding-left: 40px;
@@ -548,6 +555,10 @@
 
   .FrequencyOptions {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .EmptyState {
+    left: 0px;
   }
 }
 

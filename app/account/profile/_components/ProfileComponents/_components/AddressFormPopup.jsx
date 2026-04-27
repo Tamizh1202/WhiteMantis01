@@ -64,13 +64,16 @@ const AddressFormPopup = ({
             />
             <label htmlFor="firstName">First name <span>*</span></label>
           </div>
-          <div className={styles.floatField}>
+          <div className={styles.floatField}
+            style={{ borderLeft: "none", marginLeft: "-1px" }}
+          >
             <input
               id="lastName"
               value={addressForm.addressLastName || ""}
               onChange={(e) => onFormChange("addressLastName", e.target.value)}
               placeholder=" "
               required
+
             />
             <label htmlFor="lastName">Last name <span>*</span></label>
           </div>
@@ -90,7 +93,14 @@ const AddressFormPopup = ({
 
         {/* Country — always UAE, read-only */}
         <input
-          style={{ outline: "none" }}
+          style={{
+            outline: "none",
+            borderTop: "none",
+            borderBottom: "none",
+            borderLeft: "1px solid #6e736a",  /* Keeping sides if needed */
+            borderRight: "1px solid #6e736a",
+            backgroundColor: "transparent"    /* Makes it blend in better */
+          }}
           value="United Arab Emirates"
           readOnly
         />
@@ -114,19 +124,39 @@ const AddressFormPopup = ({
         )}
 
         {/* Apartment */}
-        <div className={styles.floatField}>
+        <div
+          className={styles.floatField}
+          style={{ borderTop: "none", borderBottom: "none" }}
+        >
           <input
             id="apartment"
+            style={{
+              outline: "none",
+              borderTop: "none",
+              borderBottom: "none",
+              borderLeft: "1px solid #6e736a",
+              borderRight: "1px solid #6e736a",
+              backgroundColor: "transparent"
+            }}
             value={addressForm.apartment || ""}
             onChange={(e) => onFormChange("apartment", e.target.value)}
             placeholder=" "
           />
-          <label htmlFor="apartment">Apartment, suite, etc. (Optional)</label>
+          <label htmlFor="apartment" style={{ color: "#6e736a" }}>
+            Apartment, suite, etc. (Optional)
+          </label>
         </div>
 
         {/* City + Emirate row */}
         <div className={styles.Row2}>
-          <div className={styles.floatField}>
+          <div
+            className={styles.floatField}
+            style={{
+              // borderTop: "none",
+              // borderBottom: "none",
+              // borderRight: "none"
+            }}
+          >
             <input
               id="city"
               value={addressForm.city || ""}
@@ -136,12 +166,12 @@ const AddressFormPopup = ({
             />
             <label htmlFor="city">City <span>*</span></label>
           </div>
-          <div className={styles.Field} ref={emirateRef} style={{ padding: 0 }}>
+          <div className={styles.Field} ref={emirateRef} style={{ padding: 0 , borderLeft: "none"}}>
             <div className={styles.SelectContainer} style={{ position: "relative", width: "100%" }}>
               <div
                 className={styles.CustomSelectTrigger}
                 onClick={() => setIsEmirateOpen(!isEmirateOpen)}
-                style={{ padding: "19px 22px", border:"0px" }}
+                style={{ padding: "19px 22px", border: "0px" }}
               >
                 <span style={{ textTransform: "capitalize" }}>
                   {UAE_STATES.find((s) => s.value === addressForm.state)?.label || "Select Emirate"}
@@ -179,13 +209,16 @@ const AddressFormPopup = ({
           style={{
             display: "flex",
             alignItems: "center",
-            border: "1px solid #2f362a4d",
+            /* Updated border logic */
+            borderLeft: "1px solid #6e736a",
+            borderRight: "1px solid #6e736a",
+            borderTop: "none",    // Specifically removed
+            borderBottom: "none", // Keeps it seamless for the next field
             padding: "19px 22px",
             fontFamily: "var(--lato)",
             fontSize: "15px",
             color: "#6a6c73",
             background: "#fff",
-            borderBottom:"none"
           }}
         >
           <span style={{ marginRight: "8px", userSelect: "none" }}>+971</span>
@@ -244,7 +277,7 @@ const AddressFormPopup = ({
               style={{
                 padding:
                   "17px clamp(20px, 5vw, 64px) 20px clamp(20px, 5vw, 64px)",
-                border: "1px solid #2F362A4D",
+                border: "1px solid #6e736a",
                 marginLeft: label === ADDRESS_LABELS[0] ? "0" : "-1px",
                 backgroundColor:
                   activeLabelBtn === label ? "#6C7A5F" : "#f8f9f8",
@@ -291,7 +324,7 @@ const AddressFormPopup = ({
             type="button"
             style={{
               backgroundColor: "transparent",
-              border: "1px solid #6C7A5F",
+              border: "1px solid #6e736a",
               color: "var(--primary-color)"
             }}
             onClick={onCancel}

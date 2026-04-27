@@ -5,7 +5,7 @@ import one from "./1.png";
 import axiosClient from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import upcomingZero from "./upcomingZero.png"
+import upcomingZero from "./No workshop (1).gif"
 const UpComing = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -290,7 +290,7 @@ const UpComing = () => {
                   src={upcomingZero}
                   alt="No products"
                   width={190}
-                  height={150}
+                  height={180}
                 />
                 <p style={{marginTop:"20px"}}> No Upcoming Courses available </p>
                 

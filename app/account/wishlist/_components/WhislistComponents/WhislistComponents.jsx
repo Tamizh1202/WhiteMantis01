@@ -4,7 +4,7 @@ import { useWishlist } from "../../../../_context/WishlistContext";
 import AddToCart from "@/app/_components/AddToCart";
 import styles from "./WhislistComponents.module.css";
 import Image from "next/image";
-import zeroWish from "./zeroWish.png";
+import zeroWish from "./No Fav (1).gif";
 import BuyNowPopup from "@/app/shop/[category]/_components/Listing/_components/BuyNowPopup/BuyNowPopup";
 import SubscriptionPopup from "@/app/shop/[category]/_components/Listing/_components/SubscriptionPopup";
 import { useRef } from "react";

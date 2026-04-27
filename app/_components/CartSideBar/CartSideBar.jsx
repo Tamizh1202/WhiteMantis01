@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { formatImageUrl } from "@/lib/imageUtils";
-import cartZero from "./cartZero.png";
+import cartZero from "./Empty Cart (1).gif";
 const CartSideBar = () => {
   const {
     isCartOpen,

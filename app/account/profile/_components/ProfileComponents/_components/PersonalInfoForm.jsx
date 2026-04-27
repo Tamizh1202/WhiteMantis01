@@ -90,7 +90,7 @@ const PersonalInfoForm = ({
           />
         </div>
 
-        <div className={styles.Field}>
+        <div className={styles.Field} style={{borderLeft: "none"}}>
           <input
             value={profile.lastName || ""}
             placeholder={!isGuestUser ? "Enter your last name" : ""}
@@ -105,7 +105,7 @@ const PersonalInfoForm = ({
         className={styles.FieldContainer}
         style={{ display: "flex", flexDirection: "column", width: "100%" }}
       >
-        <div className={styles.Field}>
+        <div className={styles.Field} style={{borderBottom: "none", borderTop: "none"}}>
           <input
             value={profile.email || ""}
             placeholder={
@@ -143,7 +143,7 @@ const PersonalInfoForm = ({
           />
         </div>
 
-        <div className={styles.Field} ref={genderRef}>
+        <div className={styles.Field} style={{borderLeft: "none"}} ref={genderRef}>
           {editMode ? (
             <div
               className={styles.SelectContainer}

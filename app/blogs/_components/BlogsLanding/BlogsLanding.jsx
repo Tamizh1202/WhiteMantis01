@@ -4,7 +4,7 @@ import styles from "../../Blogs.module.css";
 import axiosClient from "@/lib/axios";
 import { formatImageUrl } from "@/lib/imageUtils";
 import Image from "next/image";
-import blogZero from "./blogZero.png"
+import blogZero from "./No News (1).gif"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -165,8 +165,8 @@ const BlogsLanding = () => {
                 <Image
                 src={blogZero}
                 alt="No products"
-                width={260}
-                height={160}
+                width={230}
+                height={230}
             />
                 <p className={styles.EmptyText}>Brewing stories soon</p>
                 <p className={styles.EmptySubText}>
