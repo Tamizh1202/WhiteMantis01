@@ -145,6 +145,8 @@
 
 
 
+
+
 .PhonePrefix {
   font-family: var(--lato);
   font-size: 14px;
@@ -687,6 +689,11 @@
 
 .Popup input::placeholder{
   color: #C1C3C0;
+}
+
+.divide .floatField:nth-child(2) input {
+  /* your styles */
+  border-left: none;
 }
 
 .PopupActions {

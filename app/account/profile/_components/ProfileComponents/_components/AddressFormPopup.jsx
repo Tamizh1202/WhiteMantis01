@@ -65,7 +65,7 @@ const AddressFormPopup = ({
             <label htmlFor="firstName">First name <span>*</span></label>
           </div>
           <div className={styles.floatField}
-            style={{ borderLeft: "none", marginLeft: "-1px" }}
+            style={{ borderLeft: "none"}}
           >
             <input
               id="lastName"
