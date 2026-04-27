@@ -62,13 +62,14 @@
 
 /* Title */
 .title {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: var(--fs-22);
+  font-weight: 500;
   color: #1a1a1a;
   margin: 0 0 12px;
-  font-family: var(--lato);
-  line-height: 1.4;
+  font-family: var(--lexend);
+  /* line-height: 1.4; */
   padding-right: 32px;
+  text-transform: uppercase;
 }
 
 /* Price */

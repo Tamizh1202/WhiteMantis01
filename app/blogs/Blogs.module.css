@@ -349,6 +349,12 @@
   font-size: var(--lato-font-size);
   color: var(--body-color);
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.ViewMoreBtn:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color);
 }
 
 .lowersec {

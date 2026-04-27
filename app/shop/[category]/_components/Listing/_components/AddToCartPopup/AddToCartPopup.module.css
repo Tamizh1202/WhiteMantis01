@@ -63,12 +63,11 @@
 
 /* Title */
 .title {
-  font-size: 17px;
+  font-size: 22px;
   font-weight: 700;
   color: #1a1a1a;
   margin: 0 0 8px;
-  font-family: var(--lato);
-
+  font-family: var(--lexend);
   line-height: 1.4;
   padding-right: 32px;
 }

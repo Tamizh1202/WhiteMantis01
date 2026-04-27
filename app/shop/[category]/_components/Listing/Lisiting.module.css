@@ -148,6 +148,7 @@
   flex-direction: column;
   position: relative;
   max-width: 401px;
+  background-color: #F1F2EF;
 }
 
 .ProductImage {

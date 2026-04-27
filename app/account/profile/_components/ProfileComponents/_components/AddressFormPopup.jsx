@@ -54,16 +54,26 @@ const AddressFormPopup = ({
 
         {/* First 11 + Last name */}
         <div className={styles.divide}>
-          <input
-            placeholder="First name"
-            value={addressForm.addressFirstName || ""}
-            onChange={(e) => onFormChange("addressFirstName", e.target.value)}
-          />
-          <input
-            placeholder="Last Name"
-            value={addressForm.addressLastName || ""}
-            onChange={(e) => onFormChange("addressLastName", e.target.value)}
-          />
+          <div className={styles.floatField}>
+            <input
+              id="firstName"
+              value={addressForm.addressFirstName || ""}
+              onChange={(e) => onFormChange("addressFirstName", e.target.value)}
+              placeholder=" "
+              required
+            />
+            <label htmlFor="firstName">First name <span>*</span></label>
+          </div>
+          <div className={styles.floatField}>
+            <input
+              id="lastName"
+              value={addressForm.addressLastName || ""}
+              onChange={(e) => onFormChange("addressLastName", e.target.value)}
+              placeholder=" "
+              required
+            />
+            <label htmlFor="lastName">Last name <span>*</span></label>
+          </div>
         </div>
         {addressErrors.fullName && (
           <p
@@ -86,57 +96,57 @@ const AddressFormPopup = ({
         />
 
         {/* Street */}
-        <input
-          placeholder="House number, Street name"
-          value={addressForm.address || ""}
-          onChange={(e) => onFormChange("address", e.target.value)}
-        />
+        {/* Street */}
+        <div className={styles.floatField}>
+          <input
+            id="address"
+            value={addressForm.address || ""}
+            onChange={(e) => onFormChange("address", e.target.value)}
+            placeholder=" "
+            required
+          />
+          <label htmlFor="address">House number, Street name <span>*</span></label>
+        </div>
         {addressErrors.address && (
-          <p
-            style={{
-              color: "red",
-              fontSize: "12px",
-              marginTop: "-10px",
-              marginBottom: "10px",
-            }}
-          >
+          <p style={{ color: "red", fontSize: "12px", marginTop: "-10px", marginBottom: "10px" }}>
             {addressErrors.address}
           </p>
         )}
 
         {/* Apartment */}
-        <input
-          placeholder="Apartment, suite, etc. (Optional)"
-          value={addressForm.apartment || ""}
-          onChange={(e) => onFormChange("apartment", e.target.value)}
-        />
+        <div className={styles.floatField}>
+          <input
+            id="apartment"
+            value={addressForm.apartment || ""}
+            onChange={(e) => onFormChange("apartment", e.target.value)}
+            placeholder=" "
+          />
+          <label htmlFor="apartment">Apartment, suite, etc. (Optional)</label>
+        </div>
 
         {/* City + Emirate row */}
         <div className={styles.Row2}>
-          <input
-            placeholder="City"
-            value={addressForm.city || ""}
-            onChange={(e) => onFormChange("city", e.target.value)}
-          />
+          <div className={styles.floatField}>
+            <input
+              id="city"
+              value={addressForm.city || ""}
+              onChange={(e) => onFormChange("city", e.target.value)}
+              placeholder=" "
+              required
+            />
+            <label htmlFor="city">City <span>*</span></label>
+          </div>
           <div className={styles.Field} ref={emirateRef} style={{ padding: 0 }}>
-            <div
-              className={styles.SelectContainer}
-              style={{ position: "relative", width: "100%" }}
-            >
+            <div className={styles.SelectContainer} style={{ position: "relative", width: "100%" }}>
               <div
                 className={styles.CustomSelectTrigger}
                 onClick={() => setIsEmirateOpen(!isEmirateOpen)}
-                style={{ padding: "19px 22px" }}
+                style={{ padding: "19px 22px", border:"0px" }}
               >
                 <span style={{ textTransform: "capitalize" }}>
-                  {UAE_STATES.find((s) => s.value === addressForm.state)
-                    ?.label || "Select Emirate"}
+                  {UAE_STATES.find((s) => s.value === addressForm.state)?.label || "Select Emirate"}
                 </span>
-                <span
-                  className={`${styles.Arrow} ${isEmirateOpen ? styles.Rotate : ""}`}
-                >
-                  ▼
-                </span>
+                <span className={`${styles.Arrow} ${isEmirateOpen ? styles.Rotate : ""}`}>▼</span>
               </div>
 
               {isEmirateOpen && (
@@ -165,6 +175,7 @@ const AddressFormPopup = ({
 
         {/* Phone input with +971 prefix */}
         <div
+          className={styles.floatField}
           style={{
             display: "flex",
             alignItems: "center",
@@ -174,22 +185,21 @@ const AddressFormPopup = ({
             fontSize: "15px",
             color: "#6a6c73",
             background: "#fff",
+            borderBottom:"none"
           }}
         >
           <span style={{ marginRight: "8px", userSelect: "none" }}>+971</span>
           <input
-            placeholder="50 123 4567"
-            value={
-              addressForm.phone
-                ? addressForm.phone.replace(/^\+971\s?/, "")
-                : ""
-            }
-            onChange={(e) =>
-              onFormChange(
-                "phone",
-                "+971" + e.target.value.replace(/^(\+971\s?)/, ""),
-              )
-            }
+            id="phone"
+            placeholder=" "
+            type="tel"
+            inputMode="numeric"
+            value={addressForm.phone ? addressForm.phone.replace(/^\+971\s?/, "") : ""}
+            onChange={(e) => {
+              const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+              const formatted = digits.length > 2 ? digits.slice(0, 2) + " " + digits.slice(2) : digits;
+              onFormChange("phone", "+971" + formatted);
+            }}
             style={{
               border: "none",
               outline: "none",
@@ -200,6 +210,7 @@ const AddressFormPopup = ({
               background: "transparent",
             }}
           />
+          <label htmlFor="phone" style={{ left: "65px" }}> 50 123 4567 <span>*</span></label>
         </div>
         {addressErrors.phone && (
           <p

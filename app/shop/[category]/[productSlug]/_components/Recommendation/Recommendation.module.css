@@ -51,6 +51,7 @@
   cursor: pointer;
   flex-direction: column;
   position: relative;
+  background-color: #F1F2EF;
 }
 
 .WishlistIcon {

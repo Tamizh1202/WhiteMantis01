@@ -414,7 +414,13 @@
   border: 1px solid #6C7A5F;
   padding: 10px 18px;
   text-decoration: none;
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
+}
+
+.EmptyCTA:hover{
+  background-color: #6c7a5f;
+  color: #ffffff;
 }
 
 /* important */

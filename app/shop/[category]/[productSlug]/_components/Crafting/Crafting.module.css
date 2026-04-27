@@ -162,6 +162,7 @@
 }
 .activeFilter h4 {
   color: #2F362A;
+  text-decoration: underline;
 }
 
 .inactiveFilter h4 {
