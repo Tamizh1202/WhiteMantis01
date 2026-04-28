@@ -142,7 +142,7 @@ export default async function ProductDetailPage({ params }) {
       process.env.NEXT_PUBLIC_SERVER_URL;
     try {
       const categoryResponse = await fetch(
-        `${serverUrl}/api/web-categories?where[slug][equals]=${selectedCategory}`,
+        `${serverUrl}/api/web-categories?where[slug][equals]=${selectedCategory}&where[_status][equals]=published`,
         {
           method: "GET",
           headers: {

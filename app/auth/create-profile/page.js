@@ -17,7 +17,7 @@ function CreateProfileContent() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("other");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isGenderOpen, setIsGenderOpen] = useState(false);
@@ -70,7 +70,7 @@ function CreateProfileContent() {
       const res = await axiosClient.patch(`/api/users/${session?.user?.id}`, {
         firstName: firstName,
         lastName: lastName,
-        gender: gender.toLowerCase(),
+        gender: gender.toLowerCase() || gender,
         phone: phone,
       });
 
@@ -171,7 +171,7 @@ function CreateProfileContent() {
                 >
                   <span>
                     {genderOptions.find((o) => o.value === gender)?.label ||
-                      "Gender (optional)"}
+                      "Gender"}
                   </span>
                 </div>
 

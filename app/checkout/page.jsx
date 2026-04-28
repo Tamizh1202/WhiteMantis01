@@ -43,6 +43,7 @@ function CheckoutContent() {
   const productId = searchParams.get("productId");
   const subscriptionId = searchParams.get("subscriptionId"); // Frequency ID
   const variationId = searchParams.get("variationId");
+  const productHighlightsParam = searchParams.get("productHighlights");
 
   // ── Page State ──────────────────────────────────────────────────────────────
   const [isLoading, setIsLoading] = useState(true);
@@ -175,6 +176,15 @@ function CheckoutContent() {
           const discountedPrice =
             basePrice - basePrice * (discountPercent / 100);
 
+          let highlights = [];
+          if (productHighlightsParam) {
+            try {
+              highlights = JSON.parse(productHighlightsParam);
+            } catch (e) {
+              console.error("Error parsing productHighlights from URL", e);
+            }
+          }
+
           setProducts([
             {
               id: productData.id,
@@ -186,6 +196,7 @@ function CheckoutContent() {
               frequency: frequencyDisplay,
               price: discountedPrice,
               quantity: parseInt(searchParams.get("quantity") || "1"),
+              productHighlights: highlights,
             },
           ]);
 

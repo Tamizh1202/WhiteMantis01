@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./OrderCard.module.css";
 import { formatImageUrl } from "@/lib/imageUtils";
+import CartHighlights from "@/app/_components/CartHighlights/CartHighlights";
 import {
   getStatusConfig,
   formatDate,
@@ -108,10 +109,13 @@ const OrderCard = ({ order, handleCancelButton }) => {
                 className={styles.orderItemImg}
               />
               <div className={styles.orderItemInfo}>
-                <p>
+                <p style={{
+                  lineHeight: '1.0'
+                }}>
                   {item.product?.name || item.name || "Product name"}{" "}
                   {item.product?.tagline}
                 </p>
+                <CartHighlights highlights={item.productHighlights} />
                 <p>
                   {item.product?.variants?.find(
                     (v) => v.id === item.variantID,

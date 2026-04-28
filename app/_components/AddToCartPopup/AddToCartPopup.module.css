@@ -168,6 +168,11 @@
   background: #f2f5ef;
   color: #6e736a;
 }
+.qtyBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: #fff;
+}
 
 .qtyValue {
   flex: 1;
@@ -254,6 +259,13 @@
 
 .fieldHalf {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fieldFull {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;

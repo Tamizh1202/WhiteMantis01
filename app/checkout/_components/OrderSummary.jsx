@@ -7,6 +7,8 @@ import { formatImageUrl } from "@/lib/imageUtils";
 import { useEffect, useState } from "react";
 import axiosClient from "@/lib/axios";
 import { useCart } from "../../_context/CartContext";
+import CartHighlights from "@/app/_components/CartHighlights/CartHighlights";
+
 
 export default function OrderSummary({
   product,
@@ -90,6 +92,7 @@ export default function OrderSummary({
                       {item?.vId && <span>&nbsp;|&nbsp;</span>}
                       <span>{item.quantity}x Bag amount</span>
                     </div>
+                    <CartHighlights highlights={item.productHighlights} />
                     {item?.frequency && (
                       <div className={styles.ItemFrequencyRow}>
                         {item.frequency}
@@ -99,6 +102,7 @@ export default function OrderSummary({
                 ) : (
                   <>
                     {item?.vId && <span>{item?.variantName}g</span>}
+                    <CartHighlights highlights={item.productHighlights} />
                     {item?.frequency && (
                       <div
                         className={styles.ItemFrequency}

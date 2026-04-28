@@ -167,6 +167,7 @@ export default function CheckoutForm({
             quantity: product[0].quantity,
           },
           useWTCoins: !!isBeansApplied,
+          productHighlights: product[0].productHighlights || [],
         });
       } else {
         url = "/api/checkout/one-time";
@@ -180,6 +181,7 @@ export default function CheckoutForm({
             productId: p.product || p.id,
             variantId: p.vId || "",
             quantity: p.quantity,
+            productHighlights: p.productHighlights || [],
           })),
           useWTCoins: !!isBeansApplied,
           appliedCouponCode: appliedCoupon?.code || "",

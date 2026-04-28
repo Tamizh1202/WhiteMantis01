@@ -444,13 +444,16 @@ const POLICIES = {
 
 // --- Modal Component ---
 function PolicyModal({ policy, onClose }) {
-    if (!policy) return null;
     useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, []);
+        if (policy) {
+            document.body.style.overflow = "hidden";
+            return () => {
+                document.body.style.overflow = "";
+            };
+        }
+    }, [policy]);
+
+    if (!policy) return null;
     return (
         <>
             {/* Backdrop */}

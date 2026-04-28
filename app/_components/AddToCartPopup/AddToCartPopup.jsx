@@ -7,48 +7,62 @@ export default function AddToCartPopup({
   onClose,
   showCartPopup,
   selectedProduct,
+  initialVariant = null,
+  initialQuantity = 1,
+  initialHighlights = null,
 }) {
-  const { addToCart } = useCart();
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [roastProfile, setRoastProfile] = useState("");
-  const [grindOption, setGrindOption] = useState("");
+  const [selectedHighlights, setSelectedHighlights] = useState({});
+  const [qtyError, setQtyError] = useState("");
+  const { addToCart, items } = useCart();
 
   const [weightOpen, setWeightOpen] = useState(false);
-  const [roastOpen, setRoastOpen] = useState(false);
-  const [grindOpen, setGrindOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // Track which highlight dropdown is open
 
   const weightRef = useRef(null);
-  const roastRef = useRef(null);
-  const grindRef = useRef(null);
+  const dropdownRefs = useRef({});
 
   const sortedVariants = selectedProduct
     ? getSortedVariants(selectedProduct)
     : [];
 
   useEffect(() => {
-    if (showCartPopup && sortedVariants.length > 0) {
-      setSelectedVariant(sortedVariants[0]);
-      setQuantity(1);
-      setRoastProfile("");
-      setGrindOption("");
+    if (showCartPopup) {
+      setSelectedVariant(initialVariant || (sortedVariants.length > 0 ? sortedVariants[0] : null));
+      setQuantity(initialQuantity || 1);
+
+      if (initialHighlights) {
+        setSelectedHighlights(initialHighlights);
+      } else {
+        const initial = {};
+        selectedProduct?.productHighlights?.forEach((section) => {
+          if (section.items?.length > 0) {
+            initial[section.sectionTitle] = section.items[0].point;
+          }
+        });
+        setSelectedHighlights(initial);
+      }
+      setActiveDropdown(null);
     }
   }, [showCartPopup, selectedProduct]);
 
   // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(e) {
-      if (weightRef.current && !weightRef.current.contains(e.target))
+      if (weightRef.current && !weightRef.current.contains(e.target)) {
         setWeightOpen(false);
-      if (roastRef.current && !roastRef.current.contains(e.target))
-        setRoastOpen(false);
-      if (grindRef.current && !grindRef.current.contains(e.target))
-        setGrindOpen(false);
+      }
+
+      // Check highlight dropdowns
+      if (activeDropdown && dropdownRefs.current[activeDropdown] && !dropdownRefs.current[activeDropdown].contains(e.target)) {
+        setActiveDropdown(null);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [activeDropdown]);
 
   if (!showCartPopup || !selectedProduct) return null;
 
@@ -58,8 +72,31 @@ export default function AddToCartPopup({
     ? selectedVariant.variantSalePrice || selectedVariant.variantRegularPrice
     : selectedProduct.salePrice || selectedProduct.regularPrice || "0";
 
-  const increment = () => setQuantity((q) => q + 1);
-  const decrement = () => setQuantity((q) => Math.max(1, q - 1));
+  const stockQuantity = selectedVariant
+    ? selectedVariant.variantStockQuantity
+    : selectedProduct.stockQuantity || 0;
+
+  const currentCartQty = items?.find(
+    (item) =>
+      String(item.product) === String(selectedProduct.id) &&
+      (String(item.vId || "") === String(selectedVariant?.id || ""))
+  )?.quantity || 0;
+
+  const increment = () => {
+    const maxAllowed = Math.min(5, stockQuantity - currentCartQty);
+    if (quantity < maxAllowed) {
+      setQuantity((q) => q + 1);
+      setQtyError("");
+    } else {
+      if (quantity + currentCartQty >= stockQuantity) {
+        setQtyError("Stock limit reached");
+      }
+    }
+  };
+  const decrement = () => {
+    setQuantity((q) => Math.max(1, q - 1));
+    setQtyError("");
+  };
 
   const handleAddToCart = async () => {
     if (loading) return;
@@ -67,7 +104,13 @@ export default function AddToCartPopup({
     try {
       const productId = selectedProduct.id;
       const variationId = selectedVariant?.id || "";
-      await addToCart(productId, quantity, variationId);
+
+      const highlightsPayload = Object.entries(selectedHighlights).map(([title, point]) => ({
+        sectionTitle: title,
+        items: [{ point }],
+      }));
+
+      await addToCart(productId, quantity, variationId, highlightsPayload);
       onClose();
     } catch (err) {
       console.error("Popup Add to cart error", err);
@@ -104,8 +147,7 @@ export default function AddToCartPopup({
                 className={`${styles.dropdownToggle} ${weightOpen ? styles.dropdownToggleOpen : ""}`}
                 onClick={() => {
                   setWeightOpen(!weightOpen);
-                  setRoastOpen(false);
-                  setGrindOpen(false);
+                  setActiveDropdown(null);
                 }}
               >
                 <span className={selectedVariant ? styles.dropdownTextSelected : styles.dropdownTextPlaceholder}>
@@ -145,85 +187,69 @@ export default function AddToCartPopup({
               <span className={styles.qtyValue}>
                 {String(quantity).padStart(2, "0")}
               </span>
-              <button className={styles.qtyBtn} onClick={increment}>
+              <button
+                className={styles.qtyBtn}
+                onClick={increment}
+                disabled={quantity >= 5 || quantity + currentCartQty >= stockQuantity}
+              >
                 &#x2B;
               </button>
             </div>
+            {qtyError && <p style={{ color: "#c0392b", fontSize: "12px", marginTop: "4px", fontFamily: "var(--lato)" }}>{qtyError}</p>}
           </div>
         </div>
-
-        {/* Row 2: Roast Profile + Grind Option */}
-        <div className={styles.row}>
-          <div className={styles.fieldHalf}>
-            <label className={styles.label}>Roast Profile</label>
-            <div className={styles.dropdown} ref={roastRef}>
-              <button
-                className={`${styles.dropdownToggle} ${roastOpen ? styles.dropdownToggleOpen : ""}`}
-                onClick={() => {
-                  setRoastOpen(!roastOpen);
-                  setWeightOpen(false);
-                  setGrindOpen(false);
-                }}
-              >
-                <span className={roastProfile ? styles.dropdownTextSelected : styles.dropdownTextPlaceholder}>
-                  {roastProfile || "Select Roast Profile"}
-                </span>
-                <span className={`${styles.chevron} ${roastOpen ? styles.chevronOpen : ""}`} />
-              </button>
-              {roastOpen && (
-                <ul className={styles.dropdownMenu}>
-                  {["Expresso Roast", "Filter Roast"].map((opt) => (
-                    <li
-                      key={opt}
-                      className={`${styles.dropdownItem} ${roastProfile === opt ? styles.dropdownItemActive : ""}`}
-                      onClick={() => {
-                        setRoastProfile(opt);
-                        setRoastOpen(false);
-                      }}
-                    >
-                      {opt}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+        {/* Dynamic Product Highlights - Grouped in pairs */}
+        {selectedProduct.productHighlights?.reduce((acc, section, idx, arr) => {
+          if (idx % 2 === 0) {
+            acc.push(arr.slice(idx, idx + 2));
+          }
+          return acc;
+        }, []).map((pair, rowIdx) => (
+          <div className={styles.row} key={rowIdx}>
+            {pair.map((section) => (
+              <div className={styles.fieldHalf} key={section.sectionTitle}>
+                <label className={styles.label}>{section.sectionTitle}</label>
+                <div
+                  className={styles.dropdown}
+                  ref={(el) => (dropdownRefs.current[section.sectionTitle] = el)}
+                >
+                  <button
+                    className={`${styles.dropdownToggle} ${activeDropdown === section.sectionTitle ? styles.dropdownToggleOpen : ""}`}
+                    onClick={() => {
+                      setActiveDropdown(activeDropdown === section.sectionTitle ? null : section.sectionTitle);
+                      setWeightOpen(false);
+                    }}
+                  >
+                    <span className={selectedHighlights[section.sectionTitle] ? styles.dropdownTextSelected : styles.dropdownTextPlaceholder}>
+                      {selectedHighlights[section.sectionTitle] || `Select ${section.sectionTitle}`}
+                    </span>
+                    <span className={`${styles.chevron} ${activeDropdown === section.sectionTitle ? styles.chevronOpen : ""}`} />
+                  </button>
+                  {activeDropdown === section.sectionTitle && (
+                    <ul className={styles.dropdownMenu}>
+                      {section.items?.map((item) => (
+                        <li
+                          key={item.point}
+                          className={`${styles.dropdownItem} ${selectedHighlights[section.sectionTitle] === item.point ? styles.dropdownItemActive : ""}`}
+                          onClick={() => {
+                            setSelectedHighlights(prev => ({
+                              ...prev,
+                              [section.sectionTitle]: item.point
+                            }));
+                            setActiveDropdown(null);
+                          }}
+                        >
+                          {item.point}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
+        ))}
 
-          <div className={styles.fieldHalf}>
-            <label className={styles.label}>Grind Option</label>
-            <div className={styles.dropdown} ref={grindRef}>
-              <button
-                className={`${styles.dropdownToggle} ${grindOpen ? styles.dropdownToggleOpen : ""}`}
-                onClick={() => {
-                  setGrindOpen(!grindOpen);
-                  setWeightOpen(false);
-                  setRoastOpen(false);
-                }}
-              >
-                <span className={grindOption ? styles.dropdownTextSelected : styles.dropdownTextPlaceholder}>
-                  {grindOption || "Select Grind Option"}
-                </span>
-                <span className={`${styles.chevron} ${grindOpen ? styles.chevronOpen : ""}`} />
-              </button>
-              {grindOpen && (
-                <ul className={styles.dropdownMenu}>
-                  {["Whole Bean", "Filter Grind", "Expresso Grind"].map((opt) => (
-                    <li
-                      key={opt}
-                      className={`${styles.dropdownItem} ${grindOption === opt ? styles.dropdownItemActive : ""}`}
-                      onClick={() => {
-                        setGrindOption(opt);
-                        setGrindOpen(false);
-                      }}
-                    >
-                      {opt}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
 
         <button
           className={styles.addToCart}

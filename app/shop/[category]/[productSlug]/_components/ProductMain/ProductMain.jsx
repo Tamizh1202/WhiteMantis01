@@ -12,6 +12,7 @@ import { getProductDetails } from "@/utils/PDPUtils";
 
 // ... (existing imports and helpers) ...
 const ProductMain = ({ product }) => {
+  console.log(product)
   const { selectedImage, selectedVariant } = useProductImage(); // Use context
   const detailsRef = useRef(null);
   const leftRef = useRef(null);
@@ -163,8 +164,8 @@ const ProductMain = ({ product }) => {
 
             <div className={styles.LeftBottom}>
               <div>
-                <h4>Farm</h4>
-                <p>{product?.farm}</p>
+                <h4>Acidity</h4>
+                <p>{product?.acidity}</p>
               </div>
 
               <div>
@@ -173,8 +174,8 @@ const ProductMain = ({ product }) => {
               </div>
 
               <div>
-                <h4>Variety</h4>
-                <p>{product?.variety}</p>
+                <h4>Body</h4>
+                <p>{product?.body}</p>
               </div>
             </div>
           </div>

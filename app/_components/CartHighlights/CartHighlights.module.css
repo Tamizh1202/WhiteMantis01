@@ -1,0 +1,31 @@
+.HighlightsContainer {
+  margin-top: 4px;
+}
+
+.HighlightsText {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #6e736a;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+.ViewLessBtn {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #6e736a;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+@media (max-width: 640px) {
+  .HighlightsText,
+  .ViewLessBtn {
+    font-size: 11px;
+  }
+}

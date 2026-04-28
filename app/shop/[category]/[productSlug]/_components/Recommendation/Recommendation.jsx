@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 import styles from "./Recommendation.module.css";
 import Image from "next/image";
 import Wishlist from "../../../../../_components/Whishlist";
-import AddToCart from "../../../../../_components/AddToCart";
 import { formatImageUrl } from "@/lib/imageUtils";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -22,6 +21,7 @@ const Recommendation = ({ product }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedFrequency, setSelectedFrequency] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(2);
+  const [selectedHighlights, setSelectedHighlights] = useState({});
   const popupRef = useRef(null);
 
   // Add to Cart Popup State
@@ -82,6 +82,16 @@ const Recommendation = ({ product }) => {
     }
 
     setSelectedQuantity(2);
+
+    // Initialize default highlights
+    const defaults = {};
+    p.productHighlights?.forEach(section => {
+      if (section.items?.length > 0) {
+        defaults[section.sectionTitle] = section.items[0].point;
+      }
+    });
+    setSelectedHighlights(defaults);
+
     setShowSubscribePopup(true);
   };
 
@@ -93,6 +103,7 @@ const Recommendation = ({ product }) => {
       subscriptionId: selectedFrequency.id || selectedFrequency._id || "",
       variationId: selectedProduct.isVariant ? selectedProduct.variant.id : "",
       quantity: selectedQuantity.toString(),
+      highlights: JSON.stringify(selectedHighlights),
     });
     router.push(`/checkout?${params.toString()}`);
   };
@@ -178,7 +189,7 @@ const Recommendation = ({ product }) => {
                             <h4>AED {displayData.price}</h4>
                             {displayData.sale_price &&
                               displayData.sale_price !==
-                                displayData.regular_price && (
+                              displayData.regular_price && (
                                 <p className={styles.OldPrice}>
                                   AED {displayData.regular_price}
                                 </p>
@@ -200,24 +211,18 @@ const Recommendation = ({ product }) => {
                             </button>
                           </div>
                         ) : (
-                          <>
-                            <div className={styles.DesktopActions}>
-                              {item.hasVariantOptions &&
-                              item.variants?.length > 1 ? (
-                                <button
-                                  className={styles.AddToCart}
-                                  onClick={() => handleOpenCartPopup(item)}
-                                >
-                                  Add to Cart
-                                </button>
-                              ) : (
-                                <AddToCart product={cartProduct} />
-                              )}
-                              {(item.hasSimpleSub ||
-                                (item.hasVariantOptions &&
-                                  item.variants?.some(
-                                    (v) => v.hasVariantSub,
-                                  ))) && (
+                          <div className={styles.ActionRow}>
+                            <button
+                              className={styles.AddToCart}
+                              onClick={() => handleOpenCartPopup(item)}
+                            >
+                              Add to Cart
+                            </button>
+                            {(item.hasSimpleSub ||
+                              (item.hasVariantOptions &&
+                                item.variants?.some(
+                                  (v) => v.hasVariantSub,
+                                ))) && (
                                 <button
                                   className={styles.Subscribe}
                                   onClick={() => handleOpenSubscribePopup(item)}
@@ -225,37 +230,7 @@ const Recommendation = ({ product }) => {
                                   Subscribe
                                 </button>
                               )}
-                            </div>
-                            <div className={styles.MobileActions}>
-                              {item.hasVariantOptions &&
-                              item.variants?.length > 1 ? (
-                                <button
-                                  className={styles.AddToCart}
-                                  onClick={() => handleOpenCartPopup(item)}
-                                  style={{
-                                    width: "100%",
-                                    backgroundColor: "#6C7A5F",
-                                    color: "#ffffff",
-                                    fontSize: "15px",
-                                    fontWeight: 500,
-                                    border: "none",
-                                    padding: "12px 22px",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  Buy Now
-                                </button>
-                              ) : (
-                                <BuyNowPopup
-                                  product={item}
-                                  getDisplayData={getDisplayData}
-                                  handleOpenSubscribePopup={
-                                    handleOpenSubscribePopup
-                                  }
-                                />
-                              )}
-                            </div>
-                          </>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -284,6 +259,8 @@ const Recommendation = ({ product }) => {
         setSelectedQuantity={setSelectedQuantity}
         handleSubscriptionCheckout={handleSubscriptionCheckout}
         getFrequencyLabel={getFrequencyLabel}
+        selectedHighlights={selectedHighlights}
+        setSelectedHighlights={setSelectedHighlights}
         popupRef={popupRef}
         styles={styles}
       />

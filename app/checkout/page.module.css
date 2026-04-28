@@ -159,7 +159,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 8px;
+  gap: 30px;
   max-height: 150px;
   overflow-y: auto;
   padding-right: 12px;
@@ -262,6 +262,30 @@
 
 .SubSummaryItem {
   align-items: flex-start;
+}
+
+.HighlightsContainer {
+  margin-top: 2px;
+}
+
+.HighlightsText {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #6e736a;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.ViewLessBtn {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #6e736a;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4px;
 }
 
 .RightThree {

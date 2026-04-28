@@ -51,7 +51,7 @@
   cursor: pointer;
   flex-direction: column;
   position: relative;
-  background-color: #F1F2EF;
+  background-color: #f1f2ef;
 }
 
 .WishlistIcon {
@@ -160,13 +160,25 @@
   width: 100%;
 }
 
-.DesktopActions {
-  display: contents;
+.ActionRow {
+  display: flex;
+  width: 100%;
 }
 
-.MobileActions {
-  display: none;
-  width: 100%;
+.AddToCart {
+  background: #6c7a5f;
+  border: 1px solid #6c7a5f;
+  padding: 14px 10px;
+  font-family: var(--lato);
+  font-size: 14px;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
 }
 
 .Subscribe {
@@ -174,15 +186,16 @@
   justify-content: center;
   align-items: center;
   padding: 14px 20px;
-  /* Slightly deeper button */
-  width: 100%;
+  flex: 1;
   background-color: #ffffff;
   cursor: pointer;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 14px;
   color: #464646;
   font-family: var(--lato);
-  border: 0.75px solid #6c7a5f;
+  border: 1px solid #6c7a5f;
+  border-left: none; /* Join with Add to Cart */
+  text-transform: uppercase;
 }
 
 .BottomBottom {
@@ -297,14 +310,8 @@
   }
 
   /* Since BuyNowPopup handles mobile, ensure it fills the width */
-  .MobileActions {
-    display: block;
+  .ActionRow {
     width: 100%;
-  }
-
-  /* Keep desktop actions hidden as per your logic */
-  .DesktopActions {
-    display: none;
   }
 }
 
@@ -328,9 +335,7 @@
     width: 100%;
   }
 
-  .DesktopActions {
-    display: flex !important;
-    flex-direction: row !important;
+  .ActionRow {
     width: 100%;
     align-items: stretch;
   }

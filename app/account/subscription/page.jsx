@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import axiosClient from "@/lib/axios";
 import { formatImageUrl } from "@/lib/imageUtils";
+import CartHighlights from "@/app/_components/CartHighlights/CartHighlights";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL;
@@ -192,6 +193,9 @@ export default function SubscriptionPage() {
                               {sub.items?.[0]?.product?.tagline}
                             </h3>
                           </div>
+                          <CartHighlights
+                            highlights={sub.items?.[0]?.productHighlights}
+                          />
                           {/* varient field is first cross checked with the varID and then it is displayed */}
                           <div className={styles.ProdTooDetails}>
                             {(() => {
@@ -465,10 +469,11 @@ export default function SubscriptionPage() {
                       <div className={styles.pastProdSubTitledetails}>
                         <div className={styles.pastprodTag}>
                           <p>
-                            {sub.items?.[0]?.product?.name}{" "}
-                            {sub.items?.[0]?.product?.tagline}
-                          </p>
-                        </div>
+                              {sub.items?.[0]?.product?.name}{" "}
+                              {sub.items?.[0]?.product?.tagline}
+                            </p>
+                            <CartHighlights highlights={sub.items?.[0]?.productHighlights} />
+                          </div>
 
                         {(() => {
                           const item = sub?.items?.[0];

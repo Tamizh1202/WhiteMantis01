@@ -3,15 +3,15 @@ export const getProductDetails = (product) => {
   const formatDetail = (title, desc) => (desc ? { title, desc } : null);
 
   const leftDetails = [
-    formatDetail("Altitude", product?.altitude),
+    formatDetail("Origin", product?.origin),
+    formatDetail("Farm", product?.farm),
     formatDetail("Process", product?.process),
-    formatDetail("Roast Level", product?.roast),
   ].filter(Boolean);
 
   const rightDetails = [
-    formatDetail("Body", product?.body),
-    formatDetail("Aroma", product?.aroma),
-    formatDetail("Finish", product?.finish),
+    formatDetail("Variety", product?.variety),
+    formatDetail("Altitude", product?.altitude),
+    formatDetail("Roast Level", product?.roast),
   ].filter(Boolean);
 
   return {

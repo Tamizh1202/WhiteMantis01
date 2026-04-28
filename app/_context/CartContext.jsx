@@ -155,10 +155,10 @@ export function CartProvider({ children }) {
       total: Math.max(
         0,
         prev.subtotal -
-          (prev.discount || 0) +
-          (prev.shipping || 0) +
-          (prev.tax || 0) -
-          coinsDiscount,
+        (prev.discount || 0) +
+        (prev.shipping || 0) +
+        (prev.tax || 0) -
+        coinsDiscount,
       ),
     }));
   }, [
@@ -208,6 +208,7 @@ export function CartProvider({ children }) {
       if (session?.user) {
         const res = await axiosClient.get("/api/website/cart");
         applyCartResponse(res.data);
+        console.log(res.data);
       } else {
         applyGuestCart();
       }
@@ -220,21 +221,25 @@ export function CartProvider({ children }) {
 
   // ─── Add ─────────────────────────────────────────────────────────────────────
 
-  const addToCart = async (product, quantity = 1, vId) => {
+  const addToCart = async (product, quantity = 1, vId, productHighlights = []) => {
     if (session?.user) {
       try {
         const res = await axiosClient.post("/api/website/cart", {
           product,
           quantity,
           vId: vId || "",
+          productHighlights,
         });
         const data = res.data;
         applyCartResponse(data);
         // Show toast with the item that was just added/updated
+        // Match including highlights for more accuracy
         const added = (data.items || []).find(
           (i) =>
             String(i.product) === String(product) &&
-            (i.vId || "") === (vId || ""),
+            (i.vId || "") === (vId || "") &&
+            JSON.stringify(i.productHighlights || []) ===
+            JSON.stringify(productHighlights),
         );
         if (added) {
           addToCartToast({ ...added, quantity }, openCart);
@@ -248,14 +253,16 @@ export function CartProvider({ children }) {
       }
     } else {
       try {
-        await addItemToCart(product, quantity, vId);
+        await addItemToCart(product, quantity, vId, productHighlights);
         const cart = getCart();
         applyGuestCart();
         // Show toast with the item from the refreshed guest cart
         const added = (cart.items || []).find(
           (i) =>
             String(i.product) === String(product) &&
-            (i.vId || null) === (vId || null),
+            (i.vId || null) === (vId || null) &&
+            JSON.stringify(i.productHighlights || []) ===
+            JSON.stringify(productHighlights),
         );
         if (added) {
           addToCartToast({ ...added, quantity }, openCart);
@@ -269,18 +276,18 @@ export function CartProvider({ children }) {
 
   // ─── Remove ──────────────────────────────────────────────────────────────────
 
-  const removeItem = async (product, vId) => {
+  const removeItem = async (product, vId, productHighlights = []) => {
     if (session?.user) {
       try {
         const res = await axiosClient.delete("/api/website/cart", {
-          data: { product, vId: vId || "" },
+          data: { product, vId: vId || "", productHighlights },
         });
         applyCartResponse(res.data);
       } catch (e) {
         console.error("Error removing from cart:", e);
       }
     } else {
-      removeItemFromCart(product, vId);
+      removeItemFromCart(product, vId, productHighlights);
       applyGuestCart();
     }
   };
@@ -288,7 +295,13 @@ export function CartProvider({ children }) {
   // ─── Update Quantity ─────────────────────────────────────────────────────────
   // action: 'increment' | 'decrement' | null (pass quantity directly)
 
-  const updateQuantity = async (product, vId, quantity, action) => {
+  const updateQuantity = async (
+    product,
+    vId,
+    quantity,
+    action,
+    productHighlights = [],
+  ) => {
     if (session?.user) {
       try {
         const res = await axiosClient.patch("/api/website/cart", {
@@ -296,6 +309,7 @@ export function CartProvider({ children }) {
           vId: vId || "",
           quantity,
           action,
+          productHighlights,
         });
         applyCartResponse(res.data);
         return { ok: true };
@@ -314,7 +328,9 @@ export function CartProvider({ children }) {
         const existing = cart.items?.find(
           (i) =>
             String(i.product) === String(product) &&
-            (i.vId || null) === (vId || null),
+            (i.vId || null) === (vId || null) &&
+            JSON.stringify(i.productHighlights || []) ===
+            JSON.stringify(productHighlights),
         );
         if (existing) {
           let newQty = existing.quantity;
@@ -323,7 +339,7 @@ export function CartProvider({ children }) {
             newQty = Math.max(1, existing.quantity - 1);
           else if (typeof quantity === "number") newQty = Math.max(1, quantity);
 
-          updateItemQuantity(product, vId, newQty);
+          updateItemQuantity(product, vId, newQty, productHighlights);
         }
         applyGuestCart();
         return { ok: true };

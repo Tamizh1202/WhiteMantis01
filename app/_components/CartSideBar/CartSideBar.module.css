@@ -100,7 +100,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 30px;
+  gap: 40px;
 }
 
 .TopOneRight svg {
@@ -124,8 +124,8 @@
 }
 
 .ProdImage img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
   background-color: #f8f8f8;
 }
@@ -134,7 +134,7 @@
   display: flex;
   justify-content: left;
   flex-direction: column;
-  gap: 8px;
+  gap: 0px;
 }
 
 .ProdDetails h5 {
@@ -150,7 +150,39 @@
   font-weight: 400;
   font-size: 15px;
   color: #6e736a;
+  margin-top: 20px;
+}
+
+.HighlightsContainer {
+  margin-top: 2px;
+}
+
+.HighlightsText {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: var(--body-color);
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.ViewLessBtn {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #6e736a;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.FrequencyText {
+  font-family: var(--lato);
+  font-size: 13px;
+  color: #2f362a;
   margin-top: 4px;
+  font-weight: 500;
 }
 
 .CardRight {

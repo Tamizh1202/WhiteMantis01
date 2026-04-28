@@ -359,6 +359,30 @@
     color: #2F362A;
 }
 
+.HighlightsContainer {
+    margin-top: 2px;
+}
+
+.HighlightsText {
+    font-family: var(--lato);
+    font-size: 13px;
+    color: #6e736a;
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+}
+
+.ViewLessBtn {
+    font-family: var(--lato);
+    font-size: 13px;
+    color: #6e736a;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
 .ProdQnty p {
     font-family: var(--lato);
     font-size: 15px;

@@ -10,39 +10,32 @@ const SubscriptionPopup = ({
   setSelectedFrequency,
   selectedQuantity,
   setSelectedQuantity,
+  selectedHighlights,
+  setSelectedHighlights,
   handleSubscriptionCheckout,
   getFrequencyLabel,
+  items,
 }) => {
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const [weightOpen, setWeightOpen] = useState(false);
-  const [roastOpen, setRoastOpen] = useState(false);
-  const [grindOpen, setGrindOpen] = useState(false);
-  const [bagOpen, setBagOpen] = useState(false);
   const [freqOpen, setFreqOpen] = useState(false);
-
-  const [roastProfile, setRoastProfile] = useState("");
-  const [grindOption, setGrindOption] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [bagOpen, setBagOpen] = useState(false);
 
   const weightRef = useRef(null);
-  const roastRef = useRef(null);
-  const grindRef = useRef(null);
   const bagRef = useRef(null);
   const freqRef = useRef(null);
   const modalRef = useRef(null);
+  const dropdownRefs = useRef({});
 
   const closeAll = () => {
     setWeightOpen(false);
-    setRoastOpen(false);
-    setGrindOpen(false);
+    setActiveDropdown(null);
     setBagOpen(false);
     setFreqOpen(false);
   };
 
   useEffect(() => {
     if (showSubscribePopup) {
-      setQuantity(1);
-      setRoastProfile("");
-      setGrindOption("");
       closeAll();
     }
   }, [showSubscribePopup, selectedProduct]);
@@ -51,10 +44,8 @@ const SubscriptionPopup = ({
     function handleClickOutside(e) {
       if (weightRef.current && !weightRef.current.contains(e.target))
         setWeightOpen(false);
-      if (roastRef.current && !roastRef.current.contains(e.target))
-        setRoastOpen(false);
-      if (grindRef.current && !grindRef.current.contains(e.target))
-        setGrindOpen(false);
+      if (activeDropdown && dropdownRefs.current[activeDropdown] && !dropdownRefs.current[activeDropdown].contains(e.target))
+        setActiveDropdown(null);
       if (bagRef.current && !bagRef.current.contains(e.target))
         setBagOpen(false);
       if (freqRef.current && !freqRef.current.contains(e.target))
@@ -89,12 +80,20 @@ const SubscriptionPopup = ({
     ? currentVariant.variantSalePrice || currentVariant.variantRegularPrice
     : "";
 
-  const displayPrice = price && quantity
-    ? (parseFloat(price) * quantity * (1 - discount / 100)).toFixed(0)
+  const displayPrice = price && selectedQuantity
+    ? (parseFloat(price) * selectedQuantity * (1 - discount / 100)).toFixed(0)
     : "";
 
-  const increment = () => setQuantity((q) => q + 1);
-  const decrement = () => setQuantity((q) => Math.max(1, q - 1));
+  const stockQuantity = currentVariant
+    ? currentVariant.variantStockQuantity
+    : selectedProduct.parent?.stockQuantity || 0;
+
+  const currentCartQty = items?.find(
+    (item) =>
+      String(item.product) === String(selectedProduct.parent?.id) &&
+      String(item.vId || "") === String(currentVariant?.id || "")
+  )?.quantity || 0;
+
 
   return (
     <div
@@ -114,11 +113,12 @@ const SubscriptionPopup = ({
           &#x2715;
         </button>
 
-        <h2 className={styles.title}>COFFEE BEANS SUBSCRIPTION</h2>
+        <h2 className={styles.title}>
+          {selectedProduct.parent?.name?.toUpperCase()} SUBSCRIPTION
+        </h2>
 
-        {/* Row 1: Weight + Quantity */}
         <div className={styles.row}>
-          <div className={styles.fieldHalf}>
+          <div className={styles.fieldFull}>
             <label className={styles.label}>Weight</label>
             <div className={styles.dropdown} ref={weightRef}>
               <button
@@ -164,109 +164,60 @@ const SubscriptionPopup = ({
               )}
             </div>
           </div>
-
-          <div className={styles.fieldHalf}>
-            <label className={styles.label}>Quantity</label>
-            <div className={styles.quantityControl}>
-              <button className={styles.qtyBtn} onClick={decrement}>
-                &#x2212;
-              </button>
-              <span className={styles.qtyValue}>
-                {String(quantity).padStart(2, "0")}
-              </span>
-              <button className={styles.qtyBtn} onClick={increment}>
-                &#x2B;
-              </button>
-            </div>
-          </div>
         </div>
 
-        {/* Row 2: Roast Profile + Grind Option */}
-        <div className={styles.row}>
-          <div className={styles.fieldHalf}>
-            <label className={styles.label}>Roast Profile</label>
-            <div className={styles.dropdown} ref={roastRef}>
-              <button
-                className={`${styles.dropdownToggle} ${roastOpen ? styles.dropdownToggleOpen : ""}`}
-                onClick={() => {
-                  closeAll();
-                  setRoastOpen(!roastOpen);
-                }}
-              >
-                <span
-                  className={
-                    roastProfile
-                      ? styles.dropdownTextSelected
-                      : styles.dropdownTextPlaceholder
-                  }
+        {/* Dynamic Product Highlights - Grouped in pairs */}
+        {selectedProduct.parent?.productHighlights?.reduce((acc, section, idx, arr) => {
+          if (idx % 2 === 0) {
+            acc.push(arr.slice(idx, idx + 2));
+          }
+          return acc;
+        }, []).map((pair, rowIdx) => (
+          <div className={styles.row} key={rowIdx}>
+            {pair.map((section) => (
+              <div className={styles.fieldHalf} key={section.sectionTitle}>
+                <label className={styles.label}>{section.sectionTitle}</label>
+                <div
+                  className={styles.dropdown}
+                  ref={(el) => (dropdownRefs.current[section.sectionTitle] = el)}
                 >
-                  {roastProfile || "Select Roast Profile"}
-                </span>
-                <span
-                  className={`${styles.chevron} ${roastOpen ? styles.chevronOpen : ""}`}
-                />
-              </button>
-              {roastOpen && (
-                <ul className={styles.dropdownMenu}>
-                  {["Light", "Medium", "Dark"].map((opt) => (
-                    <li
-                      key={opt}
-                      className={`${styles.dropdownItem} ${roastProfile === opt ? styles.dropdownItemActive : ""}`}
-                      onClick={() => {
-                        setRoastProfile(opt);
-                        setRoastOpen(false);
-                      }}
-                    >
-                      {opt}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+                  <button
+                    className={`${styles.dropdownToggle} ${activeDropdown === section.sectionTitle ? styles.dropdownToggleOpen : ""}`}
+                    onClick={() => {
+                      const isOpen = activeDropdown === section.sectionTitle;
+                      closeAll();
+                      if (!isOpen) setActiveDropdown(section.sectionTitle);
+                    }}
+                  >
+                    <span className={selectedHighlights[section.sectionTitle] ? styles.dropdownTextSelected : styles.dropdownTextPlaceholder}>
+                      {selectedHighlights[section.sectionTitle] || `Select ${section.sectionTitle}`}
+                    </span>
+                    <span className={`${styles.chevron} ${activeDropdown === section.sectionTitle ? styles.chevronOpen : ""}`} />
+                  </button>
+                  {activeDropdown === section.sectionTitle && (
+                    <ul className={styles.dropdownMenu}>
+                      {section.items?.map((item) => (
+                        <li
+                          key={item.point}
+                          className={`${styles.dropdownItem} ${selectedHighlights[section.sectionTitle] === item.point ? styles.dropdownItemActive : ""}`}
+                          onClick={() => {
+                            setSelectedHighlights(prev => ({
+                              ...prev,
+                              [section.sectionTitle]: item.point
+                            }));
+                            setActiveDropdown(null);
+                          }}
+                        >
+                          {item.point}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
-
-          <div className={styles.fieldHalf}>
-            <label className={styles.label}>Grind Option</label>
-            <div className={styles.dropdown} ref={grindRef}>
-              <button
-                className={`${styles.dropdownToggle} ${grindOpen ? styles.dropdownToggleOpen : ""}`}
-                onClick={() => {
-                  closeAll();
-                  setGrindOpen(!grindOpen);
-                }}
-              >
-                <span
-                  className={
-                    grindOption
-                      ? styles.dropdownTextSelected
-                      : styles.dropdownTextPlaceholder
-                  }
-                >
-                  {grindOption || "Select Grind Option"}
-                </span>
-                <span
-                  className={`${styles.chevron} ${grindOpen ? styles.chevronOpen : ""}`}
-                />
-              </button>
-              {grindOpen && (
-                <ul className={styles.dropdownMenu}>
-                  {["Whole Bean", "Fine", "Medium", "Coarse"].map((opt) => (
-                    <li
-                      key={opt}
-                      className={`${styles.dropdownItem} ${grindOption === opt ? styles.dropdownItemActive : ""}`}
-                      onClick={() => {
-                        setGrindOption(opt);
-                        setGrindOpen(false);
-                      }}
-                    >
-                      {opt}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
+        ))}
 
         {/* Row 3: Bag Amount + Frequency */}
         <div className={styles.row}>

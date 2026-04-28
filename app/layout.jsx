@@ -54,7 +54,7 @@ export default async function RootLayout({ children }) {
   let categories = [];
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/web-categories?sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/web-categories?where[_status][equals]=published&sort=createdAt&select[slug]=true&select[title]=true&depth=0&limit=100`,
       {
         next: { revalidate: 3600 }, // Cache for 1 hour
       },

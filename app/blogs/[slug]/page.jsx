@@ -11,7 +11,7 @@ async function getBlog(slug) {
     const serverUrl =
       process.env.NEXT_PUBLIC_SERVER_URL || "https://endpoint.whitemantis.ae";
     const res = await fetch(
-      `${serverUrl}/api/blogs?where[slug][equals]=${slug}`,
+      `${serverUrl}/api/blogs?where[slug][equals]=${slug}&where[_status][equals]=published`,
       {
         method: "GET",
         next: { revalidate: 60 },

@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import one from "./1.png"; // Fallback image
 import axiosClient from "@/lib/axios";
-import { downloadInvoice } from "@/lib/pdf/utils/downloadInvoiceClient";
+import CartHighlights from "@/app/_components/CartHighlights/CartHighlights";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -144,6 +144,7 @@ function SuccessContent() {
     image:
       item.image?.src || item.product?.productImages?.[0]?.image?.url || null,
     tagline: item.product?.tagline || "",
+    productHighlights: item.productHighlights || item.highlights || [],
   }));
 
   const orderInfo = {
@@ -348,6 +349,7 @@ function SuccessContent() {
                   <h4>
                     {item.name} {item.tagline}
                   </h4>
+                  <CartHighlights highlights={item.productHighlights} />
                 </div>
                 <div className={styles.ProdQnty}>
                   <p>x{item.quantity}</p>

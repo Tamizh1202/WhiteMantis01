@@ -42,6 +42,7 @@ const WhislistComponents = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedFrequency, setSelectedFrequency] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(2);
+  const [selectedHighlights, setSelectedHighlights] = useState({});
   const popupRef = useRef(null);
 
   // Add to Cart Popup State
@@ -131,6 +132,16 @@ const WhislistComponents = () => {
     }
 
     setSelectedQuantity(2);
+
+    // Initialize default highlights
+    const defaults = {};
+    product.productHighlights?.forEach(section => {
+      if (section.items?.length > 0) {
+        defaults[section.sectionTitle] = section.items[0].point;
+      }
+    });
+    setSelectedHighlights(defaults);
+
     setShowSubscribePopup(true);
   };
 
@@ -143,6 +154,7 @@ const WhislistComponents = () => {
       subscriptionId: selectedFrequency.id || selectedFrequency._id || "",
       variationId: selectedProduct.isVariant ? selectedProduct.variant.id : "",
       quantity: selectedQuantity.toString(),
+      highlights: JSON.stringify(selectedHighlights),
     });
 
     router.push(`/checkout?${params.toString()}`);
@@ -405,37 +417,28 @@ const WhislistComponents = () => {
                         </div>
                       ) : (
                         <>
-                          {productDoc.hasVariantOptions &&
-                          productDoc.variants?.length > 1 ? (
+                          <div className={styles.ActionRow}>
                             <button
                               className={styles.AddToCart}
                               onClick={() => handleOpenCartPopup(productDoc)}
                             >
-                              Add to Cart
+                              Add to<br />Cart
                             </button>
-                          ) : (
-                            <AddToCart
-                              product={{
-                                productId: productDoc.id,
-                                variationId: selectedVariation?.id || null,
-                                quantity: 1,
-                              }}
-                            />
-                          )}
-                          {(productDoc.hasSimpleSub ||
-                            (productDoc.hasVariantOptions &&
-                              productDoc.variants?.some(
-                                (v) => v.hasVariantSub,
-                              ))) && (
-                            <button
-                              className={styles.Subscribe}
-                              onClick={() =>
-                                handleOpenSubscribePopup(productDoc)
-                              }
-                            >
-                              Subscribe
-                            </button>
-                          )}
+                            {(productDoc.hasSimpleSub ||
+                              (productDoc.hasVariantOptions &&
+                                productDoc.variants?.some(
+                                  (v) => v.hasVariantSub,
+                                ))) && (
+                                <button
+                                  className={styles.Subscribe}
+                                  onClick={() =>
+                                    handleOpenSubscribePopup(productDoc)
+                                  }
+                                >
+                                  Subscribe
+                                </button>
+                              )}
+                          </div>
                         </>
                       )}
                     </div>
@@ -489,6 +492,8 @@ const WhislistComponents = () => {
           setSelectedQuantity={setSelectedQuantity}
           handleSubscriptionCheckout={handleSubscriptionCheckout}
           getFrequencyLabel={getFrequencyLabel}
+          selectedHighlights={selectedHighlights}
+          setSelectedHighlights={setSelectedHighlights}
           popupRef={popupRef}
           styles={styles}
         />

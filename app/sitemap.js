@@ -43,7 +43,7 @@ export default async function sitemap() {
   // 2. Fetch Categories
   try {
     const categoriesRes = await fetch(
-      `${serverUrl}/api/web-categories?select[slug]=true&depth=0&limit=100`,
+      `${serverUrl}/api/web-categories?where[_status][equals]=published&select[slug]=true&depth=0&limit=100`,
       { next: { revalidate: 3600 } },
     );
     if (categoriesRes.ok) {

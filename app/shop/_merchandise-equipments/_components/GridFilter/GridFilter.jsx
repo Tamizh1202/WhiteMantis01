@@ -32,9 +32,9 @@ const GridFilter = () => {
       // whether more items exist. Previously we requested PER_PAGE+1 and sliced which
       // caused one item per page to be dropped.
       const fetchPerPage = PER_PAGE;
-      let url = `/api/website/products/list-all?per_page=${fetchPerPage}&page=${pageToLoad}`;
-      if (categoryId) url = `/api/website/products/filter?category=${encodeURIComponent(categoryId)}&per_page=${fetchPerPage}&page=${pageToLoad}`;
-      if (selectedIds && selectedIds.length) url = `/api/website/products/filter?categories=${encodeURIComponent(selectedIds.join(','))}&per_page=${fetchPerPage}&page=${pageToLoad}`;
+      let url = `/api/website/products/list-all?per_page=${fetchPerPage}&page=${pageToLoad}&where[_status][equals]=published`;
+      if (categoryId) url = `/api/website/products/filter?category=${encodeURIComponent(categoryId)}&per_page=${fetchPerPage}&page=${pageToLoad}&where[_status][equals]=published`;
+      if (selectedIds && selectedIds.length) url = `/api/website/products/filter?categories=${encodeURIComponent(selectedIds.join(','))}&per_page=${fetchPerPage}&page=${pageToLoad}&where[_status][equals]=published`;
       const res = await fetch(url);
       const json = await res.json();
       if (!mountedRef.current) return;
@@ -88,7 +88,7 @@ const GridFilter = () => {
       hasLoadedRef.current = true;
 
       try {
-        const slugRes = await fetch(`/api/website/products/get-categories?slug=${encodeURIComponent(DEFAULT_PARENT_SLUG)}`);
+        const slugRes = await fetch(`/api/website/products/get-categories?slug=${encodeURIComponent(DEFAULT_PARENT_SLUG)}&where[_status][equals]=published`);
         const slugJson = await slugRes.json();
         let parentId = null; if (Array.isArray(slugJson) && slugJson.length) parentId = slugJson[0].id;
         // If merchandise parent category is missing, mark that fact so we don't fall
@@ -103,11 +103,11 @@ const GridFilter = () => {
         }
         if (!mountedRef.current) return;
         setParentCategoryId(parentId);
-        const groupsRes = await fetch(`/api/website/products/get-categories?parent=${parentId}&per_page=100`);
+        const groupsRes = await fetch(`/api/website/products/get-categories?parent=${parentId}&per_page=100&where[_status][equals]=published`);
         const groups = await groupsRes.json();
         const builtFilters = [];
         for (const g of groups) {
-          const childrenRes = await fetch(`/api/website/products/get-categories?parent=${g.id}&per_page=100`);
+          const childrenRes = await fetch(`/api/website/products/get-categories?parent=${g.id}&per_page=100&where[_status][equals]=published`);
           const children = await childrenRes.json();
           const options = Array.isArray(children) && children.length ? children.map((c) => ({ id: c.id, name: c.name })) : [];
           builtFilters.push({ key: String(g.slug || g.id), label: g.name, options });
@@ -153,7 +153,7 @@ const GridFilter = () => {
           const ids = (selected[key] || []).filter((s) => String(s).match(/^\d+$/));
           if (!ids.length) { groupResults.push([]); continue; }
           const q = encodeURIComponent(ids.join(","));
-          const res = await fetch(`/api/website/products/filter?categories=${q}&per_page=100&page=1`);
+          const res = await fetch(`/api/website/products/filter?categories=${q}&per_page=100&page=1&where[_status][equals]=published`);
           const json = await res.json();
           groupResults.push(Array.isArray(json) ? json : []);
         }

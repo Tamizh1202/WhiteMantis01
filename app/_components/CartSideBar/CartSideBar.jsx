@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { formatImageUrl } from "@/lib/imageUtils";
 import cartZero from "./Empty Cart (1).gif";
+import CartHighlights from "@/app/_components/CartHighlights/CartHighlights";
+
 const CartSideBar = () => {
   const {
     isCartOpen,
@@ -35,9 +37,9 @@ const CartSideBar = () => {
     };
   }, [isCartOpen]);
 
-  const handleIncrease = async (product, vId, currentQty) => {
-    const key = `${product}_${vId || ""}`;
-    const result = await updateQuantity(product, vId, null, "increment");
+  const handleIncrease = async (product, vId, currentQty, highlights = []) => {
+    const key = `${product}_${vId || ""}_${JSON.stringify(highlights)}`;
+    const result = await updateQuantity(product, vId, null, "increment", highlights);
     if (result && !result.ok) {
       setItemErrors((prev) => ({ ...prev, [key]: result.message }));
     } else {
@@ -49,20 +51,20 @@ const CartSideBar = () => {
     }
   };
 
-  const handleDecrease = async (product, vId, currentQty) => {
+  const handleDecrease = async (product, vId, currentQty, highlights = []) => {
     if (currentQty > 1) {
-      const key = `${product}_${vId || ""}`;
+      const key = `${product}_${vId || ""}_${JSON.stringify(highlights)}`;
       setItemErrors((prev) => {
         const n = { ...prev };
         delete n[key];
         return n;
       });
-      await updateQuantity(product, vId, null, "decrement");
+      await updateQuantity(product, vId, null, "decrement", highlights);
     }
   };
 
-  const handleRemove = async (product, vId) => {
-    await removeItem(product, vId);
+  const handleRemove = async (product, vId, highlights = []) => {
+    await removeItem(product, vId, highlights);
   };
 
   const handleCheckout = () => {
@@ -155,8 +157,8 @@ const CartSideBar = () => {
                       </div>
                     ) : (
                       Array.isArray(items) &&
-                      items.map((item) => (
-                        <div className={styles.Card} key={`${item.product}`}>
+                      items.map((item, index) => (
+                        <div className={styles.Card} key={`${item.product}_${index}`}>
                           <div className={styles.CardLeft}>
                             <div className={styles.ProdImage}>
                               <Image
@@ -175,6 +177,14 @@ const CartSideBar = () => {
                                   ? `, ${item.variantName}g`
                                   : ""}
                               </h5>
+                              <CartHighlights highlights={item.productHighlights} />
+                              {item.frequency && (
+                                <p className={styles.FrequencyText}>
+                                  Delivery every {item.frequency.duration}{" "}
+                                  {item.frequency.interval}
+                                  {item.frequency.duration > 1 ? "s" : ""}
+                                </p>
+                              )}
                               <h4>AED {Number(item.price || 0).toFixed(2)}</h4>
                             </div>
                           </div>
@@ -188,6 +198,7 @@ const CartSideBar = () => {
                                     item.product,
                                     item.vId,
                                     item.quantity,
+                                    item.productHighlights,
                                   )
                                 }
                                 disabled={item.quantity <= 1}
@@ -207,7 +218,7 @@ const CartSideBar = () => {
                               </span>
 
                               {(() => {
-                                const key = `${item.product}_${item.vId || ""}`;
+                                const key = `${item.product}_${item.vId || ""}_${JSON.stringify(item.productHighlights || [])}`;
                                 const hasError = !!itemErrors[key];
                                 const increaseDisabled = hasError;
                                 return (
@@ -218,6 +229,7 @@ const CartSideBar = () => {
                                         item.product,
                                         item.vId,
                                         item.quantity,
+                                        item.productHighlights,
                                       )
                                     }
                                     disabled={increaseDisabled}
@@ -235,29 +247,33 @@ const CartSideBar = () => {
                             </div>
 
                             {itemErrors[
-                              `${item.product}_${item.vId || ""}`
+                              `${item.product}_${item.vId || ""}_${JSON.stringify(item.productHighlights || [])}`
                             ] && (
-                              <p
-                                style={{
-                                  color: "#c0392b",
-                                  fontSize: "11px",
-                                  marginTop: "4px",
-                                  fontFamily: "var(--lato)",
-                                  lineHeight: "1.3",
-                                }}
-                              >
-                                {
-                                  itemErrors[
-                                    `${item.product}_${item.vId || ""}`
-                                  ]
-                                }
-                              </p>
-                            )}
+                                <p
+                                  style={{
+                                    color: "#c0392b",
+                                    fontSize: "11px",
+                                    marginTop: "4px",
+                                    fontFamily: "var(--lato)",
+                                    lineHeight: "1.3",
+                                  }}
+                                >
+                                  {
+                                    itemErrors[
+                                    `${item.product}_${item.vId || ""}_${JSON.stringify(item.productHighlights || [])}`
+                                    ]
+                                  }
+                                </p>
+                              )}
 
                             <div className={styles.RemoveItem}>
                               <button
                                 onClick={() =>
-                                  handleRemove(item.product, item.vId)
+                                  handleRemove(
+                                    item.product,
+                                    item.vId,
+                                    item.productHighlights,
+                                  )
                                 }
                               >
                                 Remove

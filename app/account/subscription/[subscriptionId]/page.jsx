@@ -7,6 +7,7 @@ import SubPopup from "../_components/SubscriptionPopup/SubscriptionPopup";
 import axiosClient from "@/lib/axios";
 import toast from "react-hot-toast";
 import { formatImageUrl } from "@/lib/imageUtils";
+import CartHighlights from "@/app/_components/CartHighlights/CartHighlights";
 
 export default function SubscriptionDetailPage({ params }) {
   // Handle params wrapping/unwrapping
@@ -129,6 +130,7 @@ export default function SubscriptionDetailPage({ params }) {
                 );
               })()}
             </p>
+            <CartHighlights highlights={sub.items?.[0]?.productHighlights} />
 
             <div className={styles.DetailsGrid}>
               <p>
@@ -397,8 +399,8 @@ export default function SubscriptionDetailPage({ params }) {
                     resData?.errors?.[0]?.message;
                   toast.error(
                     backendMsg ||
-                      err?.message ||
-                      "Failed to cancel subscription.",
+                    err?.message ||
+                    "Failed to cancel subscription.",
                   );
                 } finally {
                   setCancelling(false);

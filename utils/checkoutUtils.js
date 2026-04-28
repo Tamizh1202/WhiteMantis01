@@ -195,7 +195,8 @@ export const buildOneTimePayload = ({
     email,
     products,
     useWTCoins,
-    appliedCouponCode
+    appliedCouponCode,
+    productHighlights
 }) => ({
     deliveryOption: delivery,
     shippingAddress,
@@ -204,7 +205,8 @@ export const buildOneTimePayload = ({
     email,
     products,
     useWTCoins,
-    appliedCouponCode
+    appliedCouponCode,
+    productHighlights
 });
 
 /**
@@ -217,7 +219,8 @@ export const buildSubscriptionPayload = ({
     shippingAddressAsBillingAddress,
     email,
     product,
-    useWTCoins
+    useWTCoins,
+    productHighlights
 }) => ({
     deliveryOption: delivery,
     shippingAddress,
@@ -225,7 +228,8 @@ export const buildSubscriptionPayload = ({
     shippingAddressAsBillingAddress,
     email,
     product,
-    useWTCoins
+    useWTCoins,
+    productHighlights
 });
 
 // ─── Success URL Builder ──────────────────────────────────────────────────────

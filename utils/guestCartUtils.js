@@ -73,7 +73,12 @@ const recalculate = (items) => {
 };
 
 // Add an item to the guest cart (fetches product details from Payload)
-export const addItemToCart = async (productId, quantity = 1, vid = null) => {
+export const addItemToCart = async (
+  productId,
+  quantity = 1,
+  vid = null,
+  productHighlights = [],
+) => {
   const cart = getCart();
   const items = cart.items || [];
 
@@ -84,10 +89,13 @@ export const addItemToCart = async (productId, quantity = 1, vid = null) => {
     return;
   }
 
-  // Check if same product + variant already in cart
+  // Check if same product + variant + highlights already in cart
   const existingIndex = items.findIndex(
     (item) =>
-      item.product === productData.product && item.vId === productData.vId,
+      item.product === productData.product &&
+      item.vId === productData.vId &&
+      JSON.stringify(item.productHighlights || []) ===
+        JSON.stringify(productHighlights),
   );
 
   if (existingIndex >= 0) {
@@ -119,28 +127,48 @@ export const addItemToCart = async (productId, quantity = 1, vid = null) => {
       throw new Error(`Only ${productData.stockQuantity} units available`);
     }
 
-    items.push({ ...productData, quantity });
+    items.push({ ...productData, quantity, productHighlights });
   }
 
   const { subtotal, totalItems } = recalculate(items);
   saveCart({ items, subtotal, totalItems });
 };
 
-// Remove an item from the guest cart by product ID and variant ID
-export const removeItemFromCart = (productId, vid = null) => {
+// Remove an item from the guest cart by product ID, variant ID, and highlights
+export const removeItemFromCart = (
+  productId,
+  vid = null,
+  productHighlights = [],
+) => {
   const cart = getCart();
   const items = (cart.items || []).filter(
-    (item) => !(item.product === productId && item.vId === vid),
+    (item) =>
+      !(
+        item.product === productId &&
+        item.vId === vid &&
+        JSON.stringify(item.productHighlights || []) ===
+          JSON.stringify(productHighlights)
+      ),
   );
   const { subtotal, totalItems } = recalculate(items);
   saveCart({ items, subtotal, totalItems });
 };
 
 // Update quantity of a specific item
-export const updateItemQuantity = (productId, vid = null, quantity) => {
+export const updateItemQuantity = (
+  productId,
+  vid = null,
+  quantity,
+  productHighlights = [],
+) => {
   const cart = getCart();
   const items = (cart.items || []).map((item) => {
-    if (item.product === productId && item.vId === vid) {
+    if (
+      item.product === productId &&
+      item.vId === vid &&
+      JSON.stringify(item.productHighlights || []) ===
+        JSON.stringify(productHighlights)
+    ) {
       const newQty = Math.max(1, quantity);
 
       // Validate stock
@@ -164,11 +192,20 @@ export const updateItemQuantity = (productId, vid = null, quantity) => {
 };
 
 // Decrease quantity of a specific item by 1; removes the item if quantity reaches 0
-export const decrementItem = (productId, vid = null) => {
+export const decrementItem = (
+  productId,
+  vid = null,
+  productHighlights = [],
+) => {
   const cart = getCart();
   let items = (cart.items || [])
     .map((item) => {
-      if (item.product === productId && item.vId === vid) {
+      if (
+        item.product === productId &&
+        item.vId === vid &&
+        JSON.stringify(item.productHighlights || []) ===
+          JSON.stringify(productHighlights)
+      ) {
         return { ...item, quantity: item.quantity - 1 };
       }
       return item;

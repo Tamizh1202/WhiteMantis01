@@ -14,8 +14,10 @@ import {
   getSortedVariants,
   getSmallestVariantDisplayData,
 } from "@/app/_utils/productVariants";
+import { useCart } from "@/app/_context/CartContext";
 
 const Lisiting = () => {
+  const { items } = useCart();
   const params = useParams();
   const categorySlug = params.category;
   const ITEMS_PER_LOAD = 6;
@@ -40,6 +42,7 @@ const Lisiting = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedFrequency, setSelectedFrequency] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(null);
+  const [selectedHighlights, setSelectedHighlights] = useState({});
 
   // Add to Cart Popup State
   const [showCartPopup, setShowCartPopup] = useState(false);
@@ -75,6 +78,7 @@ const Lisiting = () => {
           "createdAt",
           "inStock",
           "stockQuantity",
+          "productHighlights",
         ];
         const productSelectQuery = productFields
           .map((f) => `select[${f}]=true`)
@@ -242,6 +246,15 @@ const Lisiting = () => {
       setSelectedFrequency(subFreqs[0]);
     }
 
+    // Initialize Highlights
+    const initial = {};
+    product?.productHighlights?.forEach((section) => {
+      if (section.items?.length > 0) {
+        initial[section.sectionTitle] = section.items[0].point;
+      }
+    });
+    setSelectedHighlights(initial);
+
     setSelectedQuantity(2); // Default to 2 bags as per updated list
     setShowSubscribePopup(true);
   };
@@ -252,6 +265,11 @@ const Lisiting = () => {
       return;
     }
 
+    const highlightsPayload = Object.entries(selectedHighlights).map(([title, point]) => ({
+      sectionTitle: title,
+      items: [{ point }],
+    }));
+
     // Navigate to checkout with subscription parameters
     const params = new URLSearchParams({
       mode: "subscription",
@@ -259,6 +277,7 @@ const Lisiting = () => {
       subscriptionId: selectedFrequency.id || selectedFrequency._id || "",
       variationId: selectedProduct.isVariant ? selectedProduct.variant.id : "",
       quantity: selectedQuantity.toString(),
+      productHighlights: JSON.stringify(highlightsPayload),
     });
 
     router.push(`/checkout?${params.toString()}`);
@@ -373,10 +392,13 @@ const Lisiting = () => {
           setSelectedFrequency={setSelectedFrequency}
           selectedQuantity={selectedQuantity}
           setSelectedQuantity={setSelectedQuantity}
+          selectedHighlights={selectedHighlights}
+          setSelectedHighlights={setSelectedHighlights}
           handleSubscriptionCheckout={handleSubscriptionCheckout}
           getFrequencyLabel={getFrequencyLabel}
           popupRef={popupRef}
           styles={styles}
+          items={items}
         />
 
         {/* Add to Cart Popup */}
