@@ -206,51 +206,39 @@ const ProductGrid = ({
                         ) : (
                           <>
                             <div className={styles.DesktopActions}>
-                              {product.hasVariantOptions &&
-                                product.variants?.length > 1 ? (
-                                <button
-                                  className={styles.AddToCart}
-                                  onClick={() => handleOpenCartPopup(product)}
-                                  style={{
-                                    width: "100%",
-                                    boxSizing: "border-box", // <--- ADD THIS LINE
-                                    backgroundColor: "#6C7A5F",
-                                    color: "#ffffff",
-                                    fontSize: "15px",
-                                    fontWeight: 500,
-                                    border: "none",
-                                    padding: "12px 22px",
-                                    whiteSpace: "nowrap",
-                                    cursor: "pointer",
-                                    transition: "background-color 0.2s ease",
-                                  }}
-                                  onMouseEnter={(e) => {
-                                    e.target.style.backgroundColor = "#5f6f57";
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.target.style.backgroundColor = "#6C7A5F";
-                                  }}
-                                >
-                                  Add to Cart
-                                </button>
-                              ) : (
-                                <AddToCart product={cartProduct} />
-                              )}
+                              <button
+                                className={styles.AddToCart}
+                                onClick={() => handleOpenCartPopup(product)}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  backgroundColor: "#6C7A5F",
+                                  color: "#ffffff",
+                                  fontSize: "15px",
+                                  fontWeight: 500,
+                                  border: "none",
+                                  padding: "12px 22px",
+                                  whiteSpace: "nowrap",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s ease",
+                                }}
+                                onMouseEnter={(e) => { e.target.style.backgroundColor = "#5f6f57"; }}
+                                onMouseLeave={(e) => { e.target.style.backgroundColor = "#6C7A5F"; }}
+                              >
+                                Add to Cart
+                              </button>
                               {(product.hasSimpleSub ||
                                 (product.hasVariantOptions &&
-                                  product.variants?.some(
-                                    (v) => v.hasVariantSub,
-                                  ))) && (
+                                  product.variants?.some((v) => v.hasVariantSub))) && (
                                   <button
                                     className={styles.Subscribe}
-                                    onClick={() =>
-                                      handleOpenSubscribePopup(product)
-                                    }
+                                    onClick={() => handleOpenSubscribePopup(product)}
                                   >
                                     Subscribe
                                   </button>
                                 )}
                             </div>
+
                             <div className={styles.MobileActions}>
                               {isOutOfStock ? (
                                 <div className={styles.OutOfStockRow}>
@@ -260,8 +248,7 @@ const ProductGrid = ({
                                 </div>
                               ) : (
                                 <div
-                                  className={`${styles.MobileBuyNowWrapper} ${activeMobileCard === product.id ? styles.MobileBuyNowExpanded : ""
-                                    }`}
+                                  className={`${styles.MobileBuyNowWrapper} ${activeMobileCard === product.id ? styles.MobileBuyNowExpanded : ""}`}
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   {/* Frosted overlay — covers title/price on active card */}
