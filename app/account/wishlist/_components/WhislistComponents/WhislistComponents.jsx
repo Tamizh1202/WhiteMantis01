@@ -36,7 +36,7 @@ const WhislistComponents = () => {
   // };
   // Track selected variation for each product
   const [selectedVariations, setSelectedVariations] = useState({});
-
+  const [activeMobileCard, setActiveMobileCard] = useState(null)
   // Subscription Popup State
   const [showSubscribePopup, setShowSubscribePopup] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -323,7 +323,10 @@ const WhislistComponents = () => {
 
               return (
                 <div
-                  className={`${styles.Card} ${isOutOfStock ? styles.Muted : ""}`}
+                  className={`${styles.Card} ${isOutOfStock ? styles.Muted : ""} ${activeMobileCard && activeMobileCard !== item.id
+                    ? styles.CardBlurred
+                    : ""
+                    }`}
                   key={item.id}
                 >
                   <div className={styles.CardTop}>
@@ -382,7 +385,8 @@ const WhislistComponents = () => {
                     </div>
                   </div>
 
-                  <div className={styles.CardMiddle}>
+                  <div className={`${styles.CardMiddle} ${activeMobileCard === item.id ? styles.CardMiddleBlurred : ""}`}>
+
                     <div className={styles.Price}>
                       {/* Pass productDoc to helpers */}
                       <h4>{getVariationPrice(item, productDoc)}</h4>
@@ -422,7 +426,7 @@ const WhislistComponents = () => {
                               className={styles.AddToCart}
                               onClick={() => handleOpenCartPopup(productDoc)}
                             >
-                              Add to<br />Cart
+                              Add to Cart
                             </button>
                             {(productDoc.hasSimpleSub ||
                               (productDoc.hasVariantOptions &&
@@ -442,7 +446,7 @@ const WhislistComponents = () => {
                         </>
                       )}
                     </div>
-                    <div className={styles.MobileActions}>
+                    {/* <div className={styles.MobileActions}>
                       {isOutOfStock ? (
                         <div className={styles.OutOfStockRow}>
                           <button className={styles.OutOfStockBtn} disabled>
@@ -458,11 +462,12 @@ const WhislistComponents = () => {
                             width: "100%",
                             backgroundColor: "#6C7A5F",
                             color: "#ffffff",
-                            fontSize: "15px",
+                            fontSize: "14px",
                             fontWeight: 500,
                             border: "none",
-                            padding: "12px 22px",
+                            padding: "10px 24px",
                             cursor: "pointer",
+                            textTransform: "capitalize",
                           }}
                         >
                           Buy Now
@@ -473,6 +478,57 @@ const WhislistComponents = () => {
                           getDisplayData={getDisplayData}
                           handleOpenSubscribePopup={handleOpenSubscribePopup}
                         />
+                      )}
+                    </div> */}
+                    <div className={styles.MobileActions}>
+                      {isOutOfStock ? (
+                        <div className={styles.OutOfStockRow}>
+                          <button className={styles.OutOfStockBtn} disabled>
+                            Out of Stock
+                          </button>
+                        </div>
+                      ) : (
+                        <div
+                          className={`${styles.MobileBuyNowWrapper} ${activeMobileCard === item.id ? styles.MobileBuyNowExpanded : ""
+                            }`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {/* Frosted overlay — tap to collapse */}
+                          <div
+                            className={styles.MobileCardOverlay}
+                            onClick={() => setActiveMobileCard(null)}
+                          />
+
+                          {/* Subscribe rises up — shown if product supports subscriptions */}
+                          {(productDoc.hasSimpleSub ||
+                            (productDoc.hasVariantOptions &&
+                              productDoc.variants?.some((v) => v.hasVariantSub))) && (
+                              <button
+                                className={styles.MobileSubscribeRising}
+                                onClick={() => {
+                                  setActiveMobileCard(null);
+                                  handleOpenSubscribePopup(productDoc);
+                                }}
+                              >
+                                Subscribe
+                              </button>
+                            )}
+
+                          {/* Primary button — morphs Buy Now → Add to Cart */}
+                          <button
+                            className={styles.MobileBuyNowBtn}
+                            onClick={() => {
+                              if (activeMobileCard === item.id) {
+                                setActiveMobileCard(null);
+                                handleOpenCartPopup(productDoc);
+                              } else {
+                                setActiveMobileCard(item.id);
+                              }
+                            }}
+                          >
+                            {activeMobileCard === item.id ? "Add to Cart" : "Buy Now"}
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -504,6 +560,16 @@ const WhislistComponents = () => {
           onClose={() => setShowCartPopup(false)}
           selectedProduct={productForCart}
         />
+        {activeMobileCard && (
+          <div
+            onClick={() => setActiveMobileCard(null)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 10,
+            }}
+          />
+        )}
       </div>
     </div>
   );

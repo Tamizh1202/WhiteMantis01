@@ -288,6 +288,8 @@
   font-size: var(--lato-font-size);
   font-weight: var(--lato-font-weight);
   color: var(--body-color);
+  line-height: 1.4;
+  height: 2.8em;
 }
 
 .ProductActions {
@@ -638,10 +640,6 @@
   }
 
   .LowStockBadge {
-    /* padding: 6px 6px;
-    top: 6px; */
-    /* display: none; */
-
     font-size: 10px !important;
     top: 10px !important;
     padding: 5px 10px !important;
@@ -649,8 +647,8 @@
 
   .ProductImage {
     aspect-ratio: 170 / 200;
-    max-width: 170px;
-    /* padding: 20px; */
+    width: 100%;
+    max-width: 100%;
   }
 
   .ProductImage img {
@@ -665,11 +663,9 @@
     height: 2.8em;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    /* The magic number of lines */
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    /* Hides the extra text */
     text-overflow: ellipsis;
   }
 
@@ -677,10 +673,8 @@
     font-size: 14px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    /* The magic number of lines */
     -webkit-box-orient: vertical;
     overflow: hidden;
-    /* Hides the extra text */
     text-overflow: ellipsis;
   }
 
@@ -750,11 +744,9 @@
   .RightTopRight {
     display: flex;
     z-index: 30;
-
     width: 100%;
     align-items: baseline;
     justify-content: space-between;
-
     background: var(--white-color);
     padding-bottom: 10px;
   }
@@ -767,9 +759,31 @@
     display: none;
   }
 
+  /* grid cell fills its column fully — no leftover space on the right */
   .ProductCard {
     width: 100%;
-    max-width: 170px;
+    max-width: 100%;
+    /* smooth transition when sibling cards blur in/out */
+    transition: filter 0.35s ease, opacity 0.35s ease;
+  }
+
+  /* sibling cards in the grid fade when another card is expanded */
+  .CardBlurred {
+    filter: blur(1px);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .ProductBottom {
+    transition: filter 0.35s ease;
+    gap:10px;
+  }
+
+  /* price + title on the active card — slightly less blur than siblings so it reads but recedes */
+  .CardMiddleBlurred {
+    filter: blur(0.7px);
+    opacity: 0.6;
+    pointer-events: none;
   }
 
   .RightConatiner {
@@ -778,6 +792,97 @@
 
   .FilterBox {
     min-width: 120px;
+  }
+
+  /* ── Mobile Buy Now expanding interaction ───────────────── */
+
+  .MobileBuyNowWrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    z-index: 11;
+    /* sits above the fixed tap-away backdrop (z-index: 10) */
+  }
+
+  /* frosted layer over the price/title area of the active card */
+  .MobileCardOverlay {
+    position: absolute;
+    bottom: 100%;
+    left: -16px;
+    right: -16px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    pointer-events: none;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease;
+    z-index: 1;
+  }
+
+  .MobileBuyNowExpanded .MobileCardOverlay {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    /* light frost over title/price area */
+    -webkit-backdrop-filter: blur(2px);
+    pointer-events: auto;
+    /* tapping overlay collapses the card */
+  }
+
+  /* subscribe button hidden underneath, rises up on expand */
+  .MobileSubscribeRising {
+    width: 100%;
+    padding: 11px 24px;
+    background: white;
+    color: #6c7a5f;
+    border: 1.5px solid #6c7a5f;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: capitalize;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    /* behind the primary button until expanded */
+    transform: translateY(0%);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.38s cubic-bezier(0.34, 1.3, 0.64, 1),
+      opacity 0.28s ease;
+  }
+
+  .MobileBuyNowExpanded .MobileSubscribeRising {
+    transform: translateY(calc(-100% - 8px));
+    /* rises above Add to Cart */
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* primary button — text morphs between Buy Now and Add to Cart */
+  .MobileBuyNowBtn {
+    width: 100%;
+    padding: 11px 24px;
+    background-color: #6c7a5f;
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: capitalize;
+    position: relative;
+    z-index: 2;
+    /* always on top of subscribe button */
+    transition: background-color 0.25s ease, letter-spacing 0.2s ease;
+  }
+
+  .MobileBuyNowExpanded .MobileBuyNowBtn {
+    background-color: #4a5940;
+    /* slightly deeper when active */
+    letter-spacing: 0.02em;
   }
 }
 
@@ -836,7 +941,7 @@
     width: 100%;
   }
 
-  .DesktopActions > * {
+  .DesktopActions>* {
     flex: 1;
     /* Each button takes exactly 50% width */
     border-radius: 0;
@@ -948,7 +1053,7 @@
     width: 100%;
   }
 
-  .DesktopActions > * {
+  .DesktopActions>* {
     flex: 1;
     /* Each button takes exactly 50% width */
     border-radius: 0;
@@ -1001,7 +1106,7 @@
     width: 100%;
   }
 
-  .DesktopActions > * {
+  .DesktopActions>* {
     flex: 1;
     /* Each button takes exactly 50% width */
     border-radius: 0;
@@ -1237,6 +1342,7 @@
 .qtyBtn:hover {
   background: #f2f5ef;
 }
+
 .qtyBtn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
@@ -1290,6 +1396,7 @@
   .overlay {
     padding: 0 12px;
   }
+
   .dropdownToggle {
     text-align: left;
   }
@@ -1315,7 +1422,7 @@
   margin-bottom: 40px;
 }
 
-.Popup > p {
+.Popup>p {
   font-family: var(--lato);
   font-size: var(--lato-font-size);
   color: var(--heads-color);
@@ -1434,11 +1541,9 @@
 
 .ActiveFrequency::after {
   border-color: var(--primary-color);
-  background: radial-gradient(
-    circle,
-    var(--primary-color) 0 3px,
-    transparent 4px
-  );
+  background: radial-gradient(circle,
+      var(--primary-color) 0 3px,
+      transparent 4px);
 }
 
 .LowStockBadge {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import AddToCart from "@/app/_components/AddToCart";
@@ -22,6 +22,7 @@ const ProductGrid = ({
   handleOpenCartPopup,
   styles,
 }) => {
+  const [activeMobileCard, setActiveMobileCard] = useState(null);
   return (
     <div className={styles.RightConatiner}>
       <div className={styles.RightTop}>
@@ -64,9 +65,8 @@ const ProductGrid = ({
             >
               <p>{sortType}</p>
               <span
-                className={`${styles.SortArrow} ${
-                  sortOpen ? styles.SortArrowOpen : ""
-                }`}
+                className={`${styles.SortArrow} ${sortOpen ? styles.SortArrowOpen : ""
+                  }`}
               >
                 <svg
                   width="13"
@@ -138,7 +138,13 @@ const ProductGrid = ({
                 const isLowStock =
                   !isOutOfStock && stockQuantity > 0 && stockQuantity <= 10;
                 return (
-                  <div className={styles.ProductCard} key={product.id}>
+                  <div
+                    className={`${styles.ProductCard} ${activeMobileCard && activeMobileCard !== product.id
+                      ? styles.CardBlurred
+                      : ""
+                      }`}
+                    key={product.id}
+                  >
                     <div className={styles.ProductTop}>
                       {isLowStock && (
                         <div className={styles.LowStockBadge}>
@@ -169,12 +175,15 @@ const ProductGrid = ({
                         href={productUrl}
                         style={{ textDecoration: "none", color: "inherit" }}
                       >
-                        <div className={styles.ProductInfo}>
+                        <div
+                          className={`${styles.ProductInfo} ${activeMobileCard === product.id ? styles.CardMiddleBlurred : ""
+                            }`}
+                        >
                           <div className={styles.ProductPrice}>
                             <h4>AED {displayData.price}</h4>
                             {displayData.sale_price &&
                               displayData.sale_price !==
-                                displayData.regular_price && (
+                              displayData.regular_price && (
                                 <p className={styles.OldPrice}>
                                   AED {displayData.regular_price}
                                 </p>
@@ -198,7 +207,7 @@ const ProductGrid = ({
                           <>
                             <div className={styles.DesktopActions}>
                               {product.hasVariantOptions &&
-                              product.variants?.length > 1 ? (
+                                product.variants?.length > 1 ? (
                                 <button
                                   className={styles.AddToCart}
                                   onClick={() => handleOpenCartPopup(product)}
@@ -232,46 +241,65 @@ const ProductGrid = ({
                                   product.variants?.some(
                                     (v) => v.hasVariantSub,
                                   ))) && (
-                                <button
-                                  className={styles.Subscribe}
-                                  onClick={() =>
-                                    handleOpenSubscribePopup(product)
-                                  }
-                                >
-                                  Subscribe
-                                </button>
-                              )}
+                                  <button
+                                    className={styles.Subscribe}
+                                    onClick={() =>
+                                      handleOpenSubscribePopup(product)
+                                    }
+                                  >
+                                    Subscribe
+                                  </button>
+                                )}
                             </div>
                             <div className={styles.MobileActions}>
-                              {product.hasVariantOptions &&
-                              product.variants?.length > 1 ? (
-                                <button
-                                  className={styles.AddToCart}
-                                  onClick={() => handleOpenCartPopup(product)}
-                                  style={{
-                                    width: "100%",
-                                    boxSizing: "border-box",
-                                    backgroundColor: "#6C7A5F",
-                                    color: "#ffffff",
-                                    fontSize: "15px",
-                                    fontWeight: 500,
-                                    border: "none",
-                                    padding: "12px 22px",
-                                    whiteSpace: "nowrap",
-                                    cursor: "pointer",
-                                    transition: "background-color 0.2s ease",
-                                  }}
-                                >
-                                  Buy Now
-                                </button>
+                              {isOutOfStock ? (
+                                <div className={styles.OutOfStockRow}>
+                                  <button className={styles.OutOfStockBtn} disabled>
+                                    Out of Stock
+                                  </button>
+                                </div>
                               ) : (
-                                <BuyNowPopup
-                                  product={product}
-                                  getDisplayData={getDisplayData}
-                                  handleOpenSubscribePopup={
-                                    handleOpenSubscribePopup
-                                  }
-                                />
+                                <div
+                                  className={`${styles.MobileBuyNowWrapper} ${activeMobileCard === product.id ? styles.MobileBuyNowExpanded : ""
+                                    }`}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {/* Frosted overlay — covers title/price on active card */}
+                                  <div
+                                    className={styles.MobileCardOverlay}
+                                    onClick={() => setActiveMobileCard(null)}
+                                  />
+
+                                  {/* Subscribe rises up behind Add to Cart */}
+                                  {(product.hasSimpleSub ||
+                                    (product.hasVariantOptions &&
+                                      product.variants?.some((v) => v.hasVariantSub))) && (
+                                      <button
+                                        className={styles.MobileSubscribeRising}
+                                        onClick={() => {
+                                          setActiveMobileCard(null);
+                                          handleOpenSubscribePopup(product);
+                                        }}
+                                      >
+                                        Subscribe
+                                      </button>
+                                    )}
+
+                                  {/* Primary button — morphs Buy Now → Add to Cart */}
+                                  <button
+                                    className={styles.MobileBuyNowBtn}
+                                    onClick={() => {
+                                      if (activeMobileCard === product.id) {
+                                        setActiveMobileCard(null);
+                                        handleOpenCartPopup(product);
+                                      } else {
+                                        setActiveMobileCard(product.id);
+                                      }
+                                    }}
+                                  >
+                                    {activeMobileCard === product.id ? "Add to Cart" : "Buy Now"}
+                                  </button>
+                                </div>
                               )}
                             </div>
                           </>
@@ -292,6 +320,16 @@ const ProductGrid = ({
           </>
         )}
       </div>
+      {activeMobileCard && (
+        <div
+          onClick={() => setActiveMobileCard(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 10,
+          }}
+        />
+      )}
     </div>
   );
 };

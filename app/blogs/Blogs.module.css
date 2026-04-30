@@ -457,9 +457,9 @@
     padding-top: 0px;
   }
 
-  .GridSection {
+  /* .GridSection {
     padding-top: 200px;
-  }
+  } */
 
   .SectionHeader {
     flex-direction: column;
